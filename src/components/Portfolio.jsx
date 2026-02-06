@@ -408,6 +408,12 @@ function Portfolio() {
         image: mockup4
     }
 ];
+
+
+
+
+
+
     const [openFAQ, setOpenFAQ] = useState(null);
 
     const toggleFAQ = (index) => {
@@ -496,7 +502,100 @@ useEffect(() => {
 }, []);
 
 
+// Combined Animations - Navbar, Buttons, Topbar
+    useEffect(() => {
+        let ctx = gsap.context(() => {
+            
+            // 1. NAVBAR ANIMATION
+            gsap.from(".navbar", {
+                y: -20,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
 
+            gsap.from(".nav-links li, .nav-cta-btn, .mobile-menu-button", {
+                opacity: 0,
+                y: -10,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: "power2.out",
+                delay: 0.3
+            });
+
+            // 2. HERO CTA BUTTON
+            gsap.from(".hero-section .cta-button", {
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                delay: 0.8
+            });
+
+            // 3. ABOUT TOPBAR
+            gsap.from(".about-topbar .about-index", {
+                x: -50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: ".about-topbar",
+                    start: "top 80%",
+                    toggleActions: "play none none none",
+                    once: true
+                }
+            });
+
+            gsap.from(".about-topbar .about-mini-desc", {
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: ".about-topbar",
+                    start: "top 80%",
+                    toggleActions: "play none none none",
+                    once: true
+                },
+                delay: 0.2
+            });
+
+            gsap.from(".about-topbar .cta-button", {
+                scale: 0.9,
+                opacity: 0,
+                duration: 0.8,
+                ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: ".about-topbar",
+                    start: "top 80%",
+                    toggleActions: "play none none none",
+                    once: true
+                },
+                delay: 0.4
+            });
+
+            // 4. OTHER CTA BUTTONS (scroll-triggered)
+            gsap.utils.toArray(".cta-button").forEach((btn) => {
+                if (btn.closest('.hero-section') || btn.closest('.about-topbar')) return;
+                
+                gsap.from(btn, {
+                    y: 20,
+                    opacity: 0,
+                    duration: 0.6,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: btn,
+                        start: "top 90%",
+                        toggleActions: "play none none none",
+                        once: true
+                    }
+                });
+            });
+
+        });
+
+        return () => ctx.revert();
+    }, []);
 
 
 
