@@ -1,0 +1,368 @@
+.tilted-card-figure {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-40px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover lift effect - desktop only */
+@media (min-width: 1025px) {
+  .tilted-card-figure:hover {
+    transform: translateY(-45px);
+  }
+}
+
+/* ============================================
+   MOBILE & TABLET PORTRAIT - HIDDEN
+   ============================================ */
+
+/* Hide on mobile (≤640px) */
+@media (max-width: 640px) {
+  .tilted-card-figure {
+    display: none;
+  }
+}
+
+/* Hide on iPad Portrait mode (641px - 1024px in portrait) */
+@media (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
+  .tilted-card-figure {
+    display: none;
+  }
+}
+
+/* ============================================
+   TABLET LANDSCAPE - RESPONSIVE & VISIBLE
+   ============================================ */
+
+/* Responsive on iPad Landscape mode */
+@media (min-width: 641px) and (max-width: 1024px) and (orientation: landscape) {
+  .tilted-card-figure {
+    display: flex;
+    perspective: 800px;
+    transform: translateY(-15px) scale(0.8);
+    max-width: 400px;
+    max-height: 400px;
+    margin: 0 auto;
+  }
+  
+  .tilted-card-figure:hover {
+    transform: translateY(-20px) scale(0.83);
+  }
+}
+
+/* ============================================
+   ALERTS
+   ============================================ */
+
+.tilted-card-mobile-alert {
+  position: absolute;
+  top: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #666;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none;
+  animation: fadeInDown 0.5s ease-out;
+}
+
+/* Show alert on mobile and iPad portrait */
+@media (max-width: 640px), 
+       (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
+  .tilted-card-mobile-alert {
+    display: block;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   CARD INNER ANIMATIONS
+   ============================================ */
+
+.tilted-card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: floatIn 1s ease-out;
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+/* ============================================
+   IMAGE STYLING
+   ============================================ */
+
+.tilted-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  will-change: transform;
+  transform: translateZ(0);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: box-shadow 0.4s ease;
+}
+
+.tilted-card-inner:hover .tilted-card-img {
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.tilted-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  will-change: transform;
+  transform: translateZ(30px);
+  transition: transform 0.4s ease;
+}
+
+/* ============================================
+   GLASS TOOLTIP
+   ============================================ */
+
+.tilted-card-caption {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: top left;
+  
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  line-height: 1.5;
+  white-space: nowrap;
+  
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  
+  /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  
+  /* Multi-layer glass shadow */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  
+  z-index: 100;
+  
+  will-change: transform, opacity;
+  
+  /* Subtle shine effect */
+  overflow: hidden;
+}
+
+/* Glass shine effect */
+.tilted-card-caption::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0%, 100% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+}
+
+/* Frosted glass backdrop on darker backgrounds */
+@media (prefers-color-scheme: dark) {
+  .tilted-card-caption {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.98);
+  }
+}
+
+/* Hide tooltip on mobile and iPad portrait */
+@media (max-width: 640px), 
+       (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
+  .tilted-card-caption {
+    display: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* iPad Landscape - Smaller tooltip and image */
+@media (min-width: 641px) and (max-width: 1024px) and (orientation: landscape) {
+  .tilted-card-caption {
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 10px;
+  }
+  
+  .tilted-card-img {
+    border-radius: 12px;
+    box-shadow: 
+      0 15px 45px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  
+  .tilted-card-inner:hover .tilted-card-img {
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Large tablet/small desktop (1025px - 1366px) */
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .tilted-card-figure {
+    perspective: 1100px;
+    transform: translateY(-35px);
+  }
+  
+  .tilted-card-figure:hover {
+    transform: translateY(-40px);
+  }
+  
+  .tilted-card-caption {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+}
+
+/* Desktop (1367px+) */
+@media (min-width: 1367px) {
+  .tilted-card-figure {
+    perspective: 1200px;
+  }
+  
+  .tilted-card-caption {
+    font-size: 14px;
+    padding: 12px 18px;
+  }
+}
+
+/* ============================================
+   TOUCH DEVICES
+   ============================================ */
+
+/* Touch device adjustments - disable hover effects on tablets */
+@media (hover: none) and (min-width: 641px) {
+  .tilted-card-inner:hover .tilted-card-img {
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  
+  .tilted-card-figure:hover {
+    transform: translateY(-40px);
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .tilted-card-figure,
+  .tilted-card-inner,
+  .tilted-card-img,
+  .tilted-card-overlay,
+  .tilted-card-caption {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   HIGH DPI DISPLAYS
+   ============================================ */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .tilted-card-caption {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ============================================
+   SPECIFIC DEVICE TARGETING (Optional)
+   ============================================ */
+
+/* iPad Pro 11" Landscape */
+@media only screen 
+  and (min-width: 834px) 
+  and (max-width: 1194px) 
+  and (orientation: landscape) {
+  .tilted-card-figure {
+    transform: translateY(-18px) scale(0.82);
+    max-width: 420px;
+    max-height: 420px;
+  }
+}
+
+/* iPad Pro 12.9" Landscape */
+@media only screen 
+  and (min-width: 1024px) 
+  and (max-width: 1366px) 
+  and (orientation: landscape) {
+  .tilted-card-figure {
+    transform: translateY(-25px) scale(0.88);
+    max-width: 480px;
+    max-height: 480px;
+  }
+}
