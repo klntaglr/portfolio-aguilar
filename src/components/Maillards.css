@@ -1,0 +1,53 @@
+:root {
+  font-size: 16px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-Italic.woff2') format('woff2'),
+       url('/fonts/Canela-Italic.woff') format('woff');
+  font-style: italic;
+  font-weight: 400;
+}
+
+
+.loader,
+.demo-wrapper,
+.demo-text
+ {
+  background: transparent !important;
+}
+
+
+.wrapper {
+  display: flex;
+}
+
+
+.demo-gallery:not(.last) {
+  padding-bottom: 1rem;
+}
+
+
+.demo-text .text {
+font-size: clamp(6rem, 12vw, 12rem);
+color: rgba(36, 58, 78, 0.8)
+;
+
+  line-height: 1;
+  font-weight: 700;
+     font-family: 'Inter', sans-serif;
+}
+
+.demo-texts .text {
+font-size: clamp(6rem, 12vw, 12rem);
+color: rgba(189, 206, 107, 0.8)
+;
+
+  line-height: 1;
+  font-weight: 700;
+     font-family: 'Inter', sans-serif;
+}
+

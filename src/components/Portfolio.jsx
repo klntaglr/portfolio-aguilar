@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import './Portfolio.css';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -7,15 +8,25 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 import LogoLoop from './LogoLoop';
 import experienceIcon from "../assets/experience.svg";
 import projects from "../assets/projects.svg";
+import Preloader from './Preloader'; // ADD THIS
+import Maillards from './Maillards';
+import { MdOutlineArrowForwardIos } from "react-icons/md";
+import { MdOutlineArrowBackIos } from "react-icons/md";
 import {
-    SiReact,
-    SiCss3,
     SiHtml5,
+    SiCss3,
+    SiJavascript,
+    SiReact,
+    SiThreedotjs,
     SiFramer,
+
     SiGreensock,
-    SiCanva,
     SiFigma,
+    SiCanva,
+    SiTailwindcss,
+    SiSass
 } from "react-icons/si";
+
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaGift } from "react-icons/fa";
 import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
@@ -36,25 +47,228 @@ import TiltedCard from './TiltedCard';
 import { FaFacebook, FaInstagram, FaLinkedin, FaDribbble, FaDiscord } from 'react-icons/fa';
 import { SiIndeed } from 'react-icons/si';
 import SplitText from "gsap/SplitText";
-
+import { IoIosArrowUp } from "react-icons/io";
 gsap.registerPlugin(SplitText);
 
 function Portfolio() {
+    const [showPreloader, setShowPreloader] = useState(true);
+    const [pageReady, setPageReady] = useState(false);
+    const containerRef = useRef(null);
+    useEffect(() => {
+        let ctx = gsap.context(() => {
+
+            // Z-Index stacking
+            gsap.set(".panels", {
+                zIndex: (i, target, targets) => targets.length - i
+            });
+
+            // Scroll animation
+            gsap.to(".panels:not(:last-child)", {
+                yPercent: -100,
+                ease: "none",
+                stagger: 0.5,
+                scrollTrigger: {
+                    trigger: "#container",
+                    start: "top top",
+                    end: "+=300%",
+                    scrub: true,
+                    pin: true
+                }
+            });
+
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [openService, setOpenService] = useState(0);
     const [showNavbar, setShowNavbar] = useState(true);
 
     const leftRef = useRef(null);
     const sectionRef = useRef(null);
+    const heroRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        offset: ["start start", "end start"]
+    });
+
+    const blur = useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(10px)"]);
+    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
+
     const techLogos = [
         { node: <SiHtml5 />, title: "HTML" },
         { node: <SiCss3 />, title: "CSS" },
+        { node: <SiJavascript />, title: "JavaScript" },
         { node: <SiReact />, title: "React" },
+        { node: <SiThreedotjs />, title: "Three.js" },
         { node: <SiFramer />, title: "Framer" },
+
         { node: <SiGreensock />, title: "GSAP" },
-        { node: <SiCanva />, title: "Canva" },
+        { node: <SiTailwindcss />, title: "Tailwind CSS" },
+        { node: <SiSass />, title: "Sass" },
         { node: <SiFigma />, title: "Figma" },
+        { node: <SiCanva />, title: "Canva" },
     ];
+
+
+    useEffect(() => {
+        const carousel = document.getElementById('projectsCarousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (!carousel || !prevBtn || !nextBtn) return;
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let isDragging = false;
+
+        // GSAP Smooth Scroll Navigation
+        const smoothScrollTo = (targetScroll) => {
+            gsap.to(carousel, {
+                scrollLeft: targetScroll,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        };
+
+        // Get card width for navigation
+        const getCardWidth = () => {
+            const card = carousel.querySelector('.project-card');
+            return card ? card.offsetWidth + 32 : 450; // 32 = gap
+        };
+
+        // Button Navigation with GSAP
+        const handlePrevClick = () => {
+            const cardWidth = getCardWidth();
+            const targetScroll = Math.max(0, carousel.scrollLeft - cardWidth);
+            smoothScrollTo(targetScroll);
+        };
+
+        const handleNextClick = () => {
+            const cardWidth = getCardWidth();
+            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+            const targetScroll = Math.min(maxScroll, carousel.scrollLeft + cardWidth);
+            smoothScrollTo(targetScroll);
+        };
+
+        // Drag functionality with GSAP inertia
+        const handleMouseDown = (e) => {
+            isDown = true;
+            isDragging = false;
+            carousel.classList.add('dragging');
+            startX = e.pageX - carousel.offsetLeft;
+            scrollLeft = carousel.scrollLeft;
+            gsap.killTweensOf(carousel);
+        };
+
+        const handleMouseLeave = () => {
+            if (!isDown) return;
+            isDown = false;
+            carousel.classList.remove('dragging');
+
+            if (isDragging) {
+                // Add snap-to-card effect
+                const cardWidth = getCardWidth();
+                const currentScroll = carousel.scrollLeft;
+                const nearestCard = Math.round(currentScroll / cardWidth) * cardWidth;
+                smoothScrollTo(nearestCard);
+            }
+        };
+
+        const handleMouseUp = () => {
+            if (!isDown) return;
+            isDown = false;
+            carousel.classList.remove('dragging');
+
+            if (isDragging) {
+                // Add snap-to-card effect
+                const cardWidth = getCardWidth();
+                const currentScroll = carousel.scrollLeft;
+                const nearestCard = Math.round(currentScroll / cardWidth) * cardWidth;
+                smoothScrollTo(nearestCard);
+            }
+        };
+
+        const handleMouseMove = (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            isDragging = true;
+            const x = e.pageX - carousel.offsetLeft;
+            const walk = (x - startX) * 2;
+            carousel.scrollLeft = scrollLeft - walk;
+        };
+
+        // Touch Support
+        const handleTouchStart = (e) => {
+            isDown = true;
+            isDragging = false;
+            carousel.classList.add('dragging');
+            startX = e.touches[0].pageX - carousel.offsetLeft;
+            scrollLeft = carousel.scrollLeft;
+            gsap.killTweensOf(carousel);
+        };
+
+        const handleTouchEnd = () => {
+            if (!isDown) return;
+            isDown = false;
+            carousel.classList.remove('dragging');
+
+            if (isDragging) {
+                const cardWidth = getCardWidth();
+                const currentScroll = carousel.scrollLeft;
+                const nearestCard = Math.round(currentScroll / cardWidth) * cardWidth;
+                smoothScrollTo(nearestCard);
+            }
+        };
+
+        const handleTouchMove = (e) => {
+            if (!isDown) return;
+            isDragging = true;
+            const x = e.touches[0].pageX - carousel.offsetLeft;
+            const walk = (x - startX) * 2;
+            carousel.scrollLeft = scrollLeft - walk;
+        };
+
+        // Update button states
+        const updateButtons = () => {
+            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+            prevBtn.disabled = carousel.scrollLeft <= 0;
+            nextBtn.disabled = carousel.scrollLeft >= maxScroll - 5;
+        };
+
+        carousel.addEventListener('scroll', updateButtons);
+        updateButtons();
+
+        // Event Listeners
+        carousel.addEventListener('mousedown', handleMouseDown);
+        carousel.addEventListener('mouseleave', handleMouseLeave);
+        carousel.addEventListener('mouseup', handleMouseUp);
+        carousel.addEventListener('mousemove', handleMouseMove);
+        carousel.addEventListener('touchstart', handleTouchStart);
+        carousel.addEventListener('touchend', handleTouchEnd);
+        carousel.addEventListener('touchmove', handleTouchMove);
+        prevBtn.addEventListener('click', handlePrevClick);
+        nextBtn.addEventListener('click', handleNextClick);
+
+        return () => {
+            carousel.removeEventListener('mousedown', handleMouseDown);
+            carousel.removeEventListener('mouseleave', handleMouseLeave);
+            carousel.removeEventListener('mouseup', handleMouseUp);
+            carousel.removeEventListener('mousemove', handleMouseMove);
+            carousel.removeEventListener('touchstart', handleTouchStart);
+            carousel.removeEventListener('touchend', handleTouchEnd);
+            carousel.removeEventListener('touchmove', handleTouchMove);
+            carousel.removeEventListener('scroll', updateButtons);
+            prevBtn.removeEventListener('click', handlePrevClick);
+            nextBtn.removeEventListener('click', handleNextClick);
+        };
+    }, []);
+
+
+
+
+
     const [localDateTime, setLocalDateTime] = useState("");
     useEffect(() => {
         const updateDateTime = () => {
@@ -371,46 +585,60 @@ function Portfolio() {
 
     }, []);
 
-   const services = [
-    {
-        number: '01',
-        name: 'Landing Page Design',
-        description: 'Strategic landing page design engineered to capture attention, build trust, and drive conversions. Every element is purposefully crafted to guide your audience toward taking action—whether that\'s booking a call, making a purchase, or requesting a demo. The result: landing pages that don\'t just look good, they perform.',
-        tags: ['Conversion Optimization', 'Lead Generation', 'A/B Testing Ready', 'Strategic Messaging', 'Mobile-First Design'],
-        image: mockup
-    },
-    {
-        number: '02',
-        name: 'Website Design',
-        description: 'Premium website design that positions your brand as an industry authority. We create sophisticated digital experiences that communicate credibility, professionalism, and value from the first impression. Your website becomes a powerful asset that attracts ideal clients and sets you apart from competitors.',
-        tags: ['Brand Positioning', 'Premium Design', 'Strategic Architecture', 'Multi-Device Excellence', 'Scalable Systems'],
-        image: mockup1
-    },
-    {
-        number: '03',
-        name: 'UI/UX Design',
-        description: 'User experience design rooted in psychology and business strategy. We eliminate friction, reduce bounce rates, and create intuitive pathways that guide users exactly where you want them to go. The focus is simple: design that feels effortless while driving measurable business outcomes.',
-        tags: ['User Psychology', 'Conversion Flows', 'Behavioral Design', 'Usability Testing', 'Strategic Prototyping'],
-        image: mockup2
-    },
-    {
-        number: '04',
-        name: 'Website Redesign',
-        description: 'Turn your underperforming website into a revenue-generating platform. We revitalize outdated brands with modern design systems, improved user journeys, and strategic messaging that resonates with today\'s market. Your refreshed website will reflect where your business is going—not where it\'s been.',
-        tags: ['Brand Evolution', 'Competitive Repositioning', 'Legacy Modernization', 'Growth-Focused Redesign', 'Market Alignment'],
-        image: mockup3
-    },
-    {
-        number: '05',
-        name: 'Interactive Web Design',
-        description: 'Immersive web experiences that captivate and engage. Through sophisticated animations, scroll-triggered interactions, and micro-moments of delight, we create websites that people remember and talk about. Stand out in crowded markets with digital experiences that feel less like websites and more like journeys.',
-        tags: ['Cinematic Scrolling', 'Brand Storytelling', 'Advanced Animations', 'Memorable Interactions', 'Premium Polish'],
-        image: mockup4
-    }
-];
+    const services = [
+        {
+            number: '01',
+            name: 'Landing Page Design',
+            description: 'Strategic landing page design engineered to capture attention, build trust, and drive conversions. Every element is purposefully crafted to guide your audience toward taking action—whether that\'s booking a call, making a purchase, or requesting a demo. The result: landing pages that don\'t just look good, they perform.',
+            tags: ['Conversion Optimization', 'Lead Generation', 'A/B Testing Ready', 'Strategic Messaging', 'Mobile-First Design'],
+            image: mockup
+        },
+        {
+            number: '02',
+            name: 'Website Design',
+            description: 'Premium website design that positions your brand as an industry authority. We create sophisticated digital experiences that communicate credibility, professionalism, and value from the first impression. Your website becomes a powerful asset that attracts ideal clients and sets you apart from competitors.',
+            tags: ['Brand Positioning', 'Premium Design', 'Strategic Architecture', 'Multi-Device Excellence', 'Scalable Systems'],
+            image: mockup1
+        },
+        {
+            number: '03',
+            name: 'UI/UX Design',
+            description: 'User experience design rooted in psychology and business strategy. We eliminate friction, reduce bounce rates, and create intuitive pathways that guide users exactly where you want them to go. The focus is simple: design that feels effortless while driving measurable business outcomes.',
+            tags: ['User Psychology', 'Conversion Flows', 'Behavioral Design', 'Usability Testing', 'Strategic Prototyping'],
+            image: mockup2
+        },
+        {
+            number: '04',
+            name: 'Website Redesign',
+            description: 'Turn your underperforming website into a revenue-generating platform. We revitalize outdated brands with modern design systems, improved user journeys, and strategic messaging that resonates with today\'s market. Your refreshed website will reflect where your business is going—not where it\'s been.',
+            tags: ['Brand Evolution', 'Competitive Repositioning', 'Legacy Modernization', 'Growth-Focused Redesign', 'Market Alignment'],
+            image: mockup3
+        },
+        {
+            number: '05',
+            name: 'Interactive Web Design',
+            description: 'Immersive web experiences that captivate and engage. Through sophisticated animations, scroll-triggered interactions, and micro-moments of delight, we create websites that people remember and talk about. Stand out in crowded markets with digital experiences that feel less like websites and more like journeys.',
+            tags: ['Cinematic Scrolling', 'Brand Storytelling', 'Advanced Animations', 'Memorable Interactions', 'Premium Polish'],
+            image: mockup4
+        }
+    ];
+
+    const handlePreloaderComplete = () => {
+        setShowPreloader(false);
+        setPageReady(true);
+
+        ScrollTrigger.refresh();
+    };
 
 
 
+    useEffect(() => {
+        if (!pageReady) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+    }, [pageReady]);
 
 
 
@@ -465,140 +693,44 @@ function Portfolio() {
             document.body.classList.remove('menu-open');
         };
     }, [isMobileMenuOpen]);
-useEffect(() => {
-
-    let ctx = gsap.context(() => {
-
-        const elements = gsap.utils.toArray(".split-animate");
-
-        elements.forEach((el) => {
-
-            const split = new SplitText(el, {
-                type: "lines,words",
-                linesClass: "ts-line"
-            });
-
-            gsap.from(split.words, {
-                yPercent: 100,
-                opacity: 0,
-                stagger: 0.05,
-                duration: 0.6,
-                ease: "circ.out",
-
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 85%",
-                    toggleActions: "play none none none",
-                    once: true // 🔥 Important
-                }
-            });
-
-        });
-
-    });
-
-    return () => ctx.revert();
-
-}, []);
-
-
-// Combined Animations - Navbar, Buttons, Topbar
     useEffect(() => {
+
+
+
         let ctx = gsap.context(() => {
-            
-            // 1. NAVBAR ANIMATION
-            gsap.from(".navbar", {
-                y: -20,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power2.out"
-            });
 
-            gsap.from(".nav-links li, .nav-cta-btn, .mobile-menu-button", {
-                opacity: 0,
-                y: -10,
-                duration: 0.6,
-                stagger: 0.08,
-                ease: "power2.out",
-                delay: 0.3
-            });
+            const elements = gsap.utils.toArray(".split-animate");
 
-            // 2. HERO CTA BUTTON
-            gsap.from(".hero-section .cta-button", {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                delay: 0.8
-            });
 
-            // 3. ABOUT TOPBAR
-            gsap.from(".about-topbar .about-index", {
-                x: -50,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".about-topbar",
-                    start: "top 80%",
-                    toggleActions: "play none none none",
-                    once: true
-                }
-            });
+            elements.forEach((el) => {
 
-            gsap.from(".about-topbar .about-mini-desc", {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".about-topbar",
-                    start: "top 80%",
-                    toggleActions: "play none none none",
-                    once: true
-                },
-                delay: 0.2
-            });
+                const split = new SplitText(el, {
+                    type: "lines,words",
+                    linesClass: "ts-line"
+                });
 
-            gsap.from(".about-topbar .cta-button", {
-                scale: 0.9,
-                opacity: 0,
-                duration: 0.8,
-                ease: "back.out(1.7)",
-                scrollTrigger: {
-                    trigger: ".about-topbar",
-                    start: "top 80%",
-                    toggleActions: "play none none none",
-                    once: true
-                },
-                delay: 0.4
-            });
-
-            // 4. OTHER CTA BUTTONS (scroll-triggered)
-            gsap.utils.toArray(".cta-button").forEach((btn) => {
-                if (btn.closest('.hero-section') || btn.closest('.about-topbar')) return;
-                
-                gsap.from(btn, {
-                    y: 20,
+                gsap.from(split.words, {
+                    yPercent: 100,
                     opacity: 0,
+                    stagger: 0.05,
                     duration: 0.6,
-                    ease: "power3.out",
+                    ease: "circ.out",
+
                     scrollTrigger: {
-                        trigger: btn,
-                        start: "top 90%",
+                        trigger: el,
+                        start: "top 85%",
                         toggleActions: "play none none none",
-                        once: true
+                        once: true // 🔥 Important
                     }
                 });
+
             });
 
         });
 
         return () => ctx.revert();
+
     }, []);
-
-
-
 
 
 
@@ -607,12 +739,13 @@ useEffect(() => {
 
     return (
         <>
-            <div id="smooth-wrapper">
+            {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+            <div id="smooth-wrapper" >
                 <div id="smooth-content">
-                    <div className="portfolio-container" style={{ backgroundImage: `url(${blueBackground1})` }}>
+                    <div className="portfolio-container" id="heros" style={{ backgroundImage: `url(${blueBackground1})` }}>
                         <nav className={`navbar ${showNavbar ? 'navbar-visible' : 'navbar-hidden'}`}>
                             <div className="logo">
-                                <a href="#hero">
+                                <a href="#heros">
                                     <img src={logo} alt="Logo" />
                                 </a>
 
@@ -621,7 +754,7 @@ useEffect(() => {
                             <ul className="nav-links desktop-nav">
 
                                 <li>
-                                    <a href="#about" className="nav-link-animated">
+                                    <a href="/about-web-designer" className="nav-link-animated">
                                         <span className="nav-text">
                                             <span className="nav-text-top">About</span>
                                             <span className="nav-text-bottom">About</span>
@@ -655,13 +788,21 @@ useEffect(() => {
                                         </span>
                                     </a>
                                 </li>
-
+                                <li>
+                                    <a href="#faq" className="nav-link-animated">
+                                        <span className="nav-text">
+                                            <span className="nav-text-top">FAQS</span>
+                                            <span className="nav-text-bottom">FAQS</span>
+                                        </span>
+                                    </a>
+                                </li>
                                 {/* CTA stays untouched */}
-                                <button className="nav-cta-btn">
+                                <a href="/free-landing-page" className="nav-cta-btn">
                                     <TfiLayoutMediaLeftAlt className="nav-cta-icon" />Free Landing Page
-                                </button>
+                                </a>
 
                             </ul>
+
 
 
 
@@ -706,7 +847,7 @@ useEffect(() => {
                             <nav className="mobile-nav-container">
                                 <ul className="mobile-nav-links">
                                     <li className="mobile-nav-item">
-                                        <a href="#about" onClick={closeMobileMenu} className="mobile-nav-link">
+                                        <a href="/about-web-designer" onClick={closeMobileMenu} className="mobile-nav-link">
                                             <span className="nav-number">01</span>
                                             <div className="nav-content">
                                                 <span className="nav-label">About</span>
@@ -785,15 +926,18 @@ useEffect(() => {
                                 </a>
                             </div>
                         </div>
-
-
-                        <main className="hero-section panel" id="hero">
+                        <motion.main
+                            ref={heroRef}
+                            className="hero-section panel"
+                            id="hero"
+                            style={{ filter: blur, opacity }}
+                        >
                             <div className="hero-wrapper">
                                 <div className="hero-content">
                                     <p className="tagline split-animate">UI/UX & Web Designer</p>
-                                 <h1 className="hero-title split-animate">
-  Great brands aren't built overnight but they're felt instantly. I create <span className="highlight">digital experiences</span> that define yours.
-</h1>
+                                    <h1 className="hero-title split-animate">
+                                        Great brands aren't built overnight but they're felt instantly. I create <span className="highlight">digital experiences</span> that define yours.
+                                    </h1>
 
                                     <button className="cta-button ">
                                         Let's Collaborate
@@ -802,7 +946,7 @@ useEffect(() => {
 
                                 <TiltedCard
                                     imageSrc={mockup4}
-                                    altText="Mockup 3"
+                                    altText="Klent Russell Aguilar"
                                     captionText="Web Designer | Klent Russell Aguilar"
                                     containerHeight="clamp(240px, 70vw, 520px)"
                                     containerWidth="clamp(240px, 70vw, 520px)"
@@ -813,23 +957,19 @@ useEffect(() => {
                                     showMobileWarning={false}
                                     showTooltip
                                     displayOverlayContent={false}
-                                    overlayContent={
-                                        <p className="tilted-card-demo-text">
-                                            Mockup Preview
-                                        </p>
-                                    }
+
                                 />
                             </div>
 
-                        </main>
+                        </motion.main>
                     </div>
 
                     {/* About Section */}
                     <section className="about-section">
                         <div className="about-container">
-                         <h2 className="about-title split-animate" id="about">
-    Where brand strategy meets exceptional design — <span className="about-title-accent">creating websites that elevate businesses and drive meaningful growth.</span>
-</h2>
+                            <h2 className="about-title split-animate" id="about">
+                                Where brand strategy meets exceptional design — <span className="about-title-accent">creating websites that elevate businesses and drive meaningful growth.</span>
+                            </h2>
 
 
                             <div className="about-content">
@@ -842,18 +982,18 @@ useEffect(() => {
                                             <img src={virielleLogo} alt="Virielle Logo" />
                                         </div>
 
-                                     <h3 className="card-label">STRATEGY FIRST</h3>
-                                         <p className="card-description">
-                Design that thinks. Websites that convert. Brands that last.
-            </p>
+                                        <h3 className="card-label">STRATEGY FIRST</h3>
+                                        <p className="card-description">
+                                            Design that thinks. Websites that convert. Brands that last.
+                                        </p>
 
                                     </div>
 
                                     <div className="about-card card-dark">
                                         <h3 className="card-title">
-                                              <span className="title-design">CRAFT</span>
-                <span className="title-designs">&</span>
-                <span className="title-create">GROW</span>
+                                            <span className="title-design">CRAFT</span>
+                                            <span className="title-designs">&</span>
+                                            <span className="title-create">GROW</span>
                                         </h3>
 
                                         <p className="card-date">Since 2025</p>
@@ -881,10 +1021,10 @@ useEffect(() => {
                                 <span className="about-index">(ABOUT — 01)</span>
 
                                 <p className="about-mini-desc">
-        Building websites that strengthen credibility and create lasting impressions.
-    </p>
+                                    Building websites that strengthen credibility and create lasting impressions.
+                                </p>
                                 <button className="cta-button">
-                                    Book a Call Now
+                                    Let's Collaborate
 
 
                                 </button>
@@ -902,9 +1042,9 @@ useEffect(() => {
                             <div className="services-content">
                                 <span className="services-index">(SERVICE — 02)</span>
 
-                             <h3 className="services-subtitle split-animate">
-    Transforming brands through <span className="services-subtitle-accent">purposeful design and strategic digital experiences.</span>
-</h3>
+                                <h3 className="services-subtitle split-animate">
+                                    Transforming brands through <span className="services-subtitle-accent">purposeful design and strategic digital experiences.</span>
+                                </h3>
                             </div>
 
                             <div className="services-divider"></div>
@@ -965,71 +1105,155 @@ useEffect(() => {
                     </section>
 
                     {/* Works Section */}
-                    <section className="works-section" >
+                    <section className="works-section">
                         <div className="works-container">
                             <div className="works-header">
                                 <h2 className="works-title" id="projects">Works</h2>
-                                <span className="works-index">(PROJECT — 03)</span>
+                                <div className="works-header-right">
+                                    <span className="works-index">(PROJECT — 03)</span>
+                                    <div className="carousel-controls">
+                                        <button className="carousel-nav-btn prev-btn" id="prevBtn">
+                                            <MdOutlineArrowBackIos />
+                                        </button>
+                                        <button className="carousel-nav-btn next-btn" id="nextBtn">
+                                            <MdOutlineArrowForwardIos />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="works-divider"></div>
 
-                            <div className="projects-grid">
-                                <div className="project-card">
-                                    <div className="project-image">
-                                        <img src={mockup} alt="Martin Architectural" />
-                                        <div className="project-overlay">
-                                            <div className="project-icon">
-                                                <FiArrowUpRight />
+                            {/* GSAP Smooth Carousel */}
+                            <div className="projects-carousel-wrapper">
+                                <div className="projects-carousel" id="projectsCarousel">
+                                    <div className="carousel-track" id="carouselTrack">
+                                        {/* Project 1 */}
+                                        <div className="project-card">
+                                            <div className="project-image">
+                                                <img src={mockup} alt="Martin Architectural" draggable="false" />
+                                                <div className="project-overlay">
+                                                    <div className="project-icon">
+                                                        <FiArrowUpRight />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="project-info">
+                                                <div className="project-info-left">
+                                                    <h3 className="project-title">Martin Architectural</h3>
+                                                    <p className="project-year">(2025 — 2026)</p>
+                                                </div>
+                                                <div className="project-tags">
+                                                    <span className="project-tag">Website Design</span>
+                                                    <span className="project-tag">Architecture</span>
+                                                    <span className="project-tag">Animation</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="project-info">
-                                        <div className="project-info-left">
-                                            <h3 className="project-title">Martin Architectural</h3>
-                                            <p className="project-year">(2025 — 2026)</p>
-                                        </div>
-                                        <div className="project-tags">
-                                            <span className="project-tag">Website Design</span>
-                                            <span className="project-tag">Architecture</span>
-                                            <span className="project-tag">Animation</span>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div className="project-card">
-                                    <div className="project-image">
-                                        <img src={mockup1} alt="Century 21 Pura Vida" />
-                                        <div className="project-overlay">
-                                            <div className="project-icon">
-                                                <FiArrowUpRight />
+                                        {/* Project 2 */}
+                                        <div className="project-card">
+                                            <div className="project-image">
+                                                <img src={mockup1} alt="Century 21 Pura Vida" draggable="false" />
+                                                <div className="project-overlay">
+                                                    <div className="project-icon">
+                                                        <FiArrowUpRight />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="project-info">
+                                                <div className="project-info-left">
+                                                    <h3 className="project-title">Century 21® Pura Vida</h3>
+                                                    <p className="project-year">(2025 — 2026)</p>
+                                                </div>
+                                                <div className="project-tags">
+                                                    <span className="project-tag">Website Design</span>
+                                                    <span className="project-tag">UI/UX</span>
+                                                    <span className="project-tag">Real Estate</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="project-info">
-                                        <div className="project-info-left">
-                                            <h3 className="project-title">Century 21® Pura Vida</h3>
-                                            <p className="project-year">(2025 — 2026)</p>
+
+                                        {/* Project 3 */}
+                                        <div className="project-card">
+                                            <div className="project-image">
+                                                <img src={mockup2} alt="Digital Wellness" draggable="false" />
+                                                <div className="project-overlay">
+                                                    <div className="project-icon">
+                                                        <FiArrowUpRight />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="project-info">
+                                                <div className="project-info-left">
+                                                    <h3 className="project-title">Digital Wellness</h3>
+                                                    <p className="project-year">(2025 — 2026)</p>
+                                                </div>
+                                                <div className="project-tags">
+                                                    <span className="project-tag">UI/UX Design</span>
+                                                    <span className="project-tag">Healthcare</span>
+                                                    <span className="project-tag">Interaction</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="project-tags">
-                                            <span className="project-tag">Website Design</span>
-                                            <span className="project-tag">UI/UX</span>
-                                            <span className="project-tag">Real Estate</span>
+
+                                        {/* Project 4 */}
+                                        <div className="project-card">
+                                            <div className="project-image">
+                                                <img src={mockup3} alt="Brand Refresh" draggable="false" />
+                                                <div className="project-overlay">
+                                                    <div className="project-icon">
+                                                        <FiArrowUpRight />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="project-info">
+                                                <div className="project-info-left">
+                                                    <h3 className="project-title">Brand Refresh</h3>
+                                                    <p className="project-year">(2025 — 2026)</p>
+                                                </div>
+                                                <div className="project-tags">
+                                                    <span className="project-tag">Redesign</span>
+                                                    <span className="project-tag">Branding</span>
+                                                    <span className="project-tag">Modern</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Project 5 */}
+                                        <div className="project-card">
+                                            <div className="project-image">
+                                                <img src={mockup4} alt="Interactive Portfolio" draggable="false" />
+                                                <div className="project-overlay">
+                                                    <div className="project-icon">
+                                                        <FiArrowUpRight />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="project-info">
+                                                <div className="project-info-left">
+                                                    <h3 className="project-title">Interactive Portfolio</h3>
+                                                    <p className="project-year">(2025 — 2026)</p>
+                                                </div>
+                                                <div className="project-tags">
+                                                    <span className="project-tag">Interactive</span>
+                                                    <span className="project-tag">Animation</span>
+                                                    <span className="project-tag">Creative</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="works-statement">
-                        <p className="statement-text split-animate">
-    Selected projects showcasing design that performs
-    <span className="statement-highlight"> beautiful, strategic, and built for growth.</span>
-</p>
+                                <p className="statement-text split-animate">
+                                    Selected projects showcasing design that performs
+                                    <span className="statement-highlight"> beautiful, strategic, and built for growth.</span>
+                                </p>
                                 <button className="cta-button">
                                     Start your Project
-
                                 </button>
-
                             </div>
                         </div>
                     </section>
@@ -1041,14 +1265,14 @@ useEffect(() => {
                             <div className="process-header-wrapper">
                                 <div className="process-header" id="process">
                                     <span className="process-index">(PROCESS — 04)</span>
-<h2 className="process-title split-animate">
-    My design process
-    <span className="process-title-accent"> where strategy, creativity, and execution align.</span>
-</h2>
+                                    <h2 className="process-title split-animate">
+                                        My design process
+                                        <span className="process-title-accent"> where strategy, creativity, and execution align.</span>
+                                    </h2>
 
-<p className="process-subtitle split-animate">
-    A proven methodology that transforms business goals into high-performing digital experiences through strategic planning, thoughtful design, and precise execution.
-</p>
+                                    <p className="process-subtitle split-animate">
+                                        A proven methodology that transforms business goals into high-performing digital experiences through strategic planning, thoughtful design, and precise execution.
+                                    </p>
 
 
                                 </div>
@@ -1193,26 +1417,6 @@ useEffect(() => {
                         </div>
                     </section>
 
-                    {/* Parallax Reveal Section */}
-                    {/* CTA Parallax Section - Replace your parallax section with this */}
-                    <section className="parallax-reveal-section ">
-                        <div className="parallax-reveal-sticky">
-                            <div className="parallax-reveal-card">
-                            <h2 className="cta-title split-animate">
-    Your website should be your <span className="highlight">best salesperson</span>
-</h2>
-
-<p className="cta-description split-animate">
-    I know the frustration of running a successful business while your website fails to communicate your value. You're losing opportunities to competitors with better digital presence. Let's fix that. Together, we'll build a website that attracts, engages, and converts.
-</p>
-
-<button className="cta-button">
-    Book a Free Consultation
-</button>
-
-                            </div>
-                        </div>
-                    </section>
 
                     {/* Man Behind The Work Section */}
                     <section className="man-behind-section">
@@ -1245,9 +1449,9 @@ useEffect(() => {
                                         </div>
 
 
-                                     <p className="card-description split-animate">
-    "I don't just design websites. I build digital experiences that turn businesses into brands and visitors into believers."
-</p>
+                                        <p className="card-description split-animate">
+                                            "I don't just design websites. I build digital experiences that turn businesses into brands and visitors into believers."
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="about-stats ">
@@ -1280,16 +1484,19 @@ useEffect(() => {
 
 
                                 <p className="about-mini-desc">
-                                  ( ABOUT THE DESIGNER — 05 )
+                                    ( ABOUT THE DESIGNER — 05 )
                                 </p>
 
-                   <button className="cta-button">
-    Get to Know Me
-</button>
+                                <button className="cta-button">
+                                    Get to Know Me
+                                </button>
                             </div>
                         </div>
                     </section>
-                    <section className="faq-section">
+
+
+
+                    <section className="faq-section" id="faq">
                         <div className="faq-container">
                             <h2 className="faq-title split-animate">Questions You Might Ask</h2>
 
@@ -1331,134 +1538,158 @@ useEffect(() => {
                         </div>
                     </section>
 
-                    {/* Footer Section */}
-                    <footer className="footer-section">
-                        <div className="footer-container">
-                            <div className="footer-top">
-                                <div className="footer-cta">
-                                    <p className="footer-label split-animate">HAVE ANY PROJECT IN MIND?</p>
-                                    <h2 className="footer-email ">
-                                        <a href="mailto:klentaguilar@gmail.com">klentaguilar@gmail.com</a>
+                    <section className="works-section">
+                        <Maillards />
+                    </section>
+
+
+                    <div id="container" ref={containerRef}>
+                        <section className="parallax-reveal-section panels">
+                            <div className="parallax-reveal-sticky">
+                                <div className="parallax-reveal-card">
+                                    <h2 className="cta-title split-animate">
+                                        Your website should be your <span className="highlight">best salesperson</span>
                                     </h2>
-                                    <button className="footer-cta-button">
-                                        Let's Collaborate
-                                        <span className="footer-arrow-circle">
-                                            <FaArrowRight />
-                                        </span>
+
+                                    <p className="cta-description split-animate">
+                                        I know the frustration of running a successful business while your website fails to communicate your value. You're losing opportunities to competitors with better digital presence. Let's fix that. Together, we'll build a website that attracts, engages, and converts.
+                                    </p>
+
+                                    <button className="cta-button">
+                                        Book a Free Consultation
+                                    </button>
+
+                                </div>
+                            </div>
+                        </section>
+                        {/* Footer Section */}
+                        <footer className="footer-section panels">
+                            <div className="footer-container">
+                                <div className="footer-top">
+                                    <div className="footer-cta">
+                                        <p className="footer-label">HAVE ANY PROJECT IN MIND?</p>
+                                        <h2 className="footer-email ">
+                                            <a href="mailto:klentaguilar@gmail.com">klentaguilar@gmail.com</a>
+                                        </h2>
+                                        <button className="footer-cta-button">
+                                            Let's Collaborate
+                                            <span className="footer-arrow-circle">
+                                                <FaArrowRight />
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="footer-middle">
+                                    <div className="footer-brand">
+                                        <div className="footer-logo-section">
+                                            <img src={logo} alt="Logo" className="footer-logo" />
+                                            <div className="footer-logo-text">
+                                                <span className="logo-name">Russell</span>
+                                                <span className="logo-surname">Aguilar</span>
+                                            </div>
+                                        </div>
+                                        <div className="footer-brand-content">
+                                            <p className="footer-tagline split-animate">
+                                                Specializing in premium web design that transforms businesses into recognized brands through strategic planning, refined execution, and conversion-focused design.
+                                            </p>
+
+                                            <p className="footer-copyright">
+                                                © 2026 Designed and developed by Klent Russell Aguilar | Web Designer
+                                            </p>
+                                        </div>
+
+
+                                        <div className="footer-location-info">
+                                            <div className="footer-info-item">
+                                                <p className="footer-info-label">Local Address:</p>
+                                                <p className="footer-info-value">Malolos City, Bulacan, Philippines
+                                                </p>
+                                            </div>
+                                            <div className="footer-info-item">
+                                                <p className="footer-info-label">Local Time:</p>
+                                                <p className="footer-info-value">
+                                                    {localDateTime} Philippines (UTC+8)
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="footer-links">
+                                        <div className="footer-column">
+                                            <h3 className="footer-column-title">NAVIGATE</h3>
+                                            <ul className="footer-nav-list">
+                                                <li><a href="#heros">Home</a></li>
+                                                <li><a href="#about">About</a></li>
+                                                <li><a href="#services">Services</a></li>
+                                                <li><a href="#projects">Projects</a></li>
+                                                <li><a href="#process">Process</a></li>
+                                                <li><a href="#process">Contact</a></li>
+                                                <li><a href="#about">Profile</a></li>
+
+
+                                            </ul>
+                                        </div>
+
+                                        <div className="footer-column">
+                                            <h3 className="footer-column-title">SOCIAL MEDIA</h3>
+                                            <ul className="footer-nav-list">
+                                                <li>
+                                                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                                                        <FaFacebook className="footer-icon" /> Facebook
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                                                        <FaInstagram className="footer-icon" /> Instagram
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer">
+                                                        <FaDribbble className="footer-icon" /> Dribbble
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+                                                        <FaDiscord className="footer-icon" /> Discord
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                                                        <FaLinkedin className="footer-icon" /> LinkedIn
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://indeed.com" target="_blank" rel="noopener noreferrer">
+                                                        <SiIndeed className="footer-icon" /> Indeed
+                                                    </a>
+                                                </li>
+
+                                            </ul>        </div>
+                                    </div>
+                                </div>
+
+                                <div className="footer-bottom">
+                                    <div className="footer-logo-large">
+                                        <span className="logo-virielle-large">PORTFOLIO</span>
+
+                                    </div>
+                                    <button className="scroll-to-top" onClick={() => {
+                                        gsap.to(window, {
+                                            duration: 1.4,
+                                            scrollTo: { y: 0 },
+                                            ease: "power3.out"
+                                        });
+                                    }}>
+                                        <IoIosArrowUp />
                                     </button>
                                 </div>
                             </div>
-
-                            <div className="footer-middle">
-                                <div className="footer-brand">
-                                    <div className="footer-logo-section">
-                                        <img src={logo} alt="Logo" className="footer-logo" />
-                                        <div className="footer-logo-text">
-                                            <span className="logo-name">Russell</span>
-                                            <span className="logo-surname">Aguilar</span>
-                                        </div>
-                                    </div>
-                                    <div className="footer-brand-content">
-                                     <p className="footer-tagline split-animate">
-    Specializing in premium web design that transforms businesses into recognized brands through strategic planning, refined execution, and conversion-focused design.
-</p>
-
-                                        <p className="footer-copyright">
-                                            © 2026 Designed and developed by Klent Russell Aguilar | Web Designer
-                                        </p>
-                                    </div>
-
-
-                                    <div className="footer-location-info">
-                                        <div className="footer-info-item">
-                                            <p className="footer-info-label">Local Address:</p>
-                                            <p className="footer-info-value">Malolos City, Bulacan, Philippines
-                                            </p>
-                                        </div>
-                                        <div className="footer-info-item">
-                                            <p className="footer-info-label">Local Time:</p>
-                                            <p className="footer-info-value">
-                                                {localDateTime} Philippines (UTC+8)
-                                            </p>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="footer-links">
-                                    <div className="footer-column">
-                                        <h3 className="footer-column-title">NAVIGATE</h3>
-                                        <ul className="footer-nav-list">
-                                            <li><a href="#hero">Home</a></li>
-                                            <li><a href="#about">About</a></li>
-                                            <li><a href="#services">Services</a></li>
-                                            <li><a href="#projects">Projects</a></li>
-                                            <li><a href="#process">Process</a></li>
-                                            <li><a href="#process">Contact</a></li>
-                                            <li><a href="#about">Profile</a></li>
-
-
-                                        </ul>
-                                    </div>
-
-                                    <div className="footer-column">
-                                        <h3 className="footer-column-title">SOCIAL MEDIA</h3>
-                                        <ul className="footer-nav-list">
-                                            <li>
-                                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                                                    <FaFacebook className="footer-icon" /> Facebook
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                                                    <FaInstagram className="footer-icon" /> Instagram
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer">
-                                                    <FaDribbble className="footer-icon" /> Dribbble
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-                                                    <FaDiscord className="footer-icon" /> Discord
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                                                    <FaLinkedin className="footer-icon" /> LinkedIn
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="https://indeed.com" target="_blank" rel="noopener noreferrer">
-                                                    <SiIndeed className="footer-icon" /> Indeed
-                                                </a>
-                                            </li>
-
-                                        </ul>        </div>
-                                </div>
-                            </div>
-
-                            <div className="footer-bottom">
-                                <div className="footer-logo-large">
-                                    <span className="logo-virielle-large">PORTFOLIO</span>
-
-                                </div>
-                                <button className="scroll-to-top" onClick={() => {
-                                    gsap.to(window, {
-                                        duration: 1.4,
-                                        scrollTo: { y: 0 },
-                                        ease: "power3.out"
-                                    });
-                                }}>
-                                    <FaArrowUpLong />
-                                </button>
-                            </div>
-                        </div>
-                    </footer>
-
+                        </footer>
+                    </div>
                 </div>
             </div>
         </>
