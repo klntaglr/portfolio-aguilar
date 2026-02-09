@@ -423,21 +423,23 @@ function Contact() {
 
             ScrollTrigger.create({
                 snap: {
-                    snapTo: () => {
+snapTo: () => {
 
-                        let panelStarts = tops.map(st => st.start);
+    let panelStarts = tops.map(st => st.start);
 
-                        let snapScroll = gsap.utils.snap(
-                            panelStarts,
-                            ScrollTrigger.scroll()
-                        );
+    let snapScroll = gsap.utils.snap(
+        panelStarts,
+        ScrollTrigger.scroll()
+    );
 
-                        return gsap.utils.normalize(
-                            0,
-                            ScrollTrigger.maxScroll(),
-                            snapScroll
-                        );
-                    },
+    return gsap.utils.normalize(
+        0,
+        ScrollTrigger.maxScroll(),
+        snapScroll
+    );
+}
+
+,
                     duration: 0.5
                 }
             });
@@ -903,7 +905,7 @@ function Contact() {
                                             </div>
 
                                             <div className="submit-wrapper">
-                                                <button type="submit" className="submit-btn">
+                                                <button type="submit" className="recaptcha-wrapper">
                                                     Send
                                                 </button>
                                             </div>
@@ -964,7 +966,7 @@ function Contact() {
                                             <a href="mailto:klentaguilar@gmail.com">klentaguilar@gmail.com</a>
                                         </h2>
                                         <button className="footer-cta-button">
-                                            Let's Collaborate
+                                      Start a Conversation
                                             <span className="footer-arrow-circle">
                                                 <FaArrowRight />
                                             </span>
@@ -982,12 +984,12 @@ function Contact() {
                                             </div>
                                         </div>
                                         <div className="footer-brand-content">
-                                            <p className="footer-tagline split-animate">
-                                                Specializing in premium web design that transforms businesses into recognized brands through strategic planning, refined execution, and conversion-focused design.
+                                                 <p className="footer-tagline split-animate">
+                                                Web designer focused on creating user-friendly, conversion-oriented websites through thoughtful design, clean development, and attention to user experience.
                                             </p>
 
                                             <p className="footer-copyright">
-                                                © 2026 Designed and developed by Klent Russell Aguilar | Web Designer
+                                                © 2025 Designed and developed by Klent Russell Aguilar | Web Designer
                                             </p>
                                         </div>
 

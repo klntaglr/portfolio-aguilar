@@ -5,7 +5,7 @@ import LandingPage from "./components/LandingPage";
 import Contact from "./components/Contact";
 import './App.css';
 import NotFound from "./components/NotFound";
-
+import Terms from "./components/Terms";
 function App() {
   return (
     <Router>
@@ -14,6 +14,7 @@ function App() {
         <Route path="/about-web-designer" element={<About />} />
         <Route path="/free-landing-page" element={<LandingPage />} />
 <Route path="/contact-me" element={<Contact />} />
+<Route path="/free-landing-page/terms-and-conditions" element={<Terms />} />
 
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />

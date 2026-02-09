@@ -104,7 +104,7 @@ export default function Maillards() {
         
         </section>
 
-  <section className="demo-texts">
+  <section className="demo-text">
           <div className="wrapper text">
         YOURYOURYOURYOURYOUR
           </div>

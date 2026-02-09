@@ -9,7 +9,8 @@ import LogoLoop from './LogoLoop';
 import experienceIcon from "../assets/experience.svg";
 import projects from "../assets/projects.svg";
 import Preloader from './Preloader'; // ADD THIS
-import Maillards from './Maillards';
+import Maillards from './Maillards'; import { FaBookOpen } from "react-icons/fa6";
+
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import {
@@ -36,6 +37,7 @@ import blueBackground from '../assets/blue.jpg';
 import { FaArrowRight, FaArrowUpLong } from "react-icons/fa6";
 import { FiArrowUpRight } from "react-icons/fi";
 import blueBackground1 from '../assets/blue1.png';
+import since from '../assets/since.jpg';
 import virielleLogo from "../assets/viriellelogo.png";
 import mockup from '../assets/mockup.jpg';
 import mockup1 from '../assets/mockup1.jpg';
@@ -407,10 +409,13 @@ function Portfolio() {
     // Smooth scroll for anchor links
     useEffect(() => {
         const handleSmoothScroll = (e) => {
-            const link = e.target.closest("a[href^='#']");
+            const link = e.target.closest("a[href*='#']");
+
             if (!link) return;
 
-            const target = document.querySelector(link.getAttribute("href"));
+            const id = link.getAttribute("href").split("#")[1];
+            const target = document.getElementById(id);
+
             if (!target) return;
 
             e.preventDefault();
@@ -527,7 +532,9 @@ function Portfolio() {
                             ScrollTrigger.maxScroll(),
                             snapScroll
                         );
-                    },
+                    }
+
+                    ,
                     duration: 0.5
                 }
             });
@@ -589,40 +596,78 @@ function Portfolio() {
         {
             number: '01',
             name: 'Landing Page Design',
-            description: 'Strategic landing page design engineered to capture attention, build trust, and drive conversions. Every element is purposefully crafted to guide your audience toward taking action—whether that\'s booking a call, making a purchase, or requesting a demo. The result: landing pages that don\'t just look good, they perform.',
-            tags: ['Conversion Optimization', 'Lead Generation', 'A/B Testing Ready', 'Strategic Messaging', 'Mobile-First Design'],
+            description: 'Focused landing page design built to capture attention and encourage action. I create pages with clear messaging, strategic layouts, and user-friendly interfaces that guide visitors toward your goals—whether that\'s generating leads, driving sign-ups, or showcasing your offer. I also offer limited free landing page opportunities for select projects in exchange for feedback and portfolio permission.',
+            tags: [
+                'Lead Generation',
+                'Conversion-Focused',
+                'Mobile Responsive',
+                'Strategic Layout',
+                'Free Opportunity Available',
+                'Portfolio Projects'
+            ],
             image: mockup
         },
+
         {
             number: '02',
-            name: 'Website Design',
-            description: 'Premium website design that positions your brand as an industry authority. We create sophisticated digital experiences that communicate credibility, professionalism, and value from the first impression. Your website becomes a powerful asset that attracts ideal clients and sets you apart from competitors.',
-            tags: ['Brand Positioning', 'Premium Design', 'Strategic Architecture', 'Multi-Device Excellence', 'Scalable Systems'],
+            name: 'Website Design & Development',
+            description: 'Complete website design that communicates your brand professionally and serves your business goals. I focus on creating clean, modern layouts with intuitive navigation, responsive design, and performance optimization. From small business sites to portfolio showcases, I build websites that look professional and function smoothly.',
+            tags: [
+                'Responsive Design',
+                'Modern Layouts',
+                'Professional Aesthetic',
+                'Performance Focused',
+                'Brand Alignment',
+                'Multi-Page Sites'
+            ],
             image: mockup1
         },
+
         {
             number: '03',
             name: 'UI/UX Design',
-            description: 'User experience design rooted in psychology and business strategy. We eliminate friction, reduce bounce rates, and create intuitive pathways that guide users exactly where you want them to go. The focus is simple: design that feels effortless while driving measurable business outcomes.',
-            tags: ['User Psychology', 'Conversion Flows', 'Behavioral Design', 'Usability Testing', 'Strategic Prototyping'],
+            description: 'User interface and experience design focused on usability and clarity. I create wireframes, prototypes, and high-fidelity designs that prioritize user needs while supporting business objectives. My process includes user research, information architecture, and iterative design to ensure interfaces that are both functional and visually appealing.',
+            tags: [
+                'User Research',
+                'Wireframing',
+                'Prototyping',
+                'Usability Testing',
+                'Interface Design',
+                'User Flows'
+            ],
             image: mockup2
         },
+
         {
             number: '04',
             name: 'Website Redesign',
-            description: 'Turn your underperforming website into a revenue-generating platform. We revitalize outdated brands with modern design systems, improved user journeys, and strategic messaging that resonates with today\'s market. Your refreshed website will reflect where your business is going—not where it\'s been.',
-            tags: ['Brand Evolution', 'Competitive Repositioning', 'Legacy Modernization', 'Growth-Focused Redesign', 'Market Alignment'],
+            description: 'Modernization and improvement of existing websites. I help update outdated designs with fresh layouts, improved navigation, better mobile responsiveness, and enhanced visual appeal. The goal is to bring your website in line with current design standards while maintaining your brand identity and improving user experience.',
+            tags: [
+                'Visual Refresh',
+                'UX Improvements',
+                'Modern Standards',
+                'Mobile Optimization',
+                'Brand Consistency',
+                'Performance Updates'
+            ],
             image: mockup3
         },
+
         {
             number: '05',
-            name: 'Interactive Web Design',
-            description: 'Immersive web experiences that captivate and engage. Through sophisticated animations, scroll-triggered interactions, and micro-moments of delight, we create websites that people remember and talk about. Stand out in crowded markets with digital experiences that feel less like websites and more like journeys.',
-            tags: ['Cinematic Scrolling', 'Brand Storytelling', 'Advanced Animations', 'Memorable Interactions', 'Premium Polish'],
+            name: 'Interactive Web Experiences',
+            description: 'Websites with engaging animations and interactive elements that enhance user experience. Using modern tools like GSAP, Framer Motion, and Three.js, I create smooth transitions, scroll-triggered animations, and micro-interactions that make websites feel polished and professional while maintaining performance.',
+            tags: [
+                'GSAP Animations',
+                'Scroll Effects',
+                'Micro-interactions',
+                'Framer Motion',
+                'Performance Balanced',
+                'Modern Techniques'
+            ],
             image: mockup4
         }
     ];
-
     const handlePreloaderComplete = () => {
         setShowPreloader(false);
         setPageReady(true);
@@ -647,38 +692,40 @@ function Portfolio() {
     const toggleFAQ = (index) => {
         setOpenFAQ(openFAQ === index ? null : index);
     };
+
+
     const faqs = [
         {
             question: "How long does it usually take to design and build a website?",
-            answer: "The timeline for a website project typically ranges from around 2 to 6 weeks, depending on the size of the website, number of pages, level of customization, and overall project requirements. Landing pages and smaller business websites can often be completed faster, while more complex or interactive websites may require additional time for planning, refinement, and testing. I follow a structured process that includes research, design, development, and quality assurance. This approach ensures that the final website is not only visually strong but also functional, optimized, and aligned with your business objectives."
+            answer: "Timeline varies by project scope. Simple landing pages typically take 1-2 weeks. Business websites with multiple pages take 3-4 weeks. More complex projects with custom features may take 4-6 weeks. I follow a structured process including planning, design, development, and testing to ensure quality results within the agreed timeframe."
         },
         {
             question: "What information or materials do you need before starting a project?",
-            answer: "To begin a project smoothly, I usually ask for basic information about your business, including your goals, target audience, services, and overall vision for the website. If available, brand assets such as your logo, brand colors, imagery, and content drafts are also very helpful. If you are still developing these materials, that is completely fine. I can help guide you through organizing your ideas, clarifying your messaging, and identifying the most effective structure for your website. My goal is to make the process collaborative and comfortable, even if you are starting from scratch."
+            answer: "To begin a project smoothly, I typically need basic information about your business, including your goals, target audience, and the purpose of the website. If available, brand assets like your logo, colors, and any existing content are helpful. If you're still developing these materials, that's completely fine—I can guide you through organizing your ideas and clarifying your messaging as part of the design process."
         },
         {
             question: "Do you offer fixed pricing packages or customized project pricing?",
-            answer: "I primarily offer customized pricing based on the scope, goals, and specific requirements of your project. Every business has unique needs, so I focus on creating solutions that are tailored to your brand, audience, and long-term objectives rather than offering one-size-fits-all packages. After discussing your project goals and requirements, I provide a clear and transparent proposal outlining the scope of work, timeline, and deliverables so you know exactly what to expect before the project begins."
+            answer: "I offer customized pricing based on project scope and requirements. After discussing your project goals, I provide a clear proposal outlining deliverables, timeline, and cost. As a graduating designer building my portfolio, I offer competitive rates and am open to working within reasonable budgets. For the free landing page opportunity, selected projects receive a complete landing page at no cost in exchange for feedback and portfolio permission."
         },
         {
             question: "How can a professionally designed website support business growth?",
-            answer: "A professionally designed website strengthens credibility, improves user experience, and helps guide visitors toward taking meaningful actions such as sending inquiries, booking services, or requesting consultations. A well-planned website is more than just visual presentation — it functions as a digital platform that communicates your brand value and supports your business goals. By combining strategic layout, clear messaging, user-centered design, and performance optimization, a professionally built website can help increase engagement, build trust with potential clients, and improve overall conversion opportunities."
+            answer: "A well-designed website serves as a 24/7 digital presence that communicates your value and builds credibility. Good design combined with clear messaging and smooth functionality makes it easier for visitors to understand what you offer and take action—whether that's contacting you, making a purchase, or booking a service. A professional website also helps you stand out from competitors and creates a positive first impression."
         },
         {
             question: "Will my website be responsive and optimized for performance?",
-            answer: "Yes. Every website I design and develop is built to function smoothly across desktops, tablets, and mobile devices. Responsive design ensures your website remains visually consistent and easy to navigate regardless of screen size. In addition, I focus on performance optimization such as loading speed, clean implementation, accessibility considerations, and smooth interaction design. These factors contribute to better user experience, improved search visibility, and stronger engagement from visitors."
+            answer: "Yes. Every website I create is fully mobile-responsive and tested across different devices and screen sizes. I also optimize for fast loading speeds, smooth interactions, and accessibility to ensure a positive experience for all users. Performance and usability are built into my development process from the start."
         },
         {
             question: "Can you improve or redesign my existing website instead of building a new one?",
-            answer: "Yes, I offer redesign and website improvement services for businesses that already have an existing website but want to enhance its visual design, usability, structure, or performance. Many businesses benefit from redesigning rather than rebuilding from the ground up. The process usually begins with evaluating your current website to identify design limitations, usability concerns, or performance gaps. From there, I create a refreshed design approach that improves user experience while maintaining your brand identity and business goals."
+            answer: "Yes, I offer redesign services for existing websites. The process typically starts with evaluating your current site to identify design limitations, usability issues, or performance gaps. From there, I create a refreshed design that improves user experience, updates the visual style, and aligns with current web standards while maintaining your brand identity."
         },
         {
             question: "Do you provide support after the website is launched?",
-            answer: "Yes. After launch, I remain available to provide support, updates, and improvements whenever needed. I make sure your website is functioning properly, remains visually consistent, and continues to perform effectively over time. If you would like to manage content updates on your own, I can also provide guidance or basic training so you feel confident maintaining your website independently."
+            answer: "Yes. After launch, I provide post-launch support to address any issues or needed adjustments. The specific support period can be discussed based on your needs. For ongoing updates or maintenance beyond the initial period, we can arrange continued support. I can also provide basic training if you prefer to manage simple content updates yourself."
         },
         {
             question: "What is the Free Landing Page opportunity and how does it work?",
-            answer: "I currently offer 5 free landing page design slots to support growing businesses and build strong client partnerships. Each selected business will receive a modern, mobile-responsive, and conversion-focused landing page. In exchange, I simply ask for honest feedback, permission to showcase the project in my portfolio, and a short testimonial if you're happy with the result. Slots are limited to maintain quality. If you're interested, feel free to reach out or book a free consultation to discuss your project."
+            answer: "I'm currently offering 5 free landing page design slots to build my portfolio and gain experience with diverse projects. Selected businesses or individuals receive a professional, mobile-responsive, conversion-focused landing page at no cost. In exchange, I ask for honest feedback about your experience working with me and permission to showcase the project in my portfolio. If you're interested, feel free to reach out through the contact section to discuss your project."
         }
     ];
     useEffect(() => {
@@ -798,7 +845,7 @@ function Portfolio() {
                                 </li>
                                 {/* CTA stays untouched */}
                                 <a href="/free-landing-page" className="nav-cta-btn">
-                                    <TfiLayoutMediaLeftAlt className="nav-cta-icon" />Free Landing Page
+                                    <TfiLayoutMediaLeftAlt className="nav-cta-icon" />Get in Touch
                                 </a>
 
                             </ul>
@@ -935,13 +982,23 @@ function Portfolio() {
                             <div className="hero-wrapper">
                                 <div className="hero-content">
                                     <p className="tagline split-animate">UI/UX & Web Designer</p>
-                                    <h1 className="hero-title split-animate">
-                                        Great brands aren't built overnight but they're felt instantly. I create <span className="highlight">digital experiences</span> that define yours.
-                                    </h1>
 
-                                    <button className="cta-button ">
-                                        Let's Collaborate
-                                    </button>
+                                    <h1 className="hero-title split-animate">
+                                        I design <span className="highlight">user-focused websites</span> with strategic layouts and modern interactions.
+                                    </h1>
+                                    <div className="hero-cta-group">
+
+                                        <button className="cta-button primary">
+                                            Explore My Work
+                                        </button>
+
+                                        <button className="cta-buttons1">
+                                            How I Work
+                                        </button>
+
+                                    </div>
+
+
                                 </div>
 
                                 <TiltedCard
@@ -964,13 +1021,15 @@ function Portfolio() {
                         </motion.main>
                     </div>
 
-                    {/* About Section */}
+
                     <section className="about-section">
                         <div className="about-container">
-                            <h2 className="about-title split-animate" id="about">
-                                Where brand strategy meets exceptional design — <span className="about-title-accent">creating websites that elevate businesses and drive meaningful growth.</span>
+                            <h2 className="about-title split-animate">
+                                Design is more than aesthetics.
+                                <span className="about-title-accent">
+                                    It is how businesses communicate, build trust, and create meaningful digital experiences.
+                                </span>
                             </h2>
-
 
                             <div className="about-content">
                                 <div className="about-cards">
@@ -982,51 +1041,47 @@ function Portfolio() {
                                             <img src={virielleLogo} alt="Virielle Logo" />
                                         </div>
 
-                                        <h3 className="card-label">STRATEGY FIRST</h3>
+                                        <h3 className="card-label">FOCUSED APPROACH</h3>
                                         <p className="card-description">
-                                            Design that thinks. Websites that convert. Brands that last.
+                                            Design driven by user needs, clear purpose, and practical solutions.
                                         </p>
 
                                     </div>
-
                                     <div className="about-card card-dark">
                                         <h3 className="card-title">
-                                            <span className="title-design">CRAFT</span>
-                                            <span className="title-designs">&</span>
-                                            <span className="title-create">GROW</span>
+                                            <span className="title-design">DESIGN</span>
+                                            <span className="title-designs">×</span>
+                                            <span className="title-create">CODE</span>
                                         </h3>
-
-                                        <p className="card-date">Since 2025</p>
-
+                                        <p className="card-date">Building Since 2024</p>
                                     </div>
+
+                                </div>
+                                <div
+                                    className="about-statss card-blue card-blue-image"
+                                    style={{ backgroundImage: `url(${since})` }}>
+                                    <div className="card-iconss">
+                                        <img src={virielleLogo} alt="Virielle Logo" />
+                                    </div>
+                                    <h3 className="card-labels">CONTINUOUS GROWTH</h3>
+                                    <p className="card-descriptions">
+                                        Learning and applying modern web design, UX principles, and development techniques.
+                                    </p>
+
                                 </div>
 
-                                <div className="about-stats">
-                                    <div className="stats-item">
-                                        <h3 className="stats-number">10+</h3>
-                                        <img
-                                            src={projects}
-                                            alt="projects watermark"
-                                            className="stats-watermark"
-                                        />
-                                        <p className="stats-description">
-                                            Projects in web design, landing pages,<br /> and business websites.
-                                        </p>
-
-                                    </div>
-                                </div>
                             </div>
 
+
+
                             <div className="about-topbar">
-                                <span className="about-index">(ABOUT — 01)</span>
+                                <span className="about-index">(INTRODUCTION  — 01)</span>
 
                                 <p className="about-mini-desc">
-                                    Building websites that strengthen credibility and create lasting impressions.
+                                    Effective websites combine clear purpose, thoughtful design, and user-centered thinking.
                                 </p>
                                 <button className="cta-button">
-                                    Let's Collaborate
-
-
+                                    View My Approach
                                 </button>
                             </div>
                         </div>
@@ -1058,7 +1113,7 @@ function Portfolio() {
                                                 onClick={() => toggleService(index)}
                                             >
                                                 <div className="service-number">{service.number}</div>
-                                                <h3 className="service-name split-animate">{service.name}</h3>
+                                                <h3 className="service-name ">{service.name}</h3>
                                                 <button className="service-toggle">
                                                     {openService === index ? '−' : '+'}
                                                 </button>
@@ -1067,6 +1122,8 @@ function Portfolio() {
                                                 <p className="service-description">
                                                     {service.description}
                                                 </p>
+
+
                                                 <div className="service-tags">
                                                     {service.tags.map((tag, tagIndex) => (
                                                         <span key={tagIndex} className="tag">{tag}</span>
@@ -1142,6 +1199,9 @@ function Portfolio() {
                                                 <div className="project-info-left">
                                                     <h3 className="project-title">Martin Architectural</h3>
                                                     <p className="project-year">(2025 — 2026)</p>
+                                                    <p className="project-case-preview">
+                                                        Designed and developed a modern architecture portfolio website focusing on visual storytelling and project showcases. Built with React, GSAP animations, and responsive layouts to highlight architectural work effectively.
+                                                    </p>
                                                 </div>
                                                 <div className="project-tags">
                                                     <span className="project-tag">Website Design</span>
@@ -1248,11 +1308,11 @@ function Portfolio() {
 
                             <div className="works-statement">
                                 <p className="statement-text split-animate">
-                                    Selected projects showcasing design that performs
-                                    <span className="statement-highlight"> beautiful, strategic, and built for growth.</span>
+                                    Selected projects demonstrating my approach to web design—
+                                    <span className="statement-highlight"> combining visual appeal with functional, user-friendly experiences.</span>
                                 </p>
                                 <button className="cta-button">
-                                    Start your Project
+                                    Discuss Your Project
                                 </button>
                             </div>
                         </div>
@@ -1267,13 +1327,12 @@ function Portfolio() {
                                     <span className="process-index">(PROCESS — 04)</span>
                                     <h2 className="process-title split-animate">
                                         My design process
-                                        <span className="process-title-accent"> where strategy, creativity, and execution align.</span>
+                                        <span className="process-title-accent"> where research, creativity, and development come together.</span>
                                     </h2>
 
                                     <p className="process-subtitle split-animate">
-                                        A proven methodology that transforms business goals into high-performing digital experiences through strategic planning, thoughtful design, and precise execution.
+                                        A structured approach that turns ideas into functional digital experiences through careful planning, iterative design, and clean development.
                                     </p>
-
 
                                 </div>
                             </div>
@@ -1319,7 +1378,12 @@ function Portfolio() {
                                             <div className="step-content">
                                                 <h3 className="step-title">Discovery & Research</h3>
                                                 <p className="step-description">
-                                                    The process begins by understanding your business, goals, target audience, and project requirements. This stage focuses on identifying key challenges, opportunities, and defining the direction needed to create an effective and meaningful website experience.
+                                                    Every project begins with understanding your business, goals, and audience. This stage focuses on identifying opportunities and defining the direction needed to create a meaningful and effective website experience.
+
+                                                </p>
+                                                <br />
+                                                <p className="step-description">
+                                                    I start each project by researching your business, target audience, and design goals to ensure the website aligns with your objectives and user needs.
                                                 </p>
                                             </div>
                                         </div>
@@ -1382,7 +1446,7 @@ function Portfolio() {
                                             <div className="step-content">
                                                 <h3 className="step-title">Development & Implementation</h3>
                                                 <p className="step-description">
-                                                    The approved design is transformed into a fully responsive and functional website. This stage focuses on clean implementation, performance optimization, smooth interactions, and ensuring consistency across devices and screen sizes.
+                                                    I build the website using modern development practices, focusing on clean code, responsive design, and performance optimization. The result is a website that works smoothly across all devices and browsers.
                                                 </p>
                                             </div>
                                         </div>
@@ -1422,10 +1486,21 @@ function Portfolio() {
                     <section className="man-behind-section">
                         <div className="man-behind-container">
                             <div className="man-behind-header ">
-                                <h2 className="man-behind-title ">
+
+                                <h2 className="man-behind-title">
                                     Man Behind <br />
                                     The Work
                                 </h2>
+
+                            </div>
+                            <div className="services-content">
+                                <span className="services-index">( ABOUT ME — 05 )</span>
+                                <h3 className="services-subtitless split-animate">
+                                    Designing websites that look great while
+                                    <span className="services-subtitle-accent"> supporting real user needs and business goals.</span>
+                                </h3>
+
+
 
                             </div>
 
@@ -1439,41 +1514,38 @@ function Portfolio() {
 
 
                                     </div>
+                                    <div className="about-stats">
+                                        <div className="stats-item">
 
-                                    <div
-                                        className="about-card card-blue card-blue-image"
-                                        style={{ backgroundImage: `url(${blueBackground})` }}
-                                    >
-                                        <div className="card-icons">
-                                            <img src={quote} alt="Virielle Logo" />
+                                            <h3 className="stats-number ">
+
+                                                <img
+                                                    src={experienceIcon}
+                                                    alt="experience watermark"
+                                                    className="stats-watermarks"
+                                                />
+
+                                                1<span className="stats-years">Year</span>
+                                            </h3>
+
+                                            <p className="stats-description">
+                                                Experience building websites and landing pages focused on design, usability, and performance.
+                                            </p>
+
                                         </div>
-
-
-                                        <p className="card-description split-animate">
-                                            "I don't just design websites. I build digital experiences that turn businesses into brands and visitors into believers."
-                                        </p>
                                     </div>
                                 </div>
                                 <div className="about-stats ">
                                     <div className="stats-item">
-
-                                        <h3 className="stats-number ">
-
-                                            <img
-                                                src={experienceIcon}
-                                                alt="experience watermark"
-                                                className="stats-watermark"
-                                            />
-
-                                            1<span className="stats-years">Year</span>
-
-                                        </h3>
-
-
-                                        <p className="stats-description split-animate">
-                                            Experience building websites and landing pages focused on design, usability, and performance.
+                                        <h3 className="stats-number">10+</h3>
+                                        <img
+                                            src={projects}
+                                            alt="projects watermark"
+                                            className="stats-watermark"
+                                        />
+                                        <p className="stats-description">
+                                            Projects in web design, landing pages,<br /> and business websites.
                                         </p>
-
                                     </div>
                                 </div>
 
@@ -1483,12 +1555,14 @@ function Portfolio() {
                             <div className="about-topbar">
 
 
+
                                 <p className="about-mini-desc">
-                                    ( ABOUT THE DESIGNER — 05 )
+                                    There’s more behind the work—how I think, how I design, and how every decision starts with the user.
                                 </p>
 
+
                                 <button className="cta-button">
-                                    Get to Know Me
+                                    About Me
                                 </button>
                             </div>
                         </div>
@@ -1496,69 +1570,74 @@ function Portfolio() {
 
 
 
-                    <section className="faq-section" id="faq">
-                        <div className="faq-container">
-                            <h2 className="faq-title split-animate">Questions You Might Ask</h2>
-
-                            <div className="faq-list">
-                                {faqs.map((faq, index) => (
-                                    <div
-                                        key={index}
-                                        className={`faq-item ${openFAQ === index ? 'active' : ''}`}
-                                    >
-                                        <button
-                                            className="faq-question"
-                                            onClick={() => toggleFAQ(index)}
-                                            aria-expanded={openFAQ === index}
-                                        >
-                                            <span className="faq-number">{String(index + 1).padStart(2, '0')}</span>
-                                            <span className="faq-question-text">{faq.question}</span>
-                                            <span className="faq-toggle-icon">
-                                                {openFAQ === index ? '×' : '+'}
-                                            </span>
-                                        </button>
-
-                                        <div className={`faq-answer ${openFAQ === index ? 'open' : ''}`}>
-                                            <div className="faq-answer-content">
-                                                <p>{faq.answer}</p>
-
-                                                {faq.question.includes("Free Landing") && (
-                                                    <div className="faq-cta-wrapper">
-                                                        <button className="faq-cta-btn">
-                                                            Get Started . .
-
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-
                     <section className="works-section">
                         <Maillards />
                     </section>
 
 
+
+                    <section className="parallax-reveal-section ">
+                        <div className="parallax-reveal-sticky">
+                            <div className="parallax-reveal-card">
+                                <h2 className="cta-title split-animate">
+                                    Your website should be your <span className="highlight">strongest asset</span>
+                                </h2>
+
+                                <p className="cta-description split-animate">
+                                    An effective website goes beyond aesthetics—it communicates your value with clarity, establishes credibility with your audience, and creates seamless pathways for engagement. Let's collaborate to build a digital presence that authentically represents your brand and consistently delivers results.
+                                </p>
+
+                                <button className="cta-button">
+                                    Let's Collaborate
+                                </button>
+
+                            </div>
+                        </div>
+                    </section>
+
+
+
+
+
                     <div id="container" ref={containerRef}>
-                        <section className="parallax-reveal-section panels">
-                            <div className="parallax-reveal-sticky">
-                                <div className="parallax-reveal-card">
-                                    <h2 className="cta-title split-animate">
-                                        Your website should be your <span className="highlight">best salesperson</span>
-                                    </h2>
+                        <section className="faq-section panels" id="faq">
+                            <div className="faq-container">
+                                <h2 className="faq-title split-animate">Questions You Might Ask</h2>
 
-                                    <p className="cta-description split-animate">
-                                        I know the frustration of running a successful business while your website fails to communicate your value. You're losing opportunities to competitors with better digital presence. Let's fix that. Together, we'll build a website that attracts, engages, and converts.
-                                    </p>
+                                <div className="faq-list">
+                                    {faqs.map((faq, index) => (
+                                        <div
+                                            key={index}
+                                            className={`faq-item ${openFAQ === index ? 'active' : ''}`}
+                                        >
+                                            <button
+                                                className="faq-question"
+                                                onClick={() => toggleFAQ(index)}
+                                                aria-expanded={openFAQ === index}
+                                            >
+                                                <span className="faq-number">{String(index + 1).padStart(2, '0')}</span>
+                                                <span className="faq-question-text">{faq.question}</span>
+                                                <span className="faq-toggle-icon">
+                                                    {openFAQ === index ? '×' : '+'}
+                                                </span>
+                                            </button>
 
-                                    <button className="cta-button">
-                                        Book a Free Consultation
-                                    </button>
+                                            <div className={`faq-answer ${openFAQ === index ? 'open' : ''}`}>
+                                                <div className="faq-answer-content">
+                                                    <p>{faq.answer}</p>
 
+                                                    {faq.question.includes("Free Landing") && (
+                                                        <div className="faq-cta-wrapper">
+                                                            <button className="faq-cta-btn">
+                                                                Get Started . .
+
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </section>
@@ -1572,7 +1651,7 @@ function Portfolio() {
                                             <a href="mailto:klentaguilar@gmail.com">klentaguilar@gmail.com</a>
                                         </h2>
                                         <button className="footer-cta-button">
-                                            Let's Collaborate
+                                            Start a Conversation
                                             <span className="footer-arrow-circle">
                                                 <FaArrowRight />
                                             </span>
@@ -1591,11 +1670,11 @@ function Portfolio() {
                                         </div>
                                         <div className="footer-brand-content">
                                             <p className="footer-tagline split-animate">
-                                                Specializing in premium web design that transforms businesses into recognized brands through strategic planning, refined execution, and conversion-focused design.
+                                                Web designer focused on creating user-friendly, conversion-oriented websites through thoughtful design, clean development, and attention to user experience.
                                             </p>
 
                                             <p className="footer-copyright">
-                                                © 2026 Designed and developed by Klent Russell Aguilar | Web Designer
+                                                © 2025 Designed and developed by Klent Russell Aguilar | Web Designer
                                             </p>
                                         </div>
 

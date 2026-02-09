@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './Portfolio.css';
 import gsap from "gsap";
+import { FaQuoteRight } from "react-icons/fa";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -161,13 +162,13 @@ function About() {
     const leftRef = useRef(null);
     const sectionRef = useRef(null);
     const heroRef = useRef(null);
-const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-});
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        offset: ["start start", "end start"]
+    });
 
-const blur = useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(10px)"]);
-const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
+    const blur = useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(10px)"]);
+    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
     const techLogos = [
         { node: <SiHtml5 />, title: "HTML" },
         { node: <SiCss3 />, title: "CSS" },
@@ -435,7 +436,9 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                             ScrollTrigger.maxScroll(),
                             snapScroll
                         );
-                    },
+                    }
+                    ,
+
                     duration: 0.5
                 }
             });
@@ -650,7 +653,7 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
             {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
             <div id="smooth-wrapper">
                 <div id="smooth-content">
-                    <div className="portfolio-container"id="heros" style={{ backgroundImage: `url(${blueBackground1})` }}>
+                    <div className="portfolio-container" id="heros" style={{ backgroundImage: `url(${blueBackground1})` }}>
                         <nav className={`navbar ${showNavbar ? 'navbar-visible' : 'navbar-hidden'}`}>
                             <div className="logo">
                                 <a href="#heros">
@@ -670,21 +673,52 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                                     </a>
                                 </li>
 
-                            
+
+                         
+
                                 <li>
-                                    <a href="#about" className="nav-link-animated">
+                                    <a href="#cap" className="nav-link-animated">
                                         <span className="nav-text">
-                                            <span className="nav-text-top">About Me</span>
-                                            <span className="nav-text-bottom">About Me</span>
+                                            <span className="nav-text-top"> Capabilities</span>
+                                            <span className="nav-text-bottom"> Capabilities</span>
                                         </span>
                                     </a>
                                 </li>
-
+                                <li>
+                                    <a href="#phil" className="nav-link-animated">
+                                        <span className="nav-text">
+                                            <span className="nav-text-top">
+                                                Philosophy</span>
+                                            <span className="nav-text-bottom">
+                                                Philosophy</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#process" className="nav-link-animated">
+                                        <span className="nav-text">
+                                            <span className="nav-text-top"> Process</span>
+                                            <span className="nav-text-bottom"> Process</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#approach" className="nav-link-animated">
+                                        <span className="nav-text">
+                                            <span className="nav-text-top">Approach</span>
+                                            <span className="nav-text-bottom">Approach</span>
+                                        </span>
+                                    </a>
+                                </li>   <li>
+                                    <a href="#skills" className="nav-link-animated">
+                                        <span className="nav-text">
+                                            <span className="nav-text-top">Skills</span>
+                                            <span className="nav-text-bottom">Skills</span>
+                                        </span>
+                                    </a>
+                                </li>
                                 {/* CTA stays untouched */}
-                                <button className="nav-cta-btn">
-                                    <TfiLayoutMediaLeftAlt className="nav-cta-icon" />Free Landing Page
-                                </button>
-
+                  
                             </ul>
 
 
@@ -751,7 +785,7 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                                         </a>
                                     </li>
 
-                              
+
 
                                 </ul>
                             </nav>
@@ -780,65 +814,79 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                             </div>
                         </div>
 
-                     <motion.main 
-    ref={heroRef}
-    className="hero-section panel" 
-    id="hero"
-    style={{ filter: blur, opacity }}
->
-    <div className="hero-wrapper">
-
+                        <motion.main
+                            ref={heroRef}
+                            className="hero-section panel"
+                            id="hero"
+                            style={{ filter: blur, opacity }}
+                        >
                             <div className="hero-wrapper">
-                                <div className="hero-content">
-                                    <p className="tagline split-animate">LEARN ABOUT ME</p>
-                                    <h1 className="hero-title split-animate">
-                                        UI/UX & Web Designer: Crafting <span className="highlight"> results-driven,</span> Interactive Websites.
-                                    </h1>
 
-                                    <button className="cta-button ">
-                                        Let's Collaborate
-                                    </button>
+                                <div className="hero-wrapper">
+                                    <div className="hero-content">
+                                        <p className="tagline split-animate">LEARN ABOUT ME</p>
+                                        <h1 className="hero-title split-animate">
+                                            UI/UX & Web Designer crafting <span className="highlight">user-focused</span>
+                                            interactive websites
+                                        </h1>    <div className="hero-cta-group">
+                                            <button className="cta-button ">
+                                                   Get in Touch
+                                            </button>   <button className="cta-buttons1" >
+                                                About Me
+                                            </button>    </div>
+                                    </div>
+
+                                    <TiltedCard
+                                        imageSrc={mockup4}
+                                        altText="Klent Russell Aguilar"
+                                        captionText="Web Designer | Klent Russell Aguilar"
+                                        containerHeight="clamp(240px, 70vw, 520px)"
+                                        containerWidth="clamp(240px, 70vw, 520px)"
+                                        imageHeight="100%"
+                                        imageWidth="100%"
+                                        rotateAmplitude={21}
+                                        scaleOnHover={1.1}
+                                        showMobileWarning={false}
+                                        showTooltip
+                                        displayOverlayContent={false}
+
+                                    />
                                 </div>
-
-                                <TiltedCard
-                                    imageSrc={mockup4}
-                                    altText="Klent Russell Aguilar"
-                                    captionText="Web Designer | Klent Russell Aguilar"
-                                    containerHeight="clamp(240px, 70vw, 520px)"
-                                    containerWidth="clamp(240px, 70vw, 520px)"
-                                    imageHeight="100%"
-                                    imageWidth="100%"
-                                    rotateAmplitude={21}
-                                    scaleOnHover={1.1}
-                                    showMobileWarning={false}
-                                    showTooltip
-                                    displayOverlayContent={false}
-
-                                />
                             </div>
-   </div>
-                  </motion.main>
+                        </motion.main>
                     </div>
 
                     <section className="about-section">
+                        <FaQuoteRight className="quote-watermark" />
+
                         <div className="intro-container">
-                            <div className="intro-header">
+                            <div className="intro-story">
                                 <h2 className="story-paragraph" id="about">
-                                    Hi! I'm <span className="intro-name">Klent Russell Aguilar,</span> a BSIT student at La Consolacion University specializing in UI/UX and front-end development with one year of experience creating websites that actually perform.
+                                    Hi! I'm <span className="intro-name">Klent Russell Aguilar,</span> a BSIT student
+                                    at La Consolacion University Philippines specializing in UI/UX design and front-end
+                                    development.
+
+                                    Over the past year, I've focused on understanding what makes websites effective—
+                                    combining user-centered design with clean development to create digital experiences
+                                    that look professional and function smoothly. What started as curiosity about web
+                                    design has grown into a genuine commitment to the craft.
                                 </h2>
                             </div>
 
                             <div className="intro-story">
-                                <p className="story-paragraph ">
-                                    What started as curiosity became passion. Over the past year, I've learned what separates websites that just exist from websites that convert through UI/UX design, front-end development, and quality assurance. Great websites aren't accidental. They're intentional, tested, and refined until every interaction feels effortless.
-                                </p>
 
-                                <p className="story-paragraph " >
-                                    My approach is simple: <span className="story-highlight">clean design meets strategic thinking to create experiences that guide users naturally toward action.</span> I build minimal, purposeful interfaces that look professional and perform professionally helping businesses communicate value and turn visitors into customers. I'm constantly learning and growing because web design isn't just what I do it's a craft I'm committed to mastering.
+                                <p className="story-paragraph">
+                                    My approach focuses on <span className="story-highlight">combining thoughtful design
+                                        with practical development</span> to create websites that serve both user needs and
+                                    business goals. I believe good design should feel natural—guiding visitors without
+                                    overwhelming them. I'm committed to continuous learning because web design and
+                                    development are fields that constantly evolve, and staying current is essential to
+                                    delivering quality work.
                                 </p>
                             </div>
                         </div>
                     </section>
+                
                     {/* Services Section */}
                     <section className="services-section" >
                         <div className="services-container">
@@ -852,7 +900,7 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                             <div className="services-content">
 
                                 <h3 className="services-subtitles split-animate ">
-                               <span className="services-subtitle-accent"> What Sets Me Apart as a</span> Web Designer
+                                    <span className="services-subtitle-accent"> What Sets Me Apart as a</span> Web Designer
                                 </h3>
 
 
@@ -861,56 +909,70 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
 
                             <div className="services-description">
                                 <p className="services-paragraph">
-                                    Clients expect a lot more now than they did years ago. What I've learned works is combining solid conversion strategies with animations that actually make sense—not just flashy stuff that gets in the way. I'm probably too focused on small details, but that's usually what makes something feel really polished instead of just okay.
+                                    Modern web design requires more than visual appeal—it needs to balance aesthetics
+                                    with functionality. I focus on combining clean design with purposeful animations
+                                    that enhance the experience rather than distract from it. Attention to detail in
+                                    spacing, typography, and interactions is what elevates a design from acceptable
+                                    to polished.
                                 </p>
-
-                                <p className="services-paragraph ">
-                                    Working with clients from different countries taught me how to communicate clearly across cultures while keeping projects organized and on track.
+                                <p className="services-paragraph">
+                                    Through academic projects and collaborative work, I've learned the importance of
+                                    clear communication and organized project management—essential skills for successful
+                                    collaboration whether working with local businesses or remote teams.
                                 </p>
-
                                 <div className="services-what-i-do">
                                     <p className="services-label">What I do:</p>
-                                    <ul className="services-list ">
-                                        <li>Web design and development</li>
-                                        <li>Motion design and visual work</li>
-                                        <li>User experience and branding</li>
-                                        <li>Making sites that convert visitors</li>
-                                        <li>SEO and digital marketing</li>
+                                    <ul className="services-list">
+                                        <li>Web design and front-end development</li>
+                                        <li>UI/UX design and prototyping</li>
+                                        <li>Interactive web animations (GSAP, Framer Motion)</li>
+                                        <li>Responsive, mobile-first development</li>
+                                        <li>Performance optimization and testing</li>
                                     </ul>
                                 </div>
 
                                 <p className="services-paragraph">
-                                    This mix lets me handle both the creative side and the business side. Your website won't just look good—<span className="services-highlight">it'll actually work for your goals.</span>
+                                    This combination of design and development skills allows me to create cohesive
+                                    digital experiences. <span className="services-highlight">The result is websites
+                                        that look professional and function smoothly across all devices.</span>
                                 </p>
                             </div>
 
                             <div className="services-content">
-                                <h3 className="services-subtitles split-animate">
+                                <h3 className="services-subtitles split-animate"  id="cap">
                                     Core Capabilities
                                 </h3>
                             </div>
-                            <div className="core-capabilities">
+                            <div className="core-capabilities" >
                                 <ul className="capabilities-list">
-                                    <li>Converting visitors into customers through strategic interactive web design</li>
-                                    <li>Creating memorable brand experiences with thoughtful motion web design</li>
-                                    <li>Developing high-performance, SEO-optimized websites</li>
-                                    <li>Crafting minimalist interfaces that elegantly showcase your brand</li>
-                                    <li>Integrating advanced technologies for app-like experiences using SvelteKit</li>
+                                    <li>Designing user-friendly interfaces focused on clear navigation and usability</li>
+                                    <li>Building responsive websites that work smoothly across all devices</li>
+                                    <li>Creating purposeful animations that enhance user experience</li>
+                                    <li>Developing clean, maintainable code using modern frameworks (React, GSAP)</li>
+                                    <li>Testing and refining designs based on user feedback and performance data</li>
                                 </ul>
                             </div>
                             <div className="services-content">
-                                <h3 className="services-subtitles split-animate">
-                                   <span className="services-subtitle-accent">My Design</span>   Philosophy
+                                <h3 className="services-subtitles split-animate"  id="phil">
+                                    <span className="services-subtitle-accent">My Design</span>   Philosophy
                                 </h3></div>
                             <div className="services-description">
-                                <p className="services-paragraph ">
-                                    My philosophy is simple: if someone has to think about how to use your website, I haven't done my job right. Every design decision should make sense to your actual users, not just look pretty in a portfolio. I test everything because what I think works and what actually works are sometimes completely different things.
+                                <p className="services-paragraph">
+                                    My design philosophy centers on simplicity and usability. If users need to think
+                                    about how to navigate your website, something needs improvement. Every design
+                                    choice should serve a clear purpose—supporting user goals while maintaining
+                                    visual appeal.
                                 </p>
 
+                                <p className="services-paragraph">
+                                    I approach each project by prioritizing the user perspective. What looks good
+                                    in design software doesn't always work in practice, which is why I test designs
+                                    across different devices and gather feedback throughout the development process.
+                                </p>
                             </div>
                             <div className="services-content">
-                                <h3 className="services-subtitles split-animate">
-                                  <span className="services-subtitle-accent">Strategic</span> Web <br />  Design Process
+                                <h3 className="services-subtitles split-animate" id="process">
+                                    <span className="services-subtitle-accent">Strategic</span> Web <br />  Design Process
                                 </h3>
 
                             </div>
@@ -922,52 +984,59 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                                 </div>
 
                                 <p className="services-paragraph">
-                                    The web design landscape in the Philippines has evolved significantly, with clients now seeking partners who understand both local and global market dynamics. Whether you're evaluating web design companies or agencies, understanding the process is crucial. Drawing from my experience working with diverse clients worldwide, I've developed a comprehensive process that ensures result-driven success.
+                                    Through my studies and project experience, I've developed a structured approach
+                                    to web design that emphasizes user research, strategic planning, and iterative
+                                    development. This process helps ensure that each project addresses real user
+                                    needs while meeting business objectives.
                                 </p>
 
                                 <p className="services-paragraph">
-                                    Every project begins with a deep dive into your business objectives and target audience.
+                                    Every project begins with understanding your goals and target audience, allowing
+                                    me to create designs that are both visually appealing and functionally effective.
                                 </p>
-
                                 <div className="approach-section">
                                     <h4 className="approach-title">My approach combines:</h4>
 
                                     <ol className="approach-list">
-                                        <li>Result-driven User-centered design principles</li>
-                                        <li>Strategic web motion</li>
-                                        <li>Conversion optimization copywriting</li>
-                                        <li>Performance-driven development</li>
-                                        <li>Brand-aligned messaging</li>
+                                        <li>User-centered design focused on clear navigation and usability</li>
+                                        <li>Purposeful animations that enhance rather than distract</li>
+                                        <li>Clean, well-structured content presentation</li>
+                                        <li>Performance-optimized development practices</li>
+                                        <li>Consistent visual design aligned with brand identity</li>
                                     </ol>
                                 </div>
                             </div>
                             <div className="services-content">
-                                <h3 className="services-subtitles split-animate">
-                               <span className="services-subtitle-accent">My Approach to</span>       Collaboration
+                                <h3 className="services-subtitles split-animate" id="approach">
+                                    <span className="services-subtitle-accent">My Approach to</span>       Collaboration
                                 </h3>
                             </div>
                             <div className="services-description">
                                 <p className="services-paragraph">
-                                    I keep clients in the loop throughout the whole process. No surprises, no designer ego – just honest communication about what's working and what isn't. Your feedback matters because you know your business better than I do.
+                                    I maintain clear communication throughout every project stage. Regular updates
+                                    and collaborative feedback sessions ensure we stay aligned on goals and direction.
+                                    Your input is essential—you understand your business and audience better than
+                                    anyone, and that knowledge guides the design decisions we make together.
                                 </p>
                             </div>
                         </div>
 
 
-                          <div className="services-content">
-                                <h3 className="services-subtitles split-animate">
-                                  Tools & Technologies
-                                </h3>
-                            </div>
-                            <div className="core-capabilities">
-                                <ul className="capabilities-list">
-                                    <li><span className="bold">Design: </span>Figma, Adobe Creative Suite</li>
-                                    <li><span className="bold">Development:</span> SvelteKit, GSAP</li>
-                                    <li><span className="bold">Motion:</span> Strategic animations, Jitter</li>
-                                    <li><span className="bold">Performance:</span> SEO optimization, speed tuning, Google Search Console and Analytics, Semrush, Customer Behavior Analytics</li>
-                              
-                                </ul>
-                            </div>
+                        <div className="services-content">
+                            <h3 className="services-subtitles split-animate" id="skills">
+                                Tools & Technologies
+                            </h3>
+                        </div>
+                        <div className="core-capabilities">
+                            <ul className="capabilities-list">
+                                <li><span className="bold">Design:</span> Figma, Canva, Adobe Photoshop</li>
+                                <li><span className="bold">Development:</span> React, HTML/CSS, JavaScript</li>
+                                <li><span className="bold">Animation:</span> GSAP, Framer Motion</li>
+                                <li><span className="bold">Tools:</span> Git, VS Code, Chrome DevTools</li>
+                                <li><span className="bold">Performance:</span> Responsive design, loading
+                                    optimization, cross-browser testing</li>
+                            </ul>
+                        </div>
                     </section>
 
 
@@ -991,9 +1060,56 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
 
                     </section>
 
-               
 
 
+{/* Add this BEFORE the FAQ section */}
+<section className="values-section">
+    <div className="values-container">
+        <div className="section-header">
+            <span className="section-index">(VALUES — 06)</span>
+            <h2 className="section-title split-animate">My Approach & Values</h2>
+        </div>
+        
+        <div className="values-grid">
+            <div className="value-card">
+                <div className="value-icon">📚</div>
+                <h3 className="value-title">Continuous Learning</h3>
+                <p className="value-description">
+                    Web design and development evolve constantly. I stay updated with 
+                    new techniques, tools, and best practices to deliver current, 
+                    effective solutions.
+                </p>
+            </div>
+            
+            <div className="value-card">
+                <div className="value-icon">💬</div>
+                <h3 className="value-title">Clear Communication</h3>
+                <p className="value-description">
+                    I believe in transparent, regular updates throughout projects. 
+                    You'll always know where we are in the process and what comes next.
+                </p>
+            </div>
+            
+            <div className="value-card">
+                <div className="value-icon">🎯</div>
+                <h3 className="value-title">User-First Thinking</h3>
+                <p className="value-description">
+                    Every design decision considers the end user's experience. 
+                    Beautiful design means nothing if it doesn't serve user needs.
+                </p>
+            </div>
+            
+            <div className="value-card">
+                <div className="value-icon">⚡</div>
+                <h3 className="value-title">Quality Over Speed</h3>
+                <p className="value-description">
+                    I'd rather deliver excellent work on time than rush through projects. 
+                    Attention to detail makes the difference between good and great.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
                     <section className="faq-section ">
                         <div className="faq-container">
@@ -1036,20 +1152,21 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                             </div>
                         </div>
                     </section>
+
                     <div id="container" ref={containerRef}>
-                        <section className="parallax-reveal-section panels">
+                      <section className="parallax-reveal-section panels">
                             <div className="parallax-reveal-sticky">
                                 <div className="parallax-reveal-card">
                                     <h2 className="cta-title split-animate">
-                                        Your website should be your <span className="highlight">best salesperson</span>
+                                        Your website should be your <span className="highlight">strongest asset</span>
                                     </h2>
 
-                                    <p className="cta-description ">
-                                        I know the frustration of running a successful business while your website fails to communicate your value. You're losing opportunities to competitors with better digital presence. Let's fix that. Together, we'll build a website that attracts, engages, and converts.
+                                    <p className="cta-description split-animate">
+                                        An effective website goes beyond aesthetics—it communicates your value with clarity, establishes credibility with your audience, and creates seamless pathways for engagement. Let's collaborate to build a digital presence that authentically represents your brand and consistently delivers results.
                                     </p>
 
                                     <button className="cta-button">
-                                        Book a Free Consultation
+                                        Let's Collaborate
                                     </button>
 
                                 </div>
@@ -1065,7 +1182,7 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                                             <a href="mailto:klentaguilar@gmail.com">klentaguilar@gmail.com</a>
                                         </h2>
                                         <button className="footer-cta-button">
-                                            Let's Collaborate
+                                      Start a Conversation
                                             <span className="footer-arrow-circle">
                                                 <FaArrowRight />
                                             </span>
@@ -1083,12 +1200,12 @@ const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
                                             </div>
                                         </div>
                                         <div className="footer-brand-content">
-                                            <p className="footer-tagline split-animate">
-                                                Specializing in premium web design that transforms businesses into recognized brands through strategic planning, refined execution, and conversion-focused design.
+                                                <p className="footer-tagline split-animate">
+                                                Web designer focused on creating user-friendly, conversion-oriented websites through thoughtful design, clean development, and attention to user experience.
                                             </p>
 
                                             <p className="footer-copyright">
-                                                © 2026 Designed and developed by Klent Russell Aguilar | Web Designer
+                                                © 2025 Designed and developed by Klent Russell Aguilar | Web Designer
                                             </p>
                                         </div>
 
