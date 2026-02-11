@@ -557,44 +557,47 @@ function Terms() {
             document.body.classList.remove('menu-open');
         };
     }, [isMobileMenuOpen]);
-    useEffect(() => {
+   useEffect(() => {
+  if (!pageReady) return;
 
+  document.fonts.ready.then(() => {
 
+    let ctx = gsap.context(() => {
 
-        let ctx = gsap.context(() => {
+      const elements = gsap.utils.toArray(".split-animate");
 
-            const elements = gsap.utils.toArray(".split-animate");
+      elements.forEach((el) => {
 
-
-            elements.forEach((el) => {
-
-                const split = new SplitText(el, {
-                    type: "lines,words",
-                    linesClass: "ts-line"
-                });
-
-                gsap.from(split.words, {
-                    yPercent: 100,
-                    opacity: 0,
-                    stagger: 0.05,
-                    duration: 0.6,
-                    ease: "circ.out",
-
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 85%",
-                        toggleActions: "play none none none",
-                        once: true // 🔥 Important
-                    }
-                });
-
-            });
-
+        const split = new SplitText(el, {
+          type: "lines,words",
+          linesClass: "ts-line",
         });
 
-        return () => ctx.revert();
+        gsap.from(split.words, {
+          yPercent: 100,
+          opacity: 0,
+          stagger: 0.05,
+          duration: 0.6,
+          ease: "circ.out",
 
-    }, []);
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            once: true,
+          },
+        });
+
+      });
+
+      ScrollTrigger.refresh();
+
+    });
+
+    return () => ctx.revert();
+
+  });
+
+}, [pageReady]);
 
 
 

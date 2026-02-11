@@ -48,11 +48,10 @@
    LOGO WATERMARK
 ================================ */
 .preloader-logo-watermark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateZ(0);
-    
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateZ(0);
     width: clamp(340px, 42vw, 580px);
     height: auto;
     

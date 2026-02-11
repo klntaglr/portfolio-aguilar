@@ -15,7 +15,13 @@ function Preloader({ onComplete }) {
     gsap.set(overlayRef.current, { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" });
     gsap.set(textRef.current, { opacity: 0, y: 50, scale: 0.98 });
     gsap.set(tagsRef.current, { opacity: 0, y: 30 });
-    gsap.set(logoRef.current, { opacity: 0, scale: 0.85, rotateZ: -4 });
+ gsap.set(logoRef.current, {
+  opacity: 0,
+  scale: 0.85,
+  rotateZ: -4,
+  xPercent: -50,
+  yPercent: -50
+});
 
     const tl = gsap.timeline({
         delay: 0.4,
@@ -71,12 +77,16 @@ function Preloader({ onComplete }) {
 
     .to({}, { duration: 0.6 })
 
-    .to(logoRef.current, {
-        opacity: 0,
-        scale: 1.12,
-        duration: 0.7,
-        ease: "power2.in"
-    })
+ .to(logoRef.current, {
+  opacity: 1,
+  scale: 1,
+  rotateZ: 0,
+  xPercent: -50,
+  yPercent: -50,
+  duration: 1.2,
+  ease: "expo.out"
+})
+
 
     .to(overlayRef.current, {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",

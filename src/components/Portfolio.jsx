@@ -642,12 +642,15 @@ function Portfolio() {
       image: mockup4,
     },
   ];
-  const handlePreloaderComplete = () => {
-    setShowPreloader(false);
-    setPageReady(true);
+const handlePreloaderComplete = () => {
+  setShowPreloader(false);
+  setPageReady(true);
 
-    ScrollTrigger.refresh();
-  };
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh(true);
+  });
+};
+
 
   useEffect(() => {
     if (!pageReady) {
@@ -722,11 +725,18 @@ function Portfolio() {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  useEffect(() => {
+  
+useEffect(() => {
+  if (!pageReady) return;
+
+  document.fonts.ready.then(() => {
+
     let ctx = gsap.context(() => {
+
       const elements = gsap.utils.toArray(".split-animate");
 
       elements.forEach((el) => {
+
         const split = new SplitText(el, {
           type: "lines,words",
           linesClass: "ts-line",
@@ -742,15 +752,22 @@ function Portfolio() {
           scrollTrigger: {
             trigger: el,
             start: "top 85%",
-            toggleActions: "play none none none",
-            once: true, // 🔥 Important
+            once: true,
           },
         });
+
       });
+
+      ScrollTrigger.refresh();
+
     });
 
     return () => ctx.revert();
-  }, []);
+
+  });
+
+}, [pageReady]);
+
 
   return (
     <>
@@ -799,24 +816,9 @@ function Portfolio() {
                   </a>
                 </li>
 
-                <li>
-                  <a href="#process" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">Process</span>
-                      <span className="nav-text-bottom">Process</span>
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#faq" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">FAQS</span>
-                      <span className="nav-text-bottom">FAQS</span>
-                    </span>
-                  </a>
-                </li>
+            
                 {/* CTA stays untouched */}
-                <a href="/free-landing-page" className="nav-cta-btn">
+                <a href="/contact-me" className="nav-cta-btn">
                   <TfiLayoutMediaLeftAlt className="nav-cta-icon" />
                   Get in Touch
                 </a>

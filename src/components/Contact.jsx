@@ -522,20 +522,9 @@ function Contact() {
     },
   ];
 
-  const handlePreloaderComplete = () => {
-    setShowPreloader(false);
-    setPageReady(true);
 
-    ScrollTrigger.refresh();
-  };
 
-  useEffect(() => {
-    if (!pageReady) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [pageReady]);
+
 
   const [openFAQ, setOpenFAQ] = useState(null);
 
@@ -599,11 +588,18 @@ function Contact() {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  useEffect(() => {
+  
+useEffect(() => {
+  if (!pageReady) return;
+
+  document.fonts.ready.then(() => {
+
     let ctx = gsap.context(() => {
+
       const elements = gsap.utils.toArray(".split-animate");
 
       elements.forEach((el) => {
+
         const split = new SplitText(el, {
           type: "lines,words",
           linesClass: "ts-line",
@@ -619,19 +615,26 @@ function Contact() {
           scrollTrigger: {
             trigger: el,
             start: "top 85%",
-            toggleActions: "play none none none",
-            once: true, // 🔥 Important
+            once: true,
           },
         });
+
       });
+
+      ScrollTrigger.refresh();
+
     });
 
     return () => ctx.revert();
-  }, []);
+
+  });
+
+}, [pageReady]);
+
 
   return (
     <>
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+     
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div className="portfolio-container">

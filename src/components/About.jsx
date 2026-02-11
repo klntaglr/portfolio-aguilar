@@ -448,12 +448,15 @@ function About() {
     return () => ctx.revert();
   }, []);
 
-  const handlePreloaderComplete = () => {
-    setShowPreloader(false);
-    setPageReady(true);
+ const handlePreloaderComplete = () => {
+  setShowPreloader(false);
+  setPageReady(true);
 
-    ScrollTrigger.refresh();
-  };
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh(true);
+  });
+};
+
 
   useEffect(() => {
     if (!pageReady) {
@@ -527,11 +530,18 @@ function About() {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  useEffect(() => {
+  
+useEffect(() => {
+  if (!pageReady) return;
+
+  document.fonts.ready.then(() => {
+
     let ctx = gsap.context(() => {
+
       const elements = gsap.utils.toArray(".split-animate");
 
       elements.forEach((el) => {
+
         const split = new SplitText(el, {
           type: "lines,words",
           linesClass: "ts-line",
@@ -547,15 +557,22 @@ function About() {
           scrollTrigger: {
             trigger: el,
             start: "top 85%",
-            toggleActions: "play none none none",
-            once: true, // 🔥 Important
+            once: true,
           },
         });
+
       });
+
+      ScrollTrigger.refresh();
+
     });
 
     return () => ctx.revert();
-  }, []);
+
+  });
+
+}, [pageReady]);
+
 
   return (
     <>
@@ -577,6 +594,15 @@ function About() {
               </div>
 
               <ul className="nav-links desktop-nav">
+                      <li>
+                  <a href="#about" className="nav-link-animated">
+                    <span className="nav-text">
+                      <span className="nav-text-top">About</span>
+                      <span className="nav-text-bottom">About</span>
+                    </span>
+                  </a>
+
+                </li>
                 <li>
                   <a href="/" className="nav-link-animated">
                     <span className="nav-text">
@@ -585,46 +611,23 @@ function About() {
                     </span>
                   </a>
                 </li>
-                <li>
-                  <a href="#cap" className="nav-link-animated">
+           
+          
+
+
+                      <li>
+                  <a href="#about" className="nav-link-animated">
                     <span className="nav-text">
-                      <span className="nav-text-top"> Capabilities</span>
-                      <span className="nav-text-bottom"> Capabilities</span>
+                      <span className="nav-text-top">Projects</span>
+                      <span className="nav-text-bottom">Projects</span>
                     </span>
                   </a>
+
                 </li>
-                <li>
-                  <a href="#phil" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">Philosophy</span>
-                      <span className="nav-text-bottom">Philosophy</span>
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#process" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top"> Process</span>
-                      <span className="nav-text-bottom"> Process</span>
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#approach" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">Approach</span>
-                      <span className="nav-text-bottom">Approach</span>
-                    </span>
-                  </a>
-                </li>{" "}
-                <li>
-                  <a href="#skills" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">Skills</span>
-                      <span className="nav-text-bottom">Skills</span>
-                    </span>
-                  </a>
-                </li>
+                   <a href="/contact-me" className="nav-cta-btn">
+                  <TfiLayoutMediaLeftAlt className="nav-cta-icon" />
+                  Get in Touch
+                </a>
                 {/* CTA stays untouched */}
               </ul>
 

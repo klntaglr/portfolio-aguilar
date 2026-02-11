@@ -524,21 +524,6 @@ function LandingPage() {
     },
   ];
 
-  const handlePreloaderComplete = () => {
-    setShowPreloader(false);
-    setPageReady(true);
-
-    ScrollTrigger.refresh();
-  };
-
-  useEffect(() => {
-    if (!pageReady) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [pageReady]);
-
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -633,7 +618,7 @@ function LandingPage() {
 
   return (
     <>
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div
@@ -784,7 +769,7 @@ function LandingPage() {
             >
               <div className="hero-wrapper">
                 <div className="hero-contents">
-                  <h1 className="hero-titles ">
+                  <h1 className="hero-titles split-animate">
                     Free Landing Page Design{" "}
                     <span className="highlight">Trade Your Feedback</span> for
                     Professional Work
@@ -818,9 +803,9 @@ function LandingPage() {
               <div className="services-content">
                 <h3 className="services-subtitles split-animate">
                   <span className="services-subtitle-accent" id="about">
-                    What's Included
+                    What's Included — 
                   </span>{" "}
-                  — Everything You Need to Launch
+                 Everything You Need to Launch
                 </h3>
               </div>
 
@@ -1006,7 +991,7 @@ function LandingPage() {
               <div className="services-content">
                 <h3 className="services-subtitles split-animate">
                   <span className="services-subtitle-accent">Timeline &</span>{" "}
-                  How Long It Takes
+                <br />   How Long It Takes
                 </h3>
               </div>
 
@@ -1182,16 +1167,17 @@ function LandingPage() {
                   <h4 className="approach-title">
                     Essential information & resources:
                   </h4>
-                  <ol className="approach-list">
+                <ul className="approach-list bullet-list">
                     <li>
                       <span className="bold">Project Overview & Goals:</span> A
                       clear description of what you're building, what problem it
                       solves, who your target audience is, and what you want
                       visitors to do (sign up, buy, book, download, etc.). A
                       simple 2-3 paragraph summary is enough.
-                    </li>
+                    </li>    
+                     <span className="bold">Brand Assets (if available):</span>
                     <li>
-                      <span className="bold">Brand Assets (if available):</span>
+                 
                       <ul style={{ marginTop: "8px", marginLeft: "20px" }}>
                         <li>
                           Logo files (PNG, SVG, or AI format — transparent
@@ -1208,13 +1194,13 @@ function LandingPage() {
                           Existing style guide or branding document (if
                           available)
                         </li>
-                      </ul>
+                      </ul> <div className="hahaha">
                       If you don't have any branding yet, that's okay — we can
                       create a fresh visual identity together during the design
-                      phase.
-                    </li>
+                      phase.</div>
+                    </li>     <span className="bold">Written Content:</span>
                     <li>
-                      <span className="bold">Written Content:</span>
+                 
                       <ul style={{ marginTop: "8px", marginLeft: "20px" }}>
                         <li>
                           Main headline (what grabs attention and communicates
@@ -1241,12 +1227,15 @@ function LandingPage() {
                           links)
                         </li>
                       </ul>
+                      <div className="hahaha">
                       Content doesn't need to be perfect or final — I'll help
                       refine, shorten, or restructure it for better conversions.
-                      Just give me your best draft.
+                      Just give me your best draft.</div>
                     </li>
+     <span className="bold">Images & Media:</span>
+
                     <li>
-                      <span className="bold">Images & Media:</span>
+                 
                       <ul style={{ marginTop: "8px", marginLeft: "20px" }}>
                         <li>
                           High-resolution photos of your product, team,
@@ -1267,13 +1256,14 @@ function LandingPage() {
                           video)
                         </li>
                         <li>Team member headshots (if applicable)</li>
-                      </ul>
+                      </ul>  
+                      <div className="hahaha">
                       If you don't have professional photos, I can suggest free
                       stock photo resources or create simple graphics. Just let
-                      me know what's available.
-                    </li>
+                      me know what's available.</div>
+                    </li>   <span className="bold">Visual References:</span>
                     <li>
-                      <span className="bold">Visual References:</span> Share 2-3
+                    Share 2-3
                       websites or landing pages you like (for style inspiration,
                       not copying). This helps me understand your aesthetic
                       preferences, what kind of vibe you're going for, and what
@@ -1306,9 +1296,9 @@ function LandingPage() {
                         <li>Case study results or success metrics</li>
                         <li>Awards, certifications, or credentials</li>
                         <li>Media mentions or press coverage</li>
-                      </ul>
+                      </ul>  <div className="hahaha">
                       Social proof builds trust and credibility — if you have
-                      it, definitely include it.
+                      it, definitely include it.</div>
                     </li>
                     <li>
                       <span className="bold">Technical Requirements:</span>
@@ -1341,13 +1331,13 @@ function LandingPage() {
                         <li>Terms & Conditions or Terms of Service</li>
                         <li>Cookie Policy (if applicable)</li>
                         <li>Refund/Return Policy (for e-commerce)</li>
-                      </ul>
+                      </ul>   <div className="hahaha">
                       If you don't have these yet, I can provide basic templates
                       or recommend free legal policy generators. These are
                       important for compliance, especially if you're collecting
-                      user data.
+                      user data.</div>
                     </li>
-                  </ol>
+                  </ul>
                 </div>
 
                 <p className="services-paragraph">
@@ -1400,257 +1390,42 @@ function LandingPage() {
 
           <section className="about-section">
             <div className="services-container">
-              <div className="services-content">
-                <h3 className="services-subtitles split-animate">
-                  <span className="services-subtitle-accent">Terms &</span>{" "}
-                  Conditions
-                </h3>
-              </div>
-
-              <div className="services-description">
-                <p className="services-paragraph">
-                  To keep this opportunity fair, transparent, and mutually
-                  beneficial, here are the terms and conditions for the free
-                  landing page offer:
-                </p>
-
-                <div className="approach-section">
-                  <h4 className="approach-title">
-                    Please read carefully before applying:
-                  </h4>
-                  <ol className="approach-list">
-                    <li>
-                      <span className="bold">Selection Process:</span> I reserve
-                      the right to select projects based on my own criteria
-                      including creativity, feasibility, portfolio fit, and
-                      personal interest. Not all applicants will be selected.
-                      Selection decisions are final and non-negotiable.
-                    </li>
-                    <li>
-                      <span className="bold">Free Service Scope:</span> The free
-                      landing page includes design, development, and deployment
-                      on free hosting platforms (Vercel, Netlify, Firebase).
-                      Custom domain registration is NOT included — you must
-                      purchase your own domain if you want a custom URL.
-                    </li>
-                    <li>
-                      <span className="bold">Revision Limits:</span> You're
-                      entitled to 2 rounds of design revisions during the design
-                      phase. Additional revisions beyond this may be declined or
-                      require paid service. Revisions must be provided within 48
-                      hours of each review to keep the project on schedule.
-                    </li>
-                    <li>
-                      <span className="bold">Content Responsibility:</span> You
-                      are responsible for providing all written content, images,
-                      logos, and materials needed for the landing page. I can
-                      help refine and organize content, but I'm not a copywriter
-                      or photographer. Content must be original or properly
-                      licensed — no copyrighted or stolen materials.
-                    </li>
-                    <li>
-                      <span className="bold">Timeline Flexibility:</span> The
-                      estimated 10-14 day timeline is subject to change based on
-                      project complexity and your responsiveness. Delays in
-                      providing feedback or materials will extend the timeline.
-                      I'll do my best to meet deadlines, but external factors
-                      may cause adjustments.
-                    </li>
-                    <li>
-                      <span className="bold">Portfolio Rights:</span> By
-                      accepting this free service, you grant me permission to
-                      showcase the completed landing page in my portfolio, case
-                      studies, social media, and marketing materials. I will
-                      credit your project and may use screenshots or live links.
-                    </li>
-                    <li>
-                      <span className="bold">Testimonial Requirement:</span> If
-                      you're satisfied with the final result, you agree to
-                      provide a short testimonial (2-3 sentences) that I can use
-                      on my website and marketing materials. Testimonials must
-                      be honest and authentic.
-                    </li>
-                    <li>
-                      <span className="bold">Ownership:</span> Upon project
-                      completion and handoff, you own all rights to the final
-                      landing page design and code. You can modify,
-                      redistribute, or use it however you want. I retain the
-                      right to showcase it in my portfolio.
-                    </li>
-                    <li>
-                      <span className="bold">Support Period:</span> I provide 30
-                      days of email support after launch for questions, minor
-                      fixes, or clarifications. After 30 days, support ends
-                      unless you hire me for paid ongoing maintenance. Support
-                      does not include major feature additions or redesigns.
-                    </li>
-                    <li>
-                      <span className="bold">No Guarantees:</span> While I'll
-                      design and build your landing page professionally, I
-                      cannot guarantee specific business results like sales,
-                      leads, or conversions. Success depends on many factors
-                      including your product, market, and marketing efforts.
-                    </li>
-                    <li>
-                      <span className="bold">Professional Conduct:</span> Both
-                      parties agree to communicate professionally, respectfully,
-                      and promptly. Abusive, disrespectful, or unreasonable
-                      behavior from either side may result in project
-                      termination.
-                    </li>
-                    <li>
-                      <span className="bold">Legal Compliance:</span> You are
-                      responsible for ensuring your landing page complies with
-                      all applicable laws, regulations, and industry standards
-                      including privacy laws (GDPR, CCPA), advertising
-                      standards, and terms of service for any integrated
-                      platforms.
-                    </li>
-                    <li>
-                      <span className="bold">Third-Party Services:</span> If
-                      your landing page requires third-party integrations
-                      (payment processors, email services, analytics), you are
-                      responsible for creating accounts, managing subscriptions,
-                      and complying with their terms of service. I can assist
-                      with technical integration only.
-                    </li>
-                    <li>
-                      <span className="bold">Cancellation:</span> I reserve the
-                      right to cancel or pause a project if you become
-                      unresponsive for more than 7 days, fail to provide
-                      necessary materials, or if continuing the project is no
-                      longer feasible. You may also cancel at any time, but the
-                      slot will not be reopened.
-                    </li>
-                    <li>
-                      <span className="bold">No Refunds:</span> Since this is a
-                      free service, there are no refunds. However, if you're
-                      unsatisfied with the final result, I'll work with you to
-                      address concerns within the agreed revision scope.
-                    </li>
-                    <li>
-                      <span className="bold">Modification of Terms:</span> I
-                      reserve the right to modify these terms at any time. Any
-                      changes will be communicated to active projects. By
-                      continuing with the project, you accept updated terms.
-                    </li>
-                  </ol>
-                </div>
-
-                <p className="services-paragraph">
-                  By applying for this free landing page opportunity, you
-                  acknowledge that you've read, understood, and agree to these
-                  terms and conditions. If you have questions or concerns about
-                  any of these terms, please reach out before applying.
-                </p>
-              </div>
-
-              {/* PRIVACY & DATA */}
-              <div className="services-content">
-                <h3 className="services-subtitles split-animate">
-                  <span className="services-subtitle-accent">Privacy &</span>{" "}
-                  Data Handling
-                </h3>
-              </div>
-
-              <div className="services-description">
-                <p className="services-paragraph">
-                  Your privacy and data security matter. Here's how I handle
-                  information during our collaboration:
-                </p>
-
-                <div className="approach-section">
-                  <h4 className="approach-title">
-                    Data protection commitments:
-                  </h4>
-                  <ol className="approach-list">
-                    <li>
-                      <span className="bold">Information Collection:</span> I'll
-                      collect only the information necessary to complete your
-                      landing page including business details, contact
-                      information, brand assets, content, and project
-                      requirements. I won't ask for sensitive personal data,
-                      financial information, or anything unrelated to the
-                      project.
-                    </li>
-                    <li>
-                      <span className="bold">Data Storage:</span> All project
-                      files, communications, and materials will be stored
-                      securely on password-protected cloud storage (Google
-                      Drive, Dropbox) or project management tools. Access is
-                      limited to me and you only.
-                    </li>
-                    <li>
-                      <span className="bold">Communication Privacy:</span> All
-                      emails, calls, and conversations between us are
-                      confidential. I won't share your ideas, business plans, or
-                      proprietary information with third parties without your
-                      explicit permission.
-                    </li>
-                    <li>
-                      <span className="bold">Third-Party Access:</span> I may
-                      use third-party tools for design (Figma), development
-                      (GitHub), hosting (Vercel/Netlify), and communication
-                      (Email, Zoom). These platforms have their own privacy
-                      policies which I encourage you to review.
-                    </li>
-                    <li>
-                      <span className="bold">Portfolio Use:</span> When
-                      showcasing your project in my portfolio, I'll only share
-                      publicly visible information (website screenshots, project
-                      description, your business name). I won't share private
-                      business metrics, analytics, or confidential details
-                      unless you explicitly approve.
-                    </li>
-                    <li>
-                      <span className="bold">Data Retention:</span> Project
-                      files will be retained for 90 days after project
-                      completion in case you need access or revisions. After 90
-                      days, files may be deleted or archived. If you want files
-                      deleted sooner, just ask.
-                    </li>
-                    <li>
-                      <span className="bold">No Selling of Data:</span> I will
-                      never sell, rent, or share your personal or business
-                      information with marketers, advertisers, or third parties
-                      for commercial purposes. Your data is yours.
-                    </li>
-                    <li>
-                      <span className="bold">Breach Notification:</span> In the
-                      unlikely event of a data breach affecting your project
-                      materials, I'll notify you immediately and take steps to
-                      secure your information.
-                    </li>
-                    <li>
-                      <span className="bold">Your Rights:</span> You have the
-                      right to request access to your data, request corrections,
-                      or ask for deletion at any time. Just email me and I'll
-                      comply within 72 hours.
-                    </li>
-                  </ol>
-                </div>
-
-                <p className="services-paragraph">
-                  If you have specific privacy concerns or requirements (NDAs,
-                  confidentiality agreements, etc.), let me know during the
-                  application process and we can discuss appropriate measures.
-                </p>
-              </div>
 
               {/* HOW TO APPLY */}
               <div className="services-content">
                 <h3 className="services-subtitless1 split-animate">
-                  <span className="services-subtitle-accent">Ready to</span>{" "}
+                  <span className="services-subtitle-accent" id="start">Ready to</span>{" "}
                   Apply?
                 </h3>
               </div>
 
-              <div className="services-description" id="start">
+              <div className="services-description">
                 <p className="services-paragraph">
                   If you've read everything above and you're excited about this
                   opportunity, here's how to apply for one of the 5 free landing
                   page slots:
                 </p>
+                <div className="terms-reminder-box">
+
+  <p className="approach-title">
+     Before Applying
+  </p>
+
+  <p className="services-paragraph">
+    Please make sure you read and understand the Terms & Conditions for
+    this free landing page opportunity. This ensures clear expectations,
+    smooth collaboration, and transparency for both sides.
+  </p>
+
+  <a
+    href="/free-landing-page/terms-and-conditions#start"
+    className="cta-button"
+  >
+    Read Terms & Conditions
+  </a>
+
+</div>
+
                 <div className="approach-section">
                   <h4 className="approach-title">Application process:</h4>
                   <ol className="approach-list">
@@ -1705,7 +1480,17 @@ function LandingPage() {
                       project.
                     </li>
                   </ol>
-                </div>
+                </div><div className="apply-action-wrapper">
+
+  <a
+    href="mailto:klentaguilar@gmail.com?subject=Free Landing Page Application"
+    className="cta-button"
+  >
+    Apply Now
+  </a>
+
+</div>
+
                 <p className="services-paragraph">
                   Slots are limited to 5 projects to maintain quality and give
                   each one the attention it deserves. If you're interested,
@@ -1730,6 +1515,8 @@ function LandingPage() {
               </div>
             </div>
           </section>
+
+          
           <div id="container" ref={containerRef}>
             <section className="faq-section panels">
               <div className="faq-container">
