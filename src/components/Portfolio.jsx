@@ -560,88 +560,87 @@ function Portfolio() {
 
     return () => ctx.revert();
   }, []);
+const services = [
+  {
+    number: "01",
+    name: "Website Design & Development",
+    description:
+      "End-to-end website design and development for businesses, portfolios, and e-commerce platforms. I create modern, responsive websites with intuitive navigation, clean layouts, and strategic content placement. From initial concept to final deployment, I focus on building sites that communicate brand value while delivering smooth user experiences across all devices.",
+    tags: [
+      "Business Websites",
+      "E-commerce Sites",
+      "Portfolio Sites",
+      "Responsive Design",
+      "Multi-Page Development",
+      "Performance Optimized",
+    ],
+    image: mockup1,
+  },
 
-  const services = [
-    {
-      number: "01",
-      name: "Landing Page Design",
-      description:
-        "Focused landing page design built to capture attention and encourage action. I create pages with clear messaging, strategic layouts, and user-friendly interfaces that guide visitors toward your goals—whether that's generating leads, driving sign-ups, or showcasing your offer. I also offer limited free landing page opportunities for select projects in exchange for feedback and portfolio permission.",
-      tags: [
-        "Lead Generation",
-        "Conversion-Focused",
-        "Mobile Responsive",
-        "Strategic Layout",
-        "Free Opportunity Available",
-        "Portfolio Projects",
-      ],
-      image: mockup,
-    },
+  {
+    number: "02",
+    name: "Landing Page Design",
+    description:
+      "High-converting landing pages designed to capture attention and drive action. I create focused, goal-oriented pages with clear messaging, strategic layouts, and conversion-optimized elements. Perfect for product launches, lead generation campaigns, event promotions, or businesses establishing their first online presence.",
+    tags: [
+      "Lead Generation",
+      "Conversion-Focused",
+      "Mobile Responsive",
+      "Clear Messaging",
+      "Strategic CTAs",
+      "Fast Loading",
+    ],
+    image: mockup,
+  },
 
-    {
-      number: "02",
-      name: "Website Design & Development",
-      description:
-        "Complete website design that communicates your brand professionally and serves your business goals. I focus on creating clean, modern layouts with intuitive navigation, responsive design, and performance optimization. From small business sites to portfolio showcases, I build websites that look professional and function smoothly.",
-      tags: [
-        "Responsive Design",
-        "Modern Layouts",
-        "Professional Aesthetic",
-        "Performance Focused",
-        "Brand Alignment",
-        "Multi-Page Sites",
-      ],
-      image: mockup1,
-    },
+  {
+    number: "03",
+    name: "Website Redesign & Modernization",
+    description:
+      "Transforming outdated websites into modern, effective digital experiences. I evaluate existing sites to identify design limitations, usability issues, and performance gaps, then create refreshed designs with improved navigation, updated visual styles, better mobile responsiveness, and enhanced user experience—all while maintaining brand identity.",
+    tags: [
+      "Visual Refresh",
+      "UX Improvements",
+      "Modern Standards",
+      "Mobile Optimization",
+      "Performance Updates",
+      "Brand Consistency",
+    ],
+    image: mockup3,
+  },
 
-    {
-      number: "03",
-      name: "UI/UX Design",
-      description:
-        "User interface and experience design focused on usability and clarity. I create wireframes, prototypes, and high-fidelity designs that prioritize user needs while supporting business objectives. My process includes user research, information architecture, and iterative design to ensure interfaces that are both functional and visually appealing.",
-      tags: [
-        "User Research",
-        "Wireframing",
-        "Prototyping",
-        "Usability Testing",
-        "Interface Design",
-        "User Flows",
-      ],
-      image: mockup2,
-    },
+  {
+    number: "04",
+    name: "UI/UX Design",
+    description:
+      "User interface and experience design for web applications, dashboards, mobile apps, and digital products. I create wireframes, prototypes, and high-fidelity designs grounded in user research and usability principles. My process includes information architecture, user flows, and iterative design to ensure interfaces that are both functional and visually compelling.",
+    tags: [
+      "Web Applications",
+      "Dashboard Design",
+      "Mobile App UI",
+      "Wireframing",
+      "Prototyping",
+      "User Research",
+    ],
+    image: mockup2,
+  },
 
-    {
-      number: "04",
-      name: "Website Redesign",
-      description:
-        "Modernization and improvement of existing websites. I help update outdated designs with fresh layouts, improved navigation, better mobile responsiveness, and enhanced visual appeal. The goal is to bring your website in line with current design standards while maintaining your brand identity and improving user experience.",
-      tags: [
-        "Visual Refresh",
-        "UX Improvements",
-        "Modern Standards",
-        "Mobile Optimization",
-        "Brand Consistency",
-        "Performance Updates",
-      ],
-      image: mockup3,
-    },
-
-    {
-      number: "05",
-      name: "Interactive Web Experiences",
-      description:
-        "Websites with engaging animations and interactive elements that enhance user experience. Using modern tools like GSAP, Framer Motion, and Three.js, I create smooth transitions, scroll-triggered animations, and micro-interactions that make websites feel polished and professional while maintaining performance.",
-      tags: [
-        "GSAP Animations",
-        "Scroll Effects",
-        "Micro-interactions",
-        "Framer Motion",
-        "Performance Balanced",
-        "Modern Techniques",
-      ],
-      image: mockup4,
-    },
-  ];
+  {
+    number: "05",
+    name: "Interactive Web Experiences",
+    description:
+      "Engaging websites with smooth animations and interactive elements that enhance user experience. Using modern tools like GSAP, Framer Motion, and Three.js, I create scroll-triggered animations, micro-interactions, and dynamic visual effects that make websites feel polished and memorable while maintaining performance and usability.",
+    tags: [
+      "GSAP Animations",
+      "Scroll Effects",
+      "Micro-interactions",
+      "3D Elements",
+      "Motion Design",
+      "Performance Balanced",
+    ],
+    image: mockup4,
+  },
+];
 const handlePreloaderComplete = () => {
   setShowPreloader(false);
   setPageReady(true);
@@ -665,54 +664,48 @@ const handlePreloaderComplete = () => {
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
-
-  const faqs = [
-    {
-      question: "How long does it usually take to design and build a website?",
-      answer:
-        "Timeline varies by project scope. Simple landing pages typically take 1-2 weeks. Business websites with multiple pages take 3-4 weeks. More complex projects with custom features may take 4-6 weeks. I follow a structured process including planning, design, development, and testing to ensure quality results within the agreed timeframe.",
-    },
-    {
-      question:
-        "What information or materials do you need before starting a project?",
-      answer:
-        "To begin a project smoothly, I typically need basic information about your business, including your goals, target audience, and the purpose of the website. If available, brand assets like your logo, colors, and any existing content are helpful. If you're still developing these materials, that's completely fine—I can guide you through organizing your ideas and clarifying your messaging as part of the design process.",
-    },
-    {
-      question:
-        "Do you offer fixed pricing packages or customized project pricing?",
-      answer:
-        "I offer customized pricing based on project scope and requirements. After discussing your project goals, I provide a clear proposal outlining deliverables, timeline, and cost. As a graduating designer building my portfolio, I offer competitive rates and am open to working within reasonable budgets. For the free landing page opportunity, selected projects receive a complete landing page at no cost in exchange for feedback and portfolio permission.",
-    },
-    {
-      question:
-        "How can a professionally designed website support business growth?",
-      answer:
-        "A well-designed website serves as a 24/7 digital presence that communicates your value and builds credibility. Good design combined with clear messaging and smooth functionality makes it easier for visitors to understand what you offer and take action—whether that's contacting you, making a purchase, or booking a service. A professional website also helps you stand out from competitors and creates a positive first impression.",
-    },
-    {
-      question: "Will my website be responsive and optimized for performance?",
-      answer:
-        "Yes. Every website I create is fully mobile-responsive and tested across different devices and screen sizes. I also optimize for fast loading speeds, smooth interactions, and accessibility to ensure a positive experience for all users. Performance and usability are built into my development process from the start.",
-    },
-    {
-      question:
-        "Can you improve or redesign my existing website instead of building a new one?",
-      answer:
-        "Yes, I offer redesign services for existing websites. The process typically starts with evaluating your current site to identify design limitations, usability issues, or performance gaps. From there, I create a refreshed design that improves user experience, updates the visual style, and aligns with current web standards while maintaining your brand identity.",
-    },
-    {
-      question: "Do you provide support after the website is launched?",
-      answer:
-        "Yes. After launch, I provide post-launch support to address any issues or needed adjustments. The specific support period can be discussed based on your needs. For ongoing updates or maintenance beyond the initial period, we can arrange continued support. I can also provide basic training if you prefer to manage simple content updates yourself.",
-    },
-    {
-      question:
-        "What is the Free Landing Page opportunity and how does it work?",
-      answer:
-        "I'm currently offering 5 free landing page design slots to build my portfolio and gain experience with diverse projects. Selected businesses or individuals receive a professional, mobile-responsive, conversion-focused landing page at no cost. In exchange, I ask for honest feedback about your experience working with me and permission to showcase the project in my portfolio. If you're interested, feel free to reach out through the contact section to discuss your project.",
-    },
-  ];
+const faqs = [
+  {
+    question: "What's your background in UI/UX and web design?",
+    answer:
+      "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 10+ projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
+  },
+  {
+    question: "What does your design process look like?",
+    answer:
+      "I follow a structured approach: research and discovery, wireframing and prototyping, visual design, frontend development, and testing. I prioritize understanding user needs and business goals before moving into execution. Throughout the process, I collaborate closely with stakeholders and iterate based on feedback to ensure the final product meets both user and business objectives.",
+  },
+  {
+    question: "What tools and technologies are you proficient in?",
+    answer:
+      "Design: Figma, Canva. Development: HTML, CSS, JavaScript, React, Tailwind CSS, GSAP, Framer Motion, Three.js. I'm experienced with responsive design, version control (Git), and performance optimization. I stay current with industry trends and regularly expand my technical skillset to deliver modern, effective solutions.",
+  },
+  {
+    question: "Do you work on both design and development?",
+    answer:
+      "Yes. I handle both UI/UX design and frontend development, which allows me to create cohesive experiences from concept to implementation. I design interfaces with usability and aesthetics in mind, then build them with clean, maintainable code. This dual capability helps bridge the gap between design vision and technical execution.",
+  },
+  {
+    question: "Can you work with existing design systems or brand guidelines?",
+    answer:
+      "Absolutely. I'm comfortable working within established design systems, brand guidelines, and UI component libraries. I understand the importance of consistency and can adapt my work to fit existing frameworks while bringing thoughtful design solutions that align with company standards.",
+  },
+  {
+    question: "What kind of projects are you most interested in?",
+    answer:
+      "I'm drawn to projects that prioritize user experience and solve real problems through design. I enjoy working on websites, landing pages, web applications, dashboards, and digital products where thoughtful UI/UX can make a measurable impact. I'm particularly interested in opportunities where I can contribute to product thinking and collaborate with cross-functional teams.",
+  },
+  {
+    question: "Are you available for full-time positions or freelance work?",
+    answer:
+      "I'm actively seeking full-time UI/UX and web design opportunities where I can grow as a designer and contribute to meaningful projects. I'm also open to select freelance projects that align with my skills and allow me to build my portfolio while delivering real value.",
+  },
+  {
+    question: "What's the Free Landing Page opportunity?",
+    answer:
+      "I'm offering 5 complimentary landing page projects to build real-world experience and expand my portfolio. Selected projects receive professional, mobile-responsive design and development at no cost. In exchange, I ask for honest feedback and permission to feature the work in my portfolio. This helps me demonstrate my capabilities while providing value to businesses ready to launch.",
+  },
+];
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -798,15 +791,14 @@ useEffect(() => {
                   </a>
                 </li>
 
-                <li>
-                  <a href="#services" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">Services</span>
-                      <span className="nav-text-bottom">Services</span>
-                    </span>
-                  </a>
-                </li>
-
+           <li>
+    <a href="#services" className="nav-link-animated">
+        <span className="nav-text">
+            <span className="nav-text-top">What I Do</span>
+            <span className="nav-text-bottom">What I Do</span>
+        </span>
+    </a>
+</li>
                 <li>
                   <a href="#projects" className="nav-link-animated">
                     <span className="nav-text">
@@ -879,23 +871,16 @@ useEffect(() => {
                       <FaArrowRight className="nav-arrow" />
                     </a>
                   </li>
-
-                  <li className="mobile-nav-item">
-                    <a
-                      href="#services"
-                      onClick={closeMobileMenu}
-                      className="mobile-nav-link"
-                    >
-                      <span className="nav-number">02</span>
-                      <div className="nav-content">
-                        <span className="nav-label">Services</span>
-                        <span className="nav-description">
-                          What I can do for you
-                        </span>
-                      </div>
-                      <FaArrowRight className="nav-arrow" />
-                    </a>
-                  </li>
+<li className="mobile-nav-item">
+    <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
+        <span className="nav-number">02</span>
+        <div className="nav-content">
+            <span className="nav-label">What I Do</span>
+            <span className="nav-description">My capabilities & expertise</span>
+        </div>
+        <FaArrowRight className="nav-arrow" />
+    </a>
+</li>
 
                   <li className="mobile-nav-item">
                     <a
@@ -992,6 +977,20 @@ useEffect(() => {
                     <span className="highlight">user-focused websites</span>{" "}
                     with strategic layouts and modern interactions.
                   </h1>
+                  <div className="hero-stats">
+    <div className="stat-item">
+        <span className="stat-number">10+</span>
+        <span className="stat-label">Projects</span>
+    </div>
+    <div className="stat-item">
+        <span className="stat-number">1+</span>
+        <span className="stat-label">Year Experience</span>
+    </div>
+    <div className="stat-item">
+        <span className="stat-number">100%</span>
+        <span className="stat-label">Available</span>
+    </div>
+</div>
                   <div className="hero-cta-group">
                     <button className="cta-button primary">
                       Explore My Work
@@ -999,12 +998,13 @@ useEffect(() => {
 
                     <button className="cta-buttons1">How I Work</button>
                   </div>
+                  
                 </div>
 
                 <TiltedCard
                   imageSrc={mockup4}
                   altText="Klent Russell Aguilar"
-                  captionText="Web Designer | Klent Russell Aguilar"
+                  captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
                   containerHeight="clamp(240px, 70vw, 520px)"
                   containerWidth="clamp(240px, 70vw, 520px)"
                   imageHeight="100%"
@@ -1021,13 +1021,13 @@ useEffect(() => {
 
           <section className="about-section">
             <div className="about-container">
-              <h2 className="about-title split-animate">
-                Design is more than aesthetics.{" "}
-                <span className="about-title-accent">
-                  It is how businesses communicate, build trust, and create
-                  meaningful digital experiences.
-                </span>
-              </h2>
+           <h2 className="about-title split-animate">
+  Design isn't just about how it looks.{" "}
+  <span className="about-title-accent">
+    It's about how it works, how users feel, and whether 
+    it actually solves the problem it was built for.
+  </span>
+</h2>
 
               <div className="about-content">
                 <div className="about-cards">
@@ -1084,22 +1084,19 @@ useEffect(() => {
           {/* Services Section */}
           <section className="services-section">
             <div className="services-container">
-              <div className="services-header">
-                <h2 className="services-title" id="services">
-                  Services
-                </h2>
-              </div>
+ <div className="services-header">
+    <h2 className="services-title" id="services">What I Do</h2>
+</div>
 
-              <div className="services-content">
-                <span className="services-index">(SERVICE — 02)</span>
-
-                <h3 className="services-subtitle split-animate">
-                  Transforming brands through{" "}
-                  <span className="services-subtitle-accent">
-                    purposeful design and strategic digital experiences.
-                  </span>
-                </h3>
-              </div>
+<div className="services-content">
+    <span className="services-index">(CAPABILITIES — 02)</span>
+    <h3 className="services-subtitle split-animate">
+        Creating effective digital experiences through{" "}
+        <span className="services-subtitle-accent">
+            thoughtful design and user-centered development.
+        </span>
+    </h3>
+</div>
 
               <div className="services-divider"></div>
 
@@ -1176,11 +1173,9 @@ useEffect(() => {
           <section className="works-section">
             <div className="works-container">
               <div className="works-header">
-                <h2 className="works-title" id="projects">
-                  Works
-                </h2>
+             <h2 className="works-title" id="projects">Recent Work</h2>
                 <div className="works-header-right">
-                  <span className="works-index">(PROJECT — 03)</span>
+                  <span className="works-index">(PORTFOLIO  — 03)</span>
                   <div className="carousel-controls">
                     <button className="carousel-nav-btn prev-btn" id="prevBtn">
                       <MdOutlineArrowBackIos />
@@ -1350,13 +1345,12 @@ useEffect(() => {
               </div>
 
               <div className="works-statement">
-                <p className="statement-text split-animate">
-                  Selected projects demonstrating my approach to web design —{" "}
-                  <span className="statement-highlight">
-                    combining visual appeal with functional, user-friendly
-                    experiences.
-                  </span>
-                </p>
+          <p className="statement-text split-animate">
+  Each project demonstrates{" "}
+  <span className="statement-highlight">
+    user-centered design, technical execution, and measurable impact
+  </span>
+</p>
                 <button className="cta-button">Discuss Your Project</button>
               </div>
             </div>
@@ -1419,13 +1413,14 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Discovery & Research</h3>
-                        <p className="step-description">
-                          Every project begins with understanding your business,
-                          goals, and audience. This stage focuses on identifying
-                          opportunities and defining the direction needed to
-                          create a meaningful and effective website experience.
-                        </p>
+                    <h3 className="step-title">Discovery & Research</h3>
+<p className="step-description">
+  I begin by understanding project requirements, user needs, and business 
+  objectives. This involves stakeholder interviews, competitive analysis, 
+  and defining success metrics to ensure the solution aligns with both 
+  user expectations and business goals.
+</p>
+
                         <br />
                         <p className="step-description">
                           I start each project by researching your business,
@@ -1449,14 +1444,14 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Strategy & Planning</h3>
-                        <p className="step-description">
-                          Based on research insights, the website structure,
-                          user flow, and content layout are carefully planned.
-                          Wireframes and strategic planning help ensure the
-                          website delivers a clear message while aligning with
-                          your business goals and user expectations.
-                        </p>
+               <h3 className="step-title">Strategy & Planning</h3>
+<p className="step-description">
+  Based on research insights, I develop information architecture, user 
+  flows, and wireframes. This planning phase establishes the structural 
+  foundation and ensures the design supports both usability and business 
+  requirements before moving into visual design.
+</p>
+
                       </div>
                     </div>
                   </div>
@@ -1474,16 +1469,13 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">
-                          UI/UX Design & Prototyping
-                        </h3>
-                        <p className="step-description">
-                          Visual design and user interface elements are created
-                          to reflect your brand identity while ensuring a
-                          seamless and engaging user experience. Interactive
-                          prototypes help visualize the website's functionality
-                          and allow refinement before development begins.
-                        </p>
+                   <h3 className="step-title">UI/UX Design & Prototyping</h3>
+<p className="step-description">
+  I create high-fidelity mockups and interactive prototypes using Figma, 
+  applying design systems and visual principles while maintaining brand 
+  consistency. Prototypes allow for early testing and iteration before 
+  development begins.
+</p>
                       </div>
                     </div>
                   </div>
@@ -1501,15 +1493,12 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">
-                          Development & Implementation
-                        </h3>
-                        <p className="step-description">
-                          I build the website using modern development
-                          practices, focusing on clean code, responsive design,
-                          and performance optimization. The result is a website
-                          that works smoothly across all devices and browsers.
-                        </p>
+                   <h3 className="step-title">Development & Implementation</h3>
+<p className="step-description">
+  I build the interface using modern frameworks like React, ensuring clean, 
+  maintainable code. Development includes responsive design implementation, 
+  performance optimization, and adherence to web accessibility standards.
+</p>
                       </div>
                     </div>
                   </div>
@@ -1527,16 +1516,12 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">
-                          Testing, Launch & Optimization
-                        </h3>
-                        <p className="step-description">
-                          The website undergoes final testing to ensure
-                          usability, responsiveness, and performance. After
-                          launch, improvements and adjustments are made when
-                          needed to maintain a smooth and effective user
-                          experience.
-                        </p>
+                 <h3 className="step-title">Testing, Launch & Optimization</h3>
+<p className="step-description">
+  Before launch, I conduct cross-browser testing, usability validation, 
+  and performance audits. Post-launch, I monitor analytics and user 
+  feedback to identify opportunities for continuous improvement.
+</p>
                       </div>
                     </div>
                   </div>
@@ -1549,20 +1534,20 @@ useEffect(() => {
           <section className="man-behind-section">
             <div className="man-behind-container">
               <div className="man-behind-header ">
-                <h2 className="man-behind-title">
-                  Man Behind <br />
-                  The Work
-                </h2>
+               <h2 className="man-behind-title">
+        Get To <br />
+        Know Me
+      </h2>
               </div>
               <div className="services-content">
                 <span className="services-index">( ABOUT ME — 05 )</span>
-                <h3 className="services-subtitless split-animate">
-                  Designing websites that look great while
-                  <span className="services-subtitle-accent">
-                    {" "}
-                    supporting real user needs and business goals.
-                  </span>
-                </h3>
+    <h3 className="services-subtitless split-animate">
+  Designing purposeful interfaces where
+  <span className="services-subtitle-accent">
+    {" "}
+    every detail tells a story.
+  </span>
+</h3>
               </div>
 
               <div className="about-content">
@@ -1620,27 +1605,24 @@ useEffect(() => {
             <Maillards />
           </section>
 
-          <section className="parallax-reveal-section ">
-            <div className="parallax-reveal-sticky">
-              <div className="parallax-reveal-card">
-                <h2 className="cta-title split-animate">
-                  Your website should be your{" "}
-                  <span className="highlight">strongest asset</span>
-                </h2>
+         <section className="parallax-reveal-section">
+    <div className="parallax-reveal-sticky">
+        <div className="parallax-reveal-card">
+       <h2 className="cta-title split-animate">
+  Need a <span className="highlight">landing page?</span> Let's build it—free
+</h2>
 
-                <p className="cta-description split-animate">
-                  An effective website goes beyond aesthetics—it communicates
-                  your value with clarity, establishes credibility with your
-                  audience, and creates seamless pathways for engagement. Let's
-                  collaborate to build a digital presence that authentically
-                  represents your brand and consistently delivers results.
-                </p>
+<p className="cta-description split-animate">
+  5 complimentary landing page slots for businesses ready to launch. 
+  Professional design, mobile-responsive, conversion-focused. 
+  Trade: your feedback + portfolio permission.
+</p>
 
-                <button className="cta-button">Let's Collaborate</button>
-              </div>
-            </div>
-          </section>
-
+  <button className="cta-button">Claim Your Free Slot</button>
+ 
+        </div>
+    </div>
+</section>
           <div id="container" ref={containerRef}>
             <section className="faq-section panels" id="faq">
               <div className="faq-container">
@@ -1695,7 +1677,7 @@ useEffect(() => {
               <div className="footer-container">
                 <div className="footer-top">
                   <div className="footer-cta">
-                    <p className="footer-label">HAVE ANY PROJECT IN MIND?</p>
+        <p className="footer-label">LET'S CONNECT</p>
                     <h2 className="footer-email ">
                       <a href="mailto:klentaguilar@gmail.com">
                         klentaguilar@gmail.com

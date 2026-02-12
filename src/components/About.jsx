@@ -355,7 +355,7 @@ function About() {
 
     return () => {
       smoother.kill();
-      gsap.ticker.remove(() => {});
+      gsap.ticker.remove(() => { });
     };
   }, []);
 
@@ -448,14 +448,14 @@ function About() {
     return () => ctx.revert();
   }, []);
 
- const handlePreloaderComplete = () => {
-  setShowPreloader(false);
-  setPageReady(true);
+  const handlePreloaderComplete = () => {
+    setShowPreloader(false);
+    setPageReady(true);
 
-  requestAnimationFrame(() => {
-    ScrollTrigger.refresh(true);
-  });
-};
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true);
+    });
+  };
 
 
   useEffect(() => {
@@ -471,51 +471,37 @@ function About() {
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
+
   const faqs = [
     {
-      question: "How long does it usually take to design and build a website?",
+      question: "What's your background and education?",
       answer:
-        "The timeline for a website project typically ranges from around 2 to 6 weeks, depending on the size of the website, number of pages, level of customization, and overall project requirements. Landing pages and smaller business websites can often be completed faster, while more complex or interactive websites may require additional time for planning, refinement, and testing. I follow a structured process that includes research, design, development, and quality assurance. This approach ensures that the final website is not only visually strong but also functional, optimized, and aligned with your business objectives.",
+        "I'm currently a BSIT student at La Consolacion University Philippines, specializing in UI/UX design and frontend development. Over the past year, I've completed 10+ projects ranging from landing pages to full websites, combining academic learning with hands-on experience. I'm actively expanding my skills in React, GSAP, and modern web development practices.",
     },
     {
-      question:
-        "What information or materials do you need before starting a project?",
+      question: "What kind of work are you looking for?",
       answer:
-        "To begin a project smoothly, I usually ask for basic information about your business, including your goals, target audience, services, and overall vision for the website. If available, brand assets such as your logo, brand colors, imagery, and content drafts are also very helpful. If you are still developing these materials, that is completely fine. I can help guide you through organizing your ideas, clarifying your messaging, and identifying the most effective structure for your website. My goal is to make the process collaborative and comfortable, even if you are starting from scratch.",
+        "I'm seeking full-time UI/UX and web design opportunities where I can contribute to meaningful projects while continuing to grow as a designer. I'm particularly interested in roles that value user-centered design, clean code, and collaborative teamwork. I'm also open to internships or entry-level positions that offer mentorship and learning opportunities.",
     },
     {
-      question:
-        "Do you offer fixed pricing packages or customized project pricing?",
+      question: "What makes your approach different?",
       answer:
-        "I primarily offer customized pricing based on the scope, goals, and specific requirements of your project. Every business has unique needs, so I focus on creating solutions that are tailored to your brand, audience, and long-term objectives rather than offering one-size-fits-all packages. After discussing your project goals and requirements, I provide a clear and transparent proposal outlining the scope of work, timeline, and deliverables so you know exactly what to expect before the project begins.",
+        "I handle both design and development, which allows me to bridge the gap between visual concepts and technical execution. This dual skillset means I can create cohesive experiences from wireframe to deployment, communicate effectively with both designers and developers, and understand the practical constraints of implementation during the design phase.",
     },
     {
-      question:
-        "How can a professionally designed website support business growth?",
+      question: "Can you work with remote teams?",
       answer:
-        "A professionally designed website strengthens credibility, improves user experience, and helps guide visitors toward taking meaningful actions such as sending inquiries, booking services, or requesting consultations. A well-planned website is more than just visual presentation — it functions as a digital platform that communicates your brand value and supports your business goals. By combining strategic layout, clear messaging, user-centered design, and performance optimization, a professionally built website can help increase engagement, build trust with potential clients, and improve overall conversion opportunities.",
+        "Yes. I'm comfortable with remote collaboration tools like Figma, Slack, Git, and video conferencing platforms. I maintain clear communication, provide regular progress updates, and adapt to different team workflows. My academic projects and freelance work have prepared me for both independent work and collaborative environments.",
     },
     {
-      question: "Will my website be responsive and optimized for performance?",
+      question: "What's your typical workflow?",
       answer:
-        "Yes. Every website I design and develop is built to function smoothly across desktops, tablets, and mobile devices. Responsive design ensures your website remains visually consistent and easy to navigate regardless of screen size. In addition, I focus on performance optimization such as loading speed, clean implementation, accessibility considerations, and smooth interaction design. These factors contribute to better user experience, improved search visibility, and stronger engagement from visitors.",
+        "I start by understanding project requirements and user needs through research and stakeholder input. Next, I create wireframes and prototypes for feedback. Once approved, I develop using clean, maintainable code and modern frameworks. Throughout the process, I test across devices, iterate based on feedback, and ensure the final product meets both user and business objectives.",
     },
     {
-      question:
-        "Can you improve or redesign my existing website instead of building a new one?",
+      question: "Are you available for freelance projects?",
       answer:
-        "Yes, I offer redesign and website improvement services for businesses that already have an existing website but want to enhance its visual design, usability, structure, or performance. Many businesses benefit from redesigning rather than rebuilding from the ground up. The process usually begins with evaluating your current website to identify design limitations, usability concerns, or performance gaps. From there, I create a refreshed design approach that improves user experience while maintaining your brand identity and business goals.",
-    },
-    {
-      question: "Do you provide support after the website is launched?",
-      answer:
-        "Yes. After launch, I remain available to provide support, updates, and improvements whenever needed. I make sure your website is functioning properly, remains visually consistent, and continues to perform effectively over time. If you would like to manage content updates on your own, I can also provide guidance or basic training so you feel confident maintaining your website independently.",
-    },
-    {
-      question:
-        "What is the Free Landing Page opportunity and how does it work?",
-      answer:
-        "I currently offer 5 free landing page design slots to support growing businesses and build strong client partnerships. Each selected business will receive a modern, mobile-responsive, and conversion-focused landing page. In exchange, I simply ask for honest feedback, permission to showcase the project in my portfolio, and a short testimonial if you're happy with the result. Slots are limited to maintain quality. If you're interested, feel free to reach out or book a free consultation to discuss your project.",
+        "While my primary focus is securing a full-time position, I'm open to select freelance opportunities that align with my skills and schedule. I approach every project—whether employment or freelance—with the same commitment to quality, communication, and delivering results. Feel free to reach out to discuss your needs.",
     },
   ];
   useEffect(() => {
@@ -530,48 +516,48 @@ function About() {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  
-useEffect(() => {
-  if (!pageReady) return;
 
-  document.fonts.ready.then(() => {
+  useEffect(() => {
+    if (!pageReady) return;
 
-    let ctx = gsap.context(() => {
+    document.fonts.ready.then(() => {
 
-      const elements = gsap.utils.toArray(".split-animate");
+      let ctx = gsap.context(() => {
 
-      elements.forEach((el) => {
+        const elements = gsap.utils.toArray(".split-animate");
 
-        const split = new SplitText(el, {
-          type: "lines,words",
-          linesClass: "ts-line",
+        elements.forEach((el) => {
+
+          const split = new SplitText(el, {
+            type: "lines,words",
+            linesClass: "ts-line",
+          });
+
+          gsap.from(split.words, {
+            yPercent: 100,
+            opacity: 0,
+            stagger: 0.05,
+            duration: 0.6,
+            ease: "circ.out",
+
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              once: true,
+            },
+          });
+
         });
 
-        gsap.from(split.words, {
-          yPercent: 100,
-          opacity: 0,
-          stagger: 0.05,
-          duration: 0.6,
-          ease: "circ.out",
-
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
-        });
+        ScrollTrigger.refresh();
 
       });
 
-      ScrollTrigger.refresh();
+      return () => ctx.revert();
 
     });
 
-    return () => ctx.revert();
-
-  });
-
-}, [pageReady]);
+  }, [pageReady]);
 
 
   return (
@@ -594,7 +580,7 @@ useEffect(() => {
               </div>
 
               <ul className="nav-links desktop-nav">
-                      <li>
+                <li>
                   <a href="#about" className="nav-link-animated">
                     <span className="nav-text">
                       <span className="nav-text-top">About</span>
@@ -611,11 +597,11 @@ useEffect(() => {
                     </span>
                   </a>
                 </li>
-           
-          
 
 
-                      <li>
+
+
+                <li>
                   <a href="#about" className="nav-link-animated">
                     <span className="nav-text">
                       <span className="nav-text-top">Projects</span>
@@ -624,7 +610,7 @@ useEffect(() => {
                   </a>
 
                 </li>
-                   <a href="/contact-me" className="nav-cta-btn">
+                <a href="/contact-me" className="nav-cta-btn">
                   <TfiLayoutMediaLeftAlt className="nav-cta-icon" />
                   Get in Touch
                 </a>
@@ -744,10 +730,26 @@ useEffect(() => {
                   <div className="hero-content">
                     <p className="tagline split-animate">LEARN ABOUT ME</p>
                     <h1 className="hero-title split-animate">
-                      UI/UX & Web Designer crafting{" "}
-                      <span className="highlight">user-focused</span>
-                      interactive websites
+                      Learning by doing.{" "}
+                      <span className="highlight">Designing websites </span> {" "}
+                      that look great and work better
                     </h1>{" "}
+
+
+                    <div className="hero-stats">
+                      <div className="stat-item">
+                        <span className="stat-number">10+</span>
+                        <span className="stat-label">Projects</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-number">1+</span>
+                        <span className="stat-label">Year Experience</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-number">100%</span>
+                        <span className="stat-label">Available</span>
+                      </div>
+                    </div>
                     <div className="hero-cta-group">
                       <button className="cta-button ">Get in Touch</button>{" "}
                       <button className="cta-buttons1">About Me</button>{" "}
@@ -757,7 +759,7 @@ useEffect(() => {
                   <TiltedCard
                     imageSrc={mockup4}
                     altText="Klent Russell Aguilar"
-                    captionText="Web Designer | Klent Russell Aguilar"
+                       captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
                     containerHeight="clamp(240px, 70vw, 520px)"
                     containerWidth="clamp(240px, 70vw, 520px)"
                     imageHeight="100%"
@@ -774,6 +776,7 @@ useEffect(() => {
           </div>
 
           <section className="about-section">
+
             <FaQuoteRight className="quote-watermark" />
             <div className="about-container">
               <div className="intro-story">
@@ -829,29 +832,30 @@ useEffect(() => {
 
               <div className="services-description">
                 <p className="services-paragraph">
-                  Modern web design requires more than visual appeal—it needs to
-                  balance aesthetics with functionality. I focus on combining
-                  clean design with purposeful animations that enhance the
-                  experience rather than distract from it. Attention to detail
-                  in spacing, typography, and interactions is what elevates a
-                  design from acceptable to polished.
+                  I approach web design as both a creative and technical challenge.
+                  <span className="services-highlight"> {" "}
+                    My dual focus on UI/UX design and frontend development
+                  </span> means I can create interfaces that look polished and actually work—from
+                  wireframe to deployment.
                 </p>
+
                 <p className="services-paragraph">
-                  Through academic projects and collaborative work, I've learned
-                  the importance of clear communication and organized project
-                  management—essential skills for successful collaboration
-                  whether working with local businesses or remote teams.
+                  Through academic projects and real client work, I've learned that great design
+                  isn't just about aesthetics. It's about clear communication, thoughtful interaction,
+                  and solving actual problems for real users.
                 </p>
+
                 <div className="services-what-i-do">
                   <p className="services-label">What I do:</p>
                   <ul className="services-list">
-                    <li>Web design and front-end development</li>
+                    <li>Web design and frontend development</li>
                     <li>UI/UX design and prototyping</li>
-                    <li>Interactive web animations (GSAP, Framer Motion)</li>
+                    <li>Interactive animations (GSAP, Framer Motion)</li>
                     <li>Responsive, mobile-first development</li>
                     <li>Performance optimization and testing</li>
                   </ul>
                 </div>
+
 
                 <p className="services-paragraph">
                   This combination of design and development skills allows me to
@@ -1125,20 +1129,17 @@ useEffect(() => {
               <div className="parallax-reveal-sticky">
                 <div className="parallax-reveal-card">
                   <h2 className="cta-title split-animate">
-                    Your website should be your{" "}
-                    <span className="highlight">strongest asset</span>
+                    Ready to{" "}
+                    <span className="highlight">collaborate?</span>
                   </h2>
 
                   <p className="cta-description split-animate">
-                    An effective website goes beyond aesthetics—it communicates
-                    your value with clarity, establishes credibility with your
-                    audience, and creates seamless pathways for engagement.
-                    Let's collaborate to build a digital presence that
-                    authentically represents your brand and consistently
-                    delivers results.
+                    I'm actively seeking opportunities to contribute to meaningful projects
+                    and grow as a designer. Whether you're hiring, exploring collaboration,
+                    or just want to connect—let's talk.
                   </p>
 
-                  <button className="cta-button">Let's Collaborate</button>
+                  <button className="cta-button">Get in Touch</button>
                 </div>
               </div>
             </section>
@@ -1147,7 +1148,7 @@ useEffect(() => {
               <div className="footer-container">
                 <div className="footer-top">
                   <div className="footer-cta">
-                    <p className="footer-label">HAVE ANY PROJECT IN MIND?</p>
+                    <p className="footer-label">LET'S CONNECT</p>
                     <h2 className="footer-email ">
                       <a href="mailto:klentaguilar@gmail.com">
                         klentaguilar@gmail.com
