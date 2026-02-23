@@ -40,6 +40,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 gsap.registerPlugin(SplitText);
 
 function LandingPage() {
+  
   const [showPreloader, setShowPreloader] = useState(true);
   const [pageReady, setPageReady] = useState(false);
   const containerRef = useRef(null);
@@ -596,20 +597,21 @@ function LandingPage() {
           linesClass: "ts-line",
         });
 
-        gsap.from(split.words, {
-          yPercent: 100,
-          opacity: 0,
-          stagger: 0.05,
-          duration: 0.6,
-          ease: "circ.out",
+  gsap.from(split.words, {
+    yPercent: 100,
+    opacity: 0,
+    stagger: 0.05,
+    duration: 0.6,
+    ease: "circ.out",
 
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none none",
-            once: true, // 🔥 Important
-          },
-        });
+    scrollTrigger: {
+      trigger: el,
+      start: "top 85%",
+      once: true,
+    },
+
+    onComplete: () => split.revert(),
+  });
       });
     });
 

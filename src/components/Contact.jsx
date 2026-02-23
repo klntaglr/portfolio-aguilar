@@ -575,7 +575,14 @@ function Contact() {
       answer:
         "I can definitely help refine and structure your copy to be more conversion-focused and persuasive. I'll guide you on messaging, help you organize your thoughts, and suggest improvements to headlines, CTAs, and benefit statements. However, I'm not a professional copywriter — you'll need to provide the core ideas, value propositions, and key information about your business. If you need full copywriting services, I can recommend talented copywriters I've worked with.",
     },
-  ];
+  ];const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+useEffect(() => {
+  const check = () => setIsTouchDevice(window.innerWidth <= 1024); // 🔥 includes tablet + iPad
+  check();
+  window.addEventListener("resize", check);
+  return () => window.removeEventListener("resize", check);
+}, []);
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -590,7 +597,6 @@ function Contact() {
   }, [isMobileMenuOpen]);
   
 useEffect(() => {
-  if (!pageReady) return;
 
   document.fonts.ready.then(() => {
 
@@ -605,19 +611,21 @@ useEffect(() => {
           linesClass: "ts-line",
         });
 
-        gsap.from(split.words, {
-          yPercent: 100,
-          opacity: 0,
-          stagger: 0.05,
-          duration: 0.6,
-          ease: "circ.out",
+       gsap.from(split.words, {
+    yPercent: 100,
+    opacity: 0,
+    stagger: 0.05,
+    duration: 0.6,
+    ease: "circ.out",
 
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
-        });
+    scrollTrigger: {
+      trigger: el,
+      start: "top 85%",
+      once: true,
+    },
+
+    onComplete: () => split.revert(),
+  });
 
       });
 
@@ -743,13 +751,13 @@ useEffect(() => {
                   klentaguilar@gmail.com
                 </a>
               </div>
-            </div>
+            </div>     
             {/* Services Section */}
-            <section className="about-section">
+            <section className="about-section ">
               <div className="services-container">
                 {/* HEADER */}
                 <div className="services-header">
-                  <h2 className="man-behind-title">
+                  <h2 className="works-title">
                     Let's <br />
                     Collaborate
                   </h2>
@@ -918,188 +926,10 @@ useEffect(() => {
             </section>
           </div>
 
-          <div id="container" ref={containerRef}>
-            <section className="parallax-reveal-section panels">
-              <div className="parallax-reveal-sticky">
-                <div className="parallax-reveal-card">
-                  <h2 className="cta-title split-animate">
-                    Ready to get your{" "}
-                    <span className="highlight">
-                      free professional landing page?
-                    </span>
-                  </h2>
+    
 
-                  <p className="cta-description">
-                    Only 5 slots available for this limited opportunity. Get a
-                    fully designed, mobile-responsive, and conversion-focused
-                    landing page in exchange for your honest feedback. No hidden
-                    costs, no commitments — just professional work that helps
-                    your business grow.
-                  </p>
-
-                  <button className="cta-button">Claim Your Free Slot</button>
-                </div>
-              </div>
-            </section>
-
-            {/* Footer Section */}
-            <footer className="footer-section panels">
-              <div className="footer-container">
-                <div className="footer-top">
-                  <div className="footer-cta">
-                    <p className="footer-label">HAVE ANY PROJECT IN MIND?</p>
-                    <h2 className="footer-email ">
-                      <a href="mailto:klentaguilar@gmail.com">
-                        klentaguilar@gmail.com
-                      </a>
-                    </h2>
-                    <button className="footer-cta-button">
-                      Start a Conversation
-                      <span className="footer-arrow-circle">
-                        <FaArrowRight />
-                      </span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="footer-middle">
-                  <div className="footer-brand">
-                    <div className="footer-logo-section">
-                      <img src={logo} alt="Logo" className="footer-logo" />
-                      <div className="footer-logo-text">
-                        <span className="logo-name">Russell</span>
-                        <span className="logo-surname">Aguilar</span>
-                      </div>
-                    </div>
-                    <div className="footer-brand-content">
-                      <p className="footer-tagline split-animate">
-                        Web designer focused on creating user-friendly,
-                        conversion-oriented websites through thoughtful design,
-                        clean development, and attention to user experience.
-                      </p>
-
-                      <p className="footer-copyright">
-                        © 2025 Designed and developed by Klent Russell Aguilar |
-                        Web Designer
-                      </p>
-                    </div>
-
-                    <div className="footer-location-info">
-                      <div className="footer-info-item">
-                        <p className="footer-info-label">Local Address:</p>
-                        <p className="footer-info-value">
-                          Malolos City, Bulacan, Philippines
-                        </p>
-                      </div>
-                      <div className="footer-info-item">
-                        <p className="footer-info-label">Local Time:</p>
-                        <p className="footer-info-value">
-                          {localDateTime} Philippines (UTC+8)
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="footer-links">
-                    <div className="footer-column">
-                      <h3 className="footer-column-title">NAVIGATE</h3>
-                      <ul className="footer-nav-list">
-                        <li>
-                          <a href="#heros">Home</a>
-                        </li>
-                        <li>
-                          <a href="#about">About</a>
-                        </li>
-                        <li>
-                          <a href="#services">Services</a>
-                        </li>
-                        <li>
-                          <a href="#projects">Projects</a>
-                        </li>
-                        <li>
-                          <a href="#process">Process</a>
-                        </li>
-                        <li>
-                          <a href="#process">Contact</a>
-                        </li>
-                        <li>
-                          <a href="#about">Profile</a>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="footer-column">
-                      <h3 className="footer-column-title">SOCIAL MEDIA</h3>
-                      <ul className="footer-nav-list">
-                        <li>
-                          <a
-                            href="https://facebook.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaFacebook className="footer-icon" /> Facebook
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://instagram.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaInstagram className="footer-icon" /> Instagram
-                          </a>
-                        </li>
-
-                        <li>
-                          <a
-                            href="https://dribbble.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaDribbble className="footer-icon" /> Dribbble
-                          </a>
-                        </li>
-
-                        <li>
-                          <a
-                            href="https://discord.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaDiscord className="footer-icon" /> Discord
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://linkedin.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaLinkedin className="footer-icon" /> LinkedIn
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://indeed.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <SiIndeed className="footer-icon" /> Indeed
-                          </a>
-                        </li>
-                      </ul>{" "}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="footer-bottom">
-                  <div className="footer-logo-large">
-                    <span className="logo-virielle-large">PORTFOLIO</span>
-                  </div>
-                </div>
-              </div>
-            </footer>
-          </div>
+      
+   
         </div>
       </div>
     </>

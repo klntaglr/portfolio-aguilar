@@ -12,30 +12,30 @@ import "./Portfolio.css";
 import Preloader from "./Preloader"; // ADD THIS
 
 import {
-    MdOutlineArrowBackIos,
-    MdOutlineArrowForwardIos,
+  MdOutlineArrowBackIos,
+  MdOutlineArrowForwardIos,
 } from "react-icons/md";
 import {
-    SiCanva,
-    SiCss3,
-    SiFigma,
-    SiFramer,
-    SiGreensock,
-    SiHtml5,
-    SiJavascript,
-    SiReact,
-    SiSass,
-    SiTailwindcss,
-    SiThreedotjs,
+  SiCanva,
+  SiCss3,
+  SiFigma,
+  SiFramer,
+  SiGreensock,
+  SiHtml5,
+  SiJavascript,
+  SiReact,
+  SiSass,
+  SiTailwindcss,
+  SiThreedotjs,
 } from "react-icons/si";
 
 import SplitText from "gsap/SplitText";
 import {
-    FaDiscord,
-    FaDribbble,
-    FaFacebook,
-    FaInstagram,
-    FaLinkedin,
+  FaDiscord,
+  FaDribbble,
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
 } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import { FiArrowUpRight, FiChevronDown, FiChevronUp } from "react-icons/fi";
@@ -56,17 +56,36 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 gsap.registerPlugin(SplitText);
 
 function Portfolio() {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [pf_activeIdx, setPf_activeIdx] = useState(0);
+  const pf_trackRef = useRef(null);
+
+
+  useEffect(() => {
+    if (!pf_trackRef.current) return;
+    const card = pf_trackRef.current.querySelector(".project-card");
+    if (!card) return;
+    const gap = parseFloat(getComputedStyle(pf_trackRef.current).gap) || 24;
+    pf_trackRef.current.style.transform =
+      `translateX(-${pf_activeIdx * (card.offsetWidth + gap)}px)`;
+  }, [pf_activeIdx]);
+  useEffect(() => {
+    const check = () => setIsTouchDevice(window.innerWidth <= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   const [showPreloader, setShowPreloader] = useState(true);
   const [pageReady, setPageReady] = useState(false);
   const containerRef = useRef(null);
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Z-Index stacking
+
       gsap.set(".panels", {
         zIndex: (i, target, targets) => targets.length - i,
       });
 
-      // Scroll animation
+
       gsap.to(".panels:not(:last-child)", {
         yPercent: -100,
         ease: "none",
@@ -83,6 +102,86 @@ function Portfolio() {
 
     return () => ctx.revert();
   }, []);
+
+  const [rw_idx, setRw_idx] = useState(0);
+  const [crs_active, setCrs_active] = useState(false);
+  const rw_trackRef = useRef(null);
+  const crs_ref = useRef(null);
+  const crs_areaRef = useRef(null);
+  const crs_raf = useRef(null);
+  const crs_mouse = useRef({ x: 0, y: 0 });
+  const crs_cur = useRef({ x: 0, y: 0 });
+
+
+  useEffect(() => {
+    if (!rw_trackRef.current) return;
+
+    const cards = rw_trackRef.current.querySelectorAll(".rw-card");
+    if (!cards.length) return;
+
+    const card = cards[0];
+    const gap = parseFloat(getComputedStyle(rw_trackRef.current).gap) || 24;
+    const wrapWidth = rw_trackRef.current.parentElement.offsetWidth;
+    const trackWidth = cards.length * (card.offsetWidth + gap) - gap;
+
+    const maxTranslate = Math.max(0, trackWidth - wrapWidth);
+    const translate = Math.min(rw_idx * (card.offsetWidth + gap), maxTranslate);
+
+    rw_trackRef.current.style.transform = `translateX(-${translate}px)`;
+  }, [rw_idx]);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const tick = () => {
+      crs_cur.current.x = lerp(crs_cur.current.x, crs_mouse.current.x, 0.11);
+      crs_cur.current.y = lerp(crs_cur.current.y, crs_mouse.current.y, 0.11);
+      if (crs_ref.current) {
+        crs_ref.current.style.left = `${crs_cur.current.x}px`;
+        crs_ref.current.style.top = `${crs_cur.current.y}px`;
+      }
+      crs_raf.current = requestAnimationFrame(tick);
+    };
+    const onMove = (e) => { crs_mouse.current = { x: e.clientX, y: e.clientY }; };
+    const el = crs_areaRef.current;
+    if (el) el.addEventListener("mousemove", onMove);
+    crs_raf.current = requestAnimationFrame(tick);
+    return () => {
+      if (el) el.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(crs_raf.current);
+    };
+  }, [isTouchDevice]);
+
+
+
+
+
+
+  const handleCardMouseMove = (e, cardRef) => {
+    const thumb = cardRef.current?.querySelector(".rw-card__thumb");
+    const demo = cardRef.current?.querySelector(".rw-card__demo");
+    if (!thumb || !demo) return;
+
+    const rect = thumb.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    demo.style.left = `${x}px`;
+    demo.style.top = `${y}px`;
+  };
+
+  // Refs for each card
+  const card1Ref = useRef(null);
+  const card2Ref = useRef(null);
+  const card3Ref = useRef(null);
+  const card4Ref = useRef(null);
+  const card5Ref = useRef(null);
+
+
+
+
+
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openService, setOpenService] = useState(0);
   const [showNavbar, setShowNavbar] = useState(true);
@@ -117,159 +216,6 @@ function Portfolio() {
     { node: <SiCanva />, title: "Canva" },
   ];
 
-  useEffect(() => {
-    const carousel = document.getElementById("projectsCarousel");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    if (!carousel || !prevBtn || !nextBtn) return;
-
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    let isDragging = false;
-
-    // GSAP Smooth Scroll Navigation
-    const smoothScrollTo = (targetScroll) => {
-      gsap.to(carousel, {
-        scrollLeft: targetScroll,
-        duration: 0.8,
-        ease: "power3.out",
-      });
-    };
-
-    // Get card width for navigation
-    const getCardWidth = () => {
-      const card = carousel.querySelector(".project-card");
-      return card ? card.offsetWidth + 32 : 450; // 32 = gap
-    };
-
-    // Button Navigation with GSAP
-    const handlePrevClick = () => {
-      const cardWidth = getCardWidth();
-      const targetScroll = Math.max(0, carousel.scrollLeft - cardWidth);
-      smoothScrollTo(targetScroll);
-    };
-
-    const handleNextClick = () => {
-      const cardWidth = getCardWidth();
-      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-      const targetScroll = Math.min(maxScroll, carousel.scrollLeft + cardWidth);
-      smoothScrollTo(targetScroll);
-    };
-
-    // Drag functionality with GSAP inertia
-    const handleMouseDown = (e) => {
-      isDown = true;
-      isDragging = false;
-      carousel.classList.add("dragging");
-      startX = e.pageX - carousel.offsetLeft;
-      scrollLeft = carousel.scrollLeft;
-      gsap.killTweensOf(carousel);
-    };
-
-    const handleMouseLeave = () => {
-      if (!isDown) return;
-      isDown = false;
-      carousel.classList.remove("dragging");
-
-      if (isDragging) {
-        // Add snap-to-card effect
-        const cardWidth = getCardWidth();
-        const currentScroll = carousel.scrollLeft;
-        const nearestCard = Math.round(currentScroll / cardWidth) * cardWidth;
-        smoothScrollTo(nearestCard);
-      }
-    };
-
-    const handleMouseUp = () => {
-      if (!isDown) return;
-      isDown = false;
-      carousel.classList.remove("dragging");
-
-      if (isDragging) {
-        // Add snap-to-card effect
-        const cardWidth = getCardWidth();
-        const currentScroll = carousel.scrollLeft;
-        const nearestCard = Math.round(currentScroll / cardWidth) * cardWidth;
-        smoothScrollTo(nearestCard);
-      }
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      isDragging = true;
-      const x = e.pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 2;
-      carousel.scrollLeft = scrollLeft - walk;
-    };
-
-    // Touch Support
-    const handleTouchStart = (e) => {
-      isDown = true;
-      isDragging = false;
-      carousel.classList.add("dragging");
-      startX = e.touches[0].pageX - carousel.offsetLeft;
-      scrollLeft = carousel.scrollLeft;
-      gsap.killTweensOf(carousel);
-    };
-
-    const handleTouchEnd = () => {
-      if (!isDown) return;
-      isDown = false;
-      carousel.classList.remove("dragging");
-
-      if (isDragging) {
-        const cardWidth = getCardWidth();
-        const currentScroll = carousel.scrollLeft;
-        const nearestCard = Math.round(currentScroll / cardWidth) * cardWidth;
-        smoothScrollTo(nearestCard);
-      }
-    };
-
-    const handleTouchMove = (e) => {
-      if (!isDown) return;
-      isDragging = true;
-      const x = e.touches[0].pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 2;
-      carousel.scrollLeft = scrollLeft - walk;
-    };
-
-    // Update button states
-    const updateButtons = () => {
-      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-      prevBtn.disabled = carousel.scrollLeft <= 0;
-      nextBtn.disabled = carousel.scrollLeft >= maxScroll - 5;
-    };
-
-    carousel.addEventListener("scroll", updateButtons);
-    updateButtons();
-
-    // Event Listeners
-    carousel.addEventListener("mousedown", handleMouseDown);
-    carousel.addEventListener("mouseleave", handleMouseLeave);
-    carousel.addEventListener("mouseup", handleMouseUp);
-    carousel.addEventListener("mousemove", handleMouseMove);
-    carousel.addEventListener("touchstart", handleTouchStart);
-    carousel.addEventListener("touchend", handleTouchEnd);
-    carousel.addEventListener("touchmove", handleTouchMove);
-    prevBtn.addEventListener("click", handlePrevClick);
-    nextBtn.addEventListener("click", handleNextClick);
-
-    return () => {
-      carousel.removeEventListener("mousedown", handleMouseDown);
-      carousel.removeEventListener("mouseleave", handleMouseLeave);
-      carousel.removeEventListener("mouseup", handleMouseUp);
-      carousel.removeEventListener("mousemove", handleMouseMove);
-      carousel.removeEventListener("touchstart", handleTouchStart);
-      carousel.removeEventListener("touchend", handleTouchEnd);
-      carousel.removeEventListener("touchmove", handleTouchMove);
-      carousel.removeEventListener("scroll", updateButtons);
-      prevBtn.removeEventListener("click", handlePrevClick);
-      nextBtn.removeEventListener("click", handleNextClick);
-    };
-  }, []);
 
   const [localDateTime, setLocalDateTime] = useState("");
   useEffect(() => {
@@ -467,7 +413,7 @@ function Portfolio() {
 
     return () => {
       smoother.kill();
-      gsap.ticker.remove(() => {});
+      gsap.ticker.remove(() => { });
     };
   }, []);
 
@@ -560,95 +506,94 @@ function Portfolio() {
 
     return () => ctx.revert();
   }, []);
-const services = [
-  {
-    number: "01",
-    name: "Website Design & Development",
-    description:
-      "End-to-end website design and development for businesses, portfolios, and e-commerce platforms. I create modern, responsive websites with intuitive navigation, clean layouts, and strategic content placement. From initial concept to final deployment, I focus on building sites that communicate brand value while delivering smooth user experiences across all devices.",
-    tags: [
-      "Business Websites",
-      "E-commerce Sites",
-      "Portfolio Sites",
-      "Responsive Design",
-      "Multi-Page Development",
-      "Performance Optimized",
-    ],
-    image: mockup1,
-  },
+  const services = [
+    {
+      number: "01",
+      name: "Website Design & Development",
+      description:
+        "End-to-end website design and development for businesses, portfolios, and e-commerce platforms. I create modern, responsive websites with intuitive navigation, clean layouts, and strategic content placement. From initial concept to final deployment, I focus on building sites that communicate brand value while delivering smooth user experiences across all devices.",
+      tags: [
+        "Business Websites",
+        "E-commerce Sites",
+        "Portfolio Sites",
+        "Responsive Design",
+        "Performance Optimized",
+      ],
+      image: mockup1,
+    },
 
-  {
-    number: "02",
-    name: "Landing Page Design",
-    description:
-      "High-converting landing pages designed to capture attention and drive action. I create focused, goal-oriented pages with clear messaging, strategic layouts, and conversion-optimized elements. Perfect for product launches, lead generation campaigns, event promotions, or businesses establishing their first online presence.",
-    tags: [
-      "Lead Generation",
-      "Conversion-Focused",
-      "Mobile Responsive",
-      "Clear Messaging",
-      "Strategic CTAs",
-      "Fast Loading",
-    ],
-    image: mockup,
-  },
+    {
+      number: "02",
+      name: "Landing Page Design",
+      description:
+        "High-converting landing pages designed to capture attention and drive action. I create focused, goal-oriented pages with clear messaging, strategic layouts, and conversion-optimized elements. Perfect for product launches, lead generation campaigns, event promotions, or businesses establishing their first online presence.",
+      tags: [
+        "Lead Generation",
+        "Conversion-Focused",
+        "Mobile Responsive",
+        "Clear Messaging",
+        "Strategic CTAs",
+        "Fast Loading",
+      ],
+      image: mockup,
+    },
 
-  {
-    number: "03",
-    name: "Website Redesign & Modernization",
-    description:
-      "Transforming outdated websites into modern, effective digital experiences. I evaluate existing sites to identify design limitations, usability issues, and performance gaps, then create refreshed designs with improved navigation, updated visual styles, better mobile responsiveness, and enhanced user experience—all while maintaining brand identity.",
-    tags: [
-      "Visual Refresh",
-      "UX Improvements",
-      "Modern Standards",
-      "Mobile Optimization",
-      "Performance Updates",
-      "Brand Consistency",
-    ],
-    image: mockup3,
-  },
+    {
+      number: "03",
+      name: "Website Redesign & Modernization",
+      description:
+        "Transforming outdated websites into modern, effective digital experiences. I evaluate existing sites to identify design limitations, usability issues, and performance gaps, then create refreshed designs with improved navigation, updated visual styles, better mobile responsiveness, and enhanced user experience—all while maintaining brand identity.",
+      tags: [
+        "Visual Refresh",
+        "UX Improvements",
+        "Modern Standards",
+        "Mobile Optimization",
+        "Performance Updates",
+        "Brand Consistency",
+      ],
+      image: mockup3,
+    },
 
-  {
-    number: "04",
-    name: "UI/UX Design",
-    description:
-      "User interface and experience design for web applications, dashboards, mobile apps, and digital products. I create wireframes, prototypes, and high-fidelity designs grounded in user research and usability principles. My process includes information architecture, user flows, and iterative design to ensure interfaces that are both functional and visually compelling.",
-    tags: [
-      "Web Applications",
-      "Dashboard Design",
-      "Mobile App UI",
-      "Wireframing",
-      "Prototyping",
-      "User Research",
-    ],
-    image: mockup2,
-  },
+    {
+      number: "04",
+      name: "UI/UX Design",
+      description:
+        "User interface and experience design for web applications, dashboards, mobile apps, and digital products. I create wireframes, prototypes, and high-fidelity designs grounded in user research and usability principles. My process includes information architecture, user flows, and iterative design to ensure interfaces that are both functional and visually compelling.",
+      tags: [
+        "Web Applications",
+        "Dashboard Design",
+        "Mobile App UI",
+        "Wireframing",
+        "Prototyping",
+        "User Research",
+      ],
+      image: mockup2,
+    },
 
-  {
-    number: "05",
-    name: "Interactive Web Experiences",
-    description:
-      "Engaging websites with smooth animations and interactive elements that enhance user experience. Using modern tools like GSAP, Framer Motion, and Three.js, I create scroll-triggered animations, micro-interactions, and dynamic visual effects that make websites feel polished and memorable while maintaining performance and usability.",
-    tags: [
-      "GSAP Animations",
-      "Scroll Effects",
-      "Micro-interactions",
-      "3D Elements",
-      "Motion Design",
-      "Performance Balanced",
-    ],
-    image: mockup4,
-  },
-];
-const handlePreloaderComplete = () => {
-  setShowPreloader(false);
-  setPageReady(true);
+    {
+      number: "05",
+      name: "Interactive Web Experiences",
+      description:
+        "Engaging websites with smooth animations and interactive elements that enhance user experience. Using modern tools like GSAP, Framer Motion, and Three.js, I create scroll-triggered animations, micro-interactions, and dynamic visual effects that make websites feel polished and memorable while maintaining performance and usability.",
+      tags: [
+        "GSAP Animations",
+        "Scroll Effects",
+        "Micro-interactions",
+        "3D Elements",
+        "Motion Design",
+        "Performance Balanced",
+      ],
+      image: mockup4,
+    },
+  ];
+  const handlePreloaderComplete = () => {
+    setShowPreloader(false);
+    setPageReady(true);
 
-  requestAnimationFrame(() => {
-    ScrollTrigger.refresh(true);
-  });
-};
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true);
+    });
+  };
 
 
   useEffect(() => {
@@ -664,48 +609,48 @@ const handlePreloaderComplete = () => {
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
-const faqs = [
-  {
-    question: "What's your background in UI/UX and web design?",
-    answer:
-      "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 10+ projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
-  },
-  {
-    question: "What does your design process look like?",
-    answer:
-      "I follow a structured approach: research and discovery, wireframing and prototyping, visual design, frontend development, and testing. I prioritize understanding user needs and business goals before moving into execution. Throughout the process, I collaborate closely with stakeholders and iterate based on feedback to ensure the final product meets both user and business objectives.",
-  },
-  {
-    question: "What tools and technologies are you proficient in?",
-    answer:
-      "Design: Figma, Canva. Development: HTML, CSS, JavaScript, React, Tailwind CSS, GSAP, Framer Motion, Three.js. I'm experienced with responsive design, version control (Git), and performance optimization. I stay current with industry trends and regularly expand my technical skillset to deliver modern, effective solutions.",
-  },
-  {
-    question: "Do you work on both design and development?",
-    answer:
-      "Yes. I handle both UI/UX design and frontend development, which allows me to create cohesive experiences from concept to implementation. I design interfaces with usability and aesthetics in mind, then build them with clean, maintainable code. This dual capability helps bridge the gap between design vision and technical execution.",
-  },
-  {
-    question: "Can you work with existing design systems or brand guidelines?",
-    answer:
-      "Absolutely. I'm comfortable working within established design systems, brand guidelines, and UI component libraries. I understand the importance of consistency and can adapt my work to fit existing frameworks while bringing thoughtful design solutions that align with company standards.",
-  },
-  {
-    question: "What kind of projects are you most interested in?",
-    answer:
-      "I'm drawn to projects that prioritize user experience and solve real problems through design. I enjoy working on websites, landing pages, web applications, dashboards, and digital products where thoughtful UI/UX can make a measurable impact. I'm particularly interested in opportunities where I can contribute to product thinking and collaborate with cross-functional teams.",
-  },
-  {
-    question: "Are you available for full-time positions or freelance work?",
-    answer:
-      "I'm actively seeking full-time UI/UX and web design opportunities where I can grow as a designer and contribute to meaningful projects. I'm also open to select freelance projects that align with my skills and allow me to build my portfolio while delivering real value.",
-  },
-  {
-    question: "What's the Free Landing Page opportunity?",
-    answer:
-      "I'm offering 5 complimentary landing page projects to build real-world experience and expand my portfolio. Selected projects receive professional, mobile-responsive design and development at no cost. In exchange, I ask for honest feedback and permission to feature the work in my portfolio. This helps me demonstrate my capabilities while providing value to businesses ready to launch.",
-  },
-];
+  const faqs = [
+    {
+      question: "What's your background in UI/UX and web design?",
+      answer:
+        "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 10+ projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
+    },
+    {
+      question: "What does your design process look like?",
+      answer:
+        "I follow a structured approach: research and discovery, wireframing and prototyping, visual design, frontend development, and testing. I prioritize understanding user needs and business goals before moving into execution. Throughout the process, I collaborate closely with stakeholders and iterate based on feedback to ensure the final product meets both user and business objectives.",
+    },
+    {
+      question: "What tools and technologies are you proficient in?",
+      answer:
+        "Design: Figma, Canva. Development: HTML, CSS, JavaScript, React, Tailwind CSS, GSAP, Framer Motion, Three.js. I'm experienced with responsive design, version control (Git), and performance optimization. I stay current with industry trends and regularly expand my technical skillset to deliver modern, effective solutions.",
+    },
+    {
+      question: "Do you work on both design and development?",
+      answer:
+        "Yes. I handle both UI/UX design and frontend development, which allows me to create cohesive experiences from concept to implementation. I design interfaces with usability and aesthetics in mind, then build them with clean, maintainable code. This dual capability helps bridge the gap between design vision and technical execution.",
+    },
+    {
+      question: "Can you work with existing design systems or brand guidelines?",
+      answer:
+        "Absolutely. I'm comfortable working within established design systems, brand guidelines, and UI component libraries. I understand the importance of consistency and can adapt my work to fit existing frameworks while bringing thoughtful design solutions that align with company standards.",
+    },
+    {
+      question: "What kind of projects are you most interested in?",
+      answer:
+        "I'm drawn to projects that prioritize user experience and solve real problems through design. I enjoy working on websites, landing pages, web applications, dashboards, and digital products where thoughtful UI/UX can make a measurable impact. I'm particularly interested in opportunities where I can contribute to product thinking and collaborate with cross-functional teams.",
+    },
+    {
+      question: "Are you available for full-time positions or freelance work?",
+      answer:
+        "I'm actively seeking full-time UI/UX and web design opportunities where I can grow as a designer and contribute to meaningful projects. I'm also open to select freelance projects that align with my skills and allow me to build my portfolio while delivering real value.",
+    },
+    {
+      question: "What's the Free Landing Page opportunity?",
+      answer:
+        "I'm offering 5 complimentary landing page projects to build real-world experience and expand my portfolio. Selected projects receive professional, mobile-responsive design and development at no cost. In exchange, I ask for honest feedback and permission to feature the work in my portfolio. This helps me demonstrate my capabilities while providing value to businesses ready to launch.",
+    },
+  ];
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -718,48 +663,50 @@ const faqs = [
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  
-useEffect(() => {
-  if (!pageReady) return;
 
-  document.fonts.ready.then(() => {
+  useEffect(() => {
+    if (!pageReady || isTouchDevice) return; // 🔥 disable on mobile/tablet
 
-    let ctx = gsap.context(() => {
+    document.fonts.ready.then(() => {
 
-      const elements = gsap.utils.toArray(".split-animate");
+      let ctx = gsap.context(() => {
 
-      elements.forEach((el) => {
+        const elements = gsap.utils.toArray(".split-animate");
 
-        const split = new SplitText(el, {
-          type: "lines,words",
-          linesClass: "ts-line",
+        elements.forEach((el) => {
+
+          const split = new SplitText(el, {
+            type: "lines,words",
+            linesClass: "ts-line",
+          });
+
+          gsap.from(split.words, {
+            yPercent: 100,
+            opacity: 0,
+            stagger: 0.05,
+            duration: 0.6,
+            ease: "circ.out",
+
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              once: true,
+            },
+
+            onComplete: () => split.revert(),
+          });
+
         });
 
-        gsap.from(split.words, {
-          yPercent: 100,
-          opacity: 0,
-          stagger: 0.05,
-          duration: 0.6,
-          ease: "circ.out",
-
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
-        });
+        ScrollTrigger.refresh();
 
       });
 
-      ScrollTrigger.refresh();
+      return () => ctx.revert();
 
     });
 
-    return () => ctx.revert();
-
-  });
-
-}, [pageReady]);
+  }, [pageReady]);
 
 
   return (
@@ -791,14 +738,14 @@ useEffect(() => {
                   </a>
                 </li>
 
-           <li>
-    <a href="#services" className="nav-link-animated">
-        <span className="nav-text">
-            <span className="nav-text-top">What I Do</span>
-            <span className="nav-text-bottom">What I Do</span>
-        </span>
-    </a>
-</li>
+                <li>
+                  <a href="#services" className="nav-link-animated">
+                    <span className="nav-text">
+                      <span className="nav-text-top">What I Do</span>
+                      <span className="nav-text-bottom">What I Do</span>
+                    </span>
+                  </a>
+                </li>
                 <li>
                   <a href="#projects" className="nav-link-animated">
                     <span className="nav-text">
@@ -808,10 +755,10 @@ useEffect(() => {
                   </a>
                 </li>
 
-            
+
                 {/* CTA stays untouched */}
                 <a href="/contact-me" className="nav-cta-btn">
-                  <TfiLayoutMediaLeftAlt className="nav-cta-icon" />
+            
                   Get in Touch
                 </a>
               </ul>
@@ -871,16 +818,16 @@ useEffect(() => {
                       <FaArrowRight className="nav-arrow" />
                     </a>
                   </li>
-<li className="mobile-nav-item">
-    <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
-        <span className="nav-number">02</span>
-        <div className="nav-content">
-            <span className="nav-label">What I Do</span>
-            <span className="nav-description">My capabilities & expertise</span>
-        </div>
-        <FaArrowRight className="nav-arrow" />
-    </a>
-</li>
+                  <li className="mobile-nav-item">
+                    <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
+                      <span className="nav-number">02</span>
+                      <div className="nav-content">
+                        <span className="nav-label">What I Do</span>
+                        <span className="nav-description">My capabilities & expertise</span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
 
                   <li className="mobile-nav-item">
                     <a
@@ -935,32 +882,10 @@ useEffect(() => {
               </nav>
 
               {/* CTA Section */}
-              <div className="mobile-menu-cta-section">
-                <div className="cta-highlight-badge">
-                  <TfiLayoutMediaLeftAlt className="cta-gift-icon" />
-                  <span className="cta-badge-text">Limited Offer</span>
-                </div>
 
-                <button className="cta-button-mobile" onClick={closeMobileMenu}>
-                  <span className="cta-text">Free Landing Page</span>
-                  <FaArrowRight className="cta-button-arrow" />
-                </button>
-
-                <p className="cta-availability">
-                  5 slots available | No commitment required
-                </p>
-              </div>
 
               {/* Contact Info Footer */}
-              <div className="mobile-menu-footer">
-                <p className="footer-label">Get in Touch</p>
-                <a
-                  href="mailto:klentaguilar@gmail.com"
-                  className="footer-email"
-                >
-                  klentaguilar@gmail.com
-                </a>
-              </div>
+
             </div>
             <motion.main
               ref={heroRef}
@@ -970,27 +895,27 @@ useEffect(() => {
             >
               <div className="hero-wrapper">
                 <div className="hero-content">
-                  <p className="tagline split-animate">UI/UX & Web Designer</p>
+                  <p className="tagline ">UI/UX & Web Designer</p>
 
-                  <h1 className="hero-title split-animate">
+                  <h1 className="hero-title ">
                     I design{" "}
                     <span className="highlight">user-focused websites</span>{" "}
                     with strategic layouts and modern interactions.
                   </h1>
                   <div className="hero-stats">
-    <div className="stat-item">
-        <span className="stat-number">10+</span>
-        <span className="stat-label">Projects</span>
-    </div>
-    <div className="stat-item">
-        <span className="stat-number">1+</span>
-        <span className="stat-label">Year Experience</span>
-    </div>
-    <div className="stat-item">
-        <span className="stat-number">100%</span>
-        <span className="stat-label">Available</span>
-    </div>
-</div>
+                    <div className="stat-item">
+                      <span className="stat-number">10+</span>
+                      <span className="stat-label">Projects</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-number">1+</span>
+                      <span className="stat-label">Year Experience</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-number">100%</span>
+                      <span className="stat-label">Available</span>
+                    </div>
+                  </div>
                   <div className="hero-cta-group">
                     <button className="cta-button primary">
                       Explore My Work
@@ -998,7 +923,7 @@ useEffect(() => {
 
                     <button className="cta-buttons1">How I Work</button>
                   </div>
-                  
+
                 </div>
 
                 <TiltedCard
@@ -1021,82 +946,29 @@ useEffect(() => {
 
           <section className="about-section">
             <div className="about-container">
-           <h2 className="about-title split-animate">
-  Design isn't just about how it looks.{" "}
-  <span className="about-title-accent">
-    It's about how it works, how users feel, and whether 
-    it actually solves the problem it was built for.
-  </span>
-</h2>
+              <h2 className="about-title split-animate">
+                Design isn't just about how it looks.{" "}
+                <span className="about-title-accent">
+                  It's about how it works, how users feel, and whether
+                  it actually solves the problem it was built for.
+                </span>
+              </h2>
 
-              <div className="about-content">
-                <div className="about-cards">
-                  <div
-                    className="about-card card-blue card-blue-image"
-                    style={{ backgroundImage: `url(${blueBackground})` }}
-                  >
-                    <div className="card-icon">
-                      <img src={virielleLogo} alt="Virielle Logo" />
-                    </div>
 
-                    <h3 className="card-label">FOCUSED APPROACH</h3>
-                    <p className="card-description">
-                      Design driven by user needs, clear purpose, and practical
-                      solutions.
-                    </p>
-                  </div>
-                  <div className="about-card card-dark">
-                    <h3 className="card-title">
-                      <span className="title-design">DESIGN</span>
-                      <span className="title-designs">×</span>
-                      <span className="title-create">CODE</span>
-                    </h3>
-                    <p className="card-date">Building Since 2024</p>
-                  </div>
-                </div>
-                <div
-                  className="about-statss card-blue card-blue-image"
-                  style={{ backgroundImage: `url(${since})` }}
-                >
-                  <div className="card-iconss">
-                    <img src={virielleLogo} alt="Virielle Logo" />
-                  </div>
-                  <h3 className="card-labels">CONTINUOUS GROWTH</h3>
-                  <p className="card-descriptions">
-                    Learning and applying modern web design, UX principles, and
-                    development techniques.
-                  </p>
-                </div>
-              </div>
-
-              <div className="about-topbar">
-                <span className="about-index">(INTRODUCTION — 01)</span>
-
-                <p className="about-mini-desc">
-                  Effective websites combine clear purpose, thoughtful design,
-                  and user-centered thinking.
-                </p>
-                <button className="cta-button">View My Approach</button>
-              </div>
             </div>
           </section>
 
           {/* Services Section */}
           <section className="services-section">
             <div className="services-container">
- <div className="services-header">
-    <h2 className="services-title" id="services">What I Do</h2>
-</div>
+              <div className="services-header">
+                <h2 className="services-title" id="services">What I Do</h2>
+              </div>
 
-<div className="services-content">
-    <span className="services-index">(CAPABILITIES — 02)</span>
-    <h3 className="services-subtitle split-animate">
-        Creating effective digital experiences through{" "}
-        <span className="services-subtitle-accent">
-            thoughtful design and user-centered development.
-        </span>
-    </h3>
-</div>
+              <div className="services-content">
+                <span className="services-index">(CAPABILITIES — 02)</span>
+
+              </div>
 
               <div className="services-divider"></div>
 
@@ -1133,38 +1005,7 @@ useEffect(() => {
                   ))}
                 </div>
 
-                <div className="services-image-container">
-                  <div className="services-image">
-                    <div
-                      className={`service-image-placeholder ${openService === null ? "active" : ""}`}
-                    >
-                      <div className="placeholder-content">
-                        <svg
-                          width="80"
-                          height="80"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                        >
-                          <rect x="3" y="3" width="18" height="18" rx="2" />
-                          <circle cx="8.5" cy="8.5" r="1.5" />
-                          <path d="M21 15l-5-5L5 21" />
-                        </svg>
-                        <p>Select a service to view details</p>
-                      </div>
-                    </div>
 
-                    {services.map((service, index) => (
-                      <div
-                        key={index}
-                        className={`service-image ${openService === index ? "active" : ""}`}
-                      >
-                        <img src={service.image} alt={service.name} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -1173,184 +1014,239 @@ useEffect(() => {
           <section className="works-section">
             <div className="works-container">
               <div className="works-header">
-             <h2 className="works-title" id="projects">Recent Work</h2>
+                <h2 className="works-title" id="projects">Recent Work</h2>
                 <div className="works-header-right">
-                  <span className="works-index">(PORTFOLIO  — 03)</span>
-                  <div className="carousel-controls">
-                    <button className="carousel-nav-btn prev-btn" id="prevBtn">
-                      <MdOutlineArrowBackIos />
-                    </button>
-                    <button className="carousel-nav-btn next-btn" id="nextBtn">
-                      <MdOutlineArrowForwardIos />
-                    </button>
-                  </div>
+
                 </div>
               </div>
 
+              <span className="works-index">(PORTFOLIO — 03)</span>
               <div className="works-divider"></div>
 
-              {/* GSAP Smooth Carousel */}
-              <div className="projects-carousel-wrapper">
-                <div className="projects-carousel" id="projectsCarousel">
-                  <div className="carousel-track" id="carouselTrack">
-                    {/* Project 1 */}
-                    <div className="project-card">
-                      <div className="project-image">
-                        <img
-                          src={mockup}
-                          alt="Martin Architectural"
-                          draggable="false"
-                        />
-                        <div className="project-overlay">
-                          <div className="project-icon">
-                            <FiArrowUpRight />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="project-info">
-                        <div className="project-info-left">
-                          <h3 className="project-title">
-                            Martin Architectural
-                          </h3>
-                          <p className="project-year">(2025 — 2026)</p>
-                          <p className="project-case-preview">
-                            Designed and developed a modern architecture
-                            portfolio website focusing on visual storytelling
-                            and project showcases. Built with React, GSAP
-                            animations, and responsive layouts to highlight
-                            architectural work effectively.
-                          </p>
-                        </div>
-                        <div className="project-tags">
-                          <span className="project-tag">Website Design</span>
-                          <span className="project-tag">Architecture</span>
-                          <span className="project-tag">Animation</span>
-                        </div>
-                      </div>
-                    </div>
+              {!isTouchDevice && (
+                <div
+                  ref={crs_ref}
+                  className={`crs-cursor ${crs_active ? "crs-cursor--visible" : ""}`}
+                  aria-hidden="true"
+                >
+                  <div className="crs-cursor__blob">
+                    <span className="crs-cursor__text">
 
-                    {/* Project 2 */}
-                    <div className="project-card">
-                      <div className="project-image">
-                        <img
-                          src={mockup1}
-                          alt="Century 21 Pura Vida"
-                          draggable="false"
-                        />
-                        <div className="project-overlay">
-                          <div className="project-icon">
-                            <FiArrowUpRight />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="project-info">
-                        <div className="project-info-left">
-                          <h3 className="project-title">
-                            Century 21® Pura Vida
-                          </h3>
-                          <p className="project-year">(2025 — 2026)</p>
-                        </div>
-                        <div className="project-tags">
-                          <span className="project-tag">Website Design</span>
-                          <span className="project-tag">UI/UX</span>
-                          <span className="project-tag">Real Estate</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Project 3 */}
-                    <div className="project-card">
-                      <div className="project-image">
-                        <img
-                          src={mockup2}
-                          alt="Digital Wellness"
-                          draggable="false"
-                        />
-                        <div className="project-overlay">
-                          <div className="project-icon">
-                            <FiArrowUpRight />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="project-info">
-                        <div className="project-info-left">
-                          <h3 className="project-title">Digital Wellness</h3>
-                          <p className="project-year">(2025 — 2026)</p>
-                        </div>
-                        <div className="project-tags">
-                          <span className="project-tag">UI/UX Design</span>
-                          <span className="project-tag">Healthcare</span>
-                          <span className="project-tag">Interaction</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Project 4 */}
-                    <div className="project-card">
-                      <div className="project-image">
-                        <img
-                          src={mockup3}
-                          alt="Brand Refresh"
-                          draggable="false"
-                        />
-                        <div className="project-overlay">
-                          <div className="project-icon">
-                            <FiArrowUpRight />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="project-info">
-                        <div className="project-info-left">
-                          <h3 className="project-title">Brand Refresh</h3>
-                          <p className="project-year">(2025 — 2026)</p>
-                        </div>
-                        <div className="project-tags">
-                          <span className="project-tag">Redesign</span>
-                          <span className="project-tag">Branding</span>
-                          <span className="project-tag">Modern</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Project 5 */}
-                    <div className="project-card">
-                      <div className="project-image">
-                        <img
-                          src={mockup4}
-                          alt="Interactive Portfolio"
-                          draggable="false"
-                        />
-                        <div className="project-overlay">
-                          <div className="project-icon">
-                            <FiArrowUpRight />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="project-info">
-                        <div className="project-info-left">
-                          <h3 className="project-title">
-                            Interactive Portfolio
-                          </h3>
-                          <p className="project-year">(2025 — 2026)</p>
-                        </div>
-                        <div className="project-tags">
-                          <span className="project-tag">Interactive</span>
-                          <span className="project-tag">Animation</span>
-                          <span className="project-tag">Creative</span>
-                        </div>
-                      </div>
-                    </div>
+                      View Details
+                    </span>
                   </div>
                 </div>
+              )}
+
+              {/* Carousel */}
+              <div
+                className="rw-wrap"
+                ref={crs_areaRef}
+                onMouseEnter={() => { if (!isTouchDevice) setCrs_active(true); }}
+                onMouseLeave={() => setCrs_active(false)}
+              >
+                <div className="rw-track" ref={rw_trackRef}>
+
+                  {/* Card 1 */}
+                 <article
+                    className="rw-card"
+                    ref={card2Ref}
+                    onMouseMove={(e) => handleCardMouseMove(e, card2Ref)}
+                  >
+                    <div className="rw-card__thumb">
+                      <img src={mockup1} alt="Century 21 Pura Vida" draggable="false" />
+                      <div className="rw-card__demo">
+                        <span className="rw-card__demo-text">
+
+                          View Details
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rw-card__body">
+                      <div className="rw-card__meta">
+                        <h3 className="rw-card__name">Century 21® Pura Vida</h3>
+                        <p className="rw-card__period">(2025 — 2026)</p>
+                      </div>  <p className="rw-card__excerpt">
+                        Designed and developed a modern architecture portfolio website
+                        focusing on visual storytelling and project showcases. Built with
+                        React, GSAP animations, and responsive layouts.
+                      </p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Website Design</span>
+                        <span className="rw-chip">UI/UX</span>
+                        <span className="rw-chip">Real Estate</span>
+                      </div>
+                    </div>
+                  </article>
+
+                  {/* Card 2 */}
+                  <article
+                    className="rw-card"
+                    ref={card2Ref}
+                    onMouseMove={(e) => handleCardMouseMove(e, card2Ref)}
+                  >
+                    <div className="rw-card__thumb">
+                      <img src={mockup1} alt="Century 21 Pura Vida" draggable="false" />
+                      <div className="rw-card__demo">
+                        <span className="rw-card__demo-text">
+
+                          View Details
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rw-card__body">
+                      <div className="rw-card__meta">
+                        <h3 className="rw-card__name">Century 21® Pura Vida</h3>
+                        <p className="rw-card__period">(2025 — 2026)</p>
+                      </div>  <p className="rw-card__excerpt">
+                        Designed and developed a modern architecture portfolio website
+                        focusing on visual storytelling and project showcases. Built with
+                        React, GSAP animations, and responsive layouts.
+                      </p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Website Design</span>
+                        <span className="rw-chip">UI/UX</span>
+                        <span className="rw-chip">Real Estate</span>
+                      </div>
+                    </div>
+                  </article>
+
+                  {/* Card 3 */}
+                  <article
+                    className="rw-card"
+                    ref={card3Ref}
+                    onMouseMove={(e) => handleCardMouseMove(e, card3Ref)}
+                  >
+                    <div className="rw-card__thumb">
+                      <img src={mockup2} alt="Digital Wellness" draggable="false" />
+                      <div className="rw-card__demo">
+                        <span className="rw-card__demo-text">
+
+                          View Details
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rw-card__body">
+                      <div className="rw-card__meta">
+                        <h3 className="rw-card__name">Digital Wellness</h3>
+                        <p className="rw-card__period">(2025 — 2026)</p>
+                      </div>  <p className="rw-card__excerpt">
+                        Designed and developed a modern architecture portfolio website
+                        focusing on visual storytelling and project showcases. Built with
+                        React, GSAP animations, and responsive layouts.
+                      </p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">UI/UX Design</span>
+                        <span className="rw-chip">Healthcare</span>
+                        <span className="rw-chip">Interaction</span>
+                      </div>
+                    </div>
+                  </article>
+
+                  {/* Card 4 */}
+                  <article
+                    className="rw-card"
+                    ref={card4Ref}
+                    onMouseMove={(e) => handleCardMouseMove(e, card4Ref)}
+                  >
+                    <div className="rw-card__thumb">
+                      <img src={mockup3} alt="Brand Refresh" draggable="false" />
+                      <div className="rw-card__demo">
+                        <span className="rw-card__demo-text">
+
+                          View Details
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rw-card__body">
+                      <div className="rw-card__meta">
+                        <h3 className="rw-card__name">Brand Refresh</h3>
+                        <p className="rw-card__period">(2025 — 2026)</p>
+                      </div>  <p className="rw-card__excerpt">
+                        Designed and developed a modern architecture portfolio website
+                        focusing on visual storytelling and project showcases. Built with
+                        React, GSAP animations, and responsive layouts.
+                      </p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Redesign</span>
+                        <span className="rw-chip">Branding</span>
+                        <span className="rw-chip">Modern</span>
+                      </div>
+                    </div>
+                  </article>
+
+                  {/* Card 5 */}
+                  <article
+                    className="rw-card"
+                    ref={card5Ref}
+                    onMouseMove={(e) => handleCardMouseMove(e, card5Ref)}
+                  >
+                    <div className="rw-card__thumb">
+                      <img src={mockup4} alt="Interactive Portfolio" draggable="false" />
+                      <div className="rw-card__demo">
+                        <span className="rw-card__demo-text">
+
+                          View Details
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rw-card__body">
+                      <div className="rw-card__meta">
+                        <h3 className="rw-card__name">Interactive Portfolio</h3>
+                        <p className="rw-card__period">(2025 — 2026)</p>
+                      </div>  <p className="rw-card__excerpt">
+                        Designed and developed a modern architecture portfolio website
+                        focusing on visual storytelling and project showcases. Built with
+                        React, GSAP animations, and responsive layouts.
+                      </p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Interactive</span>
+                        <span className="rw-chip">Animation</span>
+                        <span className="rw-chip">Creative</span>
+                      </div>
+                    </div>
+                  </article>
+
+                </div>
+
+                <div className="rw-nav">
+                  <button
+                    className={`rw-nav__btn ${rw_idx === 0 ? "rw-nav__btn--off" : ""}`}
+                    onClick={() => setRw_idx((n) => Math.max(0, n - 1))}
+                    disabled={rw_idx === 0}
+                    aria-label="Previous project"
+                  >
+                    <MdOutlineArrowBackIos />
+                  </button>
+
+                  <div className="rw-nav__dots">
+           
+                  </div>
+
+                  <span className="rw-nav__count">
+                    <b>{String(rw_idx + 1).padStart(2, "0")}</b>
+                    <span> / 05</span>
+                  </span>
+
+                  <button
+                    className={`rw-nav__btn rw-nav__btn--fwd ${rw_idx === 4 ? "rw-nav__btn--off" : "rw-nav__btn--on"}`}
+                    onClick={() => setRw_idx((n) => Math.min(4, n + 1))}
+                    disabled={rw_idx === 4}
+                    aria-label="Next project"
+                  >
+                    <MdOutlineArrowForwardIos />
+                  </button>
+                </div>
+
               </div>
 
               <div className="works-statement">
-          <p className="statement-text split-animate">
-  Each project demonstrates{" "}
-  <span className="statement-highlight">
-    user-centered design, technical execution, and measurable impact
-  </span>
-</p>
+                <p className="statement-text split-animate">
+                  Each project is driven by{" "}
+                  <span className="statement-highlight">
+                    rigorous thinking and uncompromising attention to detail.
+                  </span>
+                </p>
                 <button className="cta-button">Discuss Your Project</button>
               </div>
             </div>
@@ -1362,7 +1258,7 @@ useEffect(() => {
               <div className="process-header-wrapper">
                 <div className="process-header" id="process">
                   <span className="process-index">(PROCESS — 04)</span>
-                  <h2 className="process-title split-animate">
+                  <h2 className="process-title ">
                     My design process
                     <span className="process-title-accent">
                       {" "}
@@ -1413,19 +1309,11 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                    <h3 className="step-title">Discovery & Research</h3>
-<p className="step-description">
-  I begin by understanding project requirements, user needs, and business 
-  objectives. This involves stakeholder interviews, competitive analysis, 
-  and defining success metrics to ensure the solution aligns with both 
-  user expectations and business goals.
-</p>
-
-                        <br />
+                        <h3 className="step-title">Discovery & Research</h3>
                         <p className="step-description">
-                          I start each project by researching your business,
-                          target audience, and design goals to ensure the
-                          website aligns with your objectives and user needs.
+                          I begin by researching your target audience and design goals —
+                          understanding user needs, competitive landscape, and success metrics
+                          to ensure every decision aligns with what your users actually expect.
                         </p>
                       </div>
                     </div>
@@ -1444,13 +1332,13 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-               <h3 className="step-title">Strategy & Planning</h3>
-<p className="step-description">
-  Based on research insights, I develop information architecture, user 
-  flows, and wireframes. This planning phase establishes the structural 
-  foundation and ensures the design supports both usability and business 
-  requirements before moving into visual design.
-</p>
+                        <h3 className="step-title">Strategy & Planning</h3>
+                        <p className="step-description">
+                          Based on research insights, I develop information architecture, user
+                          flows, and wireframes. This planning phase establishes the structural
+                          foundation and ensures the design supports both usability and business
+                          requirements before moving into visual design.
+                        </p>
 
                       </div>
                     </div>
@@ -1469,13 +1357,13 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                   <h3 className="step-title">UI/UX Design & Prototyping</h3>
-<p className="step-description">
-  I create high-fidelity mockups and interactive prototypes using Figma, 
-  applying design systems and visual principles while maintaining brand 
-  consistency. Prototypes allow for early testing and iteration before 
-  development begins.
-</p>
+                        <h3 className="step-title">UI/UX Design & Prototyping</h3>
+                        <p className="step-description">
+                          I create high-fidelity mockups and interactive prototypes using Figma,
+                          applying design systems and visual principles while maintaining brand
+                          consistency. Prototypes allow for early testing and iteration before
+                          development begins.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -1493,12 +1381,12 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                   <h3 className="step-title">Development & Implementation</h3>
-<p className="step-description">
-  I build the interface using modern frameworks like React, ensuring clean, 
-  maintainable code. Development includes responsive design implementation, 
-  performance optimization, and adherence to web accessibility standards.
-</p>
+                        <h3 className="step-title">Development & Delivery</h3>
+                        <p className="step-description">
+                          I build the interface using modern frameworks like React, ensuring clean,
+                          maintainable code. Development includes responsive design implementation,
+                          performance optimization, and adherence to web accessibility standards.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -1516,12 +1404,12 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                 <h3 className="step-title">Testing, Launch & Optimization</h3>
-<p className="step-description">
-  Before launch, I conduct cross-browser testing, usability validation, 
-  and performance audits. Post-launch, I monitor analytics and user 
-  feedback to identify opportunities for continuous improvement.
-</p>
+                        <h3 className="step-title">Testing, Launch & Optimization</h3>
+                        <p className="step-description">
+                          Before launch, I conduct cross-browser testing, usability validation,
+                          and performance audits. Post-launch, I monitor analytics and user
+                          feedback to identify opportunities for continuous improvement.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -1534,20 +1422,19 @@ useEffect(() => {
           <section className="man-behind-section">
             <div className="man-behind-container">
               <div className="man-behind-header ">
-               <h2 className="man-behind-title">
-        Get To <br />
-        Know Me
-      </h2>
+                <h2 className="man-behind-title">
+                  About Me
+                </h2>
               </div>
               <div className="services-content">
                 <span className="services-index">( ABOUT ME — 05 )</span>
-    <h3 className="services-subtitless split-animate">
-  Designing purposeful interfaces where
-  <span className="services-subtitle-accent">
-    {" "}
-    every detail tells a story.
-  </span>
-</h3>
+                <h3 className="services-subtitless split-animate">
+                  Designing purposeful interfaces where
+                  <span className="services-subtitle-accent">
+                    {" "}
+                    every detail tells a story.
+                  </span>
+                </h3>
               </div>
 
               <div className="about-content">
@@ -1605,24 +1492,24 @@ useEffect(() => {
             <Maillards />
           </section>
 
-         <section className="parallax-reveal-section">
-    <div className="parallax-reveal-sticky">
-        <div className="parallax-reveal-card">
-       <h2 className="cta-title split-animate">
-  Need a <span className="highlight">landing page?</span> Let's build it—free
-</h2>
+          <section className="parallax-reveal-section">
+            <div className="parallax-reveal-sticky">
+              <div className="parallax-reveal-card">
+                <h2 className="cta-title ">
+                  Need a <span className="highlight">landing page?</span> Let's build it free
+                </h2>
 
-<p className="cta-description split-animate">
-  5 complimentary landing page slots for businesses ready to launch. 
-  Professional design, mobile-responsive, conversion-focused. 
-  Trade: your feedback + portfolio permission.
-</p>
+                <p className="cta-description split-animate">
+                  5 complimentary landing page slots for businesses ready to launch.
+                  Professional design, mobile-responsive, conversion-focused.
+                  Trade: your feedback + portfolio permission.
+                </p>
 
-  <button className="cta-button">Claim Your Free Slot</button>
- 
-        </div>
-    </div>
-</section>
+                <button className="cta-button">Claim Your Free Slot</button>
+
+              </div>
+            </div>
+          </section>
           <div id="container" ref={containerRef}>
             <section className="faq-section panels" id="faq">
               <div className="faq-container">
@@ -1677,7 +1564,7 @@ useEffect(() => {
               <div className="footer-container">
                 <div className="footer-top">
                   <div className="footer-cta">
-        <p className="footer-label">LET'S CONNECT</p>
+                    <p className="footer-label">LET'S CONNECT</p>
                     <h2 className="footer-email ">
                       <a href="mailto:klentaguilar@gmail.com">
                         klentaguilar@gmail.com

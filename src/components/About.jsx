@@ -1,3 +1,5 @@
+// COMPLETE ABOUT.JSX WITH PHILOSOPHY, CASE STUDIES, AND DETAILED PROCESS
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -31,23 +33,46 @@ import logo from "../assets/logo.png";
 import mockup1 from "../assets/mockup1.jpg";
 import mockup4 from "../assets/mockup4.jpg";
 import mockup2 from "../assets/wireframe.jpeg";
+import mockup3 from "../assets/mockup3.png";
 import "./Portfolio.css";
-import Preloader from "./Preloader"; // ADD THIS
+
 import TiltedCard from "./TiltedCard";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 gsap.registerPlugin(SplitText);
 
 function About() {
-  const [showPreloader, setShowPreloader] = useState(true);
+
   const [pageReady, setPageReady] = useState(false);
   const containerRef = useRef(null);
-  const projectsData = [
-    { image: mockup2, title: "Martin Architectural" },
-    { image: mockup1, title: "Century 21" },
-    { image: mockup2, title: "Digital Wellness" },
-    { image: mockup1, title: "Brand Refresh" },
-    { image: mockup2, title: "Interactive Portfolio" },
+  
+  // Case Studies Data
+  const caseStudies = [
+    {
+      image: mockup2,
+      title: "Martin Architectural",
+      category: "Architecture Portfolio",
+      role: "UI/UX Design & Development",
+      impact: "Increased portfolio engagement by 150%",
+      tags: ["React", "GSAP", "Figma"]
+    },
+    {
+      image: mockup1,
+      title: "Century 21",
+      category: "Real Estate",
+      role: "Website Redesign",
+      impact: "Improved lead conversion by 40%",
+      tags: ["UI/UX", "Landing Pages", "Prototyping"]
+    },
+    {
+      image: mockup3,
+      title: "Digital Wellness",
+      category: "Healthcare",
+      role: "Mobile App Design",
+      impact: "4.8★ user rating on launch",
+      tags: ["Mobile UI", "User Research", "Figma"]
+    },
   ];
+  
   const trackRef = useRef(null);
 
   useEffect(() => {
@@ -68,12 +93,12 @@ function About() {
       },
     });
 
-    // Pause on hover track
     track.addEventListener("mouseenter", () => animation.pause());
     track.addEventListener("mouseleave", () => animation.resume());
 
     return () => animation.kill();
   }, []);
+  
   useEffect(() => {
     const cards = document.querySelectorAll(".project-card");
 
@@ -113,12 +138,10 @@ function About() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Z-Index stacking
       gsap.set(".panels", {
         zIndex: (i, target, targets) => targets.length - i,
       });
 
-      // Scroll animation
       gsap.to(".panels:not(:last-child)", {
         yPercent: -100,
         ease: "none",
@@ -135,8 +158,8 @@ function About() {
 
     return () => ctx.revert();
   }, []);
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openService, setOpenService] = useState(0);
   const [showNavbar, setShowNavbar] = useState(true);
 
   const leftRef = useRef(null);
@@ -153,15 +176,16 @@ function About() {
     ["blur(0px)", "blur(10px)"],
   );
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
-  const techLogos = [
-    { node: <SiHtml5 />, title: "HTML" },
-    { node: <SiCss3 />, title: "CSS" },
-    { node: <SiReact />, title: "React" },
-    { node: <SiFramer />, title: "Framer" },
-    { node: <SiGreensock />, title: "GSAP" },
-    { node: <SiCanva />, title: "Canva" },
-    { node: <SiFigma />, title: "Figma" },
-  ];
+  
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsTouchDevice(window.innerWidth <= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  
   const [localDateTime, setLocalDateTime] = useState("");
   useEffect(() => {
     const updateDateTime = () => {
@@ -193,86 +217,6 @@ function About() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      const steps = gsap.utils.toArray(".process-step");
-
-      /* ===== Timeline Fill ===== */
-
-      gsap.to(".timeline-line", {
-        "--progress": "100%",
-        ease: "none",
-
-        scrollTrigger: {
-          trigger: ".process-timeline",
-          start: "top 60%",
-          end: "bottom 70%",
-          scrub: 1.4,
-        },
-      });
-
-      /* ===== Dot Activation ===== */
-
-      steps.forEach((step) => {
-        const dot = step.querySelector(".marker-dot");
-
-        gsap.fromTo(
-          dot,
-          {
-            backgroundColor: "#ffffff",
-            borderColor: "#d0d0d0",
-            scale: 1,
-          },
-          {
-            backgroundColor: "#4CAF50",
-            borderColor: "#4CAF50",
-            scale: 1.25,
-            ease: "power2.out",
-
-            scrollTrigger: {
-              trigger: step,
-              start: "top 55%",
-              end: "top 40%",
-              scrub: true,
-            },
-          },
-        );
-      });
-
-      /* ===== Step Entrance ===== */
-
-      steps.forEach((step) => {
-        gsap.from(step.querySelector(".step-number-wrapper"), {
-          x: -80,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-
-          scrollTrigger: {
-            trigger: step,
-            start: "top 75%",
-            toggleActions: "play reverse play reverse",
-          },
-        });
-
-        gsap.from(step.querySelector(".step-container"), {
-          x: 80,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-
-          scrollTrigger: {
-            trigger: step,
-            start: "top 75%",
-            toggleActions: "play reverse play reverse",
-          },
-        });
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top+=120",
@@ -284,7 +228,7 @@ function About() {
 
     return () => ctx.revert();
   }, []);
-  // Smooth scroll for anchor links
+  
   useEffect(() => {
     const handleSmoothScroll = (e) => {
       const link = e.target.closest("a[href^='#']");
@@ -315,10 +259,6 @@ function About() {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
-  };
-
-  const toggleService = (index) => {
-    setOpenService(openService === index ? null : index);
   };
 
   useEffect(() => {
@@ -407,7 +347,6 @@ function About() {
     return () => ctx.revert();
   }, []);
 
-  // UPDATED GSAP ANIMATION - Works without min-height
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -448,24 +387,6 @@ function About() {
     return () => ctx.revert();
   }, []);
 
-  const handlePreloaderComplete = () => {
-    setShowPreloader(false);
-    setPageReady(true);
-
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh(true);
-    });
-  };
-
-
-  useEffect(() => {
-    if (!pageReady) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [pageReady]);
-
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -504,6 +425,7 @@ function About() {
         "While my primary focus is securing a full-time position, I'm open to select freelance opportunities that align with my skills and schedule. I approach every project—whether employment or freelance—with the same commitment to quality, communication, and delivering results. Feel free to reach out to discuss your needs.",
     },
   ];
+  
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -511,14 +433,13 @@ function About() {
       document.body.classList.remove("menu-open");
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
-    if (!pageReady) return;
+  
 
     document.fonts.ready.then(() => {
 
@@ -545,8 +466,9 @@ function About() {
               start: "top 85%",
               once: true,
             },
-          });
 
+            onComplete: () => split.revert(),
+          });
         });
 
         ScrollTrigger.refresh();
@@ -562,7 +484,6 @@ function About() {
 
   return (
     <>
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div
@@ -587,34 +508,27 @@ function About() {
                       <span className="nav-text-bottom">About</span>
                     </span>
                   </a>
-
                 </li>
                 <li>
                   <a href="/" className="nav-link-animated">
                     <span className="nav-text">
                       <span className="nav-text-top">Portfolio</span>
-                      <span className="nav-text-bottom">Portfolio </span>
+                      <span className="nav-text-bottom">Portfolio</span>
                     </span>
                   </a>
                 </li>
-
-
-
-
                 <li>
-                  <a href="#about" className="nav-link-animated">
+                  <a href="#projects" className="nav-link-animated">
                     <span className="nav-text">
                       <span className="nav-text-top">Projects</span>
                       <span className="nav-text-bottom">Projects</span>
                     </span>
                   </a>
-
                 </li>
                 <a href="/contact-me" className="nav-cta-btn">
-                  <TfiLayoutMediaLeftAlt className="nav-cta-icon" />
+           
                   Get in Touch
                 </a>
-                {/* CTA stays untouched */}
               </ul>
 
               <button
@@ -635,7 +549,6 @@ function About() {
 
             {/* Mobile Menu */}
             <div className={`mobile-menu ${isMobileMenuOpen ? "open" : ""}`}>
-              {/* Close Button */}
               <button
                 className="mobile-menu-close"
                 onClick={closeMobileMenu}
@@ -645,7 +558,6 @@ function About() {
                 <span className="close-line close-line-2"></span>
               </button>
 
-              {/* Menu Header */}
               <div className="mobile-menu-header">
                 <h3 className="mobile-menu-title">Menu</h3>
                 <p className="mobile-menu-subtitle">
@@ -653,7 +565,6 @@ function About() {
                 </p>
               </div>
 
-              {/* Navigation Links with Numbers & Descriptions */}
               <nav className="mobile-nav-container">
                 <ul className="mobile-nav-links">
                   <li className="mobile-nav-item">
@@ -690,7 +601,6 @@ function About() {
                 </ul>
               </nav>
 
-              {/* CTA Section */}
               <div className="mobile-menu-cta-section">
                 <div className="cta-highlight-badge">
                   <TfiLayoutMediaLeftAlt className="cta-gift-icon" />
@@ -707,7 +617,6 @@ function About() {
                 </p>
               </div>
 
-              {/* Contact Info Footer */}
               <div className="mobile-menu-footer">
                 <p className="footer-label">Get in Touch</p>
                 <a
@@ -728,13 +637,11 @@ function About() {
               <div className="hero-wrapper">
                 <div className="hero-wrapper">
                   <div className="hero-content">
-                    <p className="tagline split-animate">LEARN ABOUT ME</p>
+                    <p className="tagline split-animate">WEB DESIGNER</p>
                     <h1 className="hero-title split-animate">
                       Learning by doing.{" "}
-                      <span className="highlight">Designing websites </span> {" "}
-                      that look great and work better
-                    </h1>{" "}
-
+                      <span className="highlight">Designing websites</span> that look great and work better
+                    </h1>
 
                     <div className="hero-stats">
                       <div className="stat-item">
@@ -751,15 +658,15 @@ function About() {
                       </div>
                     </div>
                     <div className="hero-cta-group">
-                      <button className="cta-button ">Get in Touch</button>{" "}
-                      <button className="cta-buttons1">About Me</button>{" "}
+                      <button className="cta-button">Get in Touch</button>
+                      <button className="cta-buttons1">View Work</button>
                     </div>
                   </div>
 
                   <TiltedCard
                     imageSrc={mockup4}
                     altText="Klent Russell Aguilar"
-                       captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
+                    captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
                     containerHeight="clamp(240px, 70vw, 520px)"
                     containerWidth="clamp(240px, 70vw, 520px)"
                     imageHeight="100%"
@@ -775,152 +682,90 @@ function About() {
             </motion.main>
           </div>
 
+          {/* INTRO SECTION */}
           <section className="about-section">
-
-            <FaQuoteRight className="quote-watermark" />
-            <div className="about-container">
-              <div className="intro-story">
-                <h2 className="story-paragraph" id="about">
-                  Hi! I'm{" "}
-                  <span className="intro-name">Klent Russell Aguilar,</span> a
-                  BSIT student at La Consolacion University Philippines
-                  specializing in UI/UX design and front-end development. Over
-                  the past year, I've focused on understanding what makes
-                  websites effective— combining user-centered design with clean
-                  development to create digital experiences that look
-                  professional and function smoothly. What started as curiosity
-                  about web design has grown into a genuine commitment to the
-                  craft.
-                </h2>
-              </div>
-
-              <div className="intro-story">
-                <p className="story-paragraph">
-                  My approach focuses on{" "}
-                  <span className="story-highlight">
-                    combining thoughtful design with practical development
-                  </span>{" "}
-                  to create websites that serve both user needs and business
-                  goals. I believe good design should feel natural guiding
-                  visitors without overwhelming them. I'm committed to
-                  continuous learning because web design and development are
-                  fields that constantly evolve, and staying current is
-                  essential to delivering quality work.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Services Section */}
-          <section className="about-section">
+ 
             <div className="services-container">
               <div className="services-header">
-                <h2 className="man-behind-title ">
-                  The Evolution <br />
-                  of Web Design
+                <h2 className="works-title" id="about">
+                  About Me <br />
+                  & My Work
                 </h2>
               </div>
+
               <div className="services-content">
-                <h3 className="services-subtitles split-animate ">
-                  <span className="services-subtitle-accent">
-                    {" "}
-                    What Sets Me Apart as a
-                  </span>{" "}
-                  Web Designer
+                <h3 className="services-subtitles split-animate">
+                  UI/UX & Web Designer
                 </h3>
               </div>
 
               <div className="services-description">
                 <p className="services-paragraph">
-                  I approach web design as both a creative and technical challenge.
-                  <span className="services-highlight"> {" "}
-                    My dual focus on UI/UX design and frontend development
-                  </span> means I can create interfaces that look polished and actually work—from
-                  wireframe to deployment.
+                  I'm <span className="services-highlight">Klent Russell Aguilar,</span> a
+                  BSIT student at La Consolacion University Philippines specializing in
+                  UI/UX design and web development. I create digital experiences that
+                  balance aesthetics with functionality—from wireframe to deployment.
                 </p>
 
                 <p className="services-paragraph">
-                  Through academic projects and real client work, I've learned that great design
-                  isn't just about aesthetics. It's about clear communication, thoughtful interaction,
-                  and solving actual problems for real users.
+                  My dual focus on design and development means I can{" "}
+                  <span className="services-highlight">
+                    bridge the gap between visual concepts and technical execution
+                  </span>
+                  —communicating effectively with both designers and developers while
+                  understanding implementation constraints during the design phase.
                 </p>
 
                 <div className="services-what-i-do">
                   <p className="services-label">What I do:</p>
                   <ul className="services-list">
-                    <li>Web design and frontend development</li>
-                    <li>UI/UX design and prototyping</li>
-                    <li>Interactive animations (GSAP, Framer Motion)</li>
-                    <li>Responsive, mobile-first development</li>
-                    <li>Performance optimization and testing</li>
+                    <li>Website design and development</li>
+                    <li>UI/UX design and prototyping (Figma)</li>
+                    <li>Interactive web animations (GSAP, Framer Motion)</li>
+                    <li>Responsive, mobile-first implementation</li>
+                    <li>Performance optimization and user testing</li>
                   </ul>
                 </div>
-
-
-                <p className="services-paragraph">
-                  This combination of design and development skills allows me to
-                  create cohesive digital experiences.{" "}
-                  <span className="services-highlight">
-                    The result is websites that look professional and function
-                    smoothly across all devices.
-                  </span>
-                </p>
               </div>
 
+              {/* DESIGN PHILOSOPHY */}
               <div className="services-content">
-                <h3 className="services-subtitles split-animate" id="cap">
-                  Core Capabilities
+                <h3 className="services-subtitles split-animate" id="philosophy">
+                  <span className="services-subtitle-accent">Design</span> Philosophy
                 </h3>
               </div>
-              <div className="core-capabilities">
-                <ul className="capabilities-list">
-                  <li>
-                    Designing user-friendly interfaces focused on clear
-                    navigation and usability
-                  </li>
-                  <li>
-                    Building responsive websites that work smoothly across all
-                    devices
-                  </li>
-                  <li>
-                    Creating purposeful animations that enhance user experience
-                  </li>
-                  <li>
-                    Developing clean, maintainable code using modern frameworks
-                    (React, GSAP)
-                  </li>
-                  <li>
-                    Testing and refining designs based on user feedback and
-                    performance data
-                  </li>
-                </ul>
-              </div>
-              <div className="services-content">
-                <h3 className="services-subtitles split-animate" id="phil">
-                  <span className="services-subtitle-accent">My Design</span>{" "}
-                  Philosophy
-                </h3>
-              </div>
+
               <div className="services-description">
                 <p className="services-paragraph">
-                  My design philosophy centers on simplicity and usability. If
-                  users need to think about how to navigate your website,
-                  something needs improvement. Every design choice should serve
-                  a clear purpose—supporting user goals while maintaining visual
-                  appeal.
+                  My design philosophy centers on simplicity and usability. If users need
+                  to think about how to navigate a website, something needs improvement.
+                  <span className="services-highlight">
+                    {" "}Every design choice should serve a clear purpose
+                  </span>
+                  —supporting user goals while maintaining visual appeal.
                 </p>
 
                 <p className="services-paragraph">
-                  I approach each project by prioritizing the user perspective.
-                  What looks good in design software doesn't always work in
-                  practice, which is why I test designs across different devices
-                  and gather feedback throughout the development process.
+                  I prioritize the user perspective throughout the process. What looks good
+                  in design software doesn't always work in practice, which is why I test
+                  designs across different devices and gather feedback at every stage.
                 </p>
+
+                <div className="services-what-i-do">
+                  <p className="services-label">Core principles:</p>
+                  <ul className="services-list">
+                    <li><strong>User-first thinking</strong> — Design decisions guided by real user needs and behaviors</li>
+                    <li><strong>Purposeful simplicity</strong> — Remove unnecessary complexity, keep interfaces intuitive</li>
+                    <li><strong>Iterative refinement</strong> — Test, gather feedback, improve continuously</li>
+                    <li><strong>Technical awareness</strong> — Design with implementation feasibility in mind</li>
+                  </ul>
+                </div>
               </div>
+
+              {/* DETAILED PROCESS */}
               <div className="services-content">
                 <h3 className="services-subtitles split-animate" id="process">
-                  <span className="services-subtitle-accent">Strategic</span>{" "}
-                  Web <br /> Design Process
+                  <span className="services-subtitle-accent">My</span> Design Process
                 </h3>
               </div>
 
@@ -928,146 +773,135 @@ function About() {
                 <div className="services-what-i-dos">
                   <img
                     src={mockup2}
-                    alt="What I do"
+                    alt="Design process wireframes"
                     className="services-images"
                   />
                 </div>
 
                 <p className="services-paragraph">
-                  Through my studies and project experience, I've developed a
-                  structured approach to web design that emphasizes user
-                  research, strategic planning, and iterative development. This
-                  process helps ensure that each project addresses real user
-                  needs while meeting business objectives.
+                  I follow a structured, user-centered approach that emphasizes research,
+                  strategic planning, and iterative development. This process ensures each
+                  project addresses real user needs while meeting business objectives.
                 </p>
 
-                <p className="services-paragraph">
-                  Every project begins with understanding your goals and target
-                  audience, allowing me to create designs that are both visually
-                  appealing and functionally effective.
-                </p>
                 <div className="approach-section">
-                  <h4 className="approach-title">My approach combines:</h4>
+                  <h4 className="approach-title">Process breakdown:</h4>
 
                   <ol className="approach-list">
                     <li>
-                      User-centered design focused on clear navigation and
-                      usability
+                      <strong>Research & Discovery</strong> — Understanding user needs,
+                      business goals, and competitive landscape through stakeholder
+                      interviews and user research
                     </li>
                     <li>
-                      Purposeful animations that enhance rather than distract
+                      <strong>Information Architecture</strong> — Organizing content
+                      structure, defining user flows, and mapping navigation patterns
+                      to support intuitive experiences
                     </li>
-                    <li>Clean, well-structured content presentation</li>
-                    <li>Performance-optimized development practices</li>
                     <li>
-                      Consistent visual design aligned with brand identity
+                      <strong>Wireframing</strong> — Creating low-fidelity layouts to
+                      establish page structure, content hierarchy, and interaction
+                      patterns before visual design
+                    </li>
+                    <li>
+                      <strong>Prototyping</strong> — Building interactive prototypes in
+                      Figma to test user flows, validate concepts, and gather early
+                      feedback
+                    </li>
+                    <li>
+                      <strong>Visual Design</strong> — Applying design systems, brand
+                      guidelines, and visual principles to create high-fidelity mockups
+                    </li>
+                    <li>
+                      <strong>Frontend Development</strong> — Implementing designs with
+                      clean, maintainable code using React, ensuring responsiveness and
+                      performance
+                    </li>
+                    <li>
+                      <strong>Testing & Iteration</strong> — Conducting usability tests,
+                      cross-browser testing, and performance audits, then refining based
+                      on feedback
                     </li>
                   </ol>
                 </div>
+
+                <p className="services-paragraph">
+                  This iterative approach allows me to validate decisions early and make
+                  adjustments before committing to development.{" "}
+                  <span className="services-highlight">
+                    The result is a product that's been refined through continuous feedback
+                    and testing.
+                  </span>
+                </p>
               </div>
+
+              {/* CASE STUDY HIGHLIGHTS */}
+            
+
+              {/* CORE CAPABILITIES */}
               <div className="services-content">
-                <h3 className="services-subtitles split-animate" id="approach">
-                  <span className="services-subtitle-accent">
-                    My Approach to
-                  </span>{" "}
-                  Collaboration
+                <h3 className="services-subtitles split-animate" id="cap">
+                  Core Capabilities
                 </h3>
               </div>
-              <div className="services-description">
-                <p className="services-paragraph">
-                  I maintain clear communication throughout every project stage.
-                  Regular updates and collaborative feedback sessions ensure we
-                  stay aligned on goals and direction. Your input is
-                  essential—you understand your business and audience better
-                  than anyone, and that knowledge guides the design decisions we
-                  make together.
-                </p>
-                {/* My Approach & Values */}
-                <div className="services-content">
-                  <h3 className="services-subtitles split-animate">
-                    <span className="services-subtitle-accent">My</span>{" "}
-                    Approach & Values
-                  </h3>
-                </div>
+              <div className="core-capabilities">
+                <ul className="capabilities-list">
+                  <li>Designing user-friendly interfaces focused on clear navigation and usability</li>
+                  <li>Building responsive websites that work smoothly across all devices</li>
+                  <li>Creating purposeful animations that enhance user experience</li>
+                  <li>Developing clean, maintainable code using modern frameworks</li>
+                  <li>Testing and refining designs based on user feedback</li>
+                </ul>
+              </div>
 
-                <div className="services-description">
-                  <p className="services-paragraph">
-                    Beyond tools and techniques, my work is guided by a clear
-                    set of principles. These values shape how I design,
-                    communicate, and collaborate on every project—ensuring the
-                    process feels structured, transparent, and purposeful from
-                    start to finish.
-                  </p>
-
-                  <div className="services-what-i-do">
-                    <p className="services-label">What guides my work:</p>
-                    <ul className="services-list">
-                      <li>
-                        <strong>Continuous learning</strong> — staying current
-                        with modern design trends, tools, and best practices to
-                        deliver relevant solutions.
-                      </li>
-                      <li>
-                        <strong>Clear communication</strong> — providing regular
-                        updates and maintaining alignment throughout each
-                        project phase.
-                      </li>
-                      <li>
-                        <strong>User-first thinking</strong> — designing
-                        experiences that feel intuitive, accessible, and
-                        purposeful for real users.
-                      </li>
-                      <li>
-                        <strong>Quality over speed</strong> — focusing on
-                        thoughtful execution rather than rushing results.
-                      </li>
-                    </ul>
-                  </div>
-
-                  <p className="services-paragraph">
-                    This approach allows me to work efficiently while
-                    maintaining a high standard of quality.{" "}
-                    <span className="services-highlight">
-                      The goal is not just to deliver a website, but to create a
-                      digital experience that supports long-term growth and
-                      trust.
-                    </span>
-                  </p>
-                </div>
-
+              {/* TOOLS & TECHNOLOGIES */}
+              <div className="services-content">
                 <h3 className="services-subtitles split-animate" id="skills">
                   Tools & Technologies
                 </h3>
               </div>
               <div className="core-capabilities">
                 <ul className="capabilities-list">
-                  <li>
-                    <span className="bold">Design:</span> Figma, Canva, Adobe
-                    Photoshop
-                  </li>
-                  <li>
-                    <span className="bold">Development:</span> React, HTML/CSS,
-                    JavaScript
-                  </li>
-                  <li>
-                    <span className="bold">Animation:</span> GSAP, Framer Motion
-                  </li>
-                  <li>
-                    <span className="bold">Tools:</span> Git, VS Code, Chrome
-                    DevTools
-                  </li>
-                  <li>
-                    <span className="bold">Performance:</span> Responsive
-                    design, loading optimization, cross-browser testing
-                  </li>
+                  <li><span className="bold">Design:</span> Figma, Canva, Adobe Photoshop</li>
+                  <li><span className="bold">Development:</span> React, HTML/CSS, JavaScript</li>
+                  <li><span className="bold">Animation:</span> GSAP, Framer Motion</li>
+                  <li><span className="bold">Tools:</span> Git, VS Code, Chrome DevTools</li>
+                  <li><span className="bold">Performance:</span> Responsive design, loading optimization, cross-browser testing</li>
                 </ul>
+              </div>
+
+              {/* WORK VALUES */}
+              <div className="services-content">
+                <h3 className="services-subtitles split-animate">
+                  Work Values
+                </h3>
+              </div>
+
+              <div className="services-description">
+                <div className="services-what-i-do">
+                  <ul className="services-list">
+                    <li><strong>Continuous learning</strong> — Staying current with modern design and development practices</li>
+                    <li><strong>Clear communication</strong> — Regular updates and collaborative feedback throughout projects</li>
+                    <li><strong>User-first thinking</strong> — Designing experiences that are intuitive and accessible</li>
+                    <li><strong>Quality focus</strong> — Delivering thoughtful, well-executed work</li>
+                  </ul>
+                </div>
+
+                <p className="services-paragraph">
+                  I'm seeking opportunities to contribute to meaningful projects while
+                  continuing to grow as a designer and developer.{" "}
+                  <span className="services-highlight">
+                    Open to full-time roles, internships, and collaborative work.
+                  </span>
+                </p>
               </div>
             </div>
           </section>
 
+          {/* ANIMATED PROJECT CAROUSEL */}
           <section className="works-section">
             <div className="carousel-track" ref={trackRef}>
-              {[...projectsData, ...projectsData].map((project, i) => (
+              {[...caseStudies, ...caseStudies].map((project, i) => (
                 <div className="project-card" key={i}>
                   <div className="project-image">
                     <img src={project.image} alt="" draggable="false" />
@@ -1077,7 +911,8 @@ function About() {
             </div>
           </section>
 
-          <section className="faq-section ">
+          {/* FAQ SECTION */}
+          <section className="faq-section">
             <div className="faq-container">
               <h2 className="faq-title split-animate">
                 Questions You Might Ask
@@ -1108,14 +943,6 @@ function About() {
                     >
                       <div className="faq-answer-content">
                         <p>{faq.answer}</p>
-
-                        {faq.question.includes("Free Landing") && (
-                          <div className="faq-cta-wrapper">
-                            <button className="faq-cta-btn">
-                              Get Started . .
-                            </button>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -1124,6 +951,7 @@ function About() {
             </div>
           </section>
 
+          {/* CTA SECTION */}
           <div id="container" ref={containerRef}>
             <section className="parallax-reveal-section panels">
               <div className="parallax-reveal-sticky">
@@ -1143,13 +971,14 @@ function About() {
                 </div>
               </div>
             </section>
+
             {/* Footer Section */}
             <footer className="footer-section panels">
               <div className="footer-container">
                 <div className="footer-top">
                   <div className="footer-cta">
                     <p className="footer-label">LET'S CONNECT</p>
-                    <h2 className="footer-email ">
+                    <h2 className="footer-email">
                       <a href="mailto:klentaguilar@gmail.com">
                         klentaguilar@gmail.com
                       </a>
@@ -1205,27 +1034,12 @@ function About() {
                     <div className="footer-column">
                       <h3 className="footer-column-title">NAVIGATE</h3>
                       <ul className="footer-nav-list">
-                        <li>
-                          <a href="#heros">Home</a>
-                        </li>
-                        <li>
-                          <a href="#about">About</a>
-                        </li>
-                        <li>
-                          <a href="#services">Services</a>
-                        </li>
-                        <li>
-                          <a href="#projects">Projects</a>
-                        </li>
-                        <li>
-                          <a href="#process">Process</a>
-                        </li>
-                        <li>
-                          <a href="#process">Contact</a>
-                        </li>
-                        <li>
-                          <a href="#about">Profile</a>
-                        </li>
+                        <li><a href="#heros">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#philosophy">Philosophy</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#process">Process</a></li>
+                        <li><a href="#contact">Contact</a></li>
                       </ul>
                     </div>
 
@@ -1233,62 +1047,36 @@ function About() {
                       <h3 className="footer-column-title">SOCIAL MEDIA</h3>
                       <ul className="footer-nav-list">
                         <li>
-                          <a
-                            href="https://facebook.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                             <FaFacebook className="footer-icon" /> Facebook
                           </a>
                         </li>
                         <li>
-                          <a
-                            href="https://instagram.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
                             <FaInstagram className="footer-icon" /> Instagram
                           </a>
                         </li>
-
                         <li>
-                          <a
-                            href="https://dribbble.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer">
                             <FaDribbble className="footer-icon" /> Dribbble
                           </a>
                         </li>
-
                         <li>
-                          <a
-                            href="https://discord.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
                             <FaDiscord className="footer-icon" /> Discord
                           </a>
                         </li>
                         <li>
-                          <a
-                            href="https://linkedin.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                             <FaLinkedin className="footer-icon" /> LinkedIn
                           </a>
                         </li>
                         <li>
-                          <a
-                            href="https://indeed.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href="https://indeed.com" target="_blank" rel="noopener noreferrer">
                             <SiIndeed className="footer-icon" /> Indeed
                           </a>
                         </li>
-                      </ul>{" "}
+                      </ul>
                     </div>
                   </div>
                 </div>
