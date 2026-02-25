@@ -900,7 +900,7 @@ function Portfolio() {
                   <h1 className="hero-title ">
                     I design{" "}
                     <span className="highlight">user-focused websites</span>{" "}
-                    with strategic layouts and modern interactions.
+                    with strategic layouts and modern interactions
                   </h1>
                   <div className="hero-stats">
                     <div className="stat-item">
@@ -921,7 +921,7 @@ function Portfolio() {
                       Explore My Work
                     </button>
 
-                    <button className="cta-buttons1">How I Work</button>
+                    <button className="cta-buttons1">About Me</button>
                   </div>
 
                 </div>
@@ -958,57 +958,85 @@ function Portfolio() {
             </div>
           </section>
 
-          {/* Services Section */}
-          <section className="services-section">
-            <div className="services-container">
-              <div className="services-header">
-                <h2 className="services-title" id="services">What I Do</h2>
-              </div>
+       {/* Services Section */}
+<section className="services-section">
+  <div className="services-container">
+    <div className="services-header">
+      <h2 className="services-title" id="services">What I Do</h2>
+    </div>
 
-              <div className="services-content">
-                <span className="services-index">(CAPABILITIES — 02)</span>
+    <div className="services-content">
+      <span className="services-index">(CAPABILITIES — 02)</span>
+    </div>
 
-              </div>
+    <div className="services-divider"></div>
 
-              <div className="services-divider"></div>
-
-              <div className="services-list">
-                <div className="services-items">
-                  {services.map((service, index) => (
-                    <div key={index} className="service-item">
-                      <div
-                        className="service-header"
-                        onClick={() => toggleService(index)}
-                      >
-                        <div className="service-number">{service.number}</div>
-                        <h3 className="service-name ">{service.name}</h3>
-                        <button className="service-toggle">
-                          {openService === index ? "−" : "+"}
-                        </button>
-                      </div>
-                      <div
-                        className={`service-details  ${openService === index ? "open" : ""}`}
-                      >
-                        <p className="service-description">
-                          {service.description}
-                        </p>
-
-                        <div className="service-tags">
-                          {service.tags.map((tag, tagIndex) => (
-                            <span key={tagIndex} className="tag">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-
-              </div>
+    <div className="services-list">
+      <div className="services-items">
+        {services.map((service, index) => (
+          <div key={index} className="service-item">
+            
+            {/* HEADER */}
+            <div
+              className="service-header"
+              onClick={() => toggleService(index)}
+            >
+              <div className="service-number">{service.number}</div>
+              <h3 className="service-name">{service.name}</h3>
+              <button className="service-toggle">
+                {openService === index ? "−" : "+"}
+              </button>
             </div>
-          </section>
+
+            {/* DETAILS */}
+            <div
+              className={`service-details ${
+                openService === index ? "open" : ""
+              }`}
+            >
+              <p className="service-description">
+                {service.description}
+              </p>
+
+              {/* 🔥 TAGS WITH ANIMATION */}
+ <motion.div
+  className="service-tags"
+  initial={false} // 🔥 REMOVE INITIAL DELAY
+  animate={openService === index ? "show" : "hidden"}
+  variants={{
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.15, // medyo slow pa rin
+        delayChildren: 0, // 🔥 NO DELAY
+      },
+    },
+  }}
+>
+                {service.tags.map((tag, tagIndex) => (
+       <motion.span
+  key={tagIndex}
+  className="tag"
+  variants={{
+    hidden: { opacity: 0, y: 15, scale: 0.95 },
+    show: { opacity: 1, y: 0, scale: 1 },
+  }}
+  transition={{
+    duration: 0.5,
+    ease: "easeOut",
+  }}
+>
+                    {tag}
+                  </motion.span>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
           {/* Works Section */}
           <section className="works-section">
@@ -1589,7 +1617,7 @@ function Portfolio() {
                       </div>
                     </div>
                     <div className="footer-brand-content">
-                      <p className="footer-tagline split-animate">
+                      <p className="footer-tagline ">
                         Web designer focused on creating user-friendly,
                         conversion-oriented websites through thoughtful design,
                         clean development, and attention to user experience.

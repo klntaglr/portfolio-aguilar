@@ -44,7 +44,7 @@ function About() {
 
   const [pageReady, setPageReady] = useState(false);
   const containerRef = useRef(null);
-  
+
   // Case Studies Data
   const caseStudies = [
     {
@@ -72,7 +72,7 @@ function About() {
       tags: ["Mobile UI", "User Research", "Figma"]
     },
   ];
-  
+
   const trackRef = useRef(null);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ function About() {
 
     return () => animation.kill();
   }, []);
-  
+
   useEffect(() => {
     const cards = document.querySelectorAll(".project-card");
 
@@ -158,7 +158,7 @@ function About() {
 
     return () => ctx.revert();
   }, []);
-  
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
 
@@ -176,7 +176,7 @@ function About() {
     ["blur(0px)", "blur(10px)"],
   );
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
-  
+
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
@@ -185,7 +185,7 @@ function About() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-  
+
   const [localDateTime, setLocalDateTime] = useState("");
   useEffect(() => {
     const updateDateTime = () => {
@@ -228,7 +228,7 @@ function About() {
 
     return () => ctx.revert();
   }, []);
-  
+
   useEffect(() => {
     const handleSmoothScroll = (e) => {
       const link = e.target.closest("a[href^='#']");
@@ -425,7 +425,7 @@ function About() {
         "While my primary focus is securing a full-time position, I'm open to select freelance opportunities that align with my skills and schedule. I approach every project—whether employment or freelance—with the same commitment to quality, communication, and delivering results. Feel free to reach out to discuss your needs.",
     },
   ];
-  
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -439,7 +439,7 @@ function About() {
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
-  
+
 
     document.fonts.ready.then(() => {
 
@@ -526,7 +526,7 @@ function About() {
                   </a>
                 </li>
                 <a href="/contact-me" className="nav-cta-btn">
-           
+
                   Get in Touch
                 </a>
               </ul>
@@ -637,7 +637,9 @@ function About() {
               <div className="hero-wrapper">
                 <div className="hero-wrapper">
                   <div className="hero-content">
-                    <p className="tagline split-animate">WEB DESIGNER</p>
+                    <p className="tagline split-animate">UI/UX & Web Designer
+
+                    </p>
                     <h1 className="hero-title split-animate">
                       Learning by doing.{" "}
                       <span className="highlight">Designing websites</span> that look great and work better
@@ -684,10 +686,10 @@ function About() {
 
           {/* INTRO SECTION */}
           <section className="about-section">
- 
+
             <div className="services-container">
               <div className="services-header">
-                <h2 className="works-title" id="about">
+                <h2 className="works-titles" id="about">
                   About Me <br />
                   & My Work
                 </h2>
@@ -836,7 +838,7 @@ function About() {
               </div>
 
               {/* CASE STUDY HIGHLIGHTS */}
-            
+
 
               {/* CORE CAPABILITIES */}
               <div className="services-content">
@@ -1002,7 +1004,7 @@ function About() {
                       </div>
                     </div>
                     <div className="footer-brand-content">
-                      <p className="footer-tagline split-animate">
+                      <p className="footer-tagline ">
                         Web designer focused on creating user-friendly,
                         conversion-oriented websites through thoughtful design,
                         clean development, and attention to user experience.

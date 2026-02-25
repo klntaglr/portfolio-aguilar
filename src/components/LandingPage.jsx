@@ -587,36 +587,48 @@ function LandingPage() {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      const elements = gsap.utils.toArray(".split-animate");
+ useEffect(() => {
 
-      elements.forEach((el) => {
-        const split = new SplitText(el, {
-          type: "lines,words",
-          linesClass: "ts-line",
+    document.fonts.ready.then(() => {
+
+      let ctx = gsap.context(() => {
+
+        const elements = gsap.utils.toArray(".split-animate");
+
+        elements.forEach((el) => {
+
+          const split = new SplitText(el, {
+            type: "lines,words",
+            linesClass: "ts-line",
+          });
+
+          gsap.from(split.words, {
+            yPercent: 100,
+            opacity: 0,
+            stagger: 0.05,
+            duration: 0.6,
+            ease: "circ.out",
+
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              once: true,
+            },
+
+            onComplete: () => split.revert(),
+          });
+
         });
 
-  gsap.from(split.words, {
-    yPercent: 100,
-    opacity: 0,
-    stagger: 0.05,
-    duration: 0.6,
-    ease: "circ.out",
+        ScrollTrigger.refresh();
 
-    scrollTrigger: {
-      trigger: el,
-      start: "top 85%",
-      once: true,
-    },
-
-    onComplete: () => split.revert(),
-  });
       });
+
+      return () => ctx.revert();
+
     });
 
-    return () => ctx.revert();
-  }, []);
+  }, [pageReady]);
 
   return (
     <>
@@ -794,7 +806,7 @@ function LandingPage() {
             <div className="services-container">
               {/* HEADER */}
               <div className="services-header">
-                <h2 className="man-behind-title">
+                <h2 className="works-titles">
                   Free Landing
                   <br />
                   Page Design
@@ -1599,7 +1611,7 @@ function LandingPage() {
                       </div>
                     </div>
                     <div className="footer-brand-content">
-                      <p className="footer-tagline split-animate">
+                      <p className="footer-tagline">
                         Web designer focused on creating user-friendly,
                         conversion-oriented websites through thoughtful design,
                         clean development, and attention to user experience.

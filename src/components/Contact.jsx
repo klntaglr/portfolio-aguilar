@@ -915,7 +915,7 @@ useEffect(() => {
                       </div>
 
                       <div className="submit-wrapper">
-                        <button type="submit" className="recaptcha-wrapper">
+                        <button type="submit" className="cta-buttons">
                           Send
                         </button>
                       </div>
