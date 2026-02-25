@@ -689,10 +689,10 @@ function About() {
 
             <div className="services-container">
               <div className="services-header">
-                <h2 className="works-titles" id="about">
-                  About Me <br />
-                  & My Work
-                </h2>
+    <h2 className="works-titles" id="about">
+  Behind <br />
+  the Work
+</h2>
               </div>
 
               <div className="services-content">
