@@ -1,15 +1,7 @@
 /* Import Inter font from Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
-
-@font-face {
-  font-family: "Canela";
-  src:
-    url("/fonts/Canela-Italic.woff2") format("woff2"),
-    url("/fonts/Canela-Italic.woff") format("woff");
-  font-style: italic;
-  font-weight: 400;
-}
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
 
 /* Reset and base styles */
 * {
@@ -980,19 +972,42 @@ body.menu-open {
   font-family: "Inter", sans-serif;
   font-size: clamp(2.1rem, 3.6vw, 3.4rem);
   font-weight: 600;
-
   line-height: 1.15;
-  /* tighter editorial look */
   letter-spacing: -0.02em;
-padding-left: 4rem;padding-right: 2rem;
+  padding-left: 4rem;
+  padding-right: 2rem;
   color: #2a2a2a;
-
   max-width: 1900px;
 }
 
+.about-title-bold {
+  color: #2a2a2a;
+  font-weight: 600;
+}
+
+.about-title-accent {
+  color: #c0c0c0;
+}
 .about-title-accent {
   color: #8c8c8c;
   font-weight: 600;
+}
+
+.scroll-fill-text .sf-char {
+  display: inline;
+  color: #c0c0c0;
+  opacity: 1;
+  will-change: color, opacity;
+}
+
+.scroll-fill-text .sf-space {
+  display: inline;
+  white-space: pre;
+  color: #c0c0c0;
+}
+.scroll-fill-text .sf-space {
+  display: inline;
+  white-space: pre;
 }
 
 .about-content {
@@ -3151,13 +3166,14 @@ body {
 }
 
 .highlight {
-  font-family: "Canela", serif;
+  font-family: "Lora", serif;
   font-style: italic;
   font-weight: 500;
+  
 }
 
 .stats-years {
-  font-family: "Canela", serif;
+  font-family: "Lora", serif;
   font-style: italic;
   font-weight: 500;
 }
@@ -4029,7 +4045,7 @@ body {
   background: transparent;
   color: #242424;
   cursor: pointer;
-  font-family: "Canela", serif;
+  font-family: "Lora", serif;
   font-style: italic;
   font-size: 1.3rem;
   font-weight: 600;
@@ -6595,6 +6611,7 @@ body {
   flex-direction: column;
   cursor: none;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
+ 
 }
 
 
@@ -6607,7 +6624,7 @@ body {
   aspect-ratio: 16 / 9;
   background: #f0f0f0;
   cursor: none;
-  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.18); border: 3px solid #ffffff00;
 }
 
 .rw-card__thumb img {
@@ -7180,7 +7197,7 @@ body {
   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
   padding: clamp(0.75rem, 1.5vw, 0.85rem) clamp(1.5rem, 3vw, 1.85rem);
   border-radius: 30px;
-  border: 2px solid rgba(134, 134, 134, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.6);
   overflow: hidden;
   position: relative;
   transition: all 0.5s ease-in-out;

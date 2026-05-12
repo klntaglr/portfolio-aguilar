@@ -102,11 +102,11 @@ function Preloader({ onComplete }) {
                         russell aguilar
                     </h1>
                     <div ref={tagsRef} className="preloader-tags">
-                        <span>WEB</span>
+                      
+                   
+                        <span>UI/UX DESIGNER</span>
                         <span className="separator">·</span>
-                        <span>DESIGN</span>
-                        <span className="separator">·</span>
-                        <span>UX/UI</span>
+                        <span>FRONTEND DEV</span>
                     </div>
                 </div>
             </div>

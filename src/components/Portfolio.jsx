@@ -16,7 +16,7 @@ import {
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
 import {
-  SiCanva,
+ 
   SiCss3,
   SiFigma,
   SiFramer,
@@ -44,7 +44,9 @@ import blueBackground1 from "../assets/blue1.png";
 import logo from "../assets/logo.png";
 import mockup from "../assets/mockup.jpg";
 import mockup1 from "../assets/mockup1.jpg";
+import virielle from "../assets/Virielle.png";
 import mockup2 from "../assets/mockup2.jpg";
+import soon from "../assets/soon.png";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
 import since from "../assets/since.jpg";
@@ -135,7 +137,7 @@ function Portfolio() {
   }, []);
 
   const [rw_idx, setRw_idx] = useState(0);
-  const rw_total = 5;
+  const rw_total = 4;
   const [crs_active, setCrs_active] = useState(false);
   const rw_trackRef = useRef(null);
   const crs_ref = useRef(null);
@@ -211,7 +213,8 @@ function Portfolio() {
   const card2Ref = useRef(null);
   const card3Ref = useRef(null);
   const card4Ref = useRef(null);
-  const card5Ref = useRef(null);
+ 
+const scrollFillRef = useRef(null);
 
 
 
@@ -249,7 +252,7 @@ function Portfolio() {
     { node: <SiTailwindcss />, title: "Tailwind CSS" },
     { node: <SiSass />, title: "Sass" },
     { node: <SiFigma />, title: "Figma" },
-    { node: <SiCanva />, title: "Canva" },
+    
   ];
 
 
@@ -722,8 +725,51 @@ useEffect(() => {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-  useSplitAnimateReveal();
+useSplitAnimateReveal();
 
+useEffect(() => {
+  const el = scrollFillRef.current;
+  if (!el) return;
+
+  // Only target the grey accent span
+  const accentEl = el.querySelector(".scroll-fill-text");
+  if (!accentEl) return;
+
+  const rawText = accentEl.textContent
+    .replace(/\s+/g, " ")
+    .trim();
+  const chars = rawText.split("");
+
+  accentEl.innerHTML = chars
+    .map((char, i) =>
+      char === " "
+        ? `<span class="sf-space"> </span>`
+        : `<span class="sf-char" style="--i:${i}">${char}</span>`
+    )
+    .join("");
+
+  const ctx = gsap.context(() => {
+    const spans = accentEl.querySelectorAll(".sf-char");
+    gsap.fromTo(
+      spans,
+      { color: "#c0c0c0", opacity: 1 },
+      {
+        color: "#1a1a1a",
+        opacity: 1,
+        ease: "none",
+        stagger: { each: 0.018, from: "start" },
+        scrollTrigger: {
+          trigger: el,
+          start: "top 75%",
+          end: "bottom 55%",
+          scrub: 2,
+        },
+      }
+    );
+  });
+
+  return () => ctx.revert();
+}, [pageReady]);
   return (
     <>
       {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
@@ -912,15 +958,15 @@ useEffect(() => {
               <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
                 <div className="hero-content">
-                  <p className="tagline hero-tagline-entry">UI/UX & Web Designer</p>
+               <p className="tagline hero-tagline-entry">UI/UX Designer · Frontend Dev</p>
 
                   <h1
                     className="hero-title split-animate hero-title-reveal"
                     data-split-mode="hero"
                   >
-                    I design{" "}
-                    <span className="highlight">user-focused websites</span>{" "}
-                    with strategic layouts and modern interactions
+                    I turn{" "}
+                    <span className="highlight">interfaces</span>{" "}
+                  into experiences — from pixel to productions
                   </h1>
                   <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
@@ -968,14 +1014,13 @@ useEffect(() => {
 
           <section className="about-section">
             <div className="about-container">
-              <h2 className="about-title split-animate">
-                Design isn't just about how it looks.{" "}
-                <span className="about-title-accent">
-                  It's about how it works, how users feel, and whether
-                  it actually solves the problem it was built for.
-                </span>
-              </h2>
-
+ <h2 className="about-title" ref={scrollFillRef}>
+  <span className="about-title-bold">Design isn't just about how it looks.</span>{" "}
+  <span className="scroll-fill-text about-title-accent">
+    It's about how it works, how users feel, and whether
+    it actually solves the problem it was built for.
+  </span>
+</h2>
 
             </div>
           </section>
@@ -1104,7 +1149,7 @@ useEffect(() => {
                     onMouseMove={(e) => handleCardMouseMove(e, card1Ref)}
                   >
                     <div className="rw-card__thumb">
-                      <img src={mockup1} alt="Century 21 Pura Vida" draggable="false" />
+                      <img src={soon} alt="Century 21 Pura Vida" draggable="false" />
                       <div className="rw-card__demo">
                         <span className="rw-card__demo-text">
 
@@ -1114,17 +1159,13 @@ useEffect(() => {
                     </div>
                     <div className="rw-card__body">
                       <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Century 21® Pura Vida</h3>
+                        <h3 className="rw-card__name">Barangay Bangkal</h3>
                         <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  <p className="rw-card__excerpt">
-                        Designed and developed a modern architecture portfolio website
-                        focusing on visual storytelling and project showcases. Built with
-                        React, GSAP animations, and responsive layouts.
-                      </p>
+                      </div>  
                       <div className="rw-card__chips">
-                        <span className="rw-chip">Website Design</span>
-                        <span className="rw-chip">UI/UX</span>
-                        <span className="rw-chip">Real Estate</span>
+                        <span className="rw-chip">Capstone</span>
+                        <span className="rw-chip">Web App</span>
+                        <span className="rw-chip">Document Request</span>
                       </div>
                     </div>
                   </article>
@@ -1136,7 +1177,7 @@ useEffect(() => {
                     onMouseMove={(e) => handleCardMouseMove(e, card2Ref)}
                   >
                     <div className="rw-card__thumb">
-                      <img src={mockup1} alt="Century 21 Pura Vida" draggable="false" />
+                      <img src={soon} alt="Century 21 Pura Vida" draggable="false" />
                       <div className="rw-card__demo">
                         <span className="rw-card__demo-text">
 
@@ -1146,17 +1187,13 @@ useEffect(() => {
                     </div>
                     <div className="rw-card__body">
                       <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Century 21® Pura Vida</h3>
+                        <h3 className="rw-card__name">Virielle</h3>
                         <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  <p className="rw-card__excerpt">
-                        Designed and developed a modern architecture portfolio website
-                        focusing on visual storytelling and project showcases. Built with
-                        React, GSAP animations, and responsive layouts.
-                      </p>
+                      </div>  
                       <div className="rw-card__chips">
                         <span className="rw-chip">Website Design</span>
                         <span className="rw-chip">UI/UX</span>
-                        <span className="rw-chip">Real Estate</span>
+                        <span className="rw-chip">Freelance</span>
                       </div>
                     </div>
                   </article>
@@ -1168,7 +1205,7 @@ useEffect(() => {
                     onMouseMove={(e) => handleCardMouseMove(e, card3Ref)}
                   >
                     <div className="rw-card__thumb">
-                      <img src={mockup2} alt="Digital Wellness" draggable="false" />
+                      <img src={soon} alt="Digital Wellness" draggable="false" />
                       <div className="rw-card__demo">
                         <span className="rw-card__demo-text">
 
@@ -1178,17 +1215,13 @@ useEffect(() => {
                     </div>
                     <div className="rw-card__body">
                       <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Digital Wellness</h3>
+                        <h3 className="rw-card__name">ClockedIn</h3>
                         <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  <p className="rw-card__excerpt">
-                        Designed and developed a modern architecture portfolio website
-                        focusing on visual storytelling and project showcases. Built with
-                        React, GSAP animations, and responsive layouts.
-                      </p>
+                      </div>  
                       <div className="rw-card__chips">
-                        <span className="rw-chip">UI/UX Design</span>
-                        <span className="rw-chip">Healthcare</span>
-                        <span className="rw-chip">Interaction</span>
+                        <span className="rw-chip">Ojt Tracker</span>
+                        <span className="rw-chip">Web App</span>
+             
                       </div>
                     </div>
                   </article>
@@ -1200,7 +1233,7 @@ useEffect(() => {
                     onMouseMove={(e) => handleCardMouseMove(e, card4Ref)}
                   >
                     <div className="rw-card__thumb">
-                      <img src={mockup3} alt="Brand Refresh" draggable="false" />
+                      <img src={soon} alt="Brand Refresh" draggable="false" />
                       <div className="rw-card__demo">
                         <span className="rw-card__demo-text">
 
@@ -1210,52 +1243,18 @@ useEffect(() => {
                     </div>
                     <div className="rw-card__body">
                       <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Brand Refresh</h3>
+                        <h3 className="rw-card__name">ArmadaPH</h3>
                         <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  <p className="rw-card__excerpt">
-                        Designed and developed a modern architecture portfolio website
-                        focusing on visual storytelling and project showcases. Built with
-                        React, GSAP animations, and responsive layouts.
-                      </p>
+                      </div>  
                       <div className="rw-card__chips">
                         <span className="rw-chip">Redesign</span>
                         <span className="rw-chip">Branding</span>
-                        <span className="rw-chip">Modern</span>
+                        <span className="rw-chip">Dance Studio</span>
                       </div>
                     </div>
                   </article>
 
-                  {/* Card 5 */}
-                  <article
-                    className="rw-card"
-                    ref={card5Ref}
-                    onMouseMove={(e) => handleCardMouseMove(e, card5Ref)}
-                  >
-                    <div className="rw-card__thumb">
-                      <img src={mockup4} alt="Interactive Portfolio" draggable="false" />
-                      <div className="rw-card__demo">
-                        <span className="rw-card__demo-text">
-
-                          View Details
-                        </span>
-                      </div>
-                    </div>
-                    <div className="rw-card__body">
-                      <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Interactive Portfolio</h3>
-                        <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  <p className="rw-card__excerpt">
-                        Designed and developed a modern architecture portfolio website
-                        focusing on visual storytelling and project showcases. Built with
-                        React, GSAP animations, and responsive layouts.
-                      </p>
-                      <div className="rw-card__chips">
-                        <span className="rw-chip">Interactive</span>
-                        <span className="rw-chip">Animation</span>
-                        <span className="rw-chip">Creative</span>
-                      </div>
-                    </div>
-                  </article>
+          
 
                 </div>
 

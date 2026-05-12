@@ -594,13 +594,14 @@ const lastScrollRef = useRef(0);
               <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
                 <div className="hero-content">
-                  <p className="tagline hero-tagline-entry">UI/UX & Web Designer</p>
+               <p className="tagline hero-tagline-entry">UI/UX Designer · Frontend Dev</p>
                   <h1
                     className="hero-title split-animate hero-title-reveal"
                     data-split-mode="hero"
                   >
-                    Learning by doing.{" "}
-                    <span className="highlight">Designing websites</span> that look great and work better
+                   Designing interfaces.{" "}
+<span className="highlight">Building full-stack systems.</span>{" "}
+Shipping real products.
                   </h1>
 
                   <div className="hero-stats hero-stats-entry">
@@ -662,10 +663,10 @@ const lastScrollRef = useRef(0);
 
               <div className="services-description">
                 <p className="services-paragraph">
-                  I'm <span className="services-highlight">Klent Russell Aguilar,</span> a
-                  BSIT student at La Consolacion University Philippines specializing in
-                  UI/UX design and web development. I create digital experiences that
-                  balance aesthetics with functionality—from wireframe to deployment.
+             I'm <span className="services-highlight">Klent Russell Aguilar,</span> a
+fresh BSIT graduate from La Consolacion University Philippines (GWA: 1.87) specializing in
+UI/UX design and frontend development. I build production-ready interfaces
+and full-stack systems — from Figma wireframes to deployed applications.
                 </p>
 
                 <p className="services-paragraph">
@@ -823,11 +824,12 @@ const lastScrollRef = useRef(0);
               </div>
               <div className="core-capabilities">
                 <ul className="capabilities-list">
-                  <li><span className="bold">Design:</span> Figma, Canva, Adobe Photoshop</li>
-                  <li><span className="bold">Development:</span> React, HTML/CSS, JavaScript</li>
-                  <li><span className="bold">Animation:</span> GSAP, Framer Motion</li>
-                  <li><span className="bold">Tools:</span> Git, VS Code, Chrome DevTools</li>
-                  <li><span className="bold">Performance:</span> Responsive design, loading optimization, cross-browser testing</li>
+                  <li><span className="bold">Design:</span> Figma, Adobe XD, Wireframing, Prototyping, Accessibility (WCAG AA)</li>
+<li><span className="bold">Frontend:</span> HTML5, CSS3, JavaScript (ES6+), TypeScript, React, Next.js, Tailwind CSS, DaisyUI, Recharts, GSAP, Framer Motion</li>
+<li><span className="bold">Backend:</span> Next.js Server Actions / API Routes, Node.js, Express.js, Firebase, Supabase, Prisma</li>
+<li><span className="bold">Database:</span> SQLite (better-sqlite3), PostgreSQL</li>
+<li><span className="bold">Desktop & Real-time:</span> Electron, Vite, WebSockets, Redis, BullMQ</li>
+<li><span className="bold">DevOps & Tools:</span> Git, GitHub, Docker, Tailscale, pnpm Workspaces, AWS S3 SDK</li>
                 </ul>
               </div>
 
@@ -970,7 +972,7 @@ const lastScrollRef = useRef(0);
                       </p>
 
                       <p className="footer-copyright">
-                        © 2025 Designed and developed by Klent Russell Aguilar |
+                     © 2026 Designed and developed by Klent Russell Aguilar |
                         Web Designer
                       </p>
                     </div>
