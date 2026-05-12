@@ -5,7 +5,6 @@ import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplitText from "gsap/SplitText";
 import { useEffect, useRef, useState } from "react";
 import {
   FaDiscord,
@@ -37,12 +36,11 @@ import mockup3 from "../assets/mockup3.png";
 import "./Portfolio.css";
 
 import TiltedCard from "./TiltedCard";
+import useSplitAnimateReveal from "./useSplitAnimateReveal";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
-gsap.registerPlugin(SplitText);
 
 function About() {
-
-  const [pageReady, setPageReady] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
   const containerRef = useRef(null);
 
   // Case Studies Data
@@ -177,15 +175,12 @@ function About() {
   );
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
 
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-
   useEffect(() => {
-    const check = () => setIsTouchDevice(window.innerWidth <= 1024);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    const timer = window.setTimeout(() => {
+      setHeroReady(true);
+    }, 100);
+    return () => window.clearTimeout(timer);
   }, []);
-
   const [localDateTime, setLocalDateTime] = useState("");
   useEffect(() => {
     const updateDateTime = () => {
@@ -260,10 +255,9 @@ function About() {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+const lastScrollRef = useRef(0);
 
   useEffect(() => {
-    let lastScroll = 0;
-
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
@@ -272,16 +266,17 @@ function About() {
       smoothTouch: 0.1,
     });
 
-    gsap.ticker.add(() => {
+    const onTick = () => {
       const currentScroll = smoother.scrollTop();
       const navbar = document.querySelector(".navbar");
+      const scrollDelta = currentScroll - lastScrollRef.current;
 
       if (!navbar) return;
 
-      if (currentScroll > lastScroll && currentScroll > 120) {
-        setShowNavbar(false);
-      } else {
+      if (currentScroll <= 80 || scrollDelta < -3) {
         setShowNavbar(true);
+      } else if (scrollDelta > 3 && currentScroll > 120) {
+        setShowNavbar(false);
       }
 
       if (currentScroll > 80) {
@@ -290,12 +285,14 @@ function About() {
         navbar.classList.remove("scrolled");
       }
 
-      lastScroll = currentScroll;
-    });
+      lastScrollRef.current = currentScroll;
+    };
+
+    gsap.ticker.add(onTick);
 
     return () => {
+      gsap.ticker.remove(onTick);
       smoother.kill();
-      gsap.ticker.remove(() => { });
     };
   }, []);
 
@@ -438,48 +435,7 @@ function About() {
     };
   }, [isMobileMenuOpen]);
 
-  useEffect(() => {
-
-
-    document.fonts.ready.then(() => {
-
-      let ctx = gsap.context(() => {
-
-        const elements = gsap.utils.toArray(".split-animate");
-
-        elements.forEach((el) => {
-
-          const split = new SplitText(el, {
-            type: "lines,words",
-            linesClass: "ts-line",
-          });
-
-          gsap.from(split.words, {
-            yPercent: 100,
-            opacity: 0,
-            stagger: 0.05,
-            duration: 0.6,
-            ease: "circ.out",
-
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              once: true,
-            },
-
-            onComplete: () => split.revert(),
-          });
-        });
-
-        ScrollTrigger.refresh();
-
-      });
-
-      return () => ctx.revert();
-
-    });
-
-  }, [pageReady]);
+  useSplitAnimateReveal();
 
 
   return (
@@ -489,7 +445,7 @@ function About() {
           <div
             className="portfolio-container"
             id="heros"
-            style={{ backgroundImage: `url(${blueBackground1})` }}
+            style={{ "--hero-bg-image": `url(${blueBackground1})` }}
           >
             <nav
               className={`navbar ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
@@ -630,41 +586,44 @@ function About() {
 
             <motion.main
               ref={heroRef}
-              className="hero-section panel"
+              className={`hero-section panel ${heroReady ? "hero-ready" : ""}`}
               id="hero"
               style={{ filter: blur, opacity }}
             >
+              <div className="hero-background" aria-hidden="true"></div>
+              <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
-                <div className="hero-wrapper">
-                  <div className="hero-content">
-                    <p className="tagline split-animate">UI/UX & Web Designer
+                <div className="hero-content">
+                  <p className="tagline hero-tagline-entry">UI/UX & Web Designer</p>
+                  <h1
+                    className="hero-title split-animate hero-title-reveal"
+                    data-split-mode="hero"
+                  >
+                    Learning by doing.{" "}
+                    <span className="highlight">Designing websites</span> that look great and work better
+                  </h1>
 
-                    </p>
-                    <h1 className="hero-title split-animate">
-                      Learning by doing.{" "}
-                      <span className="highlight">Designing websites</span> that look great and work better
-                    </h1>
-
-                    <div className="hero-stats">
-                      <div className="stat-item">
-                        <span className="stat-number">10+</span>
-                        <span className="stat-label">Projects</span>
-                      </div>
-                      <div className="stat-item">
-                        <span className="stat-number">1+</span>
-                        <span className="stat-label">Year Experience</span>
-                      </div>
-                      <div className="stat-item">
-                        <span className="stat-number">100%</span>
-                        <span className="stat-label">Available</span>
-                      </div>
+                  <div className="hero-stats hero-stats-entry">
+                    <div className="stat-item">
+                      <span className="stat-number">10+</span>
+                      <span className="stat-label">Projects</span>
                     </div>
-                    <div className="hero-cta-group">
-                      <button className="cta-button">Get in Touch</button>
-                      <button className="cta-buttons1">View Work</button>
+                    <div className="stat-item">
+                      <span className="stat-number">1+</span>
+                      <span className="stat-label">Year Experience</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-number">100%</span>
+                      <span className="stat-label">Available</span>
                     </div>
                   </div>
+                  <div className="hero-cta-group hero-cta-entry">
+                    <button className="cta-button">Get in Touch</button>
+                    <button className="cta-buttons1">View Work</button>
+                  </div>
+                </div>
 
+                <div className="hero-card hero-card-entry">
                   <TiltedCard
                     imageSrc={mockup4}
                     altText="Klent Russell Aguilar"

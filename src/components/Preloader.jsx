@@ -67,7 +67,7 @@ function Preloader({ onComplete }) {
         ease: "power2.in"
     })
 
-    .to(logoRef.current, {
+.to(logoRef.current, {
         opacity: 1,
         scale: 1,
         rotateZ: 0,
@@ -76,17 +76,6 @@ function Preloader({ onComplete }) {
     }, "-=0.2")
 
     .to({}, { duration: 0.6 })
-
- .to(logoRef.current, {
-  opacity: 1,
-  scale: 1,
-  rotateZ: 0,
-  xPercent: -50,
-  yPercent: -50,
-  duration: 1.2,
-  ease: "expo.out"
-})
-
 
     .to(overlayRef.current, {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",

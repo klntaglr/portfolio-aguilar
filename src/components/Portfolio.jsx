@@ -29,7 +29,6 @@ import {
   SiThreedotjs,
 } from "react-icons/si";
 
-import SplitText from "gsap/SplitText";
 import {
   FaDiscord,
   FaDribbble,
@@ -41,7 +40,6 @@ import { FaArrowRight } from "react-icons/fa6";
 import { FiArrowUpRight, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { SiIndeed } from "react-icons/si";
 import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
-import blueBackground from "../assets/blue.jpg";
 import blueBackground1 from "../assets/blue1.png";
 import logo from "../assets/logo.png";
 import mockup from "../assets/mockup.jpg";
@@ -50,10 +48,42 @@ import mockup2 from "../assets/mockup2.jpg";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
 import since from "../assets/since.jpg";
-import virielleLogo from "../assets/viriellelogo.png";
 import TiltedCard from "./TiltedCard";
+import useSplitAnimateReveal from "./useSplitAnimateReveal";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
-gsap.registerPlugin(SplitText);
+
+const PROCESS_STEPS = [
+  {
+    label: "Discovery",
+    title: "Discovery & Research",
+    description:
+      "I begin by researching your target audience and design goals, understanding user needs, competitive landscape, and success metrics so every decision aligns with what your users actually expect.",
+  },
+  {
+    label: "Strategy",
+    title: "Strategy & Planning",
+    description:
+      "Based on research insights, I map information architecture, user flows, and wireframes to create a strong structural foundation before the visual direction is finalized.",
+  },
+  {
+    label: "Design",
+    title: "UI/UX Design & Prototyping",
+    description:
+      "I design high-fidelity interfaces and interactive prototypes in Figma, refining hierarchy, motion, and usability while keeping the experience consistent with your brand.",
+  },
+  {
+    label: "Build",
+    title: "Development & Delivery",
+    description:
+      "I translate the approved direction into clean, responsive frontend code with careful attention to performance, accessibility, and the details that make the final product feel premium.",
+  },
+  {
+    label: "Launch",
+    title: "Testing, Launch & Optimization",
+    description:
+      "Before launch, I review the experience across devices and browsers, then refine interactions and performance so the final release feels polished, stable, and ready to grow.",
+  },
+];
 
 function Portfolio() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -77,6 +107,7 @@ function Portfolio() {
   }, []);
   const [showPreloader, setShowPreloader] = useState(true);
   const [pageReady, setPageReady] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
   const containerRef = useRef(null);
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -104,6 +135,7 @@ function Portfolio() {
   }, []);
 
   const [rw_idx, setRw_idx] = useState(0);
+  const rw_total = 5;
   const [crs_active, setCrs_active] = useState(false);
   const rw_trackRef = useRef(null);
   const crs_ref = useRef(null);
@@ -121,7 +153,11 @@ function Portfolio() {
 
     const card = cards[0];
     const gap = parseFloat(getComputedStyle(rw_trackRef.current).gap) || 24;
-    const wrapWidth = rw_trackRef.current.parentElement.offsetWidth;
+    const wrapEl = rw_trackRef.current.parentElement;
+    const wrapStyles = getComputedStyle(wrapEl);
+    const paddingLeft = parseFloat(wrapStyles.paddingLeft) || 0;
+    const paddingRight = parseFloat(wrapStyles.paddingRight) || 0;
+    const wrapWidth = Math.max(0, wrapEl.offsetWidth - paddingLeft - paddingRight);
     const trackWidth = cards.length * (card.offsetWidth + gap) - gap;
 
     const maxTranslate = Math.max(0, trackWidth - wrapWidth);
@@ -378,9 +414,10 @@ function Portfolio() {
   const toggleService = (index) => {
     setOpenService(openService === index ? null : index);
   };
+const lastScrollRef = useRef(0);
 
   useEffect(() => {
-    let lastScroll = 0;
+    if (!pageReady) return undefined;
 
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
@@ -390,16 +427,19 @@ function Portfolio() {
       smoothTouch: 0.1,
     });
 
-    gsap.ticker.add(() => {
+    ScrollTrigger.refresh();
+
+    const onTick = () => {
       const currentScroll = smoother.scrollTop();
       const navbar = document.querySelector(".navbar");
+      const scrollDelta = currentScroll - lastScrollRef.current;
 
       if (!navbar) return;
 
-      if (currentScroll > lastScroll && currentScroll > 120) {
-        setShowNavbar(false);
-      } else {
+      if (currentScroll <= 80 || scrollDelta < -3) {
         setShowNavbar(true);
+      } else if (scrollDelta > 3 && currentScroll > 120) {
+        setShowNavbar(false);
       }
 
       if (currentScroll > 80) {
@@ -408,14 +448,16 @@ function Portfolio() {
         navbar.classList.remove("scrolled");
       }
 
-      lastScroll = currentScroll;
-    });
+      lastScrollRef.current = currentScroll;
+    };
+
+    gsap.ticker.add(onTick);
 
     return () => {
+      gsap.ticker.remove(onTick);
       smoother.kill();
-      gsap.ticker.remove(() => { });
     };
-  }, []);
+  }, [pageReady]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -586,23 +628,40 @@ function Portfolio() {
       image: mockup4,
     },
   ];
-  const handlePreloaderComplete = () => {
-    setShowPreloader(false);
-    setPageReady(true);
+const handlePreloaderComplete = () => {
+  setShowPreloader(false);
+  setPageReady(true);
 
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh(true);
-    });
-  };
+  // ✅ Bigyan ng time ang layout na mag-settle
+  setTimeout(() => {
+    ScrollTrigger.refresh(true);
+  }, 200);
+};
 
+useEffect(() => {
+  if (!pageReady) return undefined;
 
-  useEffect(() => {
-    if (!pageReady) {
-      document.body.style.overflow = "hidden";
-    } else {
+  const raf = window.requestAnimationFrame(() => {
+    setHeroReady(true);
+  });
+
+  return () => window.cancelAnimationFrame(raf);
+}, [pageReady]);
+
+useEffect(() => {
+  if (!pageReady) {
+    document.body.style.overflow = "hidden";
+  } else {
+    // ✅ Slight delay bago i-restore overflow
+    setTimeout(() => {
       document.body.style.overflow = "auto";
-    }
-  }, [pageReady]);
+    }, 100);
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [pageReady]);
 
   const [openFAQ, setOpenFAQ] = useState(null);
 
@@ -663,51 +722,7 @@ function Portfolio() {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    if (!pageReady || isTouchDevice) return; // 🔥 disable on mobile/tablet
-
-    document.fonts.ready.then(() => {
-
-      let ctx = gsap.context(() => {
-
-        const elements = gsap.utils.toArray(".split-animate");
-
-        elements.forEach((el) => {
-
-          const split = new SplitText(el, {
-            type: "lines,words",
-            linesClass: "ts-line",
-          });
-
-          gsap.from(split.words, {
-            yPercent: 100,
-            opacity: 0,
-            stagger: 0.05,
-            duration: 0.6,
-            ease: "circ.out",
-
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              once: true,
-            },
-
-            onComplete: () => split.revert(),
-          });
-
-        });
-
-        ScrollTrigger.refresh();
-
-      });
-
-      return () => ctx.revert();
-
-    });
-
-  }, [pageReady]);
-
+  useSplitAnimateReveal();
 
   return (
     <>
@@ -717,7 +732,7 @@ function Portfolio() {
           <div
             className="portfolio-container"
             id="heros"
-            style={{ backgroundImage: `url(${blueBackground1})` }}
+            style={{ "--hero-bg-image": `url(${blueBackground1})` }}
           >
             <nav
               className={`navbar ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
@@ -889,20 +904,25 @@ function Portfolio() {
             </div>
             <motion.main
               ref={heroRef}
-              className="hero-section panel"
+              className={`hero-section panel ${heroReady ? "hero-ready" : ""}`}
               id="hero"
               style={{ filter: blur, opacity }}
             >
+              <div className="hero-background" aria-hidden="true"></div>
+              <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
                 <div className="hero-content">
-                  <p className="tagline ">UI/UX & Web Designer</p>
+                  <p className="tagline hero-tagline-entry">UI/UX & Web Designer</p>
 
-                  <h1 className="hero-title ">
+                  <h1
+                    className="hero-title split-animate hero-title-reveal"
+                    data-split-mode="hero"
+                  >
                     I design{" "}
                     <span className="highlight">user-focused websites</span>{" "}
                     with strategic layouts and modern interactions
                   </h1>
-                  <div className="hero-stats">
+                  <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
                       <span className="stat-number">10+</span>
                       <span className="stat-label">Projects</span>
@@ -916,7 +936,7 @@ function Portfolio() {
                       <span className="stat-label">Available</span>
                     </div>
                   </div>
-                  <div className="hero-cta-group">
+                  <div className="hero-cta-group hero-cta-entry">
                     <button className="cta-button primary">
                       Explore My Work
                     </button>
@@ -926,20 +946,22 @@ function Portfolio() {
 
                 </div>
 
-                <TiltedCard
-                  imageSrc={mockup4}
-                  altText="Klent Russell Aguilar"
-                  captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
-                  containerHeight="clamp(240px, 70vw, 520px)"
-                  containerWidth="clamp(240px, 70vw, 520px)"
-                  imageHeight="100%"
-                  imageWidth="100%"
-                  rotateAmplitude={21}
-                  scaleOnHover={1.1}
-                  showMobileWarning={false}
-                  showTooltip
-                  displayOverlayContent={false}
-                />
+                <div className="hero-card hero-card-entry">
+                  <TiltedCard
+                    imageSrc={mockup4}
+                    altText="Klent Russell Aguilar"
+                    captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
+                    containerHeight="clamp(240px, 70vw, 520px)"
+                    containerWidth="clamp(240px, 70vw, 520px)"
+                    imageHeight="100%"
+                    imageWidth="100%"
+                    rotateAmplitude={21}
+                    scaleOnHover={1.1}
+                    showMobileWarning={false}
+                    showTooltip
+                    displayOverlayContent={false}
+                  />
+                </div>
               </div>
             </motion.main>
           </div>
@@ -1078,8 +1100,8 @@ function Portfolio() {
                   {/* Card 1 */}
                  <article
                     className="rw-card"
-                    ref={card2Ref}
-                    onMouseMove={(e) => handleCardMouseMove(e, card2Ref)}
+                    ref={card1Ref}
+                    onMouseMove={(e) => handleCardMouseMove(e, card1Ref)}
                   >
                     <div className="rw-card__thumb">
                       <img src={mockup1} alt="Century 21 Pura Vida" draggable="false" />
@@ -1248,18 +1270,26 @@ function Portfolio() {
                   </button>
 
                   <div className="rw-nav__dots">
-           
+                    {Array.from({ length: rw_total }).map((_, idx) => (
+                      <button
+                        key={`rw-dot-${idx}`}
+                        type="button"
+                        className={`rw-nav__dot ${rw_idx === idx ? "rw-nav__dot--on" : ""}`}
+                        onClick={() => setRw_idx(idx)}
+                        aria-label={`Go to project ${idx + 1}`}
+                      />
+                    ))}
                   </div>
 
                   <span className="rw-nav__count">
                     <b>{String(rw_idx + 1).padStart(2, "0")}</b>
-                    <span> / 05</span>
+                    <span> / {String(rw_total).padStart(2, "0")}</span>
                   </span>
 
                   <button
-                    className={`rw-nav__btn rw-nav__btn--fwd ${rw_idx === 4 ? "rw-nav__btn--off" : "rw-nav__btn--on"}`}
-                    onClick={() => setRw_idx((n) => Math.min(4, n + 1))}
-                    disabled={rw_idx === 4}
+                    className={`rw-nav__btn rw-nav__btn--fwd ${rw_idx === rw_total - 1 ? "rw-nav__btn--off" : "rw-nav__btn--on"}`}
+                    onClick={() => setRw_idx((n) => Math.min(rw_total - 1, n + 1))}
+                    disabled={rw_idx === rw_total - 1}
                     aria-label="Next project"
                   >
                     <MdOutlineArrowForwardIos />
@@ -1524,7 +1554,7 @@ function Portfolio() {
             <div className="parallax-reveal-sticky">
               <div className="parallax-reveal-card">
                 <h2 className="cta-title ">
-                  Need a <span className="highlight">landing page?</span> Let's build it free
+                  Need a <span className="highlight">landing page?</span> <br /> Let's build it free
                 </h2>
 
                 <p className="cta-description split-animate">
