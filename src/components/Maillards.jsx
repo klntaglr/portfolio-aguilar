@@ -1,11 +1,8 @@
-import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import imagesLoaded from "imagesloaded/imagesloaded.pkgd";
+import { useEffect, useRef, useState } from "react";
 
 import "./Maillards.css";
-import clockedInImg from "../assets/logo.png";
-import reactImg from "../assets/react.svg"; 
 gsap.registerPlugin(ScrollTrigger);
 
 
@@ -99,21 +96,21 @@ export default function Maillards() {
 
         <section className="demo-text">
           <div className="wrapper text">
-           STARTSTARTSTART
+           YOURYOURYOUR 
           </div>
         
         </section>
 
   <section className="demo-text">
           <div className="wrapper text">
-        YOURYOURYOURYOURYOUR
+        NEXTNEXTNEXT 
           </div>
         </section>
       
 
         <section className="demo-text">
           <div className="wrapper text">
-         WEBSITEWEBSITEWEBSITEWEBSITE
+          DESIGNERDESIGNER
           </div>
         </section>
 

@@ -7,33 +7,23 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitText from "gsap/SplitText";
-import {
-  FaDiscord,
-  FaDribbble,
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-} from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {
-  SiCanva,
-  SiCss3,
-  SiFigma,
-  SiFramer,
-  SiGreensock,
-  SiHtml5,
-  SiIndeed,
-  SiReact,
+    SiCanva,
+    SiCss3,
+    SiFigma,
+    SiFramer,
+    SiGreensock,
+    SiHtml5,
+    SiReact
 } from "react-icons/si";
 import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
-import logo from "../assets/logo.png";
 import mockup from "../assets/mockup.jpg";
 import mockup1 from "../assets/mockup1.jpg";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
 import mockup2 from "../assets/wireframe.jpeg";
-import Preloader from "./Preloader"; // ADD THIS
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 gsap.registerPlugin(SplitText);
 
@@ -731,10 +721,10 @@ useEffect(() => {
                   <span className="cta-badge-text">Limited Offer</span>
                 </div>
 
-                <button className="cta-button-mobile" onClick={closeMobileMenu}>
+                <a href="/free-landing-page" className="cta-button-mobile" onClick={closeMobileMenu}>
                   <span className="cta-text">Free Landing Page</span>
                   <FaArrowRight className="cta-button-arrow" />
-                </button>
+                </a>
 
                 <p className="cta-availability">
                   5 slots available | No commitment required

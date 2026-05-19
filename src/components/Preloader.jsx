@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import './Preloader.css';
 import gsap from 'gsap';
+import { useEffect, useRef } from 'react';
 import logo from '../assets/logo.png';
+import './Preloader.css';
 
 function Preloader({ onComplete }) {
     const preloaderRef = useRef(null);
@@ -9,6 +9,7 @@ function Preloader({ onComplete }) {
     const textRef = useRef(null);
     const overlayRef = useRef(null);
     const tagsRef = useRef(null);
+    const didCompleteRef = useRef(false);
 
     useEffect(() => {
     gsap.set(preloaderRef.current, { autoAlpha: 1 });
@@ -23,24 +24,21 @@ function Preloader({ onComplete }) {
   yPercent: -50
 });
 
+    const finalize = () => {
+        if (didCompleteRef.current) return;
+        didCompleteRef.current = true;
+
+        if (preloaderRef.current) {
+            preloaderRef.current.style.display = "none";
+        }
+
+        if (onComplete) {
+            onComplete();
+        }
+    };
+
     const tl = gsap.timeline({
         delay: 0.4,
-        onComplete: () => {
-            // SAFE fallback
-            if (onComplete) {
-                onComplete();
-            }
-
-            gsap.to(preloaderRef.current, {
-                autoAlpha: 0,
-                duration: 0.4,
-                onComplete: () => {
-                    if (preloaderRef.current) {
-                        preloaderRef.current.style.display = "none";
-                    }
-                }
-            });
-        }
     });
 
     tl.to(textRef.current, {
@@ -81,11 +79,18 @@ function Preloader({ onComplete }) {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
         duration: 1.1,
         ease: "expo.inOut"
+    })
+
+    .to(preloaderRef.current, {
+        autoAlpha: 0,
+        duration: 0.4,
+        ease: "power2.out",
+        onComplete: finalize
     });
 
     return () => tl.kill();
 
-}, []);
+}, [onComplete]);
 
     return (
         <div ref={preloaderRef} className="preloader">

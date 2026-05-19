@@ -754,10 +754,10 @@ function LandingPage() {
                   <span className="cta-badge-text">Limited Offer</span>
                 </div>
 
-                <button className="cta-button-mobile" onClick={closeMobileMenu}>
+                <a href="/free-landing-page#start" className="cta-button-mobile" onClick={closeMobileMenu}>
                   <span className="cta-text">Free Landing Page</span>
                   <FaArrowRight className="cta-button-arrow" />
-                </button>
+                </a>
 
                 <p className="cta-availability">
                   5 slots available | No commitment required
@@ -1397,7 +1397,7 @@ function LandingPage() {
                   business grow.
                 </p>
 
-                <button className="cta-button">Claim Your Free Slot</button>
+                <a href="#start" className="cta-button">Claim Your Free Slot</a>
               </div>
             </div>
           </section>
@@ -1568,9 +1568,9 @@ function LandingPage() {
 
                           {faq.question.includes("Free Landing") && (
                             <div className="faq-cta-wrapper">
-                              <button className="faq-cta-btn">
+                              <a href="#start" className="faq-cta-btn">
                                 Get Started . .
-                              </button>
+                              </a>
                             </div>
                           )}
                         </div>
@@ -1592,12 +1592,12 @@ function LandingPage() {
                         klentaguilar@gmail.com
                       </a>
                     </h2>
-                    <button className="footer-cta-button">
+                    <a href="/contact-me" className="footer-cta-button">
                       Start a Conversation
                       <span className="footer-arrow-circle">
                         <FaArrowRight />
                       </span>
-                    </button>
+                    </a>
                   </div>
                 </div>
 

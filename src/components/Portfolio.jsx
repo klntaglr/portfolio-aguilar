@@ -16,7 +16,6 @@ import {
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
 import {
- 
   SiCss3,
   SiFigma,
   SiFramer,
@@ -37,19 +36,16 @@ import {
   FaLinkedin,
 } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
-import { FiArrowUpRight, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { SiIndeed } from "react-icons/si";
-import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
 import blueBackground1 from "../assets/blue1.png";
 import logo from "../assets/logo.png";
 import mockup from "../assets/mockup.jpg";
 import mockup1 from "../assets/mockup1.jpg";
-import virielle from "../assets/Virielle.png";
 import mockup2 from "../assets/mockup2.jpg";
-import soon from "../assets/soon.png";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
-import since from "../assets/since.jpg";
+import soon from "../assets/soon.png";
 import TiltedCard from "./TiltedCard";
 import useSplitAnimateReveal from "./useSplitAnimateReveal";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
@@ -224,6 +220,9 @@ const scrollFillRef = useRef(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openService, setOpenService] = useState(0);
   const [showNavbar, setShowNavbar] = useState(true);
+  const [navTheme, setNavTheme] = useState("light");
+  const navbarRef = useRef(null);
+  const smootherRef = useRef(null);
 
   const leftRef = useRef(null);
   const sectionRef = useRef(null);
@@ -241,18 +240,16 @@ const scrollFillRef = useRef(null);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
 
   const techLogos = [
+    { node: <SiFigma />, title: "Figma" },
+    { node: <SiFramer />, title: "Framer" },
+    { node: <SiGreensock />, title: "GSAP" },
+    { node: <SiReact />, title: "React" },
+    { node: <SiTailwindcss />, title: "Tailwind CSS" },
+    { node: <SiJavascript />, title: "JavaScript" },
     { node: <SiHtml5 />, title: "HTML" },
     { node: <SiCss3 />, title: "CSS" },
-    { node: <SiJavascript />, title: "JavaScript" },
-    { node: <SiReact />, title: "React" },
-    { node: <SiThreedotjs />, title: "Three.js" },
-    { node: <SiFramer />, title: "Framer" },
-
-    { node: <SiGreensock />, title: "GSAP" },
-    { node: <SiTailwindcss />, title: "Tailwind CSS" },
     { node: <SiSass />, title: "Sass" },
-    { node: <SiFigma />, title: "Figma" },
-    
+    { node: <SiThreedotjs />, title: "Three.js" },
   ];
 
 
@@ -422,6 +419,11 @@ const lastScrollRef = useRef(0);
   useEffect(() => {
     if (!pageReady) return undefined;
 
+    const existingSmoother = ScrollSmoother.get();
+    if (existingSmoother) {
+      existingSmoother.kill();
+    }
+
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
@@ -429,36 +431,106 @@ const lastScrollRef = useRef(0);
       effects: true,
       smoothTouch: 0.1,
     });
+    smootherRef.current = smoother;
 
     ScrollTrigger.refresh();
 
-    const onTick = () => {
-      const currentScroll = smoother.scrollTop();
-      const navbar = document.querySelector(".navbar");
-      const scrollDelta = currentScroll - lastScrollRef.current;
+    const updateNavbar = (currentScroll, direction) => {
+      const navbar = navbarRef.current;
 
       if (!navbar) return;
 
-      if (currentScroll <= 80 || scrollDelta < -3) {
-        setShowNavbar(true);
-      } else if (scrollDelta > 3 && currentScroll > 120) {
-        setShowNavbar(false);
-      }
+      setShowNavbar((prev) => {
+        if (currentScroll <= 80 || direction === -1) return true;
+        if (direction === 1 && currentScroll > 120) return false;
+        return prev;
+      });
 
-      if (currentScroll > 80) {
-        navbar.classList.add("scrolled");
-      } else {
-        navbar.classList.remove("scrolled");
-      }
-
-      lastScrollRef.current = currentScroll;
+      navbar.classList.toggle("scrolled", currentScroll > 80);
     };
 
-    gsap.ticker.add(onTick);
+    lastScrollRef.current = smoother.scrollTop();
+
+    const navbarScrollTrigger = ScrollTrigger.create({
+      start: 0,
+      end: "max",
+      onUpdate: (self) => {
+        const currentScroll = self.scroll();
+        const direction =
+          currentScroll === lastScrollRef.current
+            ? 0
+            : currentScroll > lastScrollRef.current
+              ? 1
+              : -1;
+
+        updateNavbar(currentScroll, direction);
+        lastScrollRef.current = currentScroll;
+      },
+    });
+    updateNavbar(lastScrollRef.current, 0);
 
     return () => {
-      gsap.ticker.remove(onTick);
+      navbarScrollTrigger.kill();
       smoother.kill();
+      if (smootherRef.current === smoother) {
+        smootherRef.current = null;
+      }
+    };
+  }, [pageReady]);
+
+  useEffect(() => {
+    if (!pageReady) return undefined;
+
+    const themedSections = gsap.utils.toArray("[data-nav-theme]");
+    if (!themedSections.length) return undefined;
+
+    const applyTheme = (section) => {
+      const nextTheme = section?.dataset?.navTheme || "light";
+      setNavTheme((prev) => (prev === nextTheme ? prev : nextTheme));
+    };
+
+    const updateThemeFromViewport = () => {
+      const marker = window.innerHeight * 0.22;
+      const activeSection =
+        themedSections.find((section) => {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= marker && rect.bottom >= marker;
+        }) || themedSections[0];
+
+      applyTheme(activeSection);
+    };
+
+    let rafId = null;
+    const requestThemeUpdate = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        updateThemeFromViewport();
+      });
+    };
+
+    const sectionTriggers = themedSections.map((section) =>
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 22%",
+        end: "bottom 22%",
+        onEnter: () => applyTheme(section),
+        onEnterBack: () => applyTheme(section),
+        onUpdate: () => requestThemeUpdate(),
+      }),
+    );
+
+    requestThemeUpdate();
+    window.addEventListener("scroll", requestThemeUpdate, { passive: true });
+    window.addEventListener("resize", requestThemeUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", requestThemeUpdate);
+      window.removeEventListener("resize", requestThemeUpdate);
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      sectionTriggers.forEach((trigger) => trigger.kill());
     };
   }, [pageReady]);
 
@@ -628,29 +700,42 @@ const lastScrollRef = useRef(0);
         "Motion Design",
         "Performance Balanced",
       ],
-      image: mockup4,
+    image: mockup4,
+    },
+
+    {
+      number: "06",
+      name: "Mobile App Design",
+      description:
+        "End-to-end UI/UX design for iOS and Android mobile applications. I design intuitive, platform-native interfaces with a focus on usability, accessibility, and visual consistency. From user flows and wireframes to high-fidelity Figma prototypes, I create mobile experiences that feel natural in the hand and polished on screen.",
+      tags: [
+        "iOS & Android UI",
+        "Figma Prototyping",
+        "User Flows",
+        "Mobile-first",
+        "Accessibility",
+        "Design Systems",
+      ],
+      image: mockup2,
     },
   ];
 const handlePreloaderComplete = () => {
   setShowPreloader(false);
-  setPageReady(true);
 
-  // ✅ Bigyan ng time ang layout na mag-settle
   setTimeout(() => {
+    setPageReady(true);
     ScrollTrigger.refresh(true);
-  }, 200);
+  }, 80);
 };
-
 useEffect(() => {
   if (!pageReady) return undefined;
 
-  const raf = window.requestAnimationFrame(() => {
+  const timer = setTimeout(() => {
     setHeroReady(true);
-  });
+  }, 100);
 
-  return () => window.cancelAnimationFrame(raf);
+  return () => clearTimeout(timer);
 }, [pageReady]);
-
 useEffect(() => {
   if (!pageReady) {
     document.body.style.overflow = "hidden";
@@ -690,7 +775,7 @@ useEffect(() => {
     {
       question: "Do you work on both design and development?",
       answer:
-        "Yes. I handle both UI/UX design and frontend development, which allows me to create cohesive experiences from concept to implementation. I design interfaces with usability and aesthetics in mind, then build them with clean, maintainable code. This dual capability helps bridge the gap between design vision and technical execution.",
+        "I design with implementation in mind. Having built projects from Figma prototypes to deployed React applications, I understand the constraints developers work within — which makes my handoffs cleaner and my design decisions more grounded. I'm a designer first, but one who speaks the developer's language.",
     },
     {
       question: "Can you work with existing design systems or brand guidelines?",
@@ -704,14 +789,10 @@ useEffect(() => {
     },
     {
       question: "Are you available for full-time positions or freelance work?",
-      answer:
-        "I'm actively seeking full-time UI/UX and web design opportunities where I can grow as a designer and contribute to meaningful projects. I'm also open to select freelance projects that align with my skills and allow me to build my portfolio while delivering real value.",
+        answer:
+        "I'm actively looking for a UI/UX or web design role where I can own the full design process — from research and wireframing through to final UI and handoff. I'm eager, fast to learn, and ready to contribute from day one. Open to full-time roles, internships, and select freelance projects.",
     },
-    {
-      question: "What's the Free Landing Page opportunity?",
-      answer:
-        "I'm offering 5 complimentary landing page projects to build real-world experience and expand my portfolio. Selected projects receive professional, mobile-responsive design and development at no cost. In exchange, I ask for honest feedback and permission to feature the work in my portfolio. This helps me demonstrate my capabilities while providing value to businesses ready to launch.",
-    },
+
   ];
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -773,6 +854,60 @@ useEffect(() => {
   return (
     <>
       {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+      <nav
+        ref={navbarRef}
+        className={`navbar navbar-theme-${navTheme} ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
+      >
+        <div className="logo">
+          <a href="#heros">
+            <img src={logo} alt="Logo" />
+          </a>
+        </div>
+
+        <ul className="nav-links desktop-nav">
+          <li>
+            <a href="/about-web-designer" className="nav-link-animated">
+              <span className="nav-text">
+                <span className="nav-text-top">About</span>
+                <span className="nav-text-bottom">About</span>
+              </span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#services" className="nav-link-animated">
+              <span className="nav-text">
+                <span className="nav-text-top">What I Do</span>
+                <span className="nav-text-bottom">What I Do</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#projects" className="nav-link-animated">
+              <span className="nav-text">
+                <span className="nav-text-top">Projects</span>
+                <span className="nav-text-bottom">Projects</span>
+              </span>
+            </a>
+          </li>
+
+
+          {/* CTA stays untouched */}
+          <a href="/contact-me" className="nav-cta-btn1s">
+
+            Get in Touch
+          </a>
+        </ul>
+
+        <button
+          className={`mobile-menu-button ${isMobileMenuOpen ? "open" : ""}`}
+          onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
+        >
+          Menu
+          {isMobileMenuOpen ? <FiChevronUp /> : <FiChevronDown />}
+        </button>
+      </nav>
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div
@@ -780,60 +915,6 @@ useEffect(() => {
             id="heros"
             style={{ "--hero-bg-image": `url(${blueBackground1})` }}
           >
-            <nav
-              className={`navbar ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
-            >
-              <div className="logo">
-                <a href="#heros">
-                  <img src={logo} alt="Logo" />
-                </a>
-              </div>
-
-              <ul className="nav-links desktop-nav">
-                <li>
-                  <a href="/about-web-designer" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">About</span>
-                      <span className="nav-text-bottom">About</span>
-                    </span>
-                  </a>
-                </li>
-
-                <li>
-                  <a href="#services" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">What I Do</span>
-                      <span className="nav-text-bottom">What I Do</span>
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#projects" className="nav-link-animated">
-                    <span className="nav-text">
-                      <span className="nav-text-top">Projects</span>
-                      <span className="nav-text-bottom">Projects</span>
-                    </span>
-                  </a>
-                </li>
-
-
-                {/* CTA stays untouched */}
-                <a href="/contact-me" className="nav-cta-btn">
-            
-                  Get in Touch
-                </a>
-              </ul>
-
-              <button
-                className={`mobile-menu-button ${isMobileMenuOpen ? "open" : ""}`}
-                onClick={toggleMobileMenu}
-                aria-label="Toggle menu"
-              >
-                Menu
-                {isMobileMenuOpen ? <FiChevronUp /> : <FiChevronDown />}
-              </button>
-            </nav>
-
             {/* Backdrop Overlay */}
             <div
               className={`mobile-menu-backdrop ${isMobileMenuOpen ? "open" : ""}`}
@@ -952,13 +1033,14 @@ useEffect(() => {
               ref={heroRef}
               className={`hero-section panel ${heroReady ? "hero-ready" : ""}`}
               id="hero"
+              data-nav-theme="light"
               style={{ filter: blur, opacity }}
             >
               <div className="hero-background" aria-hidden="true"></div>
               <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
                 <div className="hero-content">
-               <p className="tagline hero-tagline-entry">UI/UX Designer · Frontend Dev</p>
+               <p className="tagline hero-tagline-entry">UI/UX Designer & Web Designer</p>
 
                   <h1
                     className="hero-title split-animate hero-title-reveal"
@@ -971,23 +1053,25 @@ useEffect(() => {
                   <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
                       <span className="stat-number">10+</span>
-                      <span className="stat-label">Projects</span>
+                       <span className="stat-label">Projects Delivered</span>
                     </div>
                     <div className="stat-item">
                       <span className="stat-number">1+</span>
-                      <span className="stat-label">Year Experience</span>
+                 <span className="stat-label">Year of Practice</span>
                     </div>
                     <div className="stat-item">
-                      <span className="stat-number">100%</span>
-                      <span className="stat-label">Available</span>
+                   <span className="stat-number">UI/UX</span>
+                        <span className="stat-label">Primary Discipline</span>
                     </div>
                   </div>
-                  <div className="hero-cta-group hero-cta-entry">
-                    <button className="cta-button primary">
-                      Explore My Work
-                    </button>
+             <div className="hero-cta-group hero-cta-entry">
+                  <a href="#projects" className="cta-button">
+                      View My Work
+                    </a>
 
-                    <button className="cta-buttons1">About Me</button>
+                    <a href="/about-web-designer" className="cta-buttons1">
+                      Let's Connect
+                    </a>
                   </div>
 
                 </div>
@@ -1012,21 +1096,17 @@ useEffect(() => {
             </motion.main>
           </div>
 
-          <section className="about-section">
+          <section className="about-section" id="about" data-nav-theme="dark">
             <div className="about-container">
- <h2 className="about-title" ref={scrollFillRef}>
-  <span className="about-title-bold">Design isn't just about how it looks.</span>{" "}
-  <span className="scroll-fill-text about-title-accent">
-    It's about how it works, how users feel, and whether
-    it actually solves the problem it was built for.
-  </span>
-</h2>
+              <h2 className="about-title" ref={scrollFillRef}>
+                <span className="scroll-fill-text about-title-accent">Design isn't just about how it looks. It's about how it works, how users feel, and whether it actually solves the problem it was built for.</span>
+              </h2>
 
             </div>
           </section>
 
        {/* Services Section */}
-<section className="services-section">
+<section className="services-section" data-nav-theme="dark">
   <div className="services-container">
     <div className="services-header">
       <h2 className="services-title" id="services">What I Do</h2>
@@ -1106,7 +1186,7 @@ useEffect(() => {
 </section>
 
           {/* Works Section */}
-          <section className="works-section">
+          <section className="works-section" data-nav-theme="dark">
             <div className="works-container">
               <div className="works-header">
                 <h2 className="works-title" id="projects">Recent Work</h2>
@@ -1304,29 +1384,28 @@ useEffect(() => {
                     rigorous thinking and uncompromising attention to detail.
                   </span>
                 </p>
-                <button className="cta-button">Discuss Your Project</button>
+                <a href="/contact-me" className="cta-button">Discuss Your Project</a>
               </div>
             </div>
           </section>
 
           {/* Process Section - Updated Layout */}
-          <section className="process-section">
+          <section className="process-section" data-nav-theme="light">
             <div className="process-container">
               <div className="process-header-wrapper">
                 <div className="process-header" id="process">
                   <span className="process-index">(PROCESS — 04)</span>
                   <h2 className="process-title ">
-                    My design process
+                        My design process —
                     <span className="process-title-accent">
                       {" "}
-                      where research, creativity, and development come together.
+                      from first research question to shipped product.
                     </span>
                   </h2>
-
-                  <p className="process-subtitle split-animate">
-                    A structured approach that turns ideas into functional
-                    digital experiences through careful planning, iterative
-                    design, and clean development.
+       <p className="process-subtitle split-animate">
+                    Every project follows the same discipline: understand the user
+                    before touching a design tool, structure before style,
+                    and validate before shipping.
                   </p>
                 </div>
               </div>
@@ -1356,8 +1435,8 @@ useEffect(() => {
                   {/* Step 1 */}
                   <div className="process-step" data-step="1">
                     <div className="step-number-wrapper">
-                      <span className="step-number">01.</span>
-                      <span className="step-label">Discovery</span>
+                    <span className="step-number">01.</span>
+                      <span className="step-label">Research</span>
                     </div>
 
                     <div className="step-marker">
@@ -1366,11 +1445,9 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Discovery & Research</h3>
+                          <h3 className="step-title">Research & Discovery</h3>
                         <p className="step-description">
-                          I begin by researching your target audience and design goals —
-                          understanding user needs, competitive landscape, and success metrics
-                          to ensure every decision aligns with what your users actually expect.
+                          I start by understanding the problem — not opening a design tool. This means stakeholder interviews, user research, surveys, competitive analysis, and reviewing existing analytics. Every decision that follows is grounded in evidence, not assumption.
                         </p>
                       </div>
                     </div>
@@ -1379,8 +1456,8 @@ useEffect(() => {
                   {/* Step 2 */}
                   <div className="process-step" data-step="2">
                     <div className="step-number-wrapper">
-                      <span className="step-number">02.</span>
-                      <span className="step-label">Strategy</span>
+                        <span className="step-number">02.</span>
+                      <span className="step-label">Define</span>
                     </div>
 
                     <div className="step-marker">
@@ -1389,12 +1466,9 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Strategy & Planning</h3>
+                       <h3 className="step-title">Define & Structure</h3>
                         <p className="step-description">
-                          Based on research insights, I develop information architecture, user
-                          flows, and wireframes. This planning phase establishes the structural
-                          foundation and ensures the design supports both usability and business
-                          requirements before moving into visual design.
+                          Research gets synthesized into user personas, journey maps, and a clear problem statement. I then map information architecture, sitemaps, and navigation flows — so users can find what they need intuitively, before any screen is designed.
                         </p>
 
                       </div>
@@ -1404,8 +1478,8 @@ useEffect(() => {
                   {/* Step 3 */}
                   <div className="process-step" data-step="3">
                     <div className="step-number-wrapper">
-                      <span className="step-number">03.</span>
-                      <span className="step-label">Design</span>
+                              <span className="step-number">03.</span>
+                      <span className="step-label">Wireframe</span>
                     </div>
 
                     <div className="step-marker">
@@ -1415,11 +1489,9 @@ useEffect(() => {
                     <div className="step-container">
                       <div className="step-content">
                         <h3 className="step-title">UI/UX Design & Prototyping</h3>
+                         <h3 className="step-title">Wireframe & Prototype</h3>
                         <p className="step-description">
-                          I create high-fidelity mockups and interactive prototypes using Figma,
-                          applying design systems and visual principles while maintaining brand
-                          consistency. Prototypes allow for early testing and iteration before
-                          development begins.
+                          Low-fidelity wireframes lock in layout, hierarchy, and how screens connect — fast and cheap to change. These become interactive Figma prototypes for early usability testing, validating flows before a single line of code is written.
                         </p>
                       </div>
                     </div>
@@ -1428,8 +1500,8 @@ useEffect(() => {
                   {/* Step 4 */}
                   <div className="process-step" data-step="4">
                     <div className="step-number-wrapper">
-                      <span className="step-number">04.</span>
-                      <span className="step-label">Build</span>
+                        <span className="step-number">04.</span>
+                      <span className="step-label">Visual Design</span>
                     </div>
 
                     <div className="step-marker">
@@ -1438,11 +1510,9 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Development & Delivery</h3>
+                         <h3 className="step-title">Visual Design & UI</h3>
                         <p className="step-description">
-                          I build the interface using modern frameworks like React, ensuring clean,
-                          maintainable code. Development includes responsive design implementation,
-                          performance optimization, and adherence to web accessibility standards.
+                          Once flows are validated, I apply the full visual layer — typography systems, color, spacing, iconography, and component libraries in Figma. This is where the product starts looking and feeling real. Design specs and annotated interactions are prepared for a clean developer handoff.
                         </p>
                       </div>
                     </div>
@@ -1452,7 +1522,7 @@ useEffect(() => {
                   <div className="process-step" data-step="5">
                     <div className="step-number-wrapper">
                       <span className="step-number">05.</span>
-                      <span className="step-label">Launch</span>
+                      <span className="step-label">Build & Ship</span>
                     </div>
 
                     <div className="step-marker">
@@ -1461,11 +1531,9 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Testing, Launch & Optimization</h3>
+                        <h3 className="step-title">Build, Test & Launch</h3>
                         <p className="step-description">
-                          Before launch, I conduct cross-browser testing, usability validation,
-                          and performance audits. Post-launch, I monitor analytics and user
-                          feedback to identify opportunities for continuous improvement.
+                          Designs are implemented in React — responsive, accessible, and performance-optimized. I review the live build against designs, catch spacing issues and missing states, then run cross-browser and device QA before anything ships. Post-launch, I monitor analytics and iterate based on real user behavior.
                         </p>
                       </div>
                     </div>
@@ -1476,7 +1544,7 @@ useEffect(() => {
           </section>
 
           {/* Man Behind The Work Section */}
-          <section className="man-behind-section">
+          <section className="man-behind-section" data-nav-theme="dark">
             <div className="man-behind-container">
               <div className="man-behind-header ">
                 <h2 className="man-behind-title">
@@ -1486,10 +1554,10 @@ useEffect(() => {
               <div className="services-content">
                 <span className="services-index">( ABOUT ME — 05 )</span>
                 <h3 className="services-subtitless split-animate">
-                  Designing purposeful interfaces where
+          Good design is invisible — <br />
                   <span className="services-subtitle-accent">
                     {" "}
-                    every detail tells a story.
+                    you only notice it when it's missing.
                   </span>
                 </h3>
               </div>
@@ -1511,9 +1579,8 @@ useEffect(() => {
                         1<span className="stats-years">Year</span>
                       </h3>
 
-                      <p className="stats-description">
-                        Experience building websites and landing pages focused
-                        on design, usability, and performance.
+                    <p className="stats-description">
+                        Building interfaces that balance aesthetics, usability, and real-world performance.
                       </p>
                     </div>
                   </div>
@@ -1526,49 +1593,46 @@ useEffect(() => {
                       alt="projects watermark"
                       className="stats-watermark"
                     />
-                    <p className="stats-description">
-                      Projects in web design, landing pages,
-                      <br /> and business websites.
-                    </p>
+               <p className="stats-description">
+                        Across web, mobile UI, and interactive experiences.
+                      </p>
                   </div>
                 </div>
               </div>
 
               <div className="about-topbar">
                 <p className="about-mini-desc">
-                  There’s more behind the work—how I think, how I design, and
-                  how every decision starts with the user.
+           UI/UX and web design — with the frontend skills to bring it to life.
                 </p>
 
-                <button className="cta-button">About Me</button>
+               <a href="/about-web-designer" className="cta-button">See the Full Story</a>
               </div>
             </div>
           </section>
 
-          <section className="works-section">
+          <section className="works-section" data-nav-theme="dark">
             <Maillards />
           </section>
 
-          <section className="parallax-reveal-section">
+          <section className="parallax-reveal-section" data-nav-theme="dark">
             <div className="parallax-reveal-sticky">
               <div className="parallax-reveal-card">
-                <h2 className="cta-title ">
-                  Need a <span className="highlight">landing page?</span> <br /> Let's build it free
+          <h2 className="cta-title">
+                  Looking for a <span className="highlight">UI/UX designer</span> who understands both design and code?
                 </h2>
 
-                <p className="cta-description split-animate">
-                  5 complimentary landing page slots for businesses ready to launch.
-                  Professional design, mobile-responsive, conversion-focused.
-                  Trade: your feedback + portfolio permission.
+              <p className="cta-description split-animate">
+                  I'm actively seeking UI/UX and web design roles. I bring research-grounded design,
+                  Figma-to-code capability, and genuine enthusiasm for every project I take on. If
+                  you're hiring or want to collaborate — I'd love to hear from you.
                 </p>
-
-                <button className="cta-button">Claim Your Free Slot</button>
+                 <a href="/contact-me" className="cta-button">Let's Work Together</a>
 
               </div>
             </div>
           </section>
           <div id="container" ref={containerRef}>
-            <section className="faq-section panels" id="faq">
+            <section className="faq-section panels" id="faq" data-nav-theme="dark">
               <div className="faq-container">
                 <h2 className="faq-title split-animate">
                   Questions You Might Ask
@@ -1604,9 +1668,9 @@ useEffect(() => {
 
                           {faq.question.includes("Free Landing") && (
                             <div className="faq-cta-wrapper">
-                              <button className="faq-cta-btn">
+                              <a href="/free-landing-page#start" className="faq-cta-btn">
                                 Get Started . .
-                              </button>
+                              </a>
                             </div>
                           )}
                         </div>
@@ -1617,7 +1681,7 @@ useEffect(() => {
               </div>
             </section>
             {/* Footer Section */}
-            <footer className="footer-section panels">
+            <footer className="footer-section panels" id="contact" data-nav-theme="light">
               <div className="footer-container">
                 <div className="footer-top">
                   <div className="footer-cta">
@@ -1627,12 +1691,12 @@ useEffect(() => {
                         klentaguilar@gmail.com
                       </a>
                     </h2>
-                    <button className="footer-cta-button">
+                    <a href="/contact-me" className="footer-cta-button">
                       Start a Conversation
                       <span className="footer-arrow-circle">
                         <FaArrowRight />
                       </span>
-                    </button>
+                    </a>
                   </div>
                 </div>
 
@@ -1653,8 +1717,7 @@ useEffect(() => {
                       </p>
 
                       <p className="footer-copyright">
-                        © 2025 Designed and developed by Klent Russell Aguilar |
-                        Web Designer
+                         © 2026 Designed and built by Klent Russell Aguilar — UI/UX & Web Designer
                       </p>
                     </div>
 

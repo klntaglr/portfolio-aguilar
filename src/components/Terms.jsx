@@ -724,9 +724,9 @@ function Terms() {
                                     Slots are limited to 5 projects to maintain quality and give each one the attention it deserves. If you're interested, don't wait — once they're filled, I'll open applications again in a few months. <span className="services-highlight">Let's build something great together.</span>
                                 </p>
                                 
-                                       <button className="cta-button ">
+                                       <a href="/free-landing-page#start" className="cta-button ">
                                         Apply Now
-                                    </button>
+                                    </a>
                                 <div className="quick-reminder-box">
                                     <p className="reminder-label">Quick Reminder:</p>
                                     <p className="reminder-text">
