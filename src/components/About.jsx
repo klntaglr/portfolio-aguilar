@@ -386,7 +386,7 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
         {
           question: "What's your background and education?",
           answer:
-            "I'm currently a BSIT student at La Consolacion University Philippines, specializing in UI/UX design and frontend development. Over the past year, I've completed 10+ projects ranging from landing pages to full websites, combining academic learning with hands-on experience. I'm actively expanding my skills in React, GSAP, and modern web development practices.",
+            "I'm currently a BSIT student at La Consolacion University Philippines, specializing in UI/UX design and frontend development. Over the past year, I've completed 6 projects ranging from landing pages to full websites, combining academic learning with hands-on experience. I'm actively expanding my skills in React, GSAP, and modern web development practices.",
         },
         {
           question: "What kind of work are you looking for?",
@@ -597,8 +597,8 @@ built with code.
 
                       <div className="hero-stats hero-stats-entry">
                         <div className="stat-item">
-                          <span className="stat-number">10+</span>
-                           <span className="stat-label">Projects Delivered</span>
+                          <span className="stat-number">6</span>
+                           <span className="stat-label">Projects</span>
                         </div>
                         <div className="stat-item">
                           <span className="stat-number">1+</span>
@@ -858,17 +858,19 @@ research-grounded decisions and clean, intentional execution.
               </section>
 
               {/* ANIMATED PROJECT CAROUSEL */}
-              <section className="works-section" id="projects">
-                <div className="carousel-track" ref={trackRef}>
-                  {[...caseStudies, ...caseStudies].map((project, i) => (
-                    <div className="project-card" key={i}>
-                      <div className="project-image">
-                        <img src={project.image} alt="" draggable="false" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
+       <section className="works-section" id="projects" style={{ overflow: 'hidden' }}>
+  <div style={{ overflow: 'hidden', width: '100%' }}>
+    <div className="carousel-track" ref={trackRef}>
+      {[...caseStudies, ...caseStudies].map((project, i) => (
+        <div className="project-card" key={i}>
+          <div className="project-image">
+            <img src={project.image} alt="" draggable="false" />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
 
               {/* FAQ SECTION */}
               <section className="faq-section">

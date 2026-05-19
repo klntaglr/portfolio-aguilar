@@ -962,7 +962,7 @@ body.menu-open {
 
 .about-section {
   background: #e8e8e8;
-  padding: 6rem 4rem;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 4vw, 4rem);
   position: relative;
   z-index: 1;
 }
@@ -970,8 +970,8 @@ body.menu-open {
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
-  margin-top: 10rem;
-  margin-bottom: 7rem;
+  margin-top: clamp(3rem, 8vw, 10rem);
+  margin-bottom: clamp(2rem, 6vw, 7rem);
 }
 
 .about-title {
@@ -1690,23 +1690,25 @@ body.menu-open {
 
 /* Service Details - Smooth Accordion */
 .service-details {
-  max-height: 0;
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
-  transform: translateY(-20px);
   transition:
-    max-height 0.6s cubic-bezier(0.87, 0, 0.13, 1),
-    opacity 0.5s cubic-bezier(0.87, 0, 0.13, 1),
-    transform 0.5s cubic-bezier(0.87, 0, 0.13, 1),
-    padding 0.6s cubic-bezier(0.87, 0, 0.13, 1);
+    grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0 0 0 56px;
 }
 
+.service-details > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
 .service-details.open {
-  max-height: 800px;
+  grid-template-rows: 1fr;
   opacity: 1;
-  transform: translateY(0);
-  padding: 1.5rem 0 0 56px;
+  padding: 1.5rem 0 1.5rem 56px;
 }
 
 .service-description {
@@ -1835,7 +1837,7 @@ body.menu-open {
 
 
 .works-section {
-  padding: 8rem 4rem;
+  padding: clamp(3rem, 8vw, 8rem) clamp(1.5rem, 4vw, 4rem);
   background-color: #e8e8e8;
 }
 
@@ -2073,15 +2075,14 @@ body.menu-open {
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Works Statement */
 .works-statement {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 3rem;
-  padding-top: 3rem;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-top: clamp(1.5rem, 3vw, 3rem);
+  flex-wrap: wrap;
 }
-
 .statement-text {
   font-family: "Inter", sans-serif;
   font-size: clamp(2rem, 2.8vw, 2.8rem);
@@ -2444,26 +2445,32 @@ body.menu-open {
 /* Hero section - Add padding top to account for fixed navbar */
 .hero-section {
   position: relative;
-
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 8rem 4rem 3rem 4rem;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 4rem) clamp(1.5rem, 3vw, 3rem);
 }
 
+@supports not (min-height: 100svh) {
+  .hero-section {
+    min-height: 100vh;
+  }
+}
 /* Mobile */
 @media screen and (max-width: 768px) {
   .navbar {
     padding: 1.5rem 2rem;
   }
 
-  .hero-section {
-    padding: 6rem 2rem 1.5rem 2rem;
-    min-height: 100vh;
+.hero-section {
+    padding: clamp(4.5rem, 12vw, 6rem) clamp(1rem, 5vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+    min-height: 100svh;
   }
+  .hero-content {
+margin-top: 7rem;
 
-  .hero-content {}
+  }
 
   .hero-contents {}
 }
@@ -2472,20 +2479,32 @@ body.menu-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4rem;
-  min-height: 90vh;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  min-height: 90svh; /* svh = small viewport height — fixes iOS toolbar issue */
+  width: 100%;
 }
 
+@supports not (min-height: 90svh) {
+  .hero-wrapper {
+    min-height: 90vh;
+  }
+}
 .hero-card {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1024px) and (orientation: portrait) {
   .hero-wrapper {
     flex-direction: column;
+    gap: 3rem;
+  }
+}
 
+@media (max-width: 900px) {
+  .hero-wrapper {
+    flex-direction: column;
     gap: 3rem;
   }
 }
@@ -2522,9 +2541,8 @@ body.menu-open {
 .process-container {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 60px;
+  padding: 0 clamp(1rem, 4vw, 60px);
 }
-
 /* ========================================
    HEADER SECTION
    ======================================== */
@@ -2534,7 +2552,7 @@ body.menu-open {
 }
 
 .process-header {
-  max-width: 920px;
+  max-width: 790px;
 }
 
 .process-index {
@@ -3083,16 +3101,17 @@ body {
 
 @media (max-width: 768px) {
   .parallax-reveal-section {
-    padding: clamp(16px, 3vw, 40px);
+    padding: clamp(12px, 3vw, 40px);
   }
 
   .parallax-reveal-card {
     width: 94vw;
-    height: min(450px, 60vh);
-    border-radius: 24px;
+    height: auto;
+    min-height: min(420px, 55vh);
+    border-radius: 20px;
     clip-path: inset(0% 40% 0% 40%);
-    padding: clamp(32px, 6vw, 60px);
-    gap: clamp(20px, 3vw, 32px);
+    padding: clamp(24px, 6vw, 48px) clamp(20px, 5vw, 40px);
+    gap: clamp(16px, 3vw, 28px);
   }
 
   .cta-title {
@@ -3516,7 +3535,7 @@ body {
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 clamp(1rem, 4vw, 40px);
 }
 
 /* Footer Top - CTA Section */
@@ -6135,6 +6154,17 @@ body {
     padding: 0.75rem 1.5rem;
   }
 
+  .hero-cta-group {
+    flex-wrap: nowrap;
+  }
+
+  .hero-cta-group .cta-button,
+  .hero-cta-group .cta-buttons1 {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   .nav-cta-btn,
   .nav-cta-btn1s,
   .nav-cta-btn1 {
@@ -6152,11 +6182,10 @@ body {
 
 .services-section {
   background: #e8e8e8;
-  padding: 6rem 4rem;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 4vw, 4rem);
   position: relative;
   z-index: 1;
 }
-
 .services-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -6658,9 +6687,8 @@ body {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  padding: clamp(16px, 2vw, 24px) 4rem 0;
+  padding: clamp(16px, 2vw, 24px) clamp(1rem, 4vw, 4rem) 0;
 }
-
 
 
 /* Track */
@@ -6838,8 +6866,9 @@ body {
   width: 100%;
   position: relative;
   z-index: 2;
+  padding: 0 clamp(1rem, 4vw, 4rem);
+  box-sizing: border-box;
 }
-
 .rw-nav__btn {
   display: flex;
   align-items: center;
@@ -7571,4 +7600,146 @@ body {
     font-size: clamp(3.6rem, 7.5vw, 6.8rem);
   }
 
+}/* ===============================
+   LANDSCAPE PHONES (height ≤ 500px)
+================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    min-height: auto;
+    padding: 5rem clamp(1rem, 3vw, 2rem) 1.5rem;
+  }
+
+  .hero-wrapper {
+    min-height: auto;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.5rem, 4vh, 2.4rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-stats {
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stat-number {
+    font-size: clamp(18px, 4vh, 24px);
+  }
+
+  .hero-card {
+    display: none; /* Hide tilted card on landscape phones — too cramped */
+  }
+
+  .tagline {
+    font-size: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-cta-group {
+    gap: 10px;
+    margin-top: 0.75rem;
+    flex-wrap: nowrap;
+  }
+
+  .cta-button,
+  .cta-buttons1 {
+    font-size: 0.8rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .about-container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .process-section {
+    padding: 60px 0 80px;
+  }
+
+  .preloader-title {
+    font-size: clamp(1.4rem, 5vh, 2.2rem);
+  }
+
+  .preloader-logo-watermark {
+    width: clamp(130px, 25vh, 220px);
+  }
+}
+
+/* ===============================
+   VERY SMALL PHONES (≤ 360px)
+================================ */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: clamp(1.65rem, 8.5vw, 2.2rem);
+  }
+
+  .works-title,
+  .works-titles {
+    font-size: clamp(2.6rem, 12vw, 4rem);
+  }
+
+  .services-title {
+    font-size: clamp(2.6rem, 12vw, 4rem);
+  }
+
+  .man-behind-title {
+    font-size: clamp(3rem, 13vw, 5rem);
+  }
+
+  .navbar {
+    padding: 1rem 1.25rem;
+  }
+
+  .rw-card {
+    width: calc(100vw - 24px);
+  }
+
+  .footer-email a {
+    font-size: clamp(22px, 7vw, 36px);
+  }
+
+  .faq-answer-content {
+    padding: 0 24px 16px 24px;
+  }
+}.tag {
+  padding: 0.5rem 1rem;
+  background: rgba(120, 120, 120, 0.15);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 0.5px solid rgba(120, 120, 120, 0.3);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1f1f1f;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.service-details.open .tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tag:hover {
+  background: #2a2a2a;
+  color: #ffffff;
+  border-color: #2a2a2a;
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }

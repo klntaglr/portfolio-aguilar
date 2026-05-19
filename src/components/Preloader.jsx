@@ -16,12 +16,13 @@ function Preloader({ onComplete }) {
     gsap.set(overlayRef.current, { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" });
     gsap.set(textRef.current, { opacity: 0, y: 50, scale: 0.98 });
     gsap.set(tagsRef.current, { opacity: 0, y: 30 });
- gsap.set(logoRef.current, {
+gsap.set(logoRef.current, {
   opacity: 0,
   scale: 0.85,
   rotateZ: -4,
   xPercent: -50,
-  yPercent: -50
+  yPercent: -50,
+  transformOrigin: "center center"
 });
 
     const finalize = () => {

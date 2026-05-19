@@ -623,102 +623,120 @@ const lastScrollRef = useRef(0);
 
     return () => ctx.revert();
   }, []);
+
   const services = [
-    {
-      number: "01",
-      name: "Website Design & Development",
-      description:
-        "End-to-end website design and development for businesses, portfolios, and e-commerce platforms. I create modern, responsive websites with intuitive navigation, clean layouts, and strategic content placement. From initial concept to final deployment, I focus on building sites that communicate brand value while delivering smooth user experiences across all devices.",
-      tags: [
-        "Business Websites",
-        "E-commerce Sites",
-        "Portfolio Sites",
-        "Responsive Design",
-        "Performance Optimized",
-      ],
-      image: mockup1,
-    },
+  {
+    number: "01",
+    name: "UI/UX Design — Layout, Wireframe & Prototype",
+    description:
+      "Full end-to-end UI/UX design starting from low-fidelity wireframes to high-fidelity Figma prototypes. I map out user flows, information architecture, and interaction patterns before applying the visual layer — so every screen is grounded in usability, not just aesthetics. Covers web apps, mobile apps, dashboards, and digital products.",
+    tags: [
+      "Wireframing",
+      "Prototyping",
+      "User Flows",
+      "High-Fidelity UI",
+      "Figma",
+      "Interaction Design",
+    ],
+    image: mockup2,
+  },
 
-    {
-      number: "02",
-      name: "Landing Page Design",
-      description:
-        "High-converting landing pages designed to capture attention and drive action. I create focused, goal-oriented pages with clear messaging, strategic layouts, and conversion-optimized elements. Perfect for product launches, lead generation campaigns, event promotions, or businesses establishing their first online presence.",
-      tags: [
-        "Lead Generation",
-        "Conversion-Focused",
-        "Mobile Responsive",
-        "Clear Messaging",
-        "Strategic CTAs",
-        "Fast Loading",
-      ],
-      image: mockup,
-    },
+  {
+    number: "02",
+    name: "Web Design & Development",
+    description:
+      "Custom website design and frontend development — from concept to deployed product. I design clean, responsive layouts and build them with React, Tailwind CSS, and modern frontend tools. Whether it's a business site, portfolio, or multi-page web presence, I handle the full pipeline from design to live deployment.",
+    tags: [
+      "React",
+      "Tailwind CSS",
+      "Responsive Design",
+      "Frontend Development",
+      "Deployment",
+      "Performance Optimized",
+    ],
+    image: mockup1,
+  },
 
-    {
-      number: "03",
-      name: "Website Redesign & Modernization",
-      description:
-        "Transforming outdated websites into modern, effective digital experiences. I evaluate existing sites to identify design limitations, usability issues, and performance gaps, then create refreshed designs with improved navigation, updated visual styles, better mobile responsiveness, and enhanced user experience—all while maintaining brand identity.",
-      tags: [
-        "Visual Refresh",
-        "UX Improvements",
-        "Modern Standards",
-        "Mobile Optimization",
-        "Performance Updates",
-        "Brand Consistency",
-      ],
-      image: mockup3,
-    },
+  {
+    number: "03",
+    name: "Landing Page Design & Deployment",
+    description:
+      "Focused, conversion-oriented landing pages designed to capture attention and drive action — then deployed live. I design with clear messaging, strategic CTAs, and mobile-first layouts, then build and ship the page so it's ready from day one. Ideal for product launches, campaigns, freelance clients, and early-stage businesses.",
+    tags: [
+      "Conversion-Focused",
+      "Mobile-First",
+      "Live Deployment",
+      "Strategic CTAs",
+      "Fast Turnaround",
+      "Campaign-Ready",
+    ],
+    image: mockup,
+  },
 
-    {
-      number: "04",
-      name: "UI/UX Design",
-      description:
-        "User interface and experience design for web applications, dashboards, mobile apps, and digital products. I create wireframes, prototypes, and high-fidelity designs grounded in user research and usability principles. My process includes information architecture, user flows, and iterative design to ensure interfaces that are both functional and visually compelling.",
-      tags: [
-        "Web Applications",
-        "Dashboard Design",
-        "Mobile App UI",
-        "Wireframing",
-        "Prototyping",
-        "User Research",
-      ],
-      image: mockup2,
-    },
+  {
+    number: "04",
+    name: "Dashboard & Web App UI Design",
+    description:
+      "UI design for dashboards, admin panels, and data-heavy web applications. I design clear information hierarchies, intuitive navigation patterns, and component systems that make complex data easy to read and act on. Outputs include annotated Figma files and design systems ready for developer handoff.",
+    tags: [
+      "Dashboard UI",
+      "Admin Panels",
+      "Data Visualization",
+      "Component Systems",
+      "Design Handoff",
+      "Web App UI",
+    ],
+    image: mockup2,
+  },
 
-    {
-      number: "05",
-      name: "Interactive Web Experiences",
-      description:
-        "Engaging websites with smooth animations and interactive elements that enhance user experience. Using modern tools like GSAP, Framer Motion, and Three.js, I create scroll-triggered animations, micro-interactions, and dynamic visual effects that make websites feel polished and memorable while maintaining performance and usability.",
-      tags: [
-        "GSAP Animations",
-        "Scroll Effects",
-        "Micro-interactions",
-        "3D Elements",
-        "Motion Design",
-        "Performance Balanced",
-      ],
+  {
+    number: "05",
+    name: "Website Redesign & Modernization",
+    description:
+      "Transforming outdated websites into modern, effective digital experiences. I audit existing sites for design, UX, and performance gaps — then redesign with updated visuals, improved navigation, better mobile responsiveness, and a cleaner overall structure. All while preserving what's already working with your brand.",
+    tags: [
+      "UX Audit",
+      "Visual Refresh",
+      "Mobile Optimization",
+      "Modern Standards",
+      "Brand Consistency",
+      "Performance Updates",
+    ],
+    image: mockup3,
+  },
+
+  {
+    number: "06",
+    name: "Interactive Web Experiences",
+    description:
+      "Websites with scroll-triggered animations, micro-interactions, and dynamic motion that make the experience feel premium and memorable. I use GSAP and Framer Motion to implement smooth, performance-conscious animations — from parallax effects and reveal sequences to complex timeline-driven interactions.",
+    tags: [
+      "GSAP",
+      "Framer Motion",
+      "Scroll Animations",
+      "Micro-interactions",
+      "Parallax Effects",
+      "Motion Design",
+    ],
     image: mockup4,
-    },
+  },
 
-    {
-      number: "06",
-      name: "Mobile App Design",
-      description:
-        "End-to-end UI/UX design for iOS and Android mobile applications. I design intuitive, platform-native interfaces with a focus on usability, accessibility, and visual consistency. From user flows and wireframes to high-fidelity Figma prototypes, I create mobile experiences that feel natural in the hand and polished on screen.",
-      tags: [
-        "iOS & Android UI",
-        "Figma Prototyping",
-        "User Flows",
-        "Mobile-first",
-        "Accessibility",
-        "Design Systems",
-      ],
-      image: mockup2,
-    },
-  ];
+  {
+    number: "07",
+    name: "Mobile App UI Design",
+    description:
+      "End-to-end UI/UX design for iOS and Android mobile applications. I design platform-native interfaces with a focus on usability, accessibility, and visual polish — from user flows and wireframes to high-fidelity Figma prototypes with interactive components and handoff-ready specs.",
+    tags: [
+      "iOS & Android UI",
+      "Figma Prototyping",
+      "Mobile-First",
+      "User Flows",
+      "Accessibility",
+      "Design Systems",
+    ],
+    image: mockup2,
+  },
+];
 const handlePreloaderComplete = () => {
   setShowPreloader(false);
 
@@ -737,17 +755,20 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, [pageReady]);
 useEffect(() => {
+  const root = document.documentElement;
   if (!pageReady) {
-    document.body.style.overflow = "hidden";
+    root.classList.add("preloader-lock");
+    document.body.classList.add("preloader-lock");
   } else {
-    // ✅ Slight delay bago i-restore overflow
     setTimeout(() => {
-      document.body.style.overflow = "auto";
+      root.classList.remove("preloader-lock");
+      document.body.classList.remove("preloader-lock");
     }, 100);
   }
 
   return () => {
-    document.body.style.overflow = "";
+    root.classList.remove("preloader-lock");
+    document.body.classList.remove("preloader-lock");
   };
 }, [pageReady]);
 
@@ -760,7 +781,7 @@ useEffect(() => {
     {
       question: "What's your background in UI/UX and web design?",
       answer:
-        "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 10+ projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
+        "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 6 projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
     },
     {
       question: "What does your design process look like?",
@@ -1052,8 +1073,8 @@ useEffect(() => {
                   </h1>
                   <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
-                      <span className="stat-number">10+</span>
-                       <span className="stat-label">Projects Delivered</span>
+                      <span className="stat-number">6</span>
+                       <span className="stat-label">Projects</span>
                     </div>
                     <div className="stat-item">
                       <span className="stat-number">1+</span>
@@ -1145,38 +1166,20 @@ useEffect(() => {
                 {service.description}
               </p>
 
-              {/* 🔥 TAGS WITH ANIMATION */}
- <motion.div
-  className="service-tags"
-  initial={false} // 🔥 REMOVE INITIAL DELAY
-  animate={openService === index ? "show" : "hidden"}
-  variants={{
-    hidden: {},
-    show: {
-      transition: {
-        staggerChildren: 0.15, // medyo slow pa rin
-        delayChildren: 0, // 🔥 NO DELAY
-      },
-    },
-  }}
->
-                {service.tags.map((tag, tagIndex) => (
-       <motion.span
-  key={tagIndex}
-  className="tag"
-  variants={{
-    hidden: { opacity: 0, y: 15, scale: 0.95 },
-    show: { opacity: 1, y: 0, scale: 1 },
-  }}
-  transition={{
-    duration: 0.5,
-    ease: "easeOut",
-  }}
->
-                    {tag}
-                  </motion.span>
-                ))}
-              </motion.div>
+{/* Tags — CSS-only, no Framer conflict */}
+<div className="service-tags">
+  {service.tags.map((tag, tagIndex) => (
+    <span
+      key={tagIndex}
+      className="tag"
+      style={{
+        transitionDelay: openService === index ? `${tagIndex * 0.06}s` : "0s",
+      }}
+    >
+      {tag}
+    </span>
+  ))}
+</div>
             </div>
           </div>
         ))}
@@ -1402,11 +1405,7 @@ useEffect(() => {
                       from first research question to shipped product.
                     </span>
                   </h2>
-       <p className="process-subtitle split-animate">
-                    Every project follows the same discipline: understand the user
-                    before touching a design tool, structure before style,
-                    and validate before shipping.
-                  </p>
+
                 </div>
               </div>
               <div>
@@ -1488,8 +1487,8 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">UI/UX Design & Prototyping</h3>
-                         <h3 className="step-title">Wireframe & Prototype</h3>
+                        <h3 className="step-title">UI/UX Design with Wireframing & Prototyping</h3>
+                     
                         <p className="step-description">
                           Low-fidelity wireframes lock in layout, hierarchy, and how screens connect — fast and cheap to change. These become interactive Figma prototypes for early usability testing, validating flows before a single line of code is written.
                         </p>
@@ -1587,7 +1586,7 @@ useEffect(() => {
                 </div>
                 <div className="about-stats ">
                   <div className="stats-item">
-                    <h3 className="stats-number">10+</h3>
+                    <h3 className="stats-number">6</h3>
                     <img
                       src={projects}
                       alt="projects watermark"
