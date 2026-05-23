@@ -16,6 +16,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .portfolio-container {
   min-height: 100vh;
   background-image: var(--hero-bg-image);
@@ -983,7 +996,7 @@ body.menu-open {
 
   text-align: center;
   color: #2a2a2a;
-  max-width: 1900px;
+  max-width: 1200px;
 }
 
 .about-title-bold {

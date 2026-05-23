@@ -24,7 +24,7 @@ import logo from "../assets/logo.png";
 import mockup1 from "../assets/mockup1.jpg";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
-import mockup2 from "../assets/wireframe.jpeg";
+import mockup2 from "../assets/wireframe.jpeg";import grad from "../assets/grad.jpg";
 import "./Portfolio.css";
 
     import TiltedCard from "./TiltedCard";
@@ -620,7 +620,7 @@ built with code.
 
                     <div className="hero-card hero-card-entry">
                       <TiltedCard
-                        imageSrc={mockup4}
+                        imageSrc={grad}
                         altText="Klent Russell Aguilar"
                         captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
                         containerHeight="clamp(240px, 70vw, 520px)"

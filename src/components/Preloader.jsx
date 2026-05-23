@@ -112,7 +112,7 @@ gsap.set(logoRef.current, {
                    
                         <span>UI/UX DESIGNER</span>
                         <span className="separator">·</span>
-                        <span>FRONTEND DEV</span>
+                        <span>WEB DESIGNER</span>
                     </div>
                 </div>
             </div>

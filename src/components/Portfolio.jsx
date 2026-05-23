@@ -45,6 +45,7 @@ import mockup1 from "../assets/mockup1.jpg";
 import mockup2 from "../assets/mockup2.jpg";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
+import grad from "../assets/grad.jpg";
 import soon from "../assets/soon.png";
 import TiltedCard from "./TiltedCard";
 import useSplitAnimateReveal from "./useSplitAnimateReveal";
@@ -1069,7 +1070,7 @@ useEffect(() => {
                   >
                     I turn{" "}
                     <span className="highlight">interfaces</span>{" "}
-                  into experiences — from pixel to productions
+                  into experiences from <br /> pixel to productions
                   </h1>
                   <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
@@ -1099,7 +1100,7 @@ useEffect(() => {
 
                 <div className="hero-card hero-card-entry">
                   <TiltedCard
-                    imageSrc={mockup4}
+                    imageSrc={grad}
                     altText="Klent Russell Aguilar"
                     captionText="Web / UI/UX Designer  | Klent Russell Aguilar"
                     containerHeight="clamp(240px, 70vw, 520px)"
