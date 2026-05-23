@@ -433,8 +433,8 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
       return (
         <>
           <nav
-            className={`navbar ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
-          >
+              className={`navbar navbar-static ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
+            >
             <div className="logo">
               <a href="#heros">
                 <img src={logo} alt="Logo" />
@@ -917,17 +917,18 @@ research-grounded decisions and clean, intentional execution.
                 <section className="parallax-reveal-section panels">
                   <div className="parallax-reveal-sticky">
                     <div className="parallax-reveal-card">
-                      <h2 className="cta-title">
-                  Looking for a <span className="highlight">UI/UX designer</span> who understands both design and code?
-                </h2>
+                   <h2 className="cta-title">
+  Looking for a <span className="highlight">UI/UX designer</span>?
+</h2>
 
-                      <p className="cta-description split-animate">
-                     I'm actively seeking UI/UX and web design roles. I bring research-grounded design,
-                  Figma-to-code capability, and genuine enthusiasm for every project I take on. If
-                  you're hiring or want to collaborate — I'd love to hear from you.
-                      </p>
+                    <p className="cta-description split-animate">
+  I create user-focused digital experiences that combine research, design strategy, and smooth Figma-to-code execution. Always ready to bring ideas to life in UI/UX and web design projects.
+</p>
 
-                      <a href="/contact-me" className="cta-button">Let's Work Together</a>
+                      <div className="cta-actions">
+                        <a href="/contact-me" className="cta-button">Let's Work Together</a>
+                        <a href="/resume.pdf" className="cta-buttons1" download>Download CV</a>
+                      </div>
                     </div>
                   </div>
                 </section>

@@ -19,6 +19,15 @@ import {
     SiReact
 } from "react-icons/si";
 import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
+import {
+  HiOutlineMail,
+  HiOutlinePhone,
+  HiOutlineChatAlt2,
+  HiOutlineClipboardCheck,
+  HiOutlineClipboardCopy,
+} from "react-icons/hi";
+import { BsBriefcase, BsPalette, BsArrowRepeat } from "react-icons/bs";
+import { IoCheckmarkCircle } from "react-icons/io5";
 import mockup from "../assets/mockup.jpg";
 import mockup1 from "../assets/mockup1.jpg";
 import mockup3 from "../assets/mockup3.png";
@@ -28,8 +37,10 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 gsap.registerPlugin(SplitText);
 
 function Contact() {
-  const [showPreloader, setShowPreloader] = useState(true);
-  const [pageReady, setPageReady] = useState(false);
+const [showPreloader, setShowPreloader] = useState(true);
+const [pageReady, setPageReady] = useState(false);
+const [pageVisible, setPageVisible] = useState(false);
+const pageRef = useRef(null);
   const containerRef = useRef(null);
   const projectsData = [
     { image: mockup2, title: "Martin Architectural" },
@@ -516,7 +527,26 @@ function Contact() {
 
 
 
-  const [openFAQ, setOpenFAQ] = useState(null);
+const [openFAQ, setOpenFAQ] = useState(null);
+const [engagementType, setEngagementType] = useState("hire");
+const [copiedItem, setCopiedItem] = useState(null);
+
+const handleCopy = async (text, item) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    setCopiedItem(item);
+    setTimeout(() => setCopiedItem(null), 2000);
+  } catch {
+    const el = document.createElement("textarea");
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    setCopiedItem(item);
+    setTimeout(() => setCopiedItem(null), 2000);
+  }
+};
 
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
@@ -573,6 +603,86 @@ useEffect(() => {
   window.addEventListener("resize", check);
   return () => window.removeEventListener("resize", check);
 }, []);
+// Page load entrance animation
+  useEffect(() => {
+    const tl = gsap.timeline({ delay: 0.15 });
+
+tl.fromTo(
+      ".contact-back-btn",
+      { opacity: 0, x: -20 },
+      { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
+    )
+    .fromTo(
+      ".contact-hero-eyebrow",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }
+    )
+    .fromTo(
+      ".contact-hero-title",
+      { opacity: 0, y: 60, skewY: 3 },
+      { opacity: 1, y: 0, skewY: 0, duration: 1, ease: "expo.out" },
+      "-=0.4"
+    )
+    .fromTo(
+      ".contact-hero-sub",
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+      "-=0.5"
+    )
+    .fromTo(
+      ".services-divider",
+      { scaleX: 0, transformOrigin: "left center" },
+      { scaleX: 1, duration: 0.8, ease: "power2.out" },
+      "-=0.4"
+    )
+    .fromTo(
+      ".contact-picker-label",
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+      "-=0.3"
+    )
+    .fromTo(
+      ".contact-pick-card",
+      { opacity: 0, y: 40, scale: 0.96 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.65, ease: "power3.out",
+        stagger: 0.1
+      },
+      "-=0.3"
+    );
+
+    // Scroll-triggered animations for form section
+    gsap.fromTo(
+      ".contact-left",
+      { opacity: 0, x: -50 },
+      {
+        opacity: 1, x: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: ".contact-left", start: "top 80%", once: true }
+      }
+    );
+
+    gsap.fromTo(
+      ".contact-right",
+      { opacity: 0, x: 50 },
+      {
+        opacity: 1, x: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: ".contact-right", start: "top 80%", once: true }
+      }
+    );
+
+    gsap.fromTo(
+      ".form-group",
+      { opacity: 0, y: 25 },
+      {
+        opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.07,
+        scrollTrigger: { trigger: ".form-grid", start: "top 80%", once: true }
+      }
+    );
+
+    return () => tl.kill();
+  }, []);
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -639,7 +749,12 @@ useEffect(() => {
             <nav
               className={`navbar ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}
             >
-              <div className="logo1"></div>
+   <a href="/" className="contact-back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5M5 12l7 7M5 12l7-7"/>
+                </svg>
+                <span>Back to Portfolio</span>
+              </a>
 
               <button
                 className={`mobile-menu-button ${isMobileMenuOpen ? "open" : ""}`}
@@ -741,179 +856,307 @@ useEffect(() => {
                   klentaguilar@gmail.com
                 </a>
               </div>
-            </div>     
-            {/* Services Section */}
-            <section className="about-section ">
-              <div className="services-container">
-                {/* HEADER */}
-                <div className="services-header">
-                  <h2 className="works-title">
-                    Let's <br />
-                    Collaborate
-                  </h2>
-                </div>
-                <div className="services-content">
-                  <span className="services-index">(GET IN TOUCH — 01)</span>
+            </div>    
+             
+ {/* Contact Section */}
+<section className="about-section contact-page-section">
+  <div className="services-container">
 
-                  <h3 className="services-subtitless split-animate">
-                    Transforming brands through{" "}
-                    <span className="services-subtitle-accent">
-                      purposeful design and strategic digital experiences.
-                    </span>
-                  </h3>
-                </div>
-              </div>
-              <div className="contact-form-wrapper">
-                <div className="contact-container">
-                  {/* Left Section */}
-                  <div className="contact-left">
-                    <div className="contact-header">
-                      <h2>We'd love to hear from you!</h2>
-                    </div>
+    {/* HEADER */}
+    <span className="services-index contact-hero-eyebrow">GET IN TOUCH — 01</span>
+    <div className="contact-head-row">
+      <h1 className="works-title contact-hero-title">
+        Let's <br />
+        Collaborate
+      </h1>
+      <p className="contact-head-sub contact-hero-sub">
+        Whether you're hiring, launching a project, or need ongoing design support — I'm available and ready to build something great together.
+      </p>
+    </div>
+    <div className="services-divider" />
 
-                    <div className="contact-options">
-                      <a
-                        href="mailto:klentaguilar@gmail.com"
-                        className="contact-option"
-                      >
-                        <div className="contact-option-icon">
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" />
-                          </svg>
-                        </div>
+    {/* ENGAGEMENT TYPE PICKER */}
+    <span className="contact-picker-label">How can I help you?</span>
+    <div className="contact-picker-grid">
 
-                        <div className="contact-option-content">
-                          <span className="contact-option-text">Email</span>
-                          <span className="contact-option-email">
-                            klentaguilar@gmail.com
-                          </span>
-                        </div>
-                      </a>
+  <div
+        className={`contact-pick-card ${engagementType === "hire" ? "contact-pick-card--active" : ""}`}
+        onClick={() => setEngagementType("hire")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setEngagementType("hire")}
+      >
+        <div className="contact-pick-icon-wrap">
+          <div className="contact-pick-icon"><BsBriefcase /></div>
+          {engagementType === "hire" && <span className="contact-pick-check">✓</span>}
+        </div>
+        <p className="contact-pick-title">Hire me full-time</p>
+        <p className="contact-pick-desc">Looking for a UI/UX or web designer to join your team. I do design + React frontend.</p>
+        <span className="contact-pick-tag contact-pick-tag--hire">Corporate / HR</span>
+      </div>
 
-                      <a href="tel:+1234567890" className="contact-option">
-                        <div className="contact-option-icon">
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" />
-                          </svg>
-                        </div>
-                        <div className="contact-option-content">
-                          <span className="contact-option-text">Phone</span>
-                          <span className="contact-option-email">
-                            (+63) 967-217-965
-                          </span>
-                        </div>
-                      </a>
+      <div
+        className={`contact-pick-card ${engagementType === "project" ? "contact-pick-card--active" : ""}`}
+        onClick={() => setEngagementType("project")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setEngagementType("project")}
+      >
+        <div className="contact-pick-icon-wrap">
+          <div className="contact-pick-icon"><BsPalette /></div>
+          {engagementType === "project" && <span className="contact-pick-check">✓</span>}
+        </div>
+        <p className="contact-pick-title">Commission a project</p>
+        <p className="contact-pick-desc">Landing page, website, dashboard, or UI/UX — wireframe to deployed product.</p>
+        <span className="contact-pick-tag contact-pick-tag--project">Freelance · Open to discuss</span>
+      </div>
 
-                      <a href="#contact-form" className="contact-option">
-                        <div className="contact-option-icon">
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M11 5H6C4.89543 5 4 5.89543 4 7V19L7.5 16.5H18C19.1046 16.5 20 15.6046 20 14.5V13M11 5L14 2L17 5M11 5V10C11 11.1046 11.8954 12 13 12H14M14 2V7C14 8.10457 14.8954 9 16 9H17M14 2H18C19.1046 2 20 2.89543 20 4V9M20 9L17 12" />
-                          </svg>
-                        </div>
-                        <span className="contact-option-text">Write to Us</span>
-                      </a>
-                    </div>
-                  </div>
+      <div
+        className={`contact-pick-card ${engagementType === "retainer" ? "contact-pick-card--active" : ""}`}
+        onClick={() => setEngagementType("retainer")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setEngagementType("retainer")}
+      >
+        <div className="contact-pick-icon-wrap">
+          <div className="contact-pick-icon"><BsArrowRepeat /></div>
+          {engagementType === "retainer" && <span className="contact-pick-check">✓</span>}
+        </div>
+        <p className="contact-pick-title">Ongoing retainer</p>
+        <p className="contact-pick-desc">Weekly design tasks, UX audits, new sections, and React updates on a regular basis.</p>
+        <span className="contact-pick-tag contact-pick-tag--retainer">Retainer · Flexible terms</span>
+      </div>
+    </div>
 
-                  {/* OR Divider */}
-                  <div className="divider-section"></div>
+  </div>
+  <div className="contact-form-wrapper">
+    <div className="contact-container">
 
-                  {/* Right Section - Form */}
-                  <div className="contact-right" id="contact-form">
-                    <div className="form-header"></div>
+      {/* Left Section */}
+      <div className="contact-left">
+        <span className="contact-left-eyebrow">Reach out directly</span>
 
-                    <form className="form-grid">
-                      <div className="form-group">
-                        <label className="form-label" htmlFor="yourName">
-                          Your Name <span className="required">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          id="yourName"
-                          name="yourName"
-                          className="form-input"
-                          required
-                        />
-                      </div>
+        <div className="contact-options">
 
-                      <div className="form-group">
-                        <label className="form-label" htmlFor="company">
-                          Company <span className="required">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          id="company"
-                          name="company"
-                          className="form-input"
-                          required
-                        />
-                      </div>
+          {/* EMAIL — clickable to mailto, copy button separate */}
+          <div className="contact-option contact-option--copyable">
+            <div className="contact-option-icon">
+              <HiOutlineMail />
+            </div>
+            <div className="contact-option-content">
+              <span className="contact-option-label">Email</span>
+              <a href="mailto:klentaguilar@gmail.com" className="contact-option-value">
+                klentaguilar@gmail.com
+              </a>
+            </div>
+            <div className="contact-copy-wrapper">
+              <button
+                className="contact-copy-btn"
+                onClick={() => handleCopy("klentaguilar@gmail.com", "email")}
+                aria-label="Copy email address"
+              >
+                {copiedItem === "email"
+                  ? <IoCheckmarkCircle className="copy-icon copy-icon--success" />
+                  : <HiOutlineClipboardCopy className="copy-icon" />
+                }
+              </button>
+              <span className={`copy-tooltip ${copiedItem === "email" ? "copy-tooltip--visible" : ""}`}>
+                Copied!
+              </span>
+            </div>
+          </div>
 
-                      <div className="form-group">
-                        <label className="form-label" htmlFor="telephone">
-                          Telephone <span className="required">*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          id="telephone"
-                          name="telephone"
-                          className="form-input"
-                          required
-                        />
-                      </div>
+          {/* PHONE — clickable to tel, copy button separate */}
+          <div className="contact-option contact-option--copyable">
+            <div className="contact-option-icon">
+              <HiOutlinePhone />
+            </div>
+            <div className="contact-option-content">
+              <span className="contact-option-label">Phone</span>
+              <a href="tel:+639672179650" className="contact-option-value">
+                (+63) 967-217-965
+              </a>
+            </div>
+            <div className="contact-copy-wrapper">
+              <button
+                className="contact-copy-btn"
+                onClick={() => handleCopy("+639672179650", "phone")}
+                aria-label="Copy phone number"
+              >
+                {copiedItem === "phone"
+                  ? <IoCheckmarkCircle className="copy-icon copy-icon--success" />
+                  : <HiOutlineClipboardCopy className="copy-icon" />
+                }
+              </button>
+              <span className={`copy-tooltip ${copiedItem === "phone" ? "copy-tooltip--visible" : ""}`}>
+                Copied!
+              </span>
+            </div>
+          </div>
 
-                      <div className="form-group">
-                        <label className="form-label" htmlFor="email">
-                          Email <span className="required">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          className="form-input"
-                          required
-                        />
-                      </div>
+          {/* FORM LINK */}
+          <a href="#contact-form" className="contact-option contact-option--last">
+            <div className="contact-option-icon">
+              <HiOutlineChatAlt2 />
+            </div>
+            <div className="contact-option-content">
+              <span className="contact-option-label">Send a message</span>
+              <span className="contact-option-value contact-option-value--muted">Fill the form →</span>
+            </div>
+          </a>
 
-                      <div className="form-group full-width">
-                        <label className="form-label" htmlFor="yourEnquiry">
-                          Your Enquiry <span className="required">*</span>
-                        </label>
-                        <textarea
-                          id="yourEnquiry"
-                          name="yourEnquiry"
-                          className="form-textarea"
-                          required
-                        ></textarea>
-                      </div>
+        </div>
 
-                      <div className="recaptcha-wrapper">
-                        <div className="recaptcha-placeholder">
-                          <input type="checkbox" id="recaptcha" />
-                          <label htmlFor="recaptcha">I'm not a robot</label>
-                          <div className="recaptcha-logo">reCAPTCHA</div>
-                        </div>
-                      </div>
+        {/* Availability badge */}
+        <div className="contact-avail-box">
+          <div className="contact-avail-row">
+            <span className="contact-avail-dot" />
+            <span className="contact-avail-status">Currently available</span>
+          </div>
+          <p className="contact-avail-detail">
+            Replies within 24hrs · Manila, PH (GMT+8)
+          </p>
+        </div>
+      </div>
 
-                      <div className="submit-wrapper">
-                        <button type="submit" className="cta-buttons">
-                          Send
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </section>
+      {/* Vertical Divider */}
+      <div className="contact-vline"></div>
+
+      {/* Right Section - Form */}
+      <div className="contact-right" id="contact-form">
+        <span className="contact-form-eyebrow">Send a message</span>
+
+        <form className="form-grid">
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="yourName">
+              Your Name <span className="required">*</span>
+            </label>
+            <input type="text" id="yourName" name="yourName" className="form-input" placeholder="Juan dela Cruz" required />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="company">
+              Company <span className="required">*</span>
+            </label>
+            <input type="text" id="company" name="company" className="form-input" placeholder="Acme Corp" required />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="telephone">
+              Telephone <span className="required">*</span>
+            </label>
+            <input type="tel" id="telephone" name="telephone" className="form-input" placeholder="+63 912 345 6789" required />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email <span className="required">*</span>
+            </label>
+            <input type="email" id="email" name="email" className="form-input" placeholder="hello@company.com" required />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="budget">
+              {engagementType === "hire" ? "Role / Level" : engagementType === "retainer" ? "Support Level" : "Project Type"}
+            </label>
+          <select id="budget" name="budget" className="form-input form-select">
+              <option value="">Select a range</option>
+              {engagementType === "hire" ? (
+                <>
+                  <option value="internship">Internship / OJT</option>
+                  <option value="entry">Entry level — open to discuss</option>
+                  <option value="junior">Junior / Associate level</option>
+                  <option value="discuss">Let's talk about it</option>
+                </>
+              ) : engagementType === "retainer" ? (
+                <>
+                  <option value="light">Light support — occasional updates</option>
+                  <option value="regular">Regular — weekly design tasks</option>
+                  <option value="heavy">Full support — ongoing product work</option>
+                  <option value="discuss">Open to discuss</option>
+                </>
+              ) : (
+                <>
+                  <option value="landing">Landing page / Single page</option>
+                  <option value="website">Multi-page website</option>
+                  <option value="uiux">UI/UX design only (Figma)</option>
+                  <option value="webapp">Web app / Dashboard</option>
+                  <option value="discuss">Not sure yet — let's talk</option>
+                </>
+              )}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="timeline">
+              {engagementType === "hire" ? "Desired Start Date" : "Timeline"}
+            </label>
+         <select id="timeline" name="timeline" className="form-input form-select">
+              <option value="">
+                {engagementType === "hire" ? "When would I start?" : "When do you need this?"}
+              </option>
+              {engagementType === "hire" ? (
+                <>
+                  <option value="immediate">Available now</option>
+                  <option value="2weeks">Within 2 weeks</option>
+                  <option value="1month">Next month</option>
+                  <option value="flexible">Flexible — let's align</option>
+                </>
+              ) : (
+                <>
+                  <option value="asap">As soon as possible</option>
+                  <option value="2weeks">1 – 2 weeks</option>
+                  <option value="1month">Within a month</option>
+                  <option value="3months">1 – 3 months</option>
+                  <option value="flexible">No hard deadline</option>
+                </>
+              )}
+            </select>
+          </div>
+
+          <div className="form-group full-width">
+            <label className="form-label" htmlFor="yourEnquiry">
+              Your Enquiry <span className="required">*</span>
+            </label>
+            <textarea
+              id="yourEnquiry"
+              name="yourEnquiry"
+              className="form-textarea"
+           placeholder={
+                engagementType === "hire"
+                  ? "Tell me about the role, the team, and what you're looking for. I do UI/UX design, web design, and React frontend development."
+                  : engagementType === "retainer"
+                  ? "What kind of ongoing support do you need? (e.g. design iterations, new pages, UX audits, React updates)"
+                  : "Tell me about your project — is it a landing page, website, UI/UX design, dashboard, or something else? Goals, audience, timeline."
+              }
+              required
+            />
+          </div>
+
+          <div className="recaptcha-wrapper">
+            <div className="recaptcha-placeholder">
+              <input type="checkbox" id="recaptcha" />
+              <label htmlFor="recaptcha">I'm not a robot</label>
+              <div className="recaptcha-logo">reCAPTCHA</div>
+            </div>
+          </div>
+
+          <div className="submit-wrapper">
+         <p className="form-micro-copy">
+                Based in Malolos, Bulacan — available remotely. Replies within 24hrs.
+              </p>
+            <button type="submit" className="cta-buttons">
+              Send Message
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
           </div>
 
     

@@ -4,11 +4,11 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
+import "./Portfolio.css";
 import experienceIcon from "../assets/experience.svg";
 import projects from "../assets/projects.svg";
 import LogoLoop from "./LogoLoop";
 import Maillards from "./Maillards";
-import "./Portfolio.css";
 import Preloader from "./Preloader"; // ADD THIS
 
 import {
@@ -47,6 +47,18 @@ import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
 import grad from "../assets/grad.jpg";
 import soon from "../assets/soon.png";
+import bangkalProject from "../assets/bangkalproject.png";
+import virielleproject from "../assets/virielleproject.png";
+import laconslanetproject from "../assets/laconslanetproject.png";
+import arielleproject from "../assets/arielleproject.png";
+import bangkaLogo from "../assets/bangka.png";
+import ladyLogo from "../assets/lady.png";
+import laconslanetLogo from "../assets/laconslanet.png";
+import viriellesLogo from "../assets/virielles.png";
+import nammerAvatar from "../assets/nammer1.png";
+import ladyAvatar from "../assets/ladyclient.jpg";
+import czarAvatar from "../assets/czar.jpg";
+import ellaAvatar from "../assets/ella.jpg";
 import TiltedCard from "./TiltedCard";
 import useSplitAnimateReveal from "./useSplitAnimateReveal";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
@@ -86,25 +98,14 @@ const PROCESS_STEPS = [
 
 function Portfolio() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [pf_activeIdx, setPf_activeIdx] = useState(0);
-  const pf_trackRef = useRef(null);
 
-
-  useEffect(() => {
-    if (!pf_trackRef.current) return;
-    const card = pf_trackRef.current.querySelector(".project-card");
-    if (!card) return;
-    const gap = parseFloat(getComputedStyle(pf_trackRef.current).gap) || 24;
-    pf_trackRef.current.style.transform =
-      `translateX(-${pf_activeIdx * (card.offsetWidth + gap)}px)`;
-  }, [pf_activeIdx]);
   useEffect(() => {
     const check = () => setIsTouchDevice(window.innerWidth <= 1024);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-  const [showPreloader, setShowPreloader] = useState(true);
+
   const [pageReady, setPageReady] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
   const containerRef = useRef(null);
@@ -132,11 +133,48 @@ function Portfolio() {
 
     return () => ctx.revert();
   }, []);
+  useEffect(() => {
+    if (!pageReady) return undefined;
+    const ctx = gsap.context(() => {
 
-  const [rw_idx, setRw_idx] = useState(0);
-  const rw_total = 4;
+      // Cards fade up on scroll — clean, no scale
+      gsap.utils.toArray(".rw-card").forEach((card, i) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: "power3.out",
+            delay: (i % 3) * 0.07,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 92%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+
+      });
+
+      // Divider draw
+      gsap.fromTo(".rw-top-divider",
+        { scaleX: 0, transformOrigin: "left center" },
+        {
+          scaleX: 1,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: { trigger: ".rw-top-divider", start: "top 90%" },
+        }
+      );
+
+    });
+    return () => ctx.revert();
+  }, [pageReady]);
+  const [showPreloader, setShowPreloader] = useState(true);
   const [crs_active, setCrs_active] = useState(false);
-  const rw_trackRef = useRef(null);
+
   const crs_ref = useRef(null);
   const crs_areaRef = useRef(null);
   const crs_raf = useRef(null);
@@ -144,26 +182,7 @@ function Portfolio() {
   const crs_cur = useRef({ x: 0, y: 0 });
 
 
-  useEffect(() => {
-    if (!rw_trackRef.current) return;
 
-    const cards = rw_trackRef.current.querySelectorAll(".rw-card");
-    if (!cards.length) return;
-
-    const card = cards[0];
-    const gap = parseFloat(getComputedStyle(rw_trackRef.current).gap) || 24;
-    const wrapEl = rw_trackRef.current.parentElement;
-    const wrapStyles = getComputedStyle(wrapEl);
-    const paddingLeft = parseFloat(wrapStyles.paddingLeft) || 0;
-    const paddingRight = parseFloat(wrapStyles.paddingRight) || 0;
-    const wrapWidth = Math.max(0, wrapEl.offsetWidth - paddingLeft - paddingRight);
-    const trackWidth = cards.length * (card.offsetWidth + gap) - gap;
-
-    const maxTranslate = Math.max(0, trackWidth - wrapWidth);
-    const translate = Math.min(rw_idx * (card.offsetWidth + gap), maxTranslate);
-
-    rw_trackRef.current.style.transform = `translateX(-${translate}px)`;
-  }, [rw_idx]);
 
   useEffect(() => {
     if (isTouchDevice) return;
@@ -192,26 +211,10 @@ function Portfolio() {
 
 
 
-  const handleCardMouseMove = (e, cardRef) => {
-    const thumb = cardRef.current?.querySelector(".rw-card__thumb");
-    const demo = cardRef.current?.querySelector(".rw-card__demo");
-    if (!thumb || !demo) return;
 
-    const rect = thumb.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
 
-    demo.style.left = `${x}px`;
-    demo.style.top = `${y}px`;
-  };
 
-  // Refs for each card
-  const card1Ref = useRef(null);
-  const card2Ref = useRef(null);
-  const card3Ref = useRef(null);
-  const card4Ref = useRef(null);
- 
-const scrollFillRef = useRef(null);
+  const scrollFillRef = useRef(null);
 
 
 
@@ -415,7 +418,7 @@ const scrollFillRef = useRef(null);
   const toggleService = (index) => {
     setOpenService(openService === index ? null : index);
   };
-const lastScrollRef = useRef(0);
+  const lastScrollRef = useRef(0);
 
   useEffect(() => {
     if (!pageReady) return undefined;
@@ -626,154 +629,291 @@ const lastScrollRef = useRef(0);
   }, []);
 
   const services = [
-  {
-    number: "01",
-    name: "UI/UX Design — Layout, Wireframe & Prototype",
-    description:
-      "Full end-to-end UI/UX design starting from low-fidelity wireframes to high-fidelity Figma prototypes. I map out user flows, information architecture, and interaction patterns before applying the visual layer — so every screen is grounded in usability, not just aesthetics. Covers web apps, mobile apps, dashboards, and digital products.",
-    tags: [
-      "Wireframing",
-      "Prototyping",
-      "User Flows",
-      "High-Fidelity UI",
-      "Figma",
-      "Interaction Design",
-    ],
-    image: mockup2,
-  },
+    {
+      number: "01",
+      name: "UI/UX Design — Layout, Wireframe & Prototype",
+      description:
+        "Full end-to-end UI/UX design starting from low-fidelity wireframes to high-fidelity Figma prototypes. I map out user flows, information architecture, and interaction patterns before applying the visual layer — so every screen is grounded in usability, not just aesthetics. Covers web apps, mobile apps, dashboards, and digital products.",
+      tags: [
+        "Wireframing",
+        "Prototyping",
+        "User Flows",
+        "High-Fidelity UI",
+        "Figma",
+        "Interaction Design",
+      ],
+      image: mockup2,
+    },
 
-  {
-    number: "02",
-    name: "Web Design & Development",
-    description:
-      "Custom website design and frontend development — from concept to deployed product. I design clean, responsive layouts and build them with React, Tailwind CSS, and modern frontend tools. Whether it's a business site, portfolio, or multi-page web presence, I handle the full pipeline from design to live deployment.",
-    tags: [
-      "React",
-      "Tailwind CSS",
-      "Responsive Design",
-      "Frontend Development",
-      "Deployment",
-      "Performance Optimized",
-    ],
-    image: mockup1,
-  },
+    {
+      number: "02",
+      name: "Web Design & Development",
+      description:
+        "Custom website design and frontend development — from concept to deployed product. I design clean, responsive layouts and build them with React, Tailwind CSS, and modern frontend tools. Whether it's a business site, portfolio, or multi-page web presence, I handle the full pipeline from design to live deployment.",
+      tags: [
+        "React",
+        "Tailwind CSS",
+        "Responsive Design",
+        "Frontend Development",
+        "Deployment",
+        "Performance Optimized",
+      ],
+      image: mockup1,
+    },
 
-  {
-    number: "03",
-    name: "Landing Page Design & Deployment",
-    description:
-      "Focused, conversion-oriented landing pages designed to capture attention and drive action — then deployed live. I design with clear messaging, strategic CTAs, and mobile-first layouts, then build and ship the page so it's ready from day one. Ideal for product launches, campaigns, freelance clients, and early-stage businesses.",
-    tags: [
-      "Conversion-Focused",
-      "Mobile-First",
-      "Live Deployment",
-      "Strategic CTAs",
-      "Fast Turnaround",
-      "Campaign-Ready",
-    ],
-    image: mockup,
-  },
+    {
+      number: "03",
+      name: "Landing Page Design & Deployment",
+      description:
+        "Focused, conversion-oriented landing pages designed to capture attention and drive action — then deployed live. I design with clear messaging, strategic CTAs, and mobile-first layouts, then build and ship the page so it's ready from day one. Ideal for product launches, campaigns, freelance clients, and early-stage businesses.",
+      tags: [
+        "Conversion-Focused",
+        "Mobile-First",
+        "Live Deployment",
+        "Strategic CTAs",
+        "Fast Turnaround",
+        "Campaign-Ready",
+      ],
+      image: mockup,
+    },
 
-  {
-    number: "04",
-    name: "Dashboard & Web App UI Design",
-    description:
-      "UI design for dashboards, admin panels, and data-heavy web applications. I design clear information hierarchies, intuitive navigation patterns, and component systems that make complex data easy to read and act on. Outputs include annotated Figma files and design systems ready for developer handoff.",
-    tags: [
-      "Dashboard UI",
-      "Admin Panels",
-      "Data Visualization",
-      "Component Systems",
-      "Design Handoff",
-      "Web App UI",
-    ],
-    image: mockup2,
-  },
+    {
+      number: "04",
+      name: "Dashboard & Web App UI Design",
+      description:
+        "UI design for dashboards, admin panels, and data-heavy web applications. I design clear information hierarchies, intuitive navigation patterns, and component systems that make complex data easy to read and act on. Outputs include annotated Figma files and design systems ready for developer handoff.",
+      tags: [
+        "Dashboard UI",
+        "Admin Panels",
+        "Data Visualization",
+        "Component Systems",
+        "Design Handoff",
+        "Web App UI",
+      ],
+      image: mockup2,
+    },
 
-  {
-    number: "05",
-    name: "Website Redesign & Modernization",
-    description:
-      "Transforming outdated websites into modern, effective digital experiences. I audit existing sites for design, UX, and performance gaps — then redesign with updated visuals, improved navigation, better mobile responsiveness, and a cleaner overall structure. All while preserving what's already working with your brand.",
-    tags: [
-      "UX Audit",
-      "Visual Refresh",
-      "Mobile Optimization",
-      "Modern Standards",
-      "Brand Consistency",
-      "Performance Updates",
-    ],
-    image: mockup3,
-  },
+    {
+      number: "05",
+      name: "Website Redesign & Modernization",
+      description:
+        "Transforming outdated websites into modern, effective digital experiences. I audit existing sites for design, UX, and performance gaps — then redesign with updated visuals, improved navigation, better mobile responsiveness, and a cleaner overall structure. All while preserving what's already working with your brand.",
+      tags: [
+        "UX Audit",
+        "Visual Refresh",
+        "Mobile Optimization",
+        "Modern Standards",
+        "Brand Consistency",
+        "Performance Updates",
+      ],
+      image: mockup3,
+    },
 
-  {
-    number: "06",
-    name: "Interactive Web Experiences",
-    description:
-      "Websites with scroll-triggered animations, micro-interactions, and dynamic motion that make the experience feel premium and memorable. I use GSAP and Framer Motion to implement smooth, performance-conscious animations — from parallax effects and reveal sequences to complex timeline-driven interactions.",
-    tags: [
-      "GSAP",
-      "Framer Motion",
-      "Scroll Animations",
-      "Micro-interactions",
-      "Parallax Effects",
-      "Motion Design",
-    ],
-    image: mockup4,
-  },
+    {
+      number: "06",
+      name: "Interactive Web Experiences",
+      description:
+        "Websites with scroll-triggered animations, micro-interactions, and dynamic motion that make the experience feel premium and memorable. I use GSAP and Framer Motion to implement smooth, performance-conscious animations — from parallax effects and reveal sequences to complex timeline-driven interactions.",
+      tags: [
+        "GSAP",
+        "Framer Motion",
+        "Scroll Animations",
+        "Micro-interactions",
+        "Parallax Effects",
+        "Motion Design",
+      ],
+      image: mockup4,
+    },
 
-  {
-    number: "07",
-    name: "Mobile App UI Design",
-    description:
-      "End-to-end UI/UX design for iOS and Android mobile applications. I design platform-native interfaces with a focus on usability, accessibility, and visual polish — from user flows and wireframes to high-fidelity Figma prototypes with interactive components and handoff-ready specs.",
-    tags: [
-      "iOS & Android UI",
-      "Figma Prototyping",
-      "Mobile-First",
-      "User Flows",
-      "Accessibility",
-      "Design Systems",
-    ],
-    image: mockup2,
-  },
-];
-const handlePreloaderComplete = () => {
-  setShowPreloader(false);
+    {
+      number: "07",
+      name: "Mobile App UI Design",
+      description:
+        "End-to-end UI/UX design for iOS and Android mobile applications. I design platform-native interfaces with a focus on usability, accessibility, and visual polish — from user flows and wireframes to high-fidelity Figma prototypes with interactive components and handoff-ready specs.",
+      tags: [
+        "iOS & Android UI",
+        "Figma Prototyping",
+        "Mobile-First",
+        "User Flows",
+        "Accessibility",
+        "Design Systems",
+      ],
+      image: mockup2,
+    },
+  ];
+  const handlePreloaderComplete = () => {
+    setShowPreloader(false);
 
-  setTimeout(() => {
-    setPageReady(true);
-    ScrollTrigger.refresh(true);
-  }, 80);
-};
-useEffect(() => {
-  if (!pageReady) return undefined;
-
-  const timer = setTimeout(() => {
-    setHeroReady(true);
-  }, 100);
-
-  return () => clearTimeout(timer);
-}, [pageReady]);
-useEffect(() => {
-  const root = document.documentElement;
-  if (!pageReady) {
-    root.classList.add("preloader-lock");
-    document.body.classList.add("preloader-lock");
-  } else {
     setTimeout(() => {
+      setPageReady(true);
+      ScrollTrigger.refresh(true);
+    }, 80);
+  };
+  useEffect(() => {
+    if (!pageReady) return undefined;
+
+    const timer = setTimeout(() => {
+      setHeroReady(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [pageReady]);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!pageReady) {
+      root.classList.add("preloader-lock");
+      document.body.classList.add("preloader-lock");
+    } else {
+      setTimeout(() => {
+        root.classList.remove("preloader-lock");
+        document.body.classList.remove("preloader-lock");
+      }, 100);
+    }
+
+    return () => {
       root.classList.remove("preloader-lock");
       document.body.classList.remove("preloader-lock");
-    }, 100);
-  }
-
-  return () => {
-    root.classList.remove("preloader-lock");
-    document.body.classList.remove("preloader-lock");
-  };
-}, [pageReady]);
-
+    };
+  }, [pageReady]);
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [testiIndex, setTestiIndex] = useState(0);
+  const dragRef = useRef(null);
+  const dragStart = useRef(null);
+
+
+
+  const dragOffset = useRef(0);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [exitDir, setExitDir] = useState(null);
+  const [peekIndex, setPeekIndex] = useState(null);
+
+  const handleDragStart = (e) => {
+    dragStart.current = e.type === 'touchstart'
+      ? e.touches[0].clientX
+      : e.clientX;
+    setIsDragging(true);
+    setExitDir(null);
+  };
+
+  const handleDragMove = (e) => {
+    if (dragStart.current === null) return;
+    const currentX = e.type === 'touchmove'
+      ? e.touches[0].clientX
+      : e.clientX;
+    const diff = currentX - dragStart.current;
+    dragOffset.current = diff;
+    setDragX(diff);
+    if (diff < -30 && testiIndex < testimonials.length - 1) {
+      setPeekIndex(testiIndex + 1);
+    } else if (diff > 30 && testiIndex > 0) {
+      setPeekIndex(testiIndex - 1);
+    } else {
+      setPeekIndex(null);
+    }
+  };
+
+  const handleDragEnd = (e) => {
+    if (dragStart.current === null) return;
+    const diff = dragOffset.current;
+    if (Math.abs(diff) > 80) {
+      if (diff < 0) {
+        setExitDir('left');
+        setTimeout(() => {
+          setTestiIndex(prev => Math.min(testimonials.length - 1, prev + 1));
+          setExitDir(null);
+          setDragX(0);
+        }, 300);
+      } else {
+        setExitDir('right');
+        setTimeout(() => {
+          setTestiIndex(prev => Math.max(0, prev - 1));
+          setExitDir(null);
+          setDragX(0);
+        }, 300);
+      }
+    } else {
+      setDragX(0);
+    }
+    dragStart.current = null;
+    dragOffset.current = 0;
+    setIsDragging(false);
+    setPeekIndex(null);
+  };
+
+  const testimonials = [{
+    quote: "I highly recommend Mr. Russell Aguilar for his excellent work and professionalism. He created my portfolio beautifully and was very responsive, accommodating, and easy to work with throughout the entire process. He listened carefully to my ideas, welcomed revisions, and delivered results that exceeded my expectations. The final output was clean, creative, and high quality, and I’m genuinely very satisfied with his work. Thank you so much!",
+    name: "Lady Arielle",
+    role: "Marketing Portfolio Website",
+    brand: "Lady Arielle",
+    brandLogo: ladyLogo,
+    avatar: ladyAvatar,
+    rating: 5.0,
+    date: "May 2026",
+  },
+  {
+    quote: "Dati puro pila at balik-balik lang ang mga residente namin just to follow up. Now through QRUSH, online na ang lahat — may tracking, may QR, may notifications pa. Ang ganda pa ng interface, bagay talaga sa aming barangay. Malaking tulong sa amin ang system na ito.",
+    name: "Capt. Nammer A. Bulaong",
+    role: "Barangay Captain · Barangay Bangkal, Malolos, Bulacan",
+    brand: "QRUSH",
+    brandLogo: bangkaLogo,
+    avatar: nammerAvatar,
+    rating: 4.8,
+    date: "December 2025",
+  },
+
+  {
+    quote: "We went to Mr. Russell because we needed a UI/UX redesign before our defense — for the web app, mobile version, and even our research poster. We weren’t disappointed at all. He immediately understood the concept of LaConsolaNet without needing too much explanation, and the final output was a huge improvement from before. The glow-up was incredible. Highly recommended.",
+    name: "Czar Bjorn Medina & Team",
+    role: "Capstone Client · UI/UX Redesign, Mobile & Research Poster",
+    brand: "LaConsolaNet!",
+    brandLogo: laconslanetLogo,
+    avatar: czarAvatar,
+    rating: 4.9,
+    date: "December 2025",
+  },
+  {
+    quote: "Mr. Russell Aguilar and I go way back — we were schoolmates at La Consolacion University, and he was actually referred to me by our friends when I needed someone to design our studio website. I’m really glad I worked with him because he understood the vision right away without needing too much explanation. The final result perfectly captured the brand identity we wanted to showcase.",
+    name: "Madelle Ella",
+    role: "Freelance Client · Studio Website Design",
+    brand: "Virielle Studio",
+    brandLogo: viriellesLogo,
+    avatar: ellaAvatar,
+    rating: 4.3,
+    date: "April 2026",
+  },
+  ];
+  const totalRating = 4.8;
+  const renderRatingStars = (rating) =>
+    Array.from({ length: 5 }).map((_, index) => {
+      const fill = Math.max(0, Math.min(1, rating - index));
+      const gradientId = `testi-star-${testiIndex}-${index}`;
+
+      return (
+        <svg
+          key={index}
+          className="testi-star"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset={`${fill * 100}%`} stopColor="currentColor" />
+              <stop offset={`${fill * 100}%`} stopColor="transparent" />
+            </linearGradient>
+          </defs>
+          <path
+            className="testi-star-base"
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          />
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            fill={`url(#${gradientId})`}
+          />
+        </svg>
+      );
+    });
 
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
@@ -811,7 +951,7 @@ useEffect(() => {
     },
     {
       question: "Are you available for full-time positions or freelance work?",
-        answer:
+      answer:
         "I'm actively looking for a UI/UX or web design role where I can own the full design process — from research and wireframing through to final UI and handoff. I'm eager, fast to learn, and ready to contribute from day one. Open to full-time roles, internships, and select freelance projects.",
     },
 
@@ -828,51 +968,57 @@ useEffect(() => {
       document.body.classList.remove("menu-open");
     };
   }, [isMobileMenuOpen]);
-useSplitAnimateReveal();
+  useSplitAnimateReveal();
 
-useEffect(() => {
-  const el = scrollFillRef.current;
-  if (!el) return;
+  useEffect(() => {
+    const el = scrollFillRef.current;
+    if (!el) return;
 
-  // Only target the grey accent span
-  const accentEl = el.querySelector(".scroll-fill-text");
-  if (!accentEl) return;
+    // Only target the grey accent span
+    const accentEl = el.querySelector(".scroll-fill-text");
+    if (!accentEl) return;
 
-  const rawText = accentEl.textContent
-    .replace(/\s+/g, " ")
-    .trim();
-  const chars = rawText.split("");
+    const rawText = accentEl.textContent
+      .replace(/\s+/g, " ")
+      .trim();
+    const chars = rawText.split("");
 
-  accentEl.innerHTML = chars
-    .map((char, i) =>
-      char === " "
-        ? `<span class="sf-space"> </span>`
-        : `<span class="sf-char" style="--i:${i}">${char}</span>`
-    )
-    .join("");
+    accentEl.innerHTML = chars
+      .map((char, i) =>
+        char === " "
+          ? `<span class="sf-space"> </span>`
+          : `<span class="sf-char" style="--i:${i}">${char}</span>`
+      )
+      .join("");
 
-  const ctx = gsap.context(() => {
-    const spans = accentEl.querySelectorAll(".sf-char");
-    gsap.fromTo(
-      spans,
-      { color: "#c0c0c0", opacity: 1 },
-      {
-        color: "#1a1a1a",
-        opacity: 1,
-        ease: "none",
-        stagger: { each: 0.018, from: "start" },
-        scrollTrigger: {
-          trigger: el,
-          start: "top 75%",
-          end: "bottom 55%",
-          scrub: 2,
-        },
-      }
-    );
-  });
+    const ctx = gsap.context(() => {
+      const spans = accentEl.querySelectorAll(".sf-char");
+      gsap.fromTo(
+        spans,
+        { color: "#c0c0c0", opacity: 1 },
+        {
+          color: "#1a1a1a",
+          opacity: 1,
+          ease: "none",
+          stagger: { each: 0.018, from: "start" },
+          scrollTrigger: {
+            trigger: el,
+            start: "top 75%",
+            end: "bottom 55%",
+            scrub: 2,
+          },
+        }
+      );
+    });
 
-  return () => ctx.revert();
-}, [pageReady]);
+    return () => ctx.revert();
+  }, [pageReady]);
+
+
+
+
+
+
   return (
     <>
       {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
@@ -905,7 +1051,7 @@ useEffect(() => {
             </a>
           </li>
           <li>
-            <a href="#projects" className="nav-link-animated">
+            <a href="/projects/qrush" className="nav-link-animated">
               <span className="nav-text">
                 <span className="nav-text-top">Projects</span>
                 <span className="nav-text-bottom">Projects</span>
@@ -995,7 +1141,7 @@ useEffect(() => {
 
                   <li className="mobile-nav-item">
                     <a
-                      href="#projects"
+                      href="/projects/qrush"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
@@ -1062,7 +1208,7 @@ useEffect(() => {
               <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
                 <div className="hero-content">
-               <p className="tagline hero-tagline-entry">UI/UX Designer & Web Designer</p>
+                  <p className="tagline hero-tagline-entry">UI/UX Designer & Web Designer</p>
 
                   <h1
                     className="hero-title split-animate hero-title-reveal"
@@ -1070,24 +1216,24 @@ useEffect(() => {
                   >
                     I turn{" "}
                     <span className="highlight">interfaces</span>{" "}
-                  into experiences from <br /> pixel to productions
+                    into experiences from <br /> pixel to productions
                   </h1>
                   <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
                       <span className="stat-number">6</span>
-                       <span className="stat-label">Projects</span>
+                      <span className="stat-label">Projects</span>
                     </div>
                     <div className="stat-item">
                       <span className="stat-number">1+</span>
-                 <span className="stat-label">Year of Practice</span>
+                      <span className="stat-label">Year of Practice</span>
                     </div>
                     <div className="stat-item">
-                   <span className="stat-number">UI/UX</span>
-                        <span className="stat-label">Primary Discipline</span>
+                      <span className="stat-number">UI/UX</span>
+                      <span className="stat-label">Primary Discipline</span>
                     </div>
                   </div>
-             <div className="hero-cta-group hero-cta-entry">
-                  <a href="#projects" className="cta-button">
+                  <div className="hero-cta-group hero-cta-entry">
+                    <a href="#projects" className="cta-button">
                       View My Work
                     </a>
 
@@ -1127,80 +1273,80 @@ useEffect(() => {
             </div>
           </section>
 
-       {/* Services Section */}
-<section className="services-section" data-nav-theme="dark">
-  <div className="services-container">
-    <div className="services-header">
-      <h2 className="services-title" id="services">What I Do</h2>
-    </div>
+          {/* Services Section */}
+          <section className="services-section" data-nav-theme="dark">
+            <div className="services-container">
+              <div className="services-header">
+                <h2 className="services-title" id="services">What I Do</h2>
+              </div>
 
-    <div className="services-content">
-      <span className="services-index">(CAPABILITIES — 02)</span>
-    </div>
+              <div className="services-content">
+                <span className="services-index">CAPABILITIES — 02</span>
+              </div>
 
-    <div className="services-divider"></div>
+              <div className="services-divider"></div>
 
-    <div className="services-list">
-      <div className="services-items">
-        {services.map((service, index) => (
-          <div key={index} className="service-item">
-            
-            {/* HEADER */}
-            <div
-              className="service-header"
-              onClick={() => toggleService(index)}
-            >
-              <div className="service-number">{service.number}</div>
-              <h3 className="service-name">{service.name}</h3>
-              <button className="service-toggle">
-                {openService === index ? "−" : "+"}
-              </button>
+              <div className="services-list">
+                <div className="services-items">
+                  {services.map((service, index) => (
+                    <div key={index} className="service-item">
+
+                      {/* HEADER */}
+                      <div
+                        className="service-header"
+                        onClick={() => toggleService(index)}
+                      >
+                        <div className="service-number">{service.number}</div>
+                        <h3 className="service-name">{service.name}</h3>
+                        <button className="service-toggle">
+                          {openService === index ? "−" : "+"}
+                        </button>
+                      </div>
+
+                      {/* DETAILS */}
+                      <div
+                        className={`service-details ${openService === index ? "open" : ""
+                          }`}
+                      >
+                        <p className="service-description">
+                          {service.description}
+                        </p>
+
+                        {/* Tags — CSS-only, no Framer conflict */}
+                        <div className="service-tags">
+                          {service.tags.map((tag, tagIndex) => (
+                            <span
+                              key={tagIndex}
+                              className="tag"
+                              style={{
+                                transitionDelay: openService === index ? `${tagIndex * 0.06}s` : "0s",
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-
-            {/* DETAILS */}
-            <div
-              className={`service-details ${
-                openService === index ? "open" : ""
-              }`}
-            >
-              <p className="service-description">
-                {service.description}
-              </p>
-
-{/* Tags — CSS-only, no Framer conflict */}
-<div className="service-tags">
-  {service.tags.map((tag, tagIndex) => (
-    <span
-      key={tagIndex}
-      className="tag"
-      style={{
-        transitionDelay: openService === index ? `${tagIndex * 0.06}s` : "0s",
-      }}
-    >
-      {tag}
-    </span>
-  ))}
-</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-
+          </section>
           {/* Works Section */}
           <section className="works-section" data-nav-theme="dark">
             <div className="works-container">
-              <div className="works-header">
-                <h2 className="works-title" id="projects">Recent Work</h2>
-                <div className="works-header-right">
 
+              {/* Header Row */}
+              <div className="rw-header-row">
+                <div className="rw-header-left">
+                  <span className="rw-eyebrow">Portfolio — 03</span>
+                  <h2 className="works-title" id="projects">Recent Work</h2>
                 </div>
+             
               </div>
 
-              <span className="works-index">(PORTFOLIO — 03)</span>
-              <div className="works-divider"></div>
+              <div className="works-divider rw-top-divider"></div>
 
               {!isTouchDevice && (
                 <div
@@ -1209,178 +1355,242 @@ useEffect(() => {
                   aria-hidden="true"
                 >
                   <div className="crs-cursor__blob">
-                    <span className="crs-cursor__text">
-
-                      View Details
-                    </span>
+                    <span className="crs-cursor__text">View Project</span>
                   </div>
                 </div>
               )}
 
-              {/* Carousel */}
+              {/* Project Grid */}
               <div
-                className="rw-wrap"
+                className="rw-grid"
                 ref={crs_areaRef}
                 onMouseEnter={() => { if (!isTouchDevice) setCrs_active(true); }}
                 onMouseLeave={() => setCrs_active(false)}
               >
-                <div className="rw-track" ref={rw_trackRef}>
-
-                  {/* Card 1 */}
-                 <article
-                    className="rw-card"
-                    ref={card1Ref}
-                    onMouseMove={(e) => handleCardMouseMove(e, card1Ref)}
-                  >
-                    <div className="rw-card__thumb">
-                      <img src={soon} alt="Century 21 Pura Vida" draggable="false" />
-                      <div className="rw-card__demo">
-                        <span className="rw-card__demo-text">
-
-                          View Details
-                        </span>
+                {/* Row 1 — Featured large + tall side */}
+                <a
+                  href="/projects/qrush"
+                  className="rw-card rw-card--featured"
+                  data-rw-index="0"
+                  aria-label="View QRUSH Barangay Bangkal case study"
+                >
+                  <div className="rw-card__thumb">
+                    <img src={bangkalProject} alt="Barangay Bangkal" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                       </div>
                     </div>
-                    <div className="rw-card__body">
-                      <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Barangay Bangkal</h3>
-                        <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  
-                      <div className="rw-card__chips">
-                        <span className="rw-chip">Capstone</span>
-                        <span className="rw-chip">Web App</span>
-                        <span className="rw-chip">Document Request</span>
-                      </div>
-                    </div>
-                  </article>
-
-                  {/* Card 2 */}
-                  <article
-                    className="rw-card"
-                    ref={card2Ref}
-                    onMouseMove={(e) => handleCardMouseMove(e, card2Ref)}
-                  >
-                    <div className="rw-card__thumb">
-                      <img src={soon} alt="Century 21 Pura Vida" draggable="false" />
-                      <div className="rw-card__demo">
-                        <span className="rw-card__demo-text">
-
-                          View Details
-                        </span>
-                      </div>
-                    </div>
-                    <div className="rw-card__body">
-                      <div className="rw-card__meta">
-                        <h3 className="rw-card__name">Virielle</h3>
-                        <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  
-                      <div className="rw-card__chips">
-                        <span className="rw-chip">Website Design</span>
-                        <span className="rw-chip">UI/UX</span>
-                        <span className="rw-chip">Freelance</span>
-                      </div>
-                    </div>
-                  </article>
-
-                  {/* Card 3 */}
-                  <article
-                    className="rw-card"
-                    ref={card3Ref}
-                    onMouseMove={(e) => handleCardMouseMove(e, card3Ref)}
-                  >
-                    <div className="rw-card__thumb">
-                      <img src={soon} alt="Digital Wellness" draggable="false" />
-                      <div className="rw-card__demo">
-                        <span className="rw-card__demo-text">
-
-                          View Details
-                        </span>
-                      </div>
-                    </div>
-                    <div className="rw-card__body">
-                      <div className="rw-card__meta">
-                        <h3 className="rw-card__name">ClockedIn</h3>
-                        <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  
-                      <div className="rw-card__chips">
-                        <span className="rw-chip">Ojt Tracker</span>
-                        <span className="rw-chip">Web App</span>
-             
-                      </div>
-                    </div>
-                  </article>
-
-                  {/* Card 4 */}
-                  <article
-                    className="rw-card"
-                    ref={card4Ref}
-                    onMouseMove={(e) => handleCardMouseMove(e, card4Ref)}
-                  >
-                    <div className="rw-card__thumb">
-                      <img src={soon} alt="Brand Refresh" draggable="false" />
-                      <div className="rw-card__demo">
-                        <span className="rw-card__demo-text">
-
-                          View Details
-                        </span>
-                      </div>
-                    </div>
-                    <div className="rw-card__body">
-                      <div className="rw-card__meta">
-                        <h3 className="rw-card__name">ArmadaPH</h3>
-                        <p className="rw-card__period">(2025 — 2026)</p>
-                      </div>  
-                      <div className="rw-card__chips">
-                        <span className="rw-chip">Redesign</span>
-                        <span className="rw-chip">Branding</span>
-                        <span className="rw-chip">Dance Studio</span>
-                      </div>
-                    </div>
-                  </article>
-
-          
-
-                </div>
-
-                <div className="rw-nav">
-                  <button
-                    className={`rw-nav__btn ${rw_idx === 0 ? "rw-nav__btn--off" : ""}`}
-                    onClick={() => setRw_idx((n) => Math.max(0, n - 1))}
-                    disabled={rw_idx === 0}
-                    aria-label="Previous project"
-                  >
-                    <MdOutlineArrowBackIos />
-                  </button>
-
-                  <div className="rw-nav__dots">
-                    {Array.from({ length: rw_total }).map((_, idx) => (
-                      <button
-                        key={`rw-dot-${idx}`}
-                        type="button"
-                        className={`rw-nav__dot ${rw_idx === idx ? "rw-nav__dot--on" : ""}`}
-                        onClick={() => setRw_idx(idx)}
-                        aria-label={`Go to project ${idx + 1}`}
-                      />
-                    ))}
+                    <span className="rw-card__num">01</span>
                   </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">QRUSH: Barangay Bangkal</h3>
+                      <p className="rw-card__role">Capstone Project · Full-stack Web App</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">Dec 2025 — Jan 2026</p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Web Development</span>
+                         <span className="rw-chip">Document Request</span>
+                        <span className="rw-chip">FullStack</span>
 
-                  <span className="rw-nav__count">
-                    <b>{String(rw_idx + 1).padStart(2, "0")}</b>
-                    <span> / {String(rw_total).padStart(2, "0")}</span>
-                  </span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
 
-                  <button
-                    className={`rw-nav__btn rw-nav__btn--fwd ${rw_idx === rw_total - 1 ? "rw-nav__btn--off" : "rw-nav__btn--on"}`}
-                    onClick={() => setRw_idx((n) => Math.min(rw_total - 1, n + 1))}
-                    disabled={rw_idx === rw_total - 1}
-                    aria-label="Next project"
-                  >
-                    <MdOutlineArrowForwardIos />
-                  </button>
-                </div>
+                <a
+                  href="/projects/virielle"
+                  className="rw-card rw-card--tall"
+                  data-rw-index="1"
+                  aria-label="View Virielle case study"
+                >
+                  <div className="rw-card__thumb">
+                    <img src={virielleproject} alt="Virielle" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                      </div>
+                    </div>
+                    <span className="rw-card__num">02</span>
+                  </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">Virielle</h3>
+                      <p className="rw-card__role">Freelance Studio · Website Design</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">Apr 2026</p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">UI/UX Design</span>
+                        <span className="rw-chip">Web Design</span>     
+                           <span className="rw-chip">Branding</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                {/* Row 2 — Three equal columns */}
+                {/* <article className="rw-card rw-card--third" data-rw-index="2">
+                  <div className="rw-card__thumb">
+                    <img src={soon} alt="ClockedIn" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                      </div>
+                    </div>
+                    <span className="rw-card__num">03</span>
+                  </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">ClockedIn</h3>
+                      <p className="rw-card__role">OJT Tracker · Web App</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">2025 — 2026</p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Web App</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <article className="rw-card rw-card--third" data-rw-index="3">
+                  <div className="rw-card__thumb">
+                    <img src={soon} alt="ArmadaPH" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                      </div>
+                    </div>
+                    <span className="rw-card__num">04</span>
+                  </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">ArmadaPH</h3>
+                      <p className="rw-card__role">Freelance · Brand Redesign</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">2025 — 2026</p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Branding</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <article className="rw-card rw-card--third" data-rw-index="4">
+                  <div className="rw-card__thumb">
+                    <img src={soon} alt="ClockedIn" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                      </div>
+                    </div>
+                    <span className="rw-card__num">05</span>
+                  </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">ClockedIn</h3>
+                      <p className="rw-card__role">OJT Tracker · Web App</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">2025 — 2026</p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">Web App</span>
+                      </div>
+                    </div>
+                  </div>
+                </article> */}
+
+
+                {/* Row 3 — Wide + small */}
+                {/* Row 3 — Two equal halves */}
+                <a
+                  href="/projects/lady-arielle"
+                  className="rw-card rw-card--wide"
+                  data-rw-index="2"
+                  aria-label="View Lady Arielle case study"
+                >
+                  <div className="rw-card__thumb">
+                    <img src={arielleproject} alt="SpinPix 360" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                      </div>
+                    </div>
+                    <span className="rw-card__num">03</span>
+                  </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">Lady Arielle</h3>
+                      <p className="rw-card__role">Marketing Portfolio Website</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">MAY 2026</p>
+                      <div className="rw-card__chips">
+                        <span className="rw-chip">UI/UX Design</span>
+                            <span className="rw-chip">Web Design</span>
+                                <span className="rw-chip">Portfolio</span>
+                                    <span className="rw-chip">Marketing</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                <a
+                  href="/projects/laconslanet"
+                  className="rw-card rw-card--wide-right"
+                  data-rw-index="3"
+                  aria-label="View LaConsolaNet case study"
+                >
+
+                  <div className="rw-card__thumb">
+                    <img src={laconslanetproject} alt="LaConsolaNet" draggable="false" />
+                    <div className="rw-card__overlay" />
+                    <div className="rw-card__hover-content">
+                      <span className="rw-card__hover-label">View Case Study</span>
+                      <div className="rw-card__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                      </div>
+                    </div>
+                    <span className="rw-card__num">04</span>
+                  </div>
+                  <div className="rw-card__body">
+                    <div className="rw-card__meta">
+                      <h3 className="rw-card__name">LaConsolaNet!</h3>
+                      <p className="rw-card__role">Social Media Platform</p>
+                    </div>
+                    <div className="rw-card__right">
+                      <p className="rw-card__period">Feb 2026</p>
+                      <div className="rw-card__chips">
+                  
+                        <span className="rw-chip">UI/UX Redesign</span>
+                           <span className="rw-chip">Web Redesign</span>
+                        <span className="rw-chip">Social Media</span>
+                                 <span className="rw-chip">Web APP</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
 
               </div>
 
+              {/* Footer Statement */}
+              <div className="works-divider" style={{ marginTop: "4rem" }}></div>
               <div className="works-statement">
                 <p className="statement-text split-animate">
                   Each project is driven by{" "}
@@ -1390,6 +1600,205 @@ useEffect(() => {
                 </p>
                 <a href="/contact-me" className="cta-button">Discuss Your Project</a>
               </div>
+
+            </div>
+          </section>
+
+
+
+          {/* Testimonials Section */}
+          <section className="testimonials-section" data-nav-theme="dark">
+            <div className="testimonials-container">
+
+              {/* Header Row */}
+              <div className="testi-header-row">
+                <span className="testi-eyebrow">REVIEWS — 05</span>
+                <div className="testi-header-bottom">
+                  <h2 className="testi-title">Testimonials</h2>
+                  <div className="testi-nav-btns">
+                    <button
+                      className="testi-nav-btn"
+                      onClick={() => setTestiIndex((prev) => Math.max(0, prev - 1))}
+                      disabled={testiIndex === 0}
+                      aria-label="Previous testimonial"
+                    >
+                      <MdOutlineArrowBackIos />
+                    </button>
+                    <button
+                      className="testi-nav-btn"
+                      onClick={() => setTestiIndex((prev) => Math.min(testimonials.length - 1, prev + 1))}
+                      disabled={testiIndex === testimonials.length - 1}
+                      aria-label="Next testimonial"
+                    >
+                      <MdOutlineArrowForwardIos />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="testi-divider" />
+
+              {/* Body Row */}
+              <div className="testi-body-row">
+
+                {/* Left — stat */}
+                <div className="testi-left">
+                  <p className="testi-stat-label">TOTAL RATING</p>
+                  <div className="testi-stat-block" key={`stat-${testiIndex}`}>
+                    <span className="testi-stat-number testi-stat--animate">{totalRating.toFixed(1)}</span>
+                    <span className="testi-stat-sub testi-stat-sub--animate">out of 5.0</span>
+                  </div>
+                </div>
+                {/* Right — quote */}
+                <div style={{ position: 'relative', overflow: 'hidden', flex: 1 }}>
+
+                  {peekIndex !== null && (
+                    <div
+                      className="testi-right"
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: dragX < 0 ? '100%' : '-100%',
+                        width: '100%',
+                        opacity: Math.min(0.9, Math.abs(dragX) / 120),
+                        transform: dragX < 0
+                          ? `translateX(${-100 + (Math.abs(dragX) / 4)}%)`
+                          : `translateX(${100 - (Math.abs(dragX) / 4)}%)`,
+                        pointerEvents: 'none',
+                        transition: 'none',
+                      }}
+                    >
+                      <div className="testi-meta-row">
+                        <div className="testi-stars">
+                          {renderRatingStars(testimonials[peekIndex].rating)}
+                          <span className="testi-rating-label">{testimonials[peekIndex].rating.toFixed(1)} / 5.0</span>
+                        </div>
+                        <span className="testi-date">{testimonials[peekIndex].date}</span>
+                      </div>
+                      <blockquote className="testi-quote">"{testimonials[peekIndex].quote}"</blockquote>
+                      <div className="testi-author-row">
+                        <div className="testi-avatar">
+                          {testimonials[peekIndex].avatar ? (
+                            <img
+                              src={testimonials[peekIndex].avatar}
+                              alt={testimonials[peekIndex].name}
+                            />
+                          ) : (
+                            <span className="testi-avatar-initials">
+                              {testimonials[peekIndex].name.split(" ").map(n => n[0]).join("")}
+                            </span>
+                          )}
+                        </div>
+                        <div className="testi-author-info">
+                          <p className="testi-author-name">{testimonials[peekIndex].name}</p>
+                          <p className="testi-author-role">{testimonials[peekIndex].role}</p>
+                        </div>
+                        <div className="testi-brand">
+                          <img
+                            className="testi-brand-logo"
+                            src={testimonials[peekIndex].brandLogo}
+                            alt={`${testimonials[peekIndex].brand} logo`}
+                          />
+                          <span className="testi-brand-name">{testimonials[peekIndex].brand}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div
+                    className="testi-right"
+                    key={testiIndex}
+                    ref={dragRef}
+                    onMouseDown={handleDragStart}
+                    onMouseMove={handleDragMove}
+                    onMouseUp={handleDragEnd}
+                    onMouseLeave={handleDragEnd}
+                    onTouchStart={handleDragStart}
+                    onTouchMove={handleDragMove}
+                    onTouchEnd={handleDragEnd}
+                    style={{
+                      position: 'relative',
+                      cursor: isDragging ? 'grabbing' : 'grab',
+                      userSelect: 'none',
+                      transform: exitDir === 'left'
+                        ? 'translateX(-130%) rotate(-8deg)'
+                        : exitDir === 'right'
+                          ? 'translateX(130%) rotate(8deg)'
+                          : `translateX(${dragX * 0.45}px) rotate(${dragX * 0.014}deg)`,
+                      opacity: exitDir
+                        ? 0
+                        : isDragging
+                          ? Math.max(0.45, 1 - Math.abs(dragX) / 280)
+                          : 1,
+                      transition: isDragging
+                        ? 'none'
+                        : exitDir
+                          ? 'transform 0.32s cubic-bezier(0.4, 0, 1, 1), opacity 0.28s ease'
+                          : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease',
+                      willChange: 'transform',
+                    }}
+                  >
+                    <div className="testi-meta-row">
+                      <div className="testi-stars">
+                        {renderRatingStars(testimonials[testiIndex].rating)}
+                        <span className="testi-rating-label">{testimonials[testiIndex].rating.toFixed(1)} / 5.0</span>
+                      </div>
+                      <span className="testi-date">{testimonials[testiIndex].date}</span>
+                    </div>
+                    <blockquote className="testi-quote testi-quote--animate">
+                      "{testimonials[testiIndex].quote}"
+                    </blockquote>
+                    <div className="testi-author-row">
+                      <div className="testi-avatar">
+                        {testimonials[testiIndex].avatar ? (
+                          <img
+                            src={testimonials[testiIndex].avatar}
+                            alt={testimonials[testiIndex].name}
+                          />
+                        ) : (
+                          <span className="testi-avatar-initials">
+                            {testimonials[testiIndex].name.split(" ").map(n => n[0]).join("")}
+                          </span>
+                        )}
+                      </div>
+                      <div className="testi-author-info">
+                        <p className="testi-author-name">{testimonials[testiIndex].name}</p>
+                        <p className="testi-author-role">{testimonials[testiIndex].role}</p>
+                      </div>
+                      <div className="testi-brand">
+                        <img
+                          className="testi-brand-logo"
+                          src={testimonials[testiIndex].brandLogo}
+                          alt={`${testimonials[testiIndex].brand} logo`}
+                        />
+                        <span className="testi-brand-name">{testimonials[testiIndex].brand}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* Dots — correct placement: BELOW body row, INSIDE testimonials-container */}
+              <div className="testi-footer">
+                <div className="testi-dots" role="tablist" aria-label="Testimonial navigation">
+                  {testimonials.map((_, i) => (
+                    <button
+                      key={i}
+                      className={`testi-dot ${i === testiIndex ? "testi-dot--active" : ""}`}
+                      onClick={() => setTestiIndex(i)}
+                      aria-label={`Go to testimonial ${i + 1}`}
+                      role="tab"
+                      aria-selected={i === testiIndex}
+                    />
+                  ))}
+                </div>
+                <span className="testi-counter">
+                  <strong>{String(testiIndex + 1).padStart(2, "0")}</strong> / {String(testimonials.length).padStart(2, "0")}
+                </span>
+              </div>
+
             </div>
           </section>
 
@@ -1398,9 +1807,9 @@ useEffect(() => {
             <div className="process-container">
               <div className="process-header-wrapper">
                 <div className="process-header" id="process">
-                  <span className="process-index">(PROCESS — 04)</span>
+                  <span className="process-index">PROCESS — 04</span>
                   <h2 className="process-title ">
-                        My design process —
+                    My design process —
                     <span className="process-title-accent">
                       {" "}
                       from first research question to shipped product.
@@ -1435,7 +1844,7 @@ useEffect(() => {
                   {/* Step 1 */}
                   <div className="process-step" data-step="1">
                     <div className="step-number-wrapper">
-                    <span className="step-number">01.</span>
+                      <span className="step-number">01.</span>
                       <span className="step-label">Research</span>
                     </div>
 
@@ -1445,7 +1854,7 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                          <h3 className="step-title">Research & Discovery</h3>
+                        <h3 className="step-title">Research & Discovery</h3>
                         <p className="step-description">
                           I start by understanding the problem — not opening a design tool. This means stakeholder interviews, user research, surveys, competitive analysis, and reviewing existing analytics. Every decision that follows is grounded in evidence, not assumption.
                         </p>
@@ -1456,7 +1865,7 @@ useEffect(() => {
                   {/* Step 2 */}
                   <div className="process-step" data-step="2">
                     <div className="step-number-wrapper">
-                        <span className="step-number">02.</span>
+                      <span className="step-number">02.</span>
                       <span className="step-label">Define</span>
                     </div>
 
@@ -1466,7 +1875,7 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                       <h3 className="step-title">Define & Structure</h3>
+                        <h3 className="step-title">Define & Structure</h3>
                         <p className="step-description">
                           Research gets synthesized into user personas, journey maps, and a clear problem statement. I then map information architecture, sitemaps, and navigation flows — so users can find what they need intuitively, before any screen is designed.
                         </p>
@@ -1478,7 +1887,7 @@ useEffect(() => {
                   {/* Step 3 */}
                   <div className="process-step" data-step="3">
                     <div className="step-number-wrapper">
-                              <span className="step-number">03.</span>
+                      <span className="step-number">03.</span>
                       <span className="step-label">Wireframe</span>
                     </div>
 
@@ -1489,7 +1898,7 @@ useEffect(() => {
                     <div className="step-container">
                       <div className="step-content">
                         <h3 className="step-title">UI/UX Design with Wireframing & Prototyping</h3>
-                     
+
                         <p className="step-description">
                           Low-fidelity wireframes lock in layout, hierarchy, and how screens connect — fast and cheap to change. These become interactive Figma prototypes for early usability testing, validating flows before a single line of code is written.
                         </p>
@@ -1500,7 +1909,7 @@ useEffect(() => {
                   {/* Step 4 */}
                   <div className="process-step" data-step="4">
                     <div className="step-number-wrapper">
-                        <span className="step-number">04.</span>
+                      <span className="step-number">04.</span>
                       <span className="step-label">Visual Design</span>
                     </div>
 
@@ -1510,7 +1919,7 @@ useEffect(() => {
 
                     <div className="step-container">
                       <div className="step-content">
-                         <h3 className="step-title">Visual Design & UI</h3>
+                        <h3 className="step-title">Visual Design & UI</h3>
                         <p className="step-description">
                           Once flows are validated, I apply the full visual layer — typography systems, color, spacing, iconography, and component libraries in Figma. This is where the product starts looking and feeling real. Design specs and annotated interactions are prepared for a clean developer handoff.
                         </p>
@@ -1552,9 +1961,9 @@ useEffect(() => {
                 </h2>
               </div>
               <div className="services-content">
-                <span className="services-index">( ABOUT ME — 05 )</span>
+                <span className="services-index"> ABOUT ME — 05 </span>
                 <h3 className="services-subtitless split-animate">
-          Good design is invisible — <br />
+                  Good design is invisible — <br />
                   <span className="services-subtitle-accent">
                     {" "}
                     you only notice it when it's missing.
@@ -1579,7 +1988,7 @@ useEffect(() => {
                         1<span className="stats-years">Year</span>
                       </h3>
 
-                    <p className="stats-description">
+                      <p className="stats-description">
                         Building interfaces that balance aesthetics, usability, and real-world performance.
                       </p>
                     </div>
@@ -1593,40 +2002,44 @@ useEffect(() => {
                       alt="projects watermark"
                       className="stats-watermark"
                     />
-               <p className="stats-description">
-                        Across web, mobile UI, and interactive experiences.
-                      </p>
+                    <p className="stats-description">
+                      Across web, mobile UI, and interactive experiences.
+                    </p>
                   </div>
                 </div>
               </div>
 
               <div className="about-topbar">
                 <p className="about-mini-desc">
-           UI/UX and web design — with the frontend skills to bring it to life.
+                  UI/UX and web design — with the frontend skills to bring it to life.
                 </p>
 
-               <a href="/about-web-designer" className="cta-button">See the Full Story</a>
+                <a href="/about-web-designer" className="cta-button">See the Full Story</a>
               </div>
             </div>
           </section>
 
+
+
+
+
           <section className="works-section" data-nav-theme="dark">
             <Maillards />
           </section>
-
           <section className="parallax-reveal-section" data-nav-theme="dark">
             <div className="parallax-reveal-sticky">
               <div className="parallax-reveal-card">
-          <h2 className="cta-title">
-                  Looking for a <span className="highlight">UI/UX designer</span> who understands both design and code?
+                <h2 className="cta-title">
+                  Looking for a <span className="highlight">UI/UX designer</span>?
                 </h2>
 
-              <p className="cta-description split-animate">
-                  I'm actively seeking UI/UX and web design roles. I bring research-grounded design,
-                  Figma-to-code capability, and genuine enthusiasm for every project I take on. If
-                  you're hiring or want to collaborate — I'd love to hear from you.
+                <p className="cta-description split-animate">
+                  I create user-focused digital experiences that combine research, design strategy, and smooth Figma-to-code execution. Always ready to bring ideas to life in UI/UX and web design projects.
                 </p>
-                 <a href="/contact-me" className="cta-button">Let's Work Together</a>
+                <div className="cta-actions">
+                  <a href="/contact-me" className="cta-button">Let's Work Together</a>
+                  <a href="/resume.pdf" className="cta-buttons1" download>Download CV</a>
+                </div>
 
               </div>
             </div>
@@ -1717,7 +2130,7 @@ useEffect(() => {
                       </p>
 
                       <p className="footer-copyright">
-                         © 2026 Designed and built by Klent Russell Aguilar — UI/UX & Web Designer
+                        © 2026 Designed and built by Klent Russell Aguilar — UI/UX & Web Designer
                       </p>
                     </div>
 
@@ -1751,7 +2164,7 @@ useEffect(() => {
                           <a href="#services">Services</a>
                         </li>
                         <li>
-                          <a href="#projects">Projects</a>
+                          <a href="/projects/qrush">Projects</a>
                         </li>
                         <li>
                           <a href="#process">Process</a>

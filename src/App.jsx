@@ -3,6 +3,7 @@ import Portfolio from "./components/Portfolio";
 import About from "./components/About";
 import LandingPage from "./components/LandingPage";
 import Contact from "./components/Contact";
+import Projects from "./components/Projects";
 import './App.css';
 import NotFound from "./components/NotFound";
 import Terms from "./components/Terms";
@@ -12,6 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Portfolio />} />
         <Route path="/about-web-designer" element={<About />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:projectId" element={<Projects />} />
         <Route path="/free-landing-page" element={<LandingPage />} />
 <Route path="/contact-me" element={<Contact />} />
 <Route path="/free-landing-page/terms-and-conditions" element={<Terms />} />
