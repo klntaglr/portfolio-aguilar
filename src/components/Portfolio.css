@@ -382,26 +382,11 @@ body.menu-open {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background: linear-gradient(135deg,
-      rgba(197, 255, 61, 0.15) 0%,
-      rgba(197, 255, 61, 0.08) 100%);
-  border: 1px solid rgba(126, 170, 22, 0.3);
+  background: rgba(199, 240, 0, 0.1);
+  border: 1px solid #c7f000;
   border-radius: 50px;
   padding: 0.6rem 1.2rem;
   margin-bottom: 1.25rem;
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 0 rgba(197, 255, 61, 0);
-  }
-
-  50% {
-    box-shadow: 0 0 20px rgba(197, 255, 61, 0.2);
-  }
 }
 
 .cta-gift-icon {
@@ -3147,6 +3132,18 @@ body {
   .cta-description {
     font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   }
+
+  .cta-actions {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .cta-actions .cta-button,
+  .cta-actions .cta-buttons1 {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -5260,32 +5257,31 @@ body {
   outline-offset: 3px;
 }
 
-/* ACTIVE STATE — completely different look */
 .contact-pick-card--active {
-  border-color: #c7f000 !important;
-  background: linear-gradient(145deg, #f7ffe0 0%, #efffb0 50%, #f2ffd0 100%) !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+  border-color: #0d3052 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 2px #0d3052, 0 8px 24px rgba(13, 48, 82, 0.12) !important;
   transform: translateY(-4px);
 }
 
 .contact-pick-card--active .contact-pick-title {
-  color: #2a3500;
+  color: #0d3052;
 }
 
 .contact-pick-card--active .contact-pick-desc {
-  color: #4a5700;
+  color: #4a5568;
 }
 
 .contact-pick-card--active .contact-pick-icon {
-  color: #3a4800;
-  background: rgba(199, 240, 0, 0.35);
-  border-color: rgba(199, 240, 0, 0.5);
+  color: #0d3052;
+  background: rgba(13, 48, 82, 0.07);
+  border-color: rgba(13, 48, 82, 0.2);
 }
 
 .contact-pick-card--active .contact-pick-tag {
-  background: rgba(58, 72, 0, 0.12);
-  color: #3a4800;
-  border-color: rgba(58, 72, 0, 0.2);
+  background: rgba(13, 48, 82, 0.08);
+  color: #0d3052;
+  border-color: rgba(13, 48, 82, 0.18);
 }
 
 /* Icon wrapper */
@@ -5315,11 +5311,11 @@ body {
 .contact-pick-check {
   width: 22px;
   height: 22px;
-  background: #2a3500;
+  background: #0d3052;
   border-radius: 50%;
   font-size: 0.65rem;
   font-weight: 900;
-  color: #c7f000;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5464,8 +5460,8 @@ body {
 }
 
 .contact-option-icon {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 1.5px solid #e5e7eb;
   border-radius: 10px;
   display: flex;
@@ -5473,7 +5469,7 @@ body {
   justify-content: center;
   flex-shrink: 0;
   color: #6b7280;
-  font-size: 1.1rem;
+  font-size: 1.35rem;
   transition: all 0.25s ease;
   background: #fff;
 }
@@ -9708,21 +9704,13 @@ body {
   border-radius: 20px;
 }
 
-.contact-pick-tag--hire {
-  background: rgba(47, 107, 255, 0.12);
-  color: #2346b8;
-}
-
-.contact-pick-tag--project {
-  background: rgba(47, 107, 255, 0.12);
-  color: #2346b8;
-}
-
+.contact-pick-tag--hire,
+.contact-pick-tag--project,
 .contact-pick-tag--retainer {
-  background: rgba(47, 107, 255, 0.12);
-  color: #2346b8;
+  background: #0d3052;
+  color: #ffffff;
+  border-color: #0d3052;
 }
-
 /* --- Contact Grid Body --- */
 
 .contact-vline {
@@ -9908,8 +9896,8 @@ body {
 }
 
 .contact-option-icon {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   border: 1.5px solid #d1d5db;
   border-radius: 50%;
   display: flex;
@@ -9917,7 +9905,7 @@ body {
   justify-content: center;
   flex-shrink: 0;
   color: #6b7280;
-  font-size: 1rem;
+  font-size: 1.35rem;
   transition: all 0.3s ease;
   background: #f3f4f6;
 }
@@ -9929,15 +9917,15 @@ body {
 }
 
 .contact-option-icon svg {
-  width: 15px;
-  height: 15px;
-  stroke: #6b7280;
-  fill: none;
-  stroke-width: 2;
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: currentColor;
+  stroke-width: 1;
   transition: all 0.3s ease;
 }
 
 .contact-option:hover .contact-option-icon svg {
-  stroke: #1f2937;
+  stroke: currentColor;
 }
 

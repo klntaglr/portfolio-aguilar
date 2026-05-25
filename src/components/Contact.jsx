@@ -1,6 +1,7 @@
 import { useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import "./Portfolio.css";
+import emailjs from "@emailjs/browser";
 
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -8,6 +9,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitText from "gsap/SplitText";
 import { FaArrowRight } from "react-icons/fa6";
+import { FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {
     SiCanva,
@@ -16,13 +18,12 @@ import {
     SiFramer,
     SiGreensock,
     SiHtml5,
-    SiReact
+    SiReact,
+    SiIndeed
 } from "react-icons/si";
-import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
+import { TfiLayoutMediaLeftAlt, TfiEmail, TfiWrite } from "react-icons/tfi";
+import { LuPhone } from "react-icons/lu";
 import {
-  HiOutlineMail,
-  HiOutlinePhone,
-  HiOutlineChatAlt2,
   HiOutlineClipboardCheck,
   HiOutlineClipboardCopy,
 } from "react-icons/hi";
@@ -33,6 +34,7 @@ import mockup1 from "../assets/mockup1.jpg";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
 import mockup2 from "../assets/wireframe.jpeg";
+import ReCAPTCHA from "react-google-recaptcha";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 gsap.registerPlugin(SplitText);
 
@@ -41,7 +43,17 @@ const [showPreloader, setShowPreloader] = useState(true);
 const [pageReady, setPageReady] = useState(false);
 const [pageVisible, setPageVisible] = useState(false);
 const pageRef = useRef(null);
+  const formRef = useRef(null);
+  const formStartRef = useRef(Date.now());
+  const [submitStatus, setSubmitStatus] = useState({ type: "idle", message: "" });
+  const [toast, setToast] = useState(null); // { type: "success"|"error", message: string }
+  const [isSubmitting, setIsSubmitting] = useState(false);
+const [honeypot, setHoneypot] = useState("");
+const recaptchaRef = useRef(null);
+const [recaptchaToken, setRecaptchaToken] = useState("");
   const containerRef = useRef(null);
+  const [senderName, setSenderName] = useState("");
+  const [senderEmail, setSenderEmail] = useState("");
   const projectsData = [
     { image: mockup2, title: "Martin Architectural" },
     { image: mockup1, title: "Century 21" },
@@ -531,6 +543,92 @@ const [openFAQ, setOpenFAQ] = useState(null);
 const [engagementType, setEngagementType] = useState("hire");
 const [copiedItem, setCopiedItem] = useState(null);
 
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+const RATE_LIMIT_KEY = "contact_form_last_submit";
+const RATE_LIMIT_MS = 2 * 60 * 1000;
+const MIN_FORM_TIME_MS = 3000;
+
+const isRateLimited = () => {
+  const last = Number(localStorage.getItem(RATE_LIMIT_KEY) || 0);
+  return Date.now() - last < RATE_LIMIT_MS;
+};
+
+const setRateLimit = () => {
+  localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitStatus({ type: "idle", message: "" });
+
+  if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+    setSubmitStatus({
+      type: "error",
+      message: "Missing EmailJS config. Check your .env values.",
+    });
+    return;
+  }
+
+  if (honeypot) {
+    setSubmitStatus({ type: "error", message: "Spam detected." });
+    return;
+  }
+
+  if (Date.now() - formStartRef.current < MIN_FORM_TIME_MS) {
+    setSubmitStatus({
+      type: "error",
+      message: "Please take a moment before submitting.",
+    });
+    return;
+  }
+
+  if (isRateLimited()) {
+    setSubmitStatus({
+      type: "error",
+      message: "Too many submissions. Please wait a bit and try again.",
+    });
+    return;
+  }
+
+if (!recaptchaToken) {
+    setToast({ type: "error", message: "Please tick the reCAPTCHA first." });
+    setTimeout(() => setToast(null), 4000);
+    return;
+  }
+
+  if (!formRef.current) return;
+
+  setIsSubmitting(true);
+  try {
+    await emailjs.sendForm(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      formRef.current,
+      { publicKey: EMAILJS_PUBLIC_KEY }
+    );
+    setRateLimit();
+formRef.current.reset();
+    recaptchaRef.current?.reset();
+    setRecaptchaToken("");
+    formStartRef.current = Date.now();
+  setSubmitStatus({ type: "success", message: "Message sent. Thank you!" });
+setToast({ type: "success", message: "Message sent — I'll reply within 24hrs." });
+setTimeout(() => setToast(null), 4500);
+  } catch (err) {
+  setSubmitStatus({
+  type: "error",
+  message: "Something went wrong. Please try again.",
+});
+setToast({ type: "error", message: "Something went wrong. Try emailing directly." });
+setTimeout(() => setToast(null), 5000);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 const handleCopy = async (text, item) => {
   try {
     await navigator.clipboard.writeText(text);
@@ -941,7 +1039,7 @@ useEffect(() => {
           {/* EMAIL — clickable to mailto, copy button separate */}
           <div className="contact-option contact-option--copyable">
             <div className="contact-option-icon">
-              <HiOutlineMail />
+              <TfiEmail />
             </div>
             <div className="contact-option-content">
               <span className="contact-option-label">Email</span>
@@ -969,7 +1067,7 @@ useEffect(() => {
           {/* PHONE — clickable to tel, copy button separate */}
           <div className="contact-option contact-option--copyable">
             <div className="contact-option-icon">
-              <HiOutlinePhone />
+              <LuPhone />
             </div>
             <div className="contact-option-content">
               <span className="contact-option-label">Phone</span>
@@ -995,13 +1093,59 @@ useEffect(() => {
           </div>
 
           {/* FORM LINK */}
-          <a href="#contact-form" className="contact-option contact-option--last">
+          <a href="#contact-form" className="contact-option">
             <div className="contact-option-icon">
-              <HiOutlineChatAlt2 />
+              <TfiWrite />
             </div>
             <div className="contact-option-content">
               <span className="contact-option-label">Send a message</span>
               <span className="contact-option-value contact-option-value--muted">Fill the form →</span>
+            </div>
+          </a>
+
+          {/* SOCIAL LINKS */}
+          <a
+            href="https://www.instagram.com/klntaglr/"
+            className="contact-option"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="contact-option-icon">
+              <FaInstagram />
+            </div>
+            <div className="contact-option-content">
+              <span className="contact-option-label">Instagram</span>
+              <span className="contact-option-value contact-option-value--muted">@klntaglr</span>
+            </div>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/"
+            className="contact-option"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="contact-option-icon">
+              <FaLinkedinIn />
+            </div>
+            <div className="contact-option-content">
+              <span className="contact-option-label">LinkedIn</span>
+              <span className="contact-option-value contact-option-value--muted">klent-russell-aguilar</span>
+            </div>
+          </a>
+
+          <a
+            href="https://profile.indeed.com/?hl=en_PH&co=PH&from=gnav-jobseeker-profile--profile-one-frontend"
+            className="contact-option contact-option--last"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="contact-option-icon">
+              <SiIndeed />
+            </div>
+            <div className="contact-option-content">
+              <span className="contact-option-label">Indeed</span>
+              <span className="contact-option-value contact-option-value--muted">View profile</span>
             </div>
           </a>
 
@@ -1026,13 +1170,38 @@ useEffect(() => {
       <div className="contact-right" id="contact-form">
         <span className="contact-form-eyebrow">Send a message</span>
 
-        <form className="form-grid">
+        <form className="form-grid" ref={formRef} onSubmit={handleSubmit}>
+
+          <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
+            <label htmlFor="website">Website</label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              autoComplete="off"
+              tabIndex={-1}
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
+
+          <input type="hidden" name="interest" value={engagementType} />
+          <input type="hidden" name="name" value={senderName} />
 
           <div className="form-group">
             <label className="form-label" htmlFor="yourName">
               Your Name <span className="required">*</span>
             </label>
-            <input type="text" id="yourName" name="yourName" className="form-input" placeholder="Juan dela Cruz" required />
+            <input
+              type="text"
+              id="yourName"
+              name="from_name"
+              className="form-input"
+              placeholder="Juan dela Cruz"
+              value={senderName}
+              onChange={(e) => setSenderName(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
@@ -1053,7 +1222,16 @@ useEffect(() => {
             <label className="form-label" htmlFor="email">
               Email <span className="required">*</span>
             </label>
-            <input type="email" id="email" name="email" className="form-input" placeholder="hello@company.com" required />
+            <input
+              type="email"
+              id="email"
+              name="from_email"
+              className="form-input"
+              placeholder="hello@company.com"
+              value={senderEmail}
+              onChange={(e) => setSenderEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
@@ -1121,7 +1299,7 @@ useEffect(() => {
             </label>
             <textarea
               id="yourEnquiry"
-              name="yourEnquiry"
+              name="message"
               className="form-textarea"
            placeholder={
                 engagementType === "hire"
@@ -1134,21 +1312,23 @@ useEffect(() => {
             />
           </div>
 
-          <div className="recaptcha-wrapper">
-            <div className="recaptcha-placeholder">
-              <input type="checkbox" id="recaptcha" />
-              <label htmlFor="recaptcha">I'm not a robot</label>
-              <div className="recaptcha-logo">reCAPTCHA</div>
-            </div>
+  <div className="recaptcha-wrapper">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              onChange={(token) => setRecaptchaToken(token || "")}
+              onExpired={() => setRecaptchaToken("")}
+            />
           </div>
 
           <div className="submit-wrapper">
          <p className="form-micro-copy">
                 Based in Malolos, Bulacan — available remotely. Replies within 24hrs.
               </p>
-            <button type="submit" className="cta-buttons">
-              Send Message
+            <button type="submit" className="cta-buttons" disabled={isSubmitting}>
+              {isSubmitting ? "Sending..." : "Send Message"}
             </button>
+       
           </div>
 
         </form>
@@ -1165,6 +1345,106 @@ useEffect(() => {
    
         </div>
       </div>
+{/* ── TOAST NOTIFICATION ── */}
+      {toast && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "2rem",
+            right: "2rem",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            padding: "14px 20px",
+            borderRadius: "14px",
+            background: toast.type === "success" ? "#ffffff" : "#ffffff",
+            border: toast.type === "success"
+              ? "1.5px solid #bbf7d0"
+              : "1.5px solid #fecaca",
+            boxShadow: "0 8px 32px rgba(13, 48, 82, 0.12), 0 2px 8px rgba(0,0,0,0.06)",
+            fontFamily: "Inter, sans-serif",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            color: toast.type === "success" ? "#15803d" : "#dc2626",
+            maxWidth: "340px",
+            animation: "toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* Icon */}
+          <span style={{
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            background: toast.type === "success"
+              ? "rgba(34, 197, 94, 0.12)"
+              : "rgba(239, 68, 68, 0.1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            fontSize: "1rem",
+          }}>
+            {toast.type === "success" ? "✓" : "✕"}
+          </span>
+
+          {/* Text */}
+          <div style={{ flex: 1 }}>
+            <p style={{
+              margin: 0,
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              marginBottom: "2px",
+              color: toast.type === "success" ? "#15803d" : "#dc2626",
+            }}>
+              {toast.type === "success" ? "Message Sent" : "Failed to Send"}
+            </p>
+            <p style={{
+              margin: 0,
+              fontSize: "0.8rem",
+              fontWeight: 400,
+              color: "#4f4f4f",
+              lineHeight: 1.5,
+            }}>
+              {toast.message}
+            </p>
+          </div>
+
+          {/* Close */}
+          <button
+            onClick={() => setToast(null)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#9ca3af",
+              fontSize: "1rem",
+              padding: "0",
+              lineHeight: 1,
+              flexShrink: 0,
+            }}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Toast keyframe */}
+      <style>{`
+        @keyframes toastIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </>
   );
 }

@@ -48,7 +48,7 @@ import mockup4 from "../assets/mockup4.jpg";
 import grad from "../assets/grad.jpg";
 import soon from "../assets/soon.png";
 import bangkalProject from "../assets/bangkalproject.png";
-import virielleproject from "../assets/virielleproject.png";
+import virielleproject from "../assets/virielleorig.png";
 import laconslanetproject from "../assets/laconslanetproject.png";
 import arielleproject from "../assets/arielleproject.png";
 import bangkaLogo from "../assets/bangka.png";
@@ -1051,7 +1051,7 @@ function Portfolio() {
             </a>
           </li>
           <li>
-            <a href="/projects/qrush" className="nav-link-animated">
+            <a href="#projects" className="nav-link-animated">
               <span className="nav-text">
                 <span className="nav-text-top">Projects</span>
                 <span className="nav-text-bottom">Projects</span>
@@ -2192,7 +2192,7 @@ function Portfolio() {
                         </li>
                         <li>
                           <a
-                            href="https://instagram.com"
+                            href="https://www.instagram.com/klntaglr/"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -2221,7 +2221,7 @@ function Portfolio() {
                         </li>
                         <li>
                           <a
-                            href="https://linkedin.com"
+                            href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -2230,7 +2230,7 @@ function Portfolio() {
                         </li>
                         <li>
                           <a
-                            href="https://indeed.com"
+                            href="https://profile.indeed.com/?hl=en_PH&co=PH&from=gnav-jobseeker-profile--profile-one-frontend"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
