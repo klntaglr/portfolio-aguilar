@@ -977,6 +977,9 @@ body.menu-open {
   text-align: center;
   color: #2a2a2a;
   max-width: 1200px;
+  margin: 0 auto;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .about-title-bold {
@@ -1240,6 +1243,11 @@ body.menu-open {
     padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2rem);
   }
 
+  .about-container {
+    margin-top: clamp(1.5rem, 6vw, 3rem);
+    margin-bottom: clamp(1.5rem, 6vw, 3rem);
+  }
+
   .card-icon {
     width: clamp(60px, 15vw, 80px);
     height: clamp(60px, 15vw, 80px);
@@ -1265,6 +1273,8 @@ body.menu-open {
     font-size: clamp(1.8rem, 5.5vw, 3rem);
     margin-bottom: clamp(2rem, 4vw, 2.5rem);
     text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
   }
 
   .about-cards {
@@ -1834,6 +1844,11 @@ body.menu-open {
   background-color: #e8e8e8;
 }
 
+.about-marquee.works-section {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .works-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -1931,6 +1946,29 @@ body.menu-open {
   padding: 1rem 0 2rem;
 }
 
+.about-marquee .carousel-track {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.about-marquee-track {
+  width: max-content;
+  animation: about-marquee 40s linear infinite;
+}
+
+.about-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes about-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* Projects Grid */
 .projects-grid {
   display: grid;
@@ -1969,6 +2007,10 @@ body.menu-open {
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.about-marquee .project-image img {
+  object-fit: contain;
 }
 
 .project-card:hover .project-image img {
@@ -9927,5 +9969,1836 @@ body {
 
 .contact-option:hover .contact-option-icon svg {
   stroke: currentColor;
+}
+
+/* ============================================
+   CONTACT FLOW PAGE
+   ============================================ */
+
+.contact-flow-page {
+  --contact-flow-ink: #111111;
+  --contact-flow-muted: #969696;
+  --contact-flow-line: #e6e6e3;
+  --contact-flow-panel: #ffffff;
+  --contact-flow-bg: #f7f7f6;
+  --contact-flow-brand: #0d3052;
+  --contact-flow-accent: #c7f000;
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow-y: auto;
+  background: var(--contact-flow-bg);
+  color: var(--contact-flow-ink);
+  font-family: "Inter", sans-serif;
+}
+
+.contact-flow-page button,
+.contact-flow-page input,
+.contact-flow-page textarea {
+  font-family: inherit;
+}
+
+.contact-flow-topbar {
+  height: 88px;
+  width: 100%;
+  border-bottom: 1px solid var(--contact-flow-line);
+  background: rgba(247, 247, 246, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.25rem, 3vw, 2rem);
+}
+
+.contact-flow-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+
+  text-decoration: none;
+  min-width: 0;
+}
+
+.contact-flow-brand img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%);
+  flex: 0 0 auto;
+}
+
+.contact-flow-brand span {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.95;
+}
+
+.contact-flow-brand strong,
+.contact-flow-brand small {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.contact-flow-brand small {
+  color: #2c2c2c;
+  font-weight: 500;
+}
+
+.contact-flow-close {
+  width: 42px;
+  height: 42px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  color: #9a9a9a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.contact-flow-close:hover {
+  background: #ffffff;
+  border-color: var(--contact-flow-line);
+  color: var(--contact-flow-ink);
+}
+
+.contact-flow-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.contact-flow-stage {
+  min-height: calc(100vh - 88px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  padding: clamp(3rem, 7vw, 7.25rem) 1rem 3rem;
+}
+
+.contact-flow-card {
+  width: min(512px, calc(100vw - 2rem));
+  min-height: 454px;
+  background: var(--contact-flow-panel);
+  border: 1px solid rgba(18, 18, 18, 0.04);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(18, 18, 18, 0.08);
+  padding: clamp(2rem, 5vw, 2.6rem);
+  overflow: hidden;
+}
+
+.contact-flow-progress-row {
+  display: grid;
+  grid-template-columns: 68px minmax(120px, 1fr) 44px;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(2.9rem, 6vw, 3.75rem);
+}
+
+.contact-flow-step-label,
+.contact-flow-back,
+.contact-flow-step-count {
+  color: #9a9a9a;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.contact-flow-step-label,
+.contact-flow-step-count {
+  font-family: "Geist Mono", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", monospace;
+}
+
+.contact-flow-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.contact-flow-back:hover {
+  color: var(--contact-flow-ink);
+}
+
+.contact-flow-back svg {
+  width: 14px;
+  height: 14px;
+}
+
+.contact-flow-step-count {
+  text-align: right;
+}
+
+.contact-flow-progress-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #ebebe8;
+  overflow: hidden;
+}
+
+.contact-flow-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 25%;
+  background: var(--contact-flow-ink);
+}
+
+.contact-flow-step {
+  min-height: 320px;
+}
+
+.contact-flow-copy {
+  text-align: center;
+  margin: 0 auto clamp(2rem, 4vw, 2.4rem);
+  max-width: 420px;
+}
+
+.contact-flow-copy h1 {
+  margin: 0;
+  color: var(--contact-flow-ink);
+  font-size: clamp(1.35rem, 2.3vw, 1.62rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.contact-flow-copy p {
+  margin: 0.85rem 0 0;
+  color: var(--contact-flow-muted);
+  font-size: clamp(0.88rem, 1.6vw, 0.98rem);
+  line-height: 1.5;
+}
+
+.contact-flow-options {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.contact-flow-option {
+  width: 100%;
+  min-height: 76px;
+  border: 1px solid #e3e3e0;
+  border-radius: 13px;
+  background: #fbfbfb;
+  color: var(--contact-flow-ink);
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.05rem 1.2rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease,
+    box-shadow 0.22s ease, color 0.22s ease;
+}
+
+.contact-flow-option:hover {
+  border-color: #d0d0cc;
+  transform: translateY(-1px);
+}
+
+.contact-flow-option.is-active {
+  background: var(--contact-flow-ink);
+  border-color: var(--contact-flow-ink);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(17, 17, 17, 0.12);
+}
+
+.contact-flow-option-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: #f1f1ef;
+  color: var(--contact-flow-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.22s ease, color 0.22s ease;
+}
+
+.contact-flow-option.is-active .contact-flow-option-icon {
+  background: rgba(255, 255, 255, 0.11);
+  color: #ffffff;
+}
+
+.contact-flow-option-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.contact-flow-option-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.contact-flow-option-copy strong {
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: inherit;
+}
+
+.contact-flow-option-copy small {
+  color: #8e8e8e;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.contact-flow-option.is-active .contact-flow-option-copy small {
+  color: #b9b9b9;
+}
+
+.contact-flow-option-arrow {
+  width: 17px;
+  height: 17px;
+  color: #c2c2c0;
+}
+
+.contact-flow-option.is-active .contact-flow-option-arrow {
+  color: #ffffff;
+}
+
+.contact-flow-budget-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.contact-flow-budget-card {
+  min-height: 96px;
+  border: 1px solid #e2e2df;
+  border-radius: 12px;
+  background: #fbfbfb;
+  color: var(--contact-flow-ink);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1rem;
+  transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease,
+    transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.contact-flow-budget-card:hover {
+  border-color: #d0d0cc;
+  transform: translateY(-1px);
+}
+
+.contact-flow-budget-card.is-active {
+  background: var(--contact-flow-ink);
+  border-color: var(--contact-flow-ink);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(17, 17, 17, 0.12);
+}
+
+.contact-flow-budget-card strong {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-family: "Geist Mono", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", monospace;
+}
+
+.contact-flow-budget-card span {
+  color: #999999;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.contact-flow-budget-card.is-active span {
+  color: #b9b9b9;
+}
+
+.contact-flow-details,
+.contact-flow-final {
+  display: grid;
+  gap: 1.55rem;
+}
+
+.contact-flow-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.contact-flow-label {
+  color: #a2a2a2;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.contact-flow-label em {
+  color: #b8b8b8;
+  font-size: 0.65rem;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.contact-flow-timeline-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.contact-flow-chip {
+  min-height: 38px;
+  border: 1px solid #e2e2df;
+  background: #ffffff;
+  color: #777777;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0 1.05rem;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.contact-flow-chip.is-active,
+.contact-flow-chip:hover {
+  background: var(--contact-flow-ink);
+  border-color: var(--contact-flow-ink);
+  color: #ffffff;
+}
+
+.contact-flow-line-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #ddddda;
+  border-radius: 0;
+  background: transparent;
+  color: var(--contact-flow-ink);
+  font-size: 0.98rem;
+  font-weight: 600;
+  min-height: 42px;
+  outline: none;
+  padding: 0.15rem 0 0.65rem;
+  transition: border-color 0.2s ease;
+}
+
+.contact-flow-line-input:focus {
+  border-color: var(--contact-flow-ink);
+}
+
+.contact-flow-line-input::placeholder {
+  color: #d0d0cd;
+  font-weight: 700;
+}
+
+.contact-flow-line-textarea {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.contact-flow-primary {
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  background: var(--contact-flow-ink);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.contact-flow-primary:hover:not(:disabled) {
+  background: var(--contact-flow-brand);
+  transform: translateY(-1px);
+}
+
+.contact-flow-primary:disabled {
+  background: #e1e1df;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.contact-flow-split-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contact-flow-recaptcha {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.contact-flow-recaptcha-empty {
+  width: 100%;
+  border: 1px solid #e5e5e2;
+  background: #fbfbfb;
+  color: #999999;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 1rem;
+  text-align: center;
+}
+
+.contact-flow-status {
+  margin: -0.4rem 0 0;
+  text-align: center;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.contact-flow-status.is-success {
+  color: #15803d;
+}
+
+.contact-flow-status.is-error {
+  color: #dc2626;
+}
+
+.contact-flow-honeypot {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-flow-direct {
+  width: min(512px, calc(100vw - 2rem));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.contact-flow-direct a,
+.contact-flow-direct button {
+  min-height: 36px;
+  border: 1px solid #e2e2df;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #777777;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0 0.8rem;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 800;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.contact-flow-direct a:hover,
+.contact-flow-direct button:hover {
+  background: #ffffff;
+  border-color: #cfcfcc;
+  color: var(--contact-flow-ink);
+  transform: translateY(-1px);
+}
+
+.contact-flow-direct svg {
+  width: 14px;
+  height: 14px;
+}
+
+.contact-flow-toast {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 9999;
+  width: min(360px, calc(100vw - 2rem));
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid #e6e6e3;
+  border-left: 4px solid var(--contact-flow-brand);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 46px rgba(13, 48, 82, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.85rem 0.9rem;
+}
+
+.contact-flow-toast.is-success {
+  border-left-color: #16a34a;
+}
+
+.contact-flow-toast.is-error {
+  border-left-color: #dc2626;
+}
+
+.contact-flow-toast-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 48, 82, 0.08);
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-toast.is-success .contact-flow-toast-icon {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.contact-flow-toast.is-error .contact-flow-toast-icon {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.contact-flow-toast-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.contact-flow-toast strong,
+.contact-flow-toast small {
+  display: block;
+}
+
+.contact-flow-toast strong {
+  color: var(--contact-flow-ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.contact-flow-toast small {
+  color: #666666;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 0.12rem;
+}
+
+.contact-flow-toast button {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #9a9a9a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.contact-flow-toast button:hover {
+  background: #f2f2ef;
+  color: var(--contact-flow-ink);
+}
+
+.contact-flow-toast button svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 640px) {
+  .contact-flow-topbar {
+    height: 76px;
+    padding: 0 1rem;
+  }
+
+  .contact-flow-brand img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .contact-flow-brand strong,
+  .contact-flow-brand small {
+    font-size: 0.7rem;
+  }
+
+  .contact-flow-stage {
+    min-height: calc(100vh - 76px);
+    padding: 2rem 0.85rem 2rem;
+  }
+
+  .contact-flow-card {
+    width: 100%;
+    min-height: auto;
+    border-radius: 18px;
+    padding: 1.35rem;
+  }
+
+  .contact-flow-progress-row {
+    grid-template-columns: 58px minmax(80px, 1fr) 40px;
+    gap: 0.65rem;
+    margin-bottom: 2.35rem;
+  }
+
+  .contact-flow-step-label,
+  .contact-flow-back,
+  .contact-flow-step-count {
+    font-size: 0.7rem;
+  }
+
+  .contact-flow-copy {
+    margin-bottom: 1.65rem;
+  }
+
+  .contact-flow-copy h1 {
+    font-size: clamp(1.22rem, 7vw, 1.5rem);
+  }
+
+  .contact-flow-copy p {
+    font-size: 0.86rem;
+  }
+
+  .contact-flow-option {
+    min-height: 72px;
+    grid-template-columns: 36px minmax(0, 1fr) 16px;
+    gap: 0.8rem;
+    padding: 0.8rem;
+  }
+
+  .contact-flow-option-copy strong {
+    font-size: 0.86rem;
+  }
+
+  .contact-flow-option-copy small {
+    font-size: 0.76rem;
+  }
+
+  .contact-flow-budget-grid,
+  .contact-flow-split-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-flow-budget-card {
+    min-height: 78px;
+  }
+
+  .contact-flow-timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-flow-chip {
+    padding: 0 0.6rem;
+  }
+
+  .contact-flow-recaptcha {
+    justify-content: flex-start;
+    transform: scale(0.88);
+    transform-origin: left center;
+    width: 114%;
+  }
+
+  .contact-flow-direct {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .contact-flow-brand span {
+    display: none;
+  }
+
+  .contact-flow-recaptcha {
+    transform: scale(0.78);
+    width: 128%;
+  }
+}
+
+/* ============================================
+   CONTACT FLOW RESPONSIVE REFINEMENT
+   ============================================ */
+
+.contact-flow-page {
+  --contact-flow-ink: #0d3052;
+  --contact-flow-muted: #5f7186;
+  --contact-flow-line: rgba(13, 48, 82, 0.13);
+  --contact-flow-panel: #ffffff;
+  --contact-flow-bg: #f4f8fb;
+  --contact-flow-brand: #0d3052;
+  --contact-flow-accent: #c7f000;
+  --contact-flow-accent-ink: #334000;
+  background:
+    linear-gradient(180deg, rgba(199, 240, 0, 0.07), rgba(244, 248, 251, 0) 34%),
+    var(--contact-flow-bg);
+}
+
+.contact-flow-topbar {
+  height: 72px;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: var(--contact-flow-line);
+}
+
+.contact-flow-brand {
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-brand img {
+  width: 48px;
+  height: 48px;
+  filter: brightness(0) saturate(100%);
+}
+
+.contact-flow-brand strong,
+.contact-flow-brand small {
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-close {
+  color: var(--contact-flow-muted);
+}
+
+.contact-flow-close:hover {
+  border-color: rgba(13, 48, 82, 0.15);
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-stage {
+  min-height: calc(100dvh - 72px);
+  justify-content: center;
+  gap: 0.85rem;
+  padding: clamp(1rem, 3vh, 2rem) 1rem;
+}
+
+.contact-flow-card {
+  width: min(720px, calc(100vw - 2rem));
+  min-height: 0;
+  border-color: rgba(13, 48, 82, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 18px 54px rgba(13, 48, 82, 0.13);
+  overflow: visible;
+  padding: clamp(1.25rem, 2.6vw, 1.8rem);
+}
+
+.contact-flow-progress-row {
+  grid-template-columns: 82px minmax(110px, 1fr) 48px;
+  gap: 0.85rem;
+  margin-bottom: clamp(1.25rem, 3vw, 1.8rem);
+}
+
+.contact-flow-step-label,
+.contact-flow-back,
+.contact-flow-step-count {
+  color: var(--contact-flow-muted);
+}
+
+.contact-flow-back:hover {
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-progress-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(13, 48, 82, 0.1);
+}
+
+.contact-flow-progress-fill {
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--contact-flow-brand), var(--contact-flow-accent));
+}
+
+.contact-flow-step {
+  min-height: 0;
+}
+
+.contact-flow-copy {
+  margin-bottom: clamp(1.1rem, 2.4vw, 1.45rem);
+}
+
+.contact-flow-copy h1 {
+  color: var(--contact-flow-brand);
+  font-size: clamp(1.28rem, 2vw, 1.72rem);
+}
+
+.contact-flow-copy p {
+  color: var(--contact-flow-muted);
+  font-size: clamp(0.86rem, 1.2vw, 0.96rem);
+  margin-top: 0.55rem;
+}
+
+.contact-flow-options {
+  gap: 0.65rem;
+}
+
+.contact-flow-option {
+  min-height: 68px;
+  border-color: rgba(13, 48, 82, 0.14);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--contact-flow-brand);
+  padding: 0.75rem 0.85rem;
+}
+
+.contact-flow-option:hover {
+  border-color: rgba(13, 48, 82, 0.3);
+  box-shadow: 0 10px 24px rgba(13, 48, 82, 0.08);
+}
+
+.contact-flow-option.is-active {
+  background: #0d3052;
+  border-color: #0d3052;
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(13, 48, 82, 0.22);
+}
+
+.contact-flow-option-icon {
+  background: rgba(13, 48, 82, 0.07);
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-option.is-active .contact-flow-option-icon {
+  background: var(--contact-flow-accent);
+  color: var(--contact-flow-accent-ink);
+}
+
+.contact-flow-option-copy {
+  gap: 0.18rem;
+}
+
+.contact-flow-option-copy strong {
+  font-size: 0.93rem;
+}
+
+.contact-flow-option-copy small {
+  color: var(--contact-flow-muted);
+}
+
+.contact-flow-option-copy em {
+  color: #6f8500;
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.contact-flow-option.is-active .contact-flow-option-copy small {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.contact-flow-option.is-active .contact-flow-option-copy em {
+  color: var(--contact-flow-accent);
+}
+
+.contact-flow-option-arrow {
+  color: rgba(13, 48, 82, 0.32);
+}
+
+.contact-flow-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.contact-flow-detail-card {
+  min-height: 86px;
+  border: 1px solid rgba(13, 48, 82, 0.14);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--contact-flow-brand);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.32rem;
+  padding: 0.85rem 0.95rem;
+  text-align: left;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.contact-flow-detail-card:hover {
+  border-color: rgba(13, 48, 82, 0.3);
+  box-shadow: 0 10px 24px rgba(13, 48, 82, 0.08);
+  transform: translateY(-1px);
+}
+
+.contact-flow-detail-card.is-active {
+  background: #0d3052;
+  border-color: #0d3052;
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(13, 48, 82, 0.2);
+}
+
+.contact-flow-detail-card strong {
+  font-size: 0.92rem;
+  font-weight: 850;
+  line-height: 1.18;
+}
+
+.contact-flow-detail-card span {
+  color: var(--contact-flow-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.contact-flow-detail-card.is-active span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.contact-flow-details,
+.contact-flow-final {
+  gap: 1rem;
+}
+
+.contact-flow-field {
+  gap: 0.45rem;
+}
+
+.contact-flow-label {
+  color: #365a7d;
+  font-size: 0.66rem;
+}
+
+.contact-flow-timeline-grid {
+  gap: 0.45rem;
+}
+
+.contact-flow-chip {
+  min-height: 36px;
+  border-color: rgba(13, 48, 82, 0.16);
+  border-radius: 999px;
+  color: #365a7d;
+  padding: 0 0.9rem;
+}
+
+.contact-flow-chip.is-active,
+.contact-flow-chip:hover {
+  background: var(--contact-flow-accent);
+  border-color: var(--contact-flow-accent);
+  color: var(--contact-flow-accent-ink);
+}
+
+.contact-flow-line-input {
+  border: 1px solid rgba(13, 48, 82, 0.16);
+  border-radius: 10px;
+  background: #f8fbfd;
+  color: var(--contact-flow-brand);
+  min-height: 44px;
+  padding: 0.7rem 0.85rem;
+}
+
+.contact-flow-line-input:focus {
+  border-color: var(--contact-flow-brand);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(199, 240, 0, 0.28);
+}
+
+.contact-flow-line-input::placeholder {
+  color: #96a5b4;
+  font-weight: 600;
+}
+
+.contact-flow-line-textarea {
+  min-height: 108px;
+}
+
+.contact-flow-primary {
+  min-height: 46px;
+  border-radius: 10px;
+  background: var(--contact-flow-brand);
+  color: #ffffff;
+}
+
+.contact-flow-primary:hover:not(:disabled) {
+  background: #15466f;
+  box-shadow: 0 12px 28px rgba(13, 48, 82, 0.18);
+}
+
+.contact-flow-primary:disabled {
+  background: #dce6ee;
+  color: #7890a4;
+}
+
+.contact-flow-recaptcha {
+  min-height: 72px;
+}
+
+.contact-flow-recaptcha-empty {
+  border-color: rgba(13, 48, 82, 0.14);
+  border-radius: 10px;
+  background: rgba(199, 240, 0, 0.09);
+  color: #365a7d;
+}
+
+.contact-flow-direct {
+  width: min(720px, calc(100vw - 2rem));
+  gap: 0.45rem;
+}
+
+.contact-flow-direct a,
+.contact-flow-direct button {
+  min-height: 34px;
+  border-color: rgba(13, 48, 82, 0.16);
+  background: rgba(255, 255, 255, 0.82);
+  color: #365a7d;
+}
+
+.contact-flow-direct a:hover,
+.contact-flow-direct button:hover {
+  border-color: rgba(13, 48, 82, 0.32);
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-toast {
+  border-color: rgba(13, 48, 82, 0.14);
+}
+
+@media (max-height: 760px) and (min-width: 760px) {
+  .contact-flow-stage {
+    justify-content: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .contact-flow-card {
+    padding: 1.2rem 1.45rem;
+  }
+
+  .contact-flow-progress-row {
+    margin-bottom: 1.05rem;
+  }
+
+  .contact-flow-copy {
+    margin-bottom: 1rem;
+  }
+
+  .contact-flow-detail-card {
+    min-height: 76px;
+  }
+
+  .contact-flow-line-textarea {
+    min-height: 92px;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-flow-topbar {
+    height: 64px;
+  }
+
+  .contact-flow-brand img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .contact-flow-stage {
+    min-height: calc(100dvh - 64px);
+    justify-content: flex-start;
+    padding: 0.75rem 0.75rem 1.25rem;
+  }
+
+  .contact-flow-card {
+    width: 100%;
+    border-radius: 16px;
+    padding: 1rem;
+  }
+
+  .contact-flow-progress-row {
+    grid-template-columns: 58px minmax(70px, 1fr) 40px;
+    margin-bottom: 1.15rem;
+  }
+
+  .contact-flow-copy {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .contact-flow-option {
+    min-height: 70px;
+    padding: 0.72rem;
+  }
+
+  .contact-flow-option-copy strong {
+    font-size: 0.86rem;
+  }
+
+  .contact-flow-option-copy small {
+    font-size: 0.74rem;
+  }
+
+  .contact-flow-option-copy em {
+    font-size: 0.6rem;
+  }
+
+  .contact-flow-detail-grid,
+  .contact-flow-split-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-flow-detail-card {
+    min-height: 74px;
+    padding: 0.75rem 0.82rem;
+  }
+
+  .contact-flow-timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-flow-chip {
+    width: 100%;
+    min-height: 38px;
+    padding: 0 0.55rem;
+  }
+
+  .contact-flow-line-textarea {
+    min-height: 118px;
+  }
+
+  .contact-flow-recaptcha {
+    justify-content: flex-start;
+    transform: scale(0.88);
+    transform-origin: left top;
+    width: 114%;
+    min-height: 68px;
+  }
+
+  .contact-flow-direct {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .contact-flow-recaptcha {
+    transform: scale(0.78);
+    width: 128%;
+    min-height: 62px;
+  }
+}
+
+/* ============================================
+   CONTACT FLOW MINIMAL CARD LAYOUT
+   ============================================ */
+
+.contact-flow-page {
+  --contact-flow-ink: #102f4f;
+  --contact-flow-muted: #8c96a1;
+  --contact-flow-soft: #f5f6f7;
+  --contact-flow-line: #e1e5e8;
+  --contact-flow-panel: #ffffff;
+  --contact-flow-bg: #f7f7f7;
+  --contact-flow-brand: #0d3052;
+  --contact-flow-accent: #b9df00;
+  --contact-flow-accent-ink: #334000;
+  --contact-flow-card-min: 96px;
+  min-height: 100dvh;
+  background: var(--contact-flow-bg);
+}
+
+.contact-flow-topbar {
+  height: 76px;
+  width: 100%;
+  border-bottom: 1px solid var(--contact-flow-line);
+  background: rgba(255, 255, 255, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+}
+
+.contact-flow-stage {
+  min-height: calc(100dvh - 76px);
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(1.5rem, 4vh, 2.75rem) 1rem;
+}
+
+.contact-flow-brand {
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-brand img {
+  width: 48px;
+  height: 48px;
+  filter: brightness(0) saturate(100%);
+}
+
+.contact-flow-brand strong,
+.contact-flow-brand small {
+  color: var(--contact-flow-brand);
+  font-weight: 600;
+}
+
+.contact-flow-close {
+  color: #9aa1a7;
+}
+
+.contact-flow-close:hover {
+  border-color: var(--contact-flow-line);
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-card {
+  width: min(560px, calc(100vw - 2rem));
+  min-height: 0;
+  border: 1px solid rgba(13, 48, 82, 0.05);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 20px 55px rgba(13, 48, 82, 0.08);
+  padding: clamp(1.8rem, 4.5vw, 2.4rem);
+}
+
+.contact-flow-progress-row {
+  grid-template-columns: 66px minmax(120px, 1fr) 42px;
+  gap: 1rem;
+  margin-bottom: clamp(2.6rem, 6vw, 3.9rem);
+}
+
+.contact-flow-step-label,
+.contact-flow-back,
+.contact-flow-step-count {
+  color: #9aa1a7;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.contact-flow-step-label,
+.contact-flow-step-count {
+  font-family: "Geist Mono", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", monospace;
+}
+
+.contact-flow-back {
+  color: #9aa1a7;
+}
+
+.contact-flow-back:hover {
+  color: var(--contact-flow-brand);
+}
+
+.contact-flow-progress-track {
+  height: 2px;
+  border-radius: 999px;
+  background: #e5e7e8;
+}
+
+.contact-flow-progress-fill {
+  background: var(--contact-flow-brand);
+}
+
+.contact-flow-copy {
+  max-width: 430px;
+  margin: 0 auto clamp(1.9rem, 4vw, 2.45rem);
+  text-align: center;
+}
+
+.contact-flow-copy h1 {
+  color: #151719;
+  font-size: clamp(1.48rem, 3vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+.contact-flow-copy p {
+  color: #959595;
+  font-size: clamp(0.95rem, 1.6vw, 1rem);
+  font-weight: 400;
+  line-height: 1.45;
+  margin-top: 0.65rem;
+}
+
+.contact-flow-options,
+.contact-flow-details,
+.contact-flow-final,
+.contact-flow-detail-grid {
+  width: min(448px, 100%);
+  margin-inline: auto;
+}
+
+.contact-flow-options {
+  gap: 0.65rem;
+}
+
+.contact-flow-option {
+  min-height: var(--contact-flow-card-min);
+  grid-template-columns: 38px minmax(0, 1fr) 18px;
+  gap: 0.95rem;
+  border: 1px solid #e1e4e7;
+  border-radius: 13px;
+  background: #ffffff;
+  color: #17191c;
+  padding: 1.1rem 1.2rem;
+  box-shadow: none;
+}
+
+.contact-flow-option:hover {
+  border-color: #cbd4dc;
+  box-shadow: none;
+}
+
+.contact-flow-option.is-active {
+  background: var(--contact-flow-brand);
+  border-color: var(--contact-flow-brand);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(13, 48, 82, 0.14);
+}
+
+.contact-flow-option-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #f3f4f5;
+  color: #2a2f35;
+}
+
+.contact-flow-option.is-active .contact-flow-option-icon {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.contact-flow-option-copy {
+  gap: 0.26rem;
+}
+
+.contact-flow-option-copy strong {
+  color: inherit;
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.contact-flow-option-copy small {
+  color: #969696;
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.contact-flow-option-copy em {
+  display: none;
+}
+
+.contact-flow-option.is-active .contact-flow-option-copy small {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.contact-flow-option-arrow {
+  color: #c4c8cc;
+}
+
+.contact-flow-option.is-active .contact-flow-option-arrow {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.contact-flow-detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.contact-flow-detail-card {
+  min-height: var(--contact-flow-card-min);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e1e4e7;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #17191c;
+  padding: 1.2rem;
+  text-align: center;
+  box-shadow: none;
+}
+
+.contact-flow-budget-card {
+  min-height: var(--contact-flow-card-min);
+}
+
+.contact-flow-detail-card:hover {
+  border-color: #cbd4dc;
+  box-shadow: none;
+}
+
+.contact-flow-detail-card.is-active {
+  background: var(--contact-flow-brand);
+  border-color: var(--contact-flow-brand);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(13, 48, 82, 0.14);
+}
+
+.contact-flow-detail-card strong {
+  font-size: 0.98rem;
+  font-weight: 650;
+}
+
+.contact-flow-detail-card span {
+  color: #989898;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.contact-flow-detail-card.is-active span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.contact-flow-details,
+.contact-flow-final {
+  gap: 1.6rem;
+}
+
+.contact-flow-field {
+  gap: 0.65rem;
+}
+
+.contact-flow-label {
+  color: #9a9a9a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.contact-flow-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 0.55rem;
+  row-gap: 0.7rem;
+}
+
+.contact-flow-chip {
+  min-height: 42px;
+  border: 1px solid #e0e3e5;
+  border-radius: 0;
+  background: #ffffff;
+  color: #757b81;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.22;
+  padding: 0.55rem 0.82rem;
+  text-align: center;
+  white-space: normal;
+}
+
+.contact-flow-chip.is-active,
+.contact-flow-chip:hover {
+  background: var(--contact-flow-brand);
+  border-color: var(--contact-flow-brand);
+  color: #ffffff;
+}
+
+.contact-flow-line-input {
+  min-height: 46px;
+  border: 0;
+  border-bottom: 1px solid #d9dddf;
+  border-radius: 0;
+  background: transparent;
+  color: #151719;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.3rem 0 0.75rem;
+  box-shadow: none;
+}
+
+.contact-flow-phone-group {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.contact-flow-country-select {
+  min-width: 120px;
+}
+
+.contact-flow-line-input:focus {
+  border-color: var(--contact-flow-brand);
+  background: transparent;
+  box-shadow: 0 2px 0 rgba(185, 223, 0, 0.4);
+}
+
+.contact-flow-line-input::placeholder {
+  color: #c8c8c8;
+  font-weight: 500;
+}
+
+.contact-flow-date-input {
+  color-scheme: light;
+}
+
+.contact-flow-line-textarea {
+  min-height: 96px;
+  line-height: 1.55;
+}
+
+.contact-flow-primary {
+  min-height: 50px;
+  border-radius: 0;
+  background: var(--contact-flow-brand);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.contact-flow-primary:hover:not(:disabled) {
+  background: #16486f;
+  box-shadow: none;
+}
+
+.contact-flow-primary:disabled {
+  background: #e3e5e6;
+  color: #a8a8a8;
+}
+
+.contact-flow-split-fields {
+  gap: 1.4rem;
+}
+
+.contact-flow-recaptcha {
+  min-height: 76px;
+}
+
+.contact-flow-recaptcha-empty {
+  border: 1px solid #e1e4e7;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #7b8791;
+}
+
+.contact-flow-direct {
+  width: min(560px, calc(100vw - 2rem));
+}
+
+.contact-flow-direct a,
+.contact-flow-direct button {
+  border-color: #e0e3e5;
+  background: #ffffff;
+  color: #68747e;
+  box-shadow: none;
+}
+
+.contact-flow-direct a:hover,
+.contact-flow-direct button:hover {
+  border-color: #cbd4dc;
+  color: var(--contact-flow-brand);
+  box-shadow: none;
+}
+
+.contact-flow-toast {
+  border: 0;
+  border-left: 0;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-height: 760px) and (min-width: 760px) {
+  .contact-flow-stage {
+    justify-content: flex-start;
+    padding-top: 1rem;
+  }
+
+  .contact-flow-card {
+    padding: 1.5rem 1.75rem;
+  }
+
+  .contact-flow-progress-row {
+    margin-bottom: 1.65rem;
+  }
+
+  .contact-flow-copy {
+    margin-bottom: 1.35rem;
+  }
+
+  .contact-flow-option {
+    min-height: 68px;
+    padding-block: 0.9rem;
+  }
+
+  .contact-flow-detail-card {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 900px) {
+  .contact-flow-topbar {
+    height: 72px;
+    padding-inline: 1rem;
+  }
+
+  .contact-flow-stage {
+    min-height: calc(100dvh - 72px);
+    justify-content: flex-start;
+    padding: 1rem;
+  }
+
+  .contact-flow-card {
+    width: min(560px, 100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-flow-page {
+    --contact-flow-card-min: 82px;
+  }
+
+  .contact-flow-topbar {
+    height: 66px;
+  }
+
+  .contact-flow-brand img {
+    width: 42px;
+    height: 42px;
+    filter: brightness(0) saturate(100%);
+  }
+
+  .contact-flow-brand strong,
+  .contact-flow-brand small {
+    font-size: 0.68rem;
+  }
+
+  .contact-flow-stage {
+    min-height: calc(100dvh - 66px);
+    justify-content: flex-start;
+    padding: 0.8rem;
+  }
+
+  .contact-flow-card {
+    width: 100%;
+    border-radius: 18px;
+    padding: 1.35rem;
+  }
+
+  .contact-flow-progress-row {
+    grid-template-columns: 58px minmax(70px, 1fr) 40px;
+    gap: 0.65rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .contact-flow-copy {
+    text-align: center;
+    margin-bottom: 1.45rem;
+  }
+
+  .contact-flow-copy h1 {
+    font-size: clamp(1.3rem, 6vw, 1.5rem);
+  }
+
+  .contact-flow-copy p {
+    font-size: 0.88rem;
+  }
+
+  .contact-flow-option {
+    min-height: 72px;
+    grid-template-columns: 36px minmax(0, 1fr) 14px;
+    gap: 0.78rem;
+    padding: 0.95rem;
+  }
+
+  .contact-flow-option-copy strong {
+    font-size: 0.88rem;
+    font-weight: 650;
+  }
+
+  .contact-flow-option-copy small {
+    font-size: 0.76rem;
+  }
+
+  .contact-flow-detail-grid,
+  .contact-flow-split-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-flow-detail-card {
+    min-height: 76px;
+    align-items: flex-start;
+    text-align: left;
+    padding: 0.95rem 1rem;
+  }
+
+  .contact-flow-phone-group {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-flow-details,
+  .contact-flow-final {
+    gap: 1.25rem;
+  }
+
+  .contact-flow-timeline-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0.55rem;
+    row-gap: 0.65rem;
+  }
+
+  .contact-flow-chip {
+    width: 100%;
+    min-height: 44px;
+    padding-inline: 0.65rem;
+  }
+
+  .contact-flow-line-textarea {
+    min-height: 110px;
+  }
+
+  .contact-flow-recaptcha {
+    justify-content: flex-start;
+    transform: scale(0.88);
+    transform-origin: left top;
+    width: 114%;
+    min-height: 68px;
+  }
+
+  .contact-flow-direct {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .contact-flow-brand span {
+    display: none;
+  }
+
+  .contact-flow-card {
+    padding: 1.1rem;
+  }
+
+  .contact-flow-progress-row {
+    grid-template-columns: 50px minmax(58px, 1fr) 36px;
+  }
+
+  .contact-flow-recaptcha {
+    transform: scale(0.78);
+    width: 128%;
+    min-height: 62px;
+  }
 }
 

@@ -922,7 +922,7 @@ function Portfolio() {
     {
       question: "What's your background in UI/UX and web design?",
       answer:
-        "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 6 projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
+        "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 4 projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
     },
     {
       question: "What does your design process look like?",
@@ -1220,7 +1220,7 @@ function Portfolio() {
                   </h1>
                   <div className="hero-stats hero-stats-entry">
                     <div className="stat-item">
-                      <span className="stat-number">6</span>
+                      <span className="stat-number">4</span>
                       <span className="stat-label">Projects</span>
                     </div>
                     <div className="stat-item">
@@ -1237,7 +1237,7 @@ function Portfolio() {
                       View My Work
                     </a>
 
-                    <a href="/about-web-designer" className="cta-buttons1">
+                    <a href="/contact-me" className="cta-buttons1">
                       Let's Connect
                     </a>
                   </div>
@@ -1996,7 +1996,7 @@ function Portfolio() {
                 </div>
                 <div className="about-stats ">
                   <div className="stats-item">
-                    <h3 className="stats-number">6</h3>
+                    <h3 className="stats-number">4</h3>
                     <img
                       src={projects}
                       alt="projects watermark"
@@ -2158,7 +2158,7 @@ function Portfolio() {
                           <a href="#heros">Home</a>
                         </li>
                         <li>
-                          <a href="#about">About</a>
+                          <a href="/about-web-designer">About</a>
                         </li>
                         <li>
                           <a href="#services">Services</a>
@@ -2173,7 +2173,7 @@ function Portfolio() {
                           <a href="#process">Contact</a>
                         </li>
                         <li>
-                          <a href="#about">Profile</a>
+                        
                         </li>
                       </ul>
                     </div>

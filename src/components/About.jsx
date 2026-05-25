@@ -1,6 +1,6 @@
     // COMPLETE ABOUT.JSX WITH PHILOSOPHY, CASE STUDIES, AND DETAILED PROCESS
 
-    import { motion, useScroll, useTransform } from "framer-motion";
+    import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -14,17 +14,35 @@ import {
   FaLinkedin
 } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import {
+  FiAlertCircle,
+  FiBriefcase,
+  FiCheckCircle,
+  FiChevronDown,
+  FiChevronLeft,
+  FiChevronRight,
+  FiChevronUp,
+  FiEdit3,
+  FiGlobe,
+  FiLayers,
+  FiMail,
+  FiMessageSquare,
+  FiRepeat,
+  FiUser,
+  FiX
+} from "react-icons/fi";
 import {
   SiIndeed
 } from "react-icons/si";
 import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
 import blueBackground1 from "../assets/blue1.png";
 import logo from "../assets/logo.png";
-import mockup1 from "../assets/mockup1.jpg";
-import mockup3 from "../assets/mockup3.png";
-import mockup4 from "../assets/mockup4.jpg";
-import mockup2 from "../assets/wireframe.jpeg";import grad from "../assets/grad.jpg";
+import arielle1 from "../assets/arielle1.png";
+import bangkal1 from "../assets/bangkal1.png";
+import laconslanet5 from "../assets/laconslanet5.png";
+import mockup2 from "../assets/wireframe.jpeg";
+import virielleorig from "../assets/virielleorig.png";
+import grad from "../assets/grad.jpg";
 import "./Portfolio.css";
 
     import TiltedCard from "./TiltedCard";
@@ -34,11 +52,23 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
     function About() {
       const [heroReady, setHeroReady] = useState(false);
       const containerRef = useRef(null);
+      const consultationToastTimerRef = useRef(null);
+      const [consultationStep, setConsultationStep] = useState(0);
+      const [consultationToast, setConsultationToast] = useState(null);
+      const [consultationForm, setConsultationForm] = useState({
+        projectType: "redesign",
+        investment: "project",
+        timeline: "asap",
+        website: "",
+        brief: "",
+        name: "",
+        email: "",
+      });
 
       // Case Studies Data
       const caseStudies = [
         {
-          image: mockup2,
+          image: virielleorig,
           title: "Martin Architectural",
           category: "Architecture Portfolio",
           role: "UI/UX Design & Development",
@@ -46,7 +76,7 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
           tags: ["React", "GSAP", "Figma"]
         },
         {
-          image: mockup1,
+          image: arielle1,
           title: "Century 21",
           category: "Real Estate",
           role: "Website Redesign",
@@ -54,40 +84,22 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
           tags: ["UI/UX", "Landing Pages", "Prototyping"]
         },
         {
-          image: mockup3,
+          image: laconslanet5,
           title: "Digital Wellness",
           category: "Healthcare",
           role: "Mobile App Design",
           impact: "4.8★ user rating on launch",
           tags: ["Mobile UI", "User Research", "Figma"]
         },
+        {
+          image: bangkal1,
+          title: "Barangay QRUSH",
+          category: "Public Service",
+          role: "Full-stack Web App",
+          impact: "Streamlined document requests",
+          tags: ["React", "Firebase", "GSAP"]
+        },
       ];
-
-      const trackRef = useRef(null);
-
-      useEffect(() => {
-        const track = trackRef.current;
-        if (!track) return;
-
-        const cards = track.querySelectorAll(".project-card");
-        const cardWidth = cards[0].offsetWidth + 32;
-        const totalWidth = cardWidth * (cards.length / 2);
-
-        const animation = gsap.to(track, {
-          x: `-=${totalWidth}`,
-          duration: 25,
-          ease: "none",
-          repeat: -1,
-          modifiers: {
-            x: gsap.utils.unitize((x) => parseFloat(x) % totalWidth),
-          },
-        });
-
-        track.addEventListener("mouseenter", () => animation.pause());
-        track.addEventListener("mouseleave", () => animation.resume());
-
-        return () => animation.kill();
-      }, []);
 
       useEffect(() => {
         const cards = document.querySelectorAll(".project-card");
@@ -386,7 +398,7 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
         {
           question: "What's your background and education?",
           answer:
-            "I'm currently a BSIT student at La Consolacion University Philippines, specializing in UI/UX design and frontend development. Over the past year, I've completed 6 projects ranging from landing pages to full websites, combining academic learning with hands-on experience. I'm actively expanding my skills in React, GSAP, and modern web development practices.",
+            "I'm currently a BSIT student at La Consolacion University Philippines, specializing in UI/UX design and frontend development. Over the past year, I've completed 4 projects ranging from landing pages to full websites, combining academic learning with hands-on experience. I'm actively expanding my skills in React, GSAP, and modern web development practices.",
         },
         {
           question: "What kind of work are you looking for?",
@@ -414,6 +426,142 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
             "While my primary focus is securing a full-time position, I'm open to select freelance opportunities that align with my skills and schedule. I approach every project—whether employment or freelance—with the same commitment to quality, communication, and delivering results. Feel free to reach out to discuss your needs.",
         },
       ];
+
+      const consultationTotalSteps = 4;
+      const consultationProgress =
+        ((consultationStep + 1) / consultationTotalSteps) * 100;
+
+      const projectTypeOptions = [
+        {
+          value: "hire",
+          title: "Hire me full-time",
+          description: "UI/UX, web design, and React frontend for your team",
+          icon: <FiBriefcase />,
+        },
+        {
+          value: "redesign",
+          title: "Website redesign",
+          description: "Upgrade an existing site into a cleaner experience",
+          icon: <FiRepeat />,
+        },
+        {
+          value: "landing",
+          title: "Landing page",
+          description: "Focused single page for leads, launches, or offers",
+          icon: <FiEdit3 />,
+        },
+        {
+          value: "product",
+          title: "UI/UX + React project",
+          description: "Dashboards, web apps, prototypes, and product screens",
+          icon: <FiLayers />,
+        },
+      ];
+
+      const investmentOptions = [
+        {
+          value: "internship",
+          title: "Internship / OJT",
+          description: "Training-ready",
+        },
+        {
+          value: "entry",
+          title: "Entry-level role",
+          description: "Full-time / junior",
+        },
+        {
+          value: "project",
+          title: "Project-based",
+          description: "Open scope",
+        },
+        {
+          value: "discuss",
+          title: "Let's discuss",
+          description: "Flexible terms",
+        },
+      ];
+
+      const timelineOptions = [
+        { value: "asap", label: "ASAP" },
+        { value: "1-3", label: "1 - 3 months" },
+        { value: "3-6", label: "3 - 6 months" },
+        { value: "flexible", label: "Flexible" },
+      ];
+
+      const updateConsultationField = (field, value) => {
+        setConsultationForm((current) => ({
+          ...current,
+          [field]: value,
+        }));
+      };
+
+      const showConsultationToast = (type, message) => {
+        if (consultationToastTimerRef.current) {
+          window.clearTimeout(consultationToastTimerRef.current);
+        }
+
+        setConsultationToast({ type, message });
+        consultationToastTimerRef.current = window.setTimeout(() => {
+          setConsultationToast(null);
+        }, 3600);
+      };
+
+      const isConsultationStepValid = () => {
+        if (consultationStep === 0) return Boolean(consultationForm.projectType);
+        if (consultationStep === 1) return Boolean(consultationForm.investment);
+        if (consultationStep === 2) return Boolean(consultationForm.timeline);
+        return (
+          consultationForm.name.trim().length > 1 &&
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(consultationForm.email.trim())
+        );
+      };
+
+      const nextConsultationStep = () => {
+        if (!isConsultationStepValid()) {
+          showConsultationToast("error", "Please complete this step first.");
+          return;
+        }
+
+        setConsultationStep((current) =>
+          Math.min(current + 1, consultationTotalSteps - 1),
+        );
+      };
+
+      const previousConsultationStep = () => {
+        setConsultationStep((current) => Math.max(current - 1, 0));
+      };
+
+      const submitConsultation = (event) => {
+        event.preventDefault();
+
+        if (!isConsultationStepValid()) {
+          showConsultationToast("error", "Add your name and a valid email.");
+          return;
+        }
+
+        showConsultationToast(
+          "success",
+          "Consultation request ready. I'll reply within 24 hours.",
+        );
+        setConsultationForm({
+          projectType: "redesign",
+          investment: "project",
+          timeline: "asap",
+          website: "",
+          brief: "",
+          name: "",
+          email: "",
+        });
+        setConsultationStep(0);
+      };
+
+      useEffect(() => {
+        return () => {
+          if (consultationToastTimerRef.current) {
+            window.clearTimeout(consultationToastTimerRef.current);
+          }
+        };
+      }, []);
 
       useEffect(() => {
         if (isMobileMenuOpen) {
@@ -443,29 +591,32 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
 
             <ul className="nav-links desktop-nav">
               <li>
-                <a href="#about" className="nav-link-animated">
+                <a href="/about-web-designer" className="nav-link-animated">
                   <span className="nav-text">
                     <span className="nav-text-top">About</span>
                     <span className="nav-text-bottom">About</span>
                   </span>
                 </a>
               </li>
+
               <li>
-                <a href="/" className="nav-link-animated">
+                <a href="#services" className="nav-link-animated">
                   <span className="nav-text">
-                    <span className="nav-text-top">Portfolio</span>
-                    <span className="nav-text-bottom">Portfolio</span>
+                    <span className="nav-text-top">What I Do</span>
+                    <span className="nav-text-bottom">What I Do</span>
                   </span>
                 </a>
               </li>
               <li>
-                <a href="#projects" className="nav-link-animated">
+                <a href="/projects" className="nav-link-animated">
                   <span className="nav-text">
                     <span className="nav-text-top">Projects</span>
                     <span className="nav-text-bottom">Projects</span>
                   </span>
                 </a>
               </li>
+
+
               <a href="/contact-me" className="nav-cta-btn1s">
 
                 Get in Touch
@@ -516,15 +667,42 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
                     <ul className="mobile-nav-links">
                       <li className="mobile-nav-item">
                         <a
-                          href="/"
+                          href="/about-web-designer"
                           onClick={closeMobileMenu}
                           className="mobile-nav-link"
                         >
                           <span className="nav-number">01</span>
                           <div className="nav-content">
-                            <span className="nav-label">Portfolio</span>
+                            <span className="nav-label">About</span>
                             <span className="nav-description">
-                              Look at my Portfolio
+                              Learn about my approach
+                            </span>
+                          </div>
+                          <FaArrowRight className="nav-arrow" />
+                        </a>
+                      </li>
+                      <li className="mobile-nav-item">
+                        <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
+                          <span className="nav-number">02</span>
+                          <div className="nav-content">
+                            <span className="nav-label">What I Do</span>
+                            <span className="nav-description">My capabilities & expertise</span>
+                          </div>
+                          <FaArrowRight className="nav-arrow" />
+                        </a>
+                      </li>
+
+                      <li className="mobile-nav-item">
+                        <a
+                          href="/projects/qrush"
+                          onClick={closeMobileMenu}
+                          className="mobile-nav-link"
+                        >
+                          <span className="nav-number">03</span>
+                          <div className="nav-content">
+                            <span className="nav-label">Projects</span>
+                            <span className="nav-description">
+                              View my latest work
                             </span>
                           </div>
                           <FaArrowRight className="nav-arrow" />
@@ -533,14 +711,32 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
 
                       <li className="mobile-nav-item">
                         <a
-                          href="#about"
+                          href="#process"
                           onClick={closeMobileMenu}
                           className="mobile-nav-link"
                         >
-                          <span className="nav-number">02</span>
+                          <span className="nav-number">04</span>
                           <div className="nav-content">
-                            <span className="nav-label">About Me</span>
-                            <span className="nav-description">Learn about me</span>
+                            <span className="nav-label">Process</span>
+                            <span className="nav-description">
+                              How I bring ideas to life
+                            </span>
+                          </div>
+                          <FaArrowRight className="nav-arrow" />
+                        </a>
+                      </li>
+                      <li className="mobile-nav-item">
+                        <a
+                          href="#contact"
+                          onClick={closeMobileMenu}
+                          className="mobile-nav-link"
+                        >
+                          <span className="nav-number">05</span>
+                          <div className="nav-content">
+                            <span className="nav-label">Contact</span>
+                            <span className="nav-description">
+                              Get in touch with me
+                            </span>
                           </div>
                           <FaArrowRight className="nav-arrow" />
                         </a>
@@ -597,7 +793,7 @@ built with code.
 
                       <div className="hero-stats hero-stats-entry">
                         <div className="stat-item">
-                          <span className="stat-number">6</span>
+                          <span className="stat-number">4</span>
                            <span className="stat-label">Projects</span>
                         </div>
                         <div className="stat-item">
@@ -613,8 +809,8 @@ built with code.
                         </div>
                       </div>
                       <div className="hero-cta-group hero-cta-entry">
-                        <a href="/contact-me" className="cta-button">Get in Touch</a>
-                        <a href="#projects" className="cta-buttons1">View Work</a>
+                        <a href="/contact-me" className="cta-button">Let's Connect</a>
+                        <a href="/projects" className="cta-buttons1">View Works</a>
                       </div>
                     </div>
 
@@ -858,9 +1054,9 @@ research-grounded decisions and clean, intentional execution.
               </section>
 
               {/* ANIMATED PROJECT CAROUSEL */}
-       <section className="works-section" id="projects" style={{ overflow: 'hidden' }}>
+      <section className="works-section about-marquee" id="projects" style={{ overflow: 'hidden' }}>
   <div style={{ overflow: 'hidden', width: '100%' }}>
-    <div className="carousel-track" ref={trackRef}>
+    <div className="carousel-track about-marquee-track">
       {[...caseStudies, ...caseStudies].map((project, i) => (
         <div className="project-card" key={i}>
           <div className="project-image">
@@ -934,7 +1130,7 @@ research-grounded decisions and clean, intentional execution.
                 </section>
 
                 {/* Footer Section */}
-                <footer className="footer-section panels">
+                <footer className="footer-section panels" id="contact">
                   <div className="footer-container">
                     <div className="footer-top">
                       <div className="footer-cta">
@@ -995,11 +1191,11 @@ research-grounded decisions and clean, intentional execution.
                           <h3 className="footer-column-title">NAVIGATE</h3>
                           <ul className="footer-nav-list">
                             <li><a href="#heros">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#philosophy">Philosophy</a></li>
-                            <li><a href="#projects">Projects</a></li>
+                            <li><a href="/about-web-designer">About</a></li>
+                            <li><a href="#services">Services</a></li>
+                            <li><a href="/projects/qrush">Projects</a></li>
                             <li><a href="#process">Process</a></li>
-                            <li><a href="#contact">Contact</a></li>
+                            <li><a href="#process">Contact</a></li>
                           </ul>
                         </div>
 

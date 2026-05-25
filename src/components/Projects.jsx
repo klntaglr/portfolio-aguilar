@@ -25,26 +25,35 @@ import arielle5 from "../assets/arielle5.png";
 import arielle6 from "../assets/arielle6.png";
 import arielle7 from "../assets/arielle7.png";
 import arielle8 from "../assets/arielle8.png";
-import arielleProject from "../assets/arielleproject.png";
 import bangkaLogo from "../assets/bangka.png";
-import bangkalProject from "../assets/bangkalproject.png";
-import blueBackground from "../assets/blue1.png";
+import bangkal1 from "../assets/bangkal1.png";
+import bangkal2 from "../assets/bangkal2.png";
+import bangkal3 from "../assets/bangkal3.png";
+import bangkal4 from "../assets/bangkal4.png";
+import bangkal5 from "../assets/bangkal5.png";
+import bangkal6 from "../assets/bangkal6.png";
+import bangkal7 from "../assets/bangkal7.png";
+import bangkal8 from "../assets/bangkal8.png";
+import bangkal9 from "../assets/bangkal9.png";
+import bangkal10 from "../assets/bangkal10.png";
 import laconslanetLogo from "../assets/laconslanet.png";
 import laconslanet1 from "../assets/laconslanet1.png";
 import laconslanet2 from "../assets/laconslanet2.png";
 import laconslanet3 from "../assets/laconslanet3.png";
 import laconslanet4 from "../assets/laconslanet4.png";
 import laconslanet5 from "../assets/laconslanet5.png";
-import laconslanetProject from "../assets/laconslanetproject.png";
+import laconslanetLoginBefore from "../assets/loginbefore.png";
+import laconslanetLoginAfter from "../assets/loginafter.png";
+import laconslanetDashboardBefore from "../assets/dashboardbefore.png";
+import laconslanetDashboardAfter from "../assets/dashboardafter.png";
+import laconslanetLandingAfter from "../assets/landingpageafter.png";
 import ladyLogo from "../assets/lady.png";
-import logo from "../assets/logo.png";
 import virielle1 from "../assets/virielle1.png";
 import virielle2 from "../assets/virielle2.png";
 import virielle3 from "../assets/virielle3.png";
 import virielle4 from "../assets/virielle4.png";
 import virielle5 from "../assets/virielle5.png";
 import virielle6 from "../assets/virielle6.png";
-import virielleProject from "../assets/virielleproject.png";
 import viriellesLogo from "../assets/virielles.png";
 import nammerAvatar from "../assets/nammer1.png";
 import ladyAvatar from "../assets/ladyclient.jpg";
@@ -68,7 +77,7 @@ const CASE_STUDIES = [
     role: "Full-stack Web App",
     industry: "Public Service",
     type: "Capstone Project",
-    image: bangkalProject,
+    image: bangkal1,
     logo: bangkaLogo,
     bgColor: "#0d3052",
     accentColor: "#c7f000",
@@ -197,7 +206,7 @@ const CASE_STUDIES = [
         { name: "Ink", value: "#3E3A3A" },
         { name: "Ghost", value: "transparent" },
       ],
-fonts: [
+      fonts: [
         { name: "Inter Heavy", role: "Display · Hero headings · Section titles · Impact statements" },
         { name: "Inter Regular", role: "Body copy · Labels · Nav items · Captions · UI elements" },
         { name: "Inter Medium", role: "Subheadings · Meta labels · Button text · Data values" },
@@ -227,8 +236,19 @@ fonts: [
         { category: "Buttons", items: ["Primary: #296459 bg, white text, 30px radius", "Success: #157044 bg, white text", "Ghost: transparent bg, #296459 border + text", "Disabled: #D9D9D9 bg, #767676 text"] },
       ],
     },
-gallery: [bangkalProject, bangkalProject, bangkalProject, bangkalProject],
-    websiteUrl: "https://your-qrush-website-link-here.com",
+    gallery: [
+      bangkal1,
+      bangkal2,
+      bangkal3,
+      bangkal4,
+      bangkal5,
+      bangkal6,
+      bangkal7,
+      bangkal8,
+      bangkal9,
+      bangkal10,
+    ],
+    websiteUrl: "https://bangkalqrush.com",
     testimonial: {
       quote: "Dati puro pila at balik-balik lang ang mga residente namin just to follow up. Now through QRUSH, online na ang lahat — may tracking, may QR, may notifications pa. Ang ganda pa ng interface, bagay talaga sa aming barangay. Malaking tulong sa amin ang system na ito.",
       name: "Capt. Nammer A. Bulaong",
@@ -249,7 +269,7 @@ gallery: [bangkalProject, bangkalProject, bangkalProject, bangkalProject],
     role: "Website Design",
     industry: "Creative Studio",
     type: "Freelance Project",
-    image: virielleProject,
+    image: virielle1,
     logo: viriellesLogo,
     bgColor: "#1a1a1a",
     accentColor: "#c7f000",
@@ -335,7 +355,7 @@ gallery: [bangkalProject, bangkalProject, bangkalProject, bangkalProject],
         { name: "Subtle", value: "#6B6860" },
         { name: "Badge", value: "#DA7756" },
       ],
-  fonts: [
+      fonts: [
         { name: "Lora", role: "Display · Hero headings · Section titles · Editorial tone" },
         { name: "Geist Mono", role: "Numbers · Pricing · Stats · Code-style labels" },
         { name: "Inter Regular", role: "Body copy · Labels · Nav items · Captions · UI elements" },
@@ -344,7 +364,7 @@ gallery: [bangkalProject, bangkalProject, bangkalProject, bangkalProject],
         { icon: <SiFigma />, label: "Figma" },
       ],
     },
-gallery: [virielle1, virielle2, virielle3, virielle4, virielle5, virielle6],
+    gallery: [virielle1, virielle2, virielle3, virielle4, virielle5, virielle6],
     figmaUrl: "https://www.figma.com/proto/HIZxdN2pkwpRUX0iNorExB/Virielle-Studio?node-id=1-44&p=f&t=42imX7hEho6xvAXg-0&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A44",
     testimonial: {
       quote: "Mr. Russell Aguilar and I go way back — we were schoolmates at La Consolacion University. He understood the vision right away without needing too much explanation. The final result perfectly captured the brand identity we wanted to showcase.",
@@ -363,31 +383,31 @@ gallery: [virielle1, virielle2, virielle3, virielle4, virielle5, virielle6],
     subtitle: "Storytelling marketing portfolio — personal brand website",
     client: "Lady Arielle ",
     timeline: "May 2026",
-    role: "Website Designer",
+    role: "UI/UX Designer & Web Designer",
     industry: "Marketing & Events",
     type: "Freelance Project",
-    image: arielleProject,
+    image: arielle1,
     logo: ladyLogo,
     bgColor: "#0d3052",
     accentColor: "#c7f000",
-    services: ["Requirements Gathering", "Wireframing", "UI/UX Design", "Frontend Build", "Deployment"],
+    services: ["Requirements Gathering", "Wireframing", "UI/UX Design", "Prototype", "Design Handoff"],
     overviewParagraphs: [
       "Lady Arielle is a Marketing Management graduate from La Consolacion University Philippines who reached out after noticing my work. She needed a storytelling-driven personal brand website — one that gathered her hosting experience, internship, org leadership, awards, certifications, and skills into a single shareable portfolio.",
-      "The project ran across four phases: requirements gathering (resources, color direction, content, images), wireframing, high-fidelity design and prototype, then a full code translation into a deployed live website.",
-      "The final site is a 7-section landing page built in React with GSAP smooth scroll, GSAP ScrollTrigger animations, parallax effects, and Framer Motion page transitions — deployed on Vercel.",
+      "The project ran across three phases: requirements gathering (resources, color direction, content, images), wireframing, then high-fidelity design and a fully interactive Figma prototype handed off development-ready.",
+      "The final deliverable is a 7-section Figma design — desktop and mobile — with real content, real photography, and a complete prototype ready for developer handoff.",
     ],
     challengeParagraphs: [
       "Lady Arielle's experience spanned event hosting, internship work, org leadership, awards, and certifications — but it was scattered across PDFs, social profiles, and memory. There was no single place that told the full story.",
       "She's a marketing graduate who understood positioning — so the site couldn't just be a list. It needed to feel like a deliberate personal brand: warm, credible, and story-driven from the first scroll.",
-      "The additional challenge was scope: 7 sections, real photography, real credentials, and a live deployment — all coordinated across four phases starting from zero assets.",
+      "The design challenge was translating that scattered experience into a cohesive 7-section narrative — one that a developer could pick up and build without needing to make layout decisions.",
     ],
     challengePoints: [
       "Experience scattered across PDFs, social profiles, and decks — no unified narrative",
-      "No live portfolio link to share during applications or introductions",
+      "No portfolio design to share during applications or introductions",
       "7 content areas (hosting, internship, orgs, awards, certs, skills, contact) needed to flow as a story, not a resume dump",
       "Client had specific color direction and tone — required careful requirements gathering before any design",
-      "Full deployment required: design wasn't enough, the site had to go live",
-      "Mobile-first sharing required for on-the-go professional use",
+      "Mobile version required as a separate deliverable alongside desktop",
+      "Design had to be development-ready — all content slots clearly defined for handoff",
     ],
     industryParagraphs: [
       "For marketing professionals, the portfolio is the pitch. How you frame your own story signals exactly how you'd frame a brand's story — clients and employers read it that way.",
@@ -395,51 +415,49 @@ gallery: [virielle1, virielle2, virielle3, virielle4, virielle5, virielle6],
       "Lady Arielle's background — event hosting, org leadership, real campaign work — is genuinely strong. The job was to surface that credibility fast, before a visitor loses interest.",
     ],
     industryStats: [
-      { value: "7", label: "Page sections built" },
-      { value: "4", label: "Project phases" },
-      { value: "React", label: "Frontend stack" },
-      { value: "Vercel", label: "Deployment platform" },
+      { value: "7", label: "Page sections designed" },
+      { value: "3", label: "Project phases" },
+      { value: "Figma", label: "Design tool" },
+      { value: "2", label: "Breakpoints — desktop & mobile" },
     ],
     approachParagraphs: [
       "Phase 1 was requirements gathering — I collected her color direction, tone references, real photography, and all content: hosting events, internship details, org positions, awards, certifications, and skills. Nothing was assumed.",
       "Phase 2 was wireframing — establishing the 7-section structure before any visual decisions. Hero → Brand Strategy → Event Hosting & Planning → Social Media → About → Experience & Skills → Contact.",
-      "Phase 3 was high-fidelity design and Figma prototype. Phase 4 was the full code build: React, HTML, CSS, JavaScript, GSAP smooth scroll, GSAP ScrollTrigger for scroll animations, parallax effects, Framer Motion page transitions — then deployed live on Vercel.",
+      "Phase 3 was high-fidelity design in Figma using real content and real photography — no placeholders. Every section was fully detailed and connected end-to-end as an interactive prototype, ready for developer handoff.",
     ],
     approachSteps: [
       { num: "01", title: "Requirements Gathering", desc: "Collected all resources from the client: color direction, tone, real photography, hosting events, internship details, org leadership, awards, certifications, and skills." },
       { num: "02", title: "Wireframing", desc: "Mapped the 7-section structure before any visual decisions — establishing flow from hero to contact without content placeholders." },
       { num: "03", title: "High-Fidelity Design & Prototype", desc: "Built full-fidelity Figma mockups with real content and photography, prototyped end-to-end for client review and approval." },
-      { num: "04", title: "Code Build & Deployment", desc: "Translated the approved design into React with GSAP smooth scroll, ScrollTrigger animations, parallax effects, and Framer Motion — deployed live on Vercel." },
+      { num: "04", title: "Prototype & Handoff", desc: "Connected all 7 sections end-to-end in Figma with full prototype links — desktop and mobile — handed off development-ready with all content slots clearly defined." },
     ],
     solutionParagraphs: [
-      "The final site is a 7-section marketing portfolio website, live on Vercel, built entirely in React with real content from day one — no placeholder copy.",
+      "The final deliverable is a 7-section Figma design — desktop and mobile — built entirely with real content and real photography from Lady Arielle from day one. No placeholder copy, no stock images.",
       "Sections cover her brand strategy positioning, event hosting and public speaking work, social media and content creation background, a full about section, her internship and org experience, awards and certifications, and a contact section.",
-      "GSAP ScrollSmoother handles smooth scroll across the full page. GSAP ScrollTrigger drives section reveal animations. Framer Motion handles page transitions. Parallax effects add depth to the hero and key sections. The result feels polished and intentional — exactly what a marketing professional's personal brand should communicate.",
+      "Every section was fully detailed in high fidelity and connected end-to-end as an interactive prototype — scroll animations, transitions, and hover states all communicated through Figma prototyping. The design was handed off development-ready, with all spacing, typography, and color tokens documented.",
     ],
     solutionFeatures: [
-      { title: "7-Section Landing Page", desc: "Hero, Brand Strategy, Event Hosting & Planning, Social Media, About, Experience & Skills, Contact — all built with real content and photography." },
-      { title: "GSAP Smooth Scroll + ScrollTrigger", desc: "Full-page smooth scroll via ScrollSmoother, with ScrollTrigger-driven section reveal animations throughout." },
-      { title: "Framer Motion Page Transitions", desc: "Smooth animated transitions between route changes for a polished, app-like feel." },
-      { title: "Parallax Effects", desc: "Depth-layered parallax on the hero and key sections, reinforcing the premium personal brand positioning." },
+      { title: "Scroll & Transition Annotations", desc: "Scroll animations, page transitions, and hover states all communicated through Figma prototype connections and motion annotations." },
+      { title: "Mobile Version", desc: "Complete mobile layout designed as a separate breakpoint — all 7 sections adapted for small screens with the same visual system." },
       { title: "Real Content from Day One", desc: "Built with Lady Arielle's actual photography, hosting events, org positions, awards, and certifications — no placeholder copy." },
-      { title: "Live Deployment on Vercel", desc: "Fully deployed and publicly accessible — a shareable link she can use in applications, introductions, and her social profiles." },
+      { title: "Development-Ready Handoff", desc: "All spacing, typography, color tokens, and component states documented — designed so a developer can implement without making layout decisions." },
     ],
     reflectionParagraphs: [
       "What made this project work was the requirements-first approach. Going into Phase 1 with a proper brief — real content, real photography, clear color direction — meant the wireframe stage had actual decisions to make, not assumptions to paper over.",
-      "The four-phase structure (gather → wireframe → design → build) kept the project from expanding scope mid-execution. The client knew what was happening at every stage, which made approvals faster and revisions minimal.",
-      "The animation stack (GSAP + Framer Motion + parallax) was worth the investment. It's the difference between a page that looks like a portfolio and one that feels like a personal brand.",
-      "If I were to revisit this, I'd add a case study section for her major event hosting projects — full narrative writeups the way I do for my own projects. Her hosting experience is her strongest proof point and deserves more than a gallery card.",
+      "The three-phase structure (gather → wireframe → design) kept the project from expanding scope mid-execution. The client knew what was happening at every stage, which made approvals faster and revisions minimal.",
+      "Designing with real content from day one changed the quality of every decision. Typography scale, section spacing, image crop — all of those choices are different when you're working with actual photos and actual copy instead of lorem ipsum.",
+      "If I were to revisit this, I'd add a case study section for her major event hosting projects — full narrative writeups with supporting photography. Her hosting experience is her strongest proof point and deserves more than a gallery card.",
     ],
     outcomes: [
-      "Live portfolio website deployed on Vercel — shareable from day one",
       "7 content areas unified into a single coherent personal brand narrative",
-      "Full animation stack: GSAP smooth scroll, ScrollTrigger, Framer Motion, parallax",
-      "Built with real content and photography — no placeholders, no filler",
+      "Desktop and mobile designs delivered — fully detailed, no placeholders",
+      "End-to-end interactive Figma prototype ready for developer handoff",
+      "Built with real content and photography from requirements gathering — no filler",
     ],
     metrics: [
       { value: "7", label: "Page sections" },
-      { value: "4", label: "Project phases" },
-      { value: "1", label: "Live deployed site" },
+      { value: "3", label: "Project phases" },
+      { value: "2", label: "Breakpoints designed" },
     ],
     designSystem: {
       colors: [
@@ -453,23 +471,16 @@ gallery: [virielle1, virielle2, virielle3, virielle4, virielle5, virielle6],
         { name: "Highlight", value: "#F5B8EF" },
         { name: "Secondary Text", value: "#6B6259" },
       ],
-     fonts: [
+      fonts: [
         { name: "Young Serif", role: "Display · Hero headings · Name · Logotype · Impact statements" },
         { name: "Instrument Serif", role: "Section headings · Pull quotes · Italic emphasis · Editorial tone" },
         { name: "Inter", role: "Body copy · Labels · Nav items · Captions · UI elements" },
       ],
       tools: [
         { icon: <SiFigma />, label: "Figma" },
-        { icon: <SiReact />, label: "React" },
-        { icon: <SiGreensock />, label: "GSAP" },
-        { icon: <SiFramer />, label: "Framer" },
-        { icon: <SiVercel />, label: "Vercel" },
-        { icon: <SiJavascript />, label: "JavaScript" },
-        { icon: <SiHtml5 />, label: "HTML5" },
-        { icon: <SiCss3 />, label: "CSS3" },
       ],
     },
-gallery: [arielle1, arielle2, arielle3, arielle4, arielle5, arielle6, arielle7, arielle8],
+    gallery: [arielle1, arielle2, arielle3, arielle4, arielle5, arielle6, arielle7, arielle8],
     figmaUrl: "https://www.figma.com/proto/iJYpGFpGr3p2PmPPBTpUYW/Portfolio-Website-%E2%80%94-Lady-Arielle?node-id=9-145&p=f&t=UElfOglUmcC5MkVE-0&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=9%3A145",
     testimonial: {
       quote: "I highly recommend Mr. Russell Aguilar for his excellent work and professionalism. He created my portfolio beautifully and was very responsive, accommodating, and easy to work with. He listened carefully to my ideas, welcomed revisions, and delivered results that exceeded my expectations.",
@@ -532,6 +543,63 @@ gallery: [arielle1, arielle2, arielle3, arielle4, arielle5, arielle6, arielle7, 
       { label: "Before", points: ["Generic visual language, no institutional feel", "Flat color system with no hierarchy signal", "Inconsistent component styling", "No mobile-ready screens", "No landing page for platform introduction"] },
       { label: "After", points: ["LCUP-aligned color system and typography", "Clear visual hierarchy across all content categories", "Unified component language across web and mobile", "iPhone 14/15 Pro Max mobile screens for defense", "Full landing page with feature sections and CTA"] },
     ],
+    beforeAfterShowcase: {
+      intro:
+        "A screen-by-screen view of the redesign: login, dashboard, and the landing-page entry point that the original system did not have.",
+      screens: [
+        {
+          id: "landing",
+          eyebrow: "Screen 01",
+          title: "Landing page",
+          before: {
+            variant: "landing",
+            title: "No dedicated landing page",
+            caption:
+              "The original project did not have a proper entry page to explain the product before users reached the app.",
+          },
+          after: {
+            image: laconslanetLandingAfter,
+            title: "Product introduction page",
+            caption:
+              "The added landing page frames LaConsolaNet as an official campus platform with a clear hero, CTA, and product preview.",
+          },
+        },
+        {
+          id: "login",
+          eyebrow: "Screen 02",
+          title: "Login page",
+          before: {
+            image: laconslanetLoginBefore,
+            title: "Functional sign-in",
+            caption:
+              "The old login flow handled access, but it did not immediately communicate the LCUP identity or the purpose of the platform.",
+          },
+          after: {
+            image: laconslanetLoginAfter,
+            title: "Branded authentication",
+            caption:
+              "The redesign gave the sign-in experience stronger campus context, clearer form hierarchy, and a more presentation-ready look.",
+          },
+        },
+        {
+          id: "dashboard",
+          eyebrow: "Screen 03",
+          title: "Dashboard and home feed",
+          before: {
+            image: laconslanetDashboardBefore,
+            title: "Unclear content hierarchy",
+            caption:
+              "The feed needed clearer separation between categories, navigation, posting, and department content.",
+          },
+          after: {
+            image: laconslanetDashboardAfter,
+            title: "Structured social dashboard",
+            caption:
+              "The new layout organizes the feed, school departments, posting tools, and navigation into a familiar social-platform structure.",
+          },
+        },
+      ],
+    },
     industryParagraphs: [
       "Social platforms live by the rule of familiarity. Users expect certain patterns — feed, notifications, profile, compose — and deviation creates friction, not delight.",
       "For a capstone defense, the interface is an argument. Evaluators are assessing whether the team understands their users. A clean, conventional UI is the clearest proof.",
@@ -588,13 +656,13 @@ gallery: [arielle1, arielle2, arielle3, arielle4, arielle5, arielle6, arielle7, 
       { value: "1", label: "Unified UI direction" },
     ],
     designSystem: {
-  colors: [
-  { name: "Mid Blue", value: "#3C2F76" },
-  { name: "Deep Navy", value: "#0D2472" },
-  { name: "Light Blue", value: "#678AFF" },
-  { name: "White", value: "#FFFFFF" },
-  { name: "Stroke", value: "#FFFFFF" },
-],
+      colors: [
+        { name: "Mid Blue", value: "#3C2F76" },
+        { name: "Deep Navy", value: "#0D2472" },
+        { name: "Light Blue", value: "#678AFF" },
+        { name: "White", value: "#FFFFFF" },
+        { name: "Stroke", value: "#FFFFFF" },
+      ],
       fonts: [
         { name: "Inter Heavy", role: "Display · Hero headings · Section titles · Impact statements" },
         { name: "Inter Medium", role: "Subheadings · Meta labels · Button text · Card titles" },
@@ -605,8 +673,8 @@ gallery: [arielle1, arielle2, arielle3, arielle4, arielle5, arielle6, arielle7, 
         { icon: <SiFigma />, label: "Figma" },
       ],
     },
-gallery: [laconslanet1, laconslanet2, laconslanet3, laconslanet4, laconslanet5],
-figmaUrl: null,
+    gallery: [laconslanet1, laconslanet2, laconslanet3, laconslanet4, laconslanet5],
+    figmaUrl: null,
     testimonial: {
       quote: "We went to Mr. Russell because we needed a UI/UX redesign before our defense — for the web app, mobile version, and even our research poster. He immediately understood the concept of LaConsolaNet without needing too much explanation. The glow-up was incredible. Highly recommended.",
       name: "Czar Bjorn Medina & Team",
@@ -663,6 +731,129 @@ function StarRating({ rating, id }) {
   );
 }
 
+function BeforeAfterShowcase({ showcase }) {
+  const renderWireframe = (variant) => {
+    if (variant === "login") {
+      return (
+        <div className="pc-ba-wireframe pc-ba-wireframe--login" aria-label="Old login screen skeleton">
+          <div className="pc-ba-wireframe__topbar">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="pc-ba-wireframe__login-card">
+            <i className="pc-ba-wireframe__mark" />
+            <b />
+            <p />
+            <em />
+            <em />
+            <i className="pc-ba-wireframe__button" />
+          </div>
+        </div>
+      );
+    }
+
+    if (variant === "dashboard") {
+      return (
+        <div className="pc-ba-wireframe pc-ba-wireframe--dashboard" aria-label="Old dashboard screen skeleton">
+          <div className="pc-ba-wireframe__topbar">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="pc-ba-wireframe__dashboard">
+            <aside>
+              <i />
+              <i />
+              <i />
+              <i />
+            </aside>
+            <main>
+              <b />
+              <p />
+              <article>
+                <span />
+                <span />
+                <span />
+              </article>
+            </main>
+            <section>
+              <i />
+              <i />
+              <i />
+            </section>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="pc-ba-wireframe pc-ba-wireframe--landing pc-ba-wireframe--loading" aria-label="Missing landing page skeleton">
+        <div className="pc-ba-wireframe__topbar">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="pc-ba-wireframe__empty">
+          <b>No dedicated landing page</b>
+          <p>Users entered the product without a clear introduction, value proposition, or CTA.</p>
+          <i />
+        </div>
+      </div>
+    );
+  };
+
+  const renderPane = (side, tone) => (
+    <div className={`pc-ba-pane pc-ba-pane--${tone}`}>
+      <div className="pc-ba-pane__header">
+        <span className="pc-ba-pane__stage">{tone}</span>
+        <strong>{side.title}</strong>
+      </div>
+      <div className="pc-ba-pane__visual">
+        {side.image ? (
+          <img src={side.image} alt={side.title} />
+        ) : (
+          renderWireframe(side.variant)
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="pc-compare-showcase pc-sr">
+      <p className="pc-compare-intro">{showcase.intro}</p>
+      <div className="pc-ba-screen-list">
+        {showcase.screens.map((screen) => (
+          <article className="pc-ba-screen" key={screen.id}>
+            <div className="pc-ba-screen__summary">
+              <span>{screen.eyebrow}</span>
+              <h3>{screen.title}</h3>
+            </div>
+
+            <div className="pc-ba-screen__labels" aria-hidden="true">
+              <span>Before</span>
+              <span>After</span>
+            </div>
+
+            <div className="pc-ba-screen__compare">
+              {renderPane(screen.before, "before")}
+              <span className="pc-ba-screen__divider" aria-hidden="true">
+                <i />
+              </span>
+              {renderPane(screen.after, "after")}
+            </div>
+
+            <div className="pc-ba-screen__notes">
+              <p><span>Before</span>{screen.before.caption}</p>
+              <p><span>After</span>{screen.after.caption}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Sticky Section Label with GSAP scroll follow ─────────────────────────────
 function StickySection({ label, children, id }) {
   const sectionRef = useRef(null);
@@ -712,7 +903,10 @@ function ProjectNav({ prevProject, nextProject }) {
     rafRef.current = requestAnimationFrame(readRect);
   };
 
+const isTouchDevice = () => window.matchMedia("(hover: none)").matches;
+
   const handleEnter = (which) => {
+    if (isTouchDevice()) return;
     hoveredRef.current = which;
     setHovered(which);
     cancelAnimationFrame(rafRef.current);
@@ -720,6 +914,7 @@ function ProjectNav({ prevProject, nextProject }) {
   };
 
   const handleLeave = () => {
+    if (isTouchDevice()) return;
     hoveredRef.current = null;
     cancelAnimationFrame(rafRef.current);
     setHovered(null);
@@ -832,8 +1027,8 @@ function GalleryCarousel({ images, title, actionHref, websiteHref }) {
             <MdOutlineArrowForwardIos />
           </button>
         </div>
-       {actionHref && (
-             <a
+        {actionHref && (
+          <a
             href={actionHref}
             target="_blank"
             rel="noopener noreferrer"
@@ -1006,18 +1201,15 @@ function Projects() {
             </div>
           </section>
 
-          {/* ── HERO IMAGE ──────────────────────────────────────────────────── */}
-    {/* ── HERO IMAGE MARQUEE ──────────────────────────────────────────── */}
-          <div className="pc-hero-marquee-wrap pc-hero-reveal">
+   <div className="pc-hero-marquee-wrap pc-hero-reveal">
             <div className="pc-hero-marquee__track">
               {[...project.gallery, ...project.gallery].map((src, i) => (
                 <div className="pc-hero-marquee__slide" key={i}>
-                  <img src={src} alt={`${project.title} screen ${i + 1}`} />
+                  <img src={src} alt={`${project.title} screen ${i + 1}`} draggable={false} />
                 </div>
               ))}
             </div>
           </div>
-
           {/* ── OVERVIEW ────────────────────────────────────────────────────── */}
           <StickySection label="OVERVIEW" id="overview">
             <div className="pc-prose-block pc-sr">
@@ -1058,6 +1250,12 @@ function Projects() {
               )}
             </div>
           </StickySection>
+
+          {project.beforeAfterShowcase && (
+            <StickySection label="BEFORE / AFTER" id="before-after-showcase">
+              <BeforeAfterShowcase showcase={project.beforeAfterShowcase} />
+            </StickySection>
+          )}
 
           {/* ── USER RESEARCH ────────────────────────────────────────────────── */}
           {project.researchParagraphs && (
@@ -1161,7 +1359,7 @@ function Projects() {
 
                 <hr className="pc-divider" />
                 <span className="pc-sub-eyebrow">TYPOGRAPHY</span>
-      <div className="pc-ds-fonts">
+                <div className="pc-ds-fonts">
                   {project.designSystem.fonts.map((f, i) => (
                     <div className="pc-ds-font-card" key={i}>
                       <span className="pc-ds-font-name">{f.name}</span>
@@ -1211,7 +1409,7 @@ function Projects() {
           <StickySection label="DESIGN SCREENS" id="prototype">
             <div className="pc-prose-block pc-sr">
               <p>Sample screens from the final system — covering key resident and staff flows. Open the Figma prototype link below to explore the full interactive flow.</p>
-             <GalleryCarousel images={project.gallery} title={project.title} actionHref={project.figmaUrl} websiteHref={project.websiteUrl} />
+              <GalleryCarousel images={project.gallery} title={project.title} actionHref={project.figmaUrl} websiteHref={project.websiteUrl} />
             </div>
           </StickySection>
           {/* ── THE RESULT ───────────────────────────────────────────────────────── */}
