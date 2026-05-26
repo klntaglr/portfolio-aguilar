@@ -65,34 +65,46 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 
 const PROCESS_STEPS = [
   {
-    label: "Discovery",
-    title: "Discovery & Research",
+    label: "Requirements",
+    title: "Requirement Gathering",
     description:
-      "I begin by researching your target audience and design goals, understanding user needs, competitive landscape, and success metrics so every decision aligns with what your users actually expect.",
+      "Before any design work begins, I align with stakeholders on business goals, user needs, technical constraints, timeline, and scope. Functional requirements (what the system must do) and non-functional requirements (performance, accessibility, security) are documented and agreed upon — so nothing is assumed.",
+  },
+  {
+    label: "Discovery",
+    title: "Research & Discovery",
+    description:
+      "I research the target audience, competitive landscape, and existing analytics. Stakeholder interviews, user interviews, and surveys ground every decision in evidence — not gut feel. I observe real users in real contexts before opening a design tool.",
   },
   {
     label: "Strategy",
-    title: "Strategy & Planning",
+    title: "Define & Strategy",
     description:
-      "Based on research insights, I map information architecture, user flows, and wireframes to create a strong structural foundation before the visual direction is finalized.",
+      "Research is synthesized into user personas, journey maps, affinity maps, and a sharp problem statement. Information architecture, sitemaps, and navigation flows are mapped — so users can find what they need intuitively before any screen is designed.",
   },
   {
     label: "Design",
-    title: "UI/UX Design & Prototyping",
+    title: "Wireframing, UI/UX & Prototyping",
     description:
-      "I design high-fidelity interfaces and interactive prototypes in Figma, refining hierarchy, motion, and usability while keeping the experience consistent with your brand.",
+      "Lo-fi wireframes lock in layout, hierarchy, and screen connections — fast and cheap to change. These evolve into high-fidelity Figma prototypes with typography systems, color tokens, spacing, and component libraries. Interactive prototypes validate flows before a single line of code is written.",
+  },
+  {
+    label: "Test",
+    title: "Usability Testing & Iteration",
+    description:
+      "Real users test the prototype. I observe, document friction points, run heuristic reviews against Nielsen's 10 principles, and iterate on findings before committing to development. Test early — revise cheaply.",
   },
   {
     label: "Build",
-    title: "Development & Delivery",
+    title: "Development & Handoff",
     description:
-      "I translate the approved direction into clean, responsive frontend code with careful attention to performance, accessibility, and the details that make the final product feel premium.",
+      "Designs are implemented in React — responsive, accessible, and performance-optimized. Annotated Figma specs, design tokens, and asset exports support a clean developer handoff. I stay involved during the build phase to catch implementation gaps before they ship.",
   },
   {
     label: "Launch",
-    title: "Testing, Launch & Optimization",
+    title: "QA, Launch & Iteration",
     description:
-      "Before launch, I review the experience across devices and browsers, then refine interactions and performance so the final release feels polished, stable, and ready to grow.",
+      "Cross-browser and device testing, accessibility audits (WCAG), and performance reviews before launch. Post-launch analytics and real user feedback feed the next iteration cycle — because good design is never truly finished.",
   },
 ];
 
@@ -1840,23 +1852,21 @@ function Portfolio() {
                 <div className="timeline-line">
                   <div className="timeline-progress"></div>
                 </div>
-                <div className="process-steps ">
+               <div className="process-steps ">
                   {/* Step 1 */}
                   <div className="process-step" data-step="1">
                     <div className="step-number-wrapper">
                       <span className="step-number">01.</span>
-                      <span className="step-label">Research</span>
+                      <span className="step-label">Requirements</span>
                     </div>
-
                     <div className="step-marker">
                       <div className="marker-dot"></div>
                     </div>
-
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Research & Discovery</h3>
+                        <h3 className="step-title">Requirement Gathering</h3>
                         <p className="step-description">
-                          I start by understanding the problem — not opening a design tool. This means stakeholder interviews, user research, surveys, competitive analysis, and reviewing existing analytics. Every decision that follows is grounded in evidence, not assumption.
+                          Before any design work begins, I align with stakeholders on business goals, user needs, technical constraints, timeline, and scope. Functional requirements (what the system must do) and non-functional requirements (performance, accessibility, security) are documented and agreed upon — so nothing is assumed and no pivots happen mid-execution.
                         </p>
                       </div>
                     </div>
@@ -1866,20 +1876,17 @@ function Portfolio() {
                   <div className="process-step" data-step="2">
                     <div className="step-number-wrapper">
                       <span className="step-number">02.</span>
-                      <span className="step-label">Define</span>
+                      <span className="step-label">Research</span>
                     </div>
-
                     <div className="step-marker">
                       <div className="marker-dot"></div>
                     </div>
-
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Define & Structure</h3>
+                        <h3 className="step-title">Research & Discovery</h3>
                         <p className="step-description">
-                          Research gets synthesized into user personas, journey maps, and a clear problem statement. I then map information architecture, sitemaps, and navigation flows — so users can find what they need intuitively, before any screen is designed.
+                          I research the target audience, competitive landscape, and existing analytics. Stakeholder interviews, user interviews, and surveys ground every decision in evidence — not gut feel. I observe real users in real contexts before opening a design tool.
                         </p>
-
                       </div>
                     </div>
                   </div>
@@ -1888,19 +1895,16 @@ function Portfolio() {
                   <div className="process-step" data-step="3">
                     <div className="step-number-wrapper">
                       <span className="step-number">03.</span>
-                      <span className="step-label">Wireframe</span>
+                      <span className="step-label">Define</span>
                     </div>
-
                     <div className="step-marker">
                       <div className="marker-dot"></div>
                     </div>
-
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">UI/UX Design with Wireframing & Prototyping</h3>
-
+                        <h3 className="step-title">Define & Strategy</h3>
                         <p className="step-description">
-                          Low-fidelity wireframes lock in layout, hierarchy, and how screens connect — fast and cheap to change. These become interactive Figma prototypes for early usability testing, validating flows before a single line of code is written.
+                          Research is synthesized into user personas, journey maps, affinity maps, and a sharp problem statement that keeps the entire team aligned. Information architecture, sitemaps, and navigation flows are mapped — so users can find what they need intuitively before any screen is designed.
                         </p>
                       </div>
                     </div>
@@ -1910,18 +1914,16 @@ function Portfolio() {
                   <div className="process-step" data-step="4">
                     <div className="step-number-wrapper">
                       <span className="step-number">04.</span>
-                      <span className="step-label">Visual Design</span>
+                      <span className="step-label">Wireframe</span>
                     </div>
-
                     <div className="step-marker">
                       <div className="marker-dot"></div>
                     </div>
-
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Visual Design & UI</h3>
+                        <h3 className="step-title">Wireframing & UI/UX Design</h3>
                         <p className="step-description">
-                          Once flows are validated, I apply the full visual layer — typography systems, color, spacing, iconography, and component libraries in Figma. This is where the product starts looking and feeling real. Design specs and annotated interactions are prepared for a clean developer handoff.
+                          Lo-fi wireframes lock in layout, hierarchy, and screen connections — fast and cheap to change. These evolve into high-fidelity Figma prototypes with typography systems, color tokens, spacing, and component libraries. Everything is validated before a single line of code is written.
                         </p>
                       </div>
                     </div>
@@ -1931,18 +1933,54 @@ function Portfolio() {
                   <div className="process-step" data-step="5">
                     <div className="step-number-wrapper">
                       <span className="step-number">05.</span>
-                      <span className="step-label">Build & Ship</span>
+                      <span className="step-label">Test</span>
                     </div>
-
                     <div className="step-marker">
                       <div className="marker-dot"></div>
                     </div>
-
                     <div className="step-container">
                       <div className="step-content">
-                        <h3 className="step-title">Build, Test & Launch</h3>
+                        <h3 className="step-title">Usability Testing & Iteration</h3>
                         <p className="step-description">
-                          Designs are implemented in React — responsive, accessible, and performance-optimized. I review the live build against designs, catch spacing issues and missing states, then run cross-browser and device QA before anything ships. Post-launch, I monitor analytics and iterate based on real user behavior.
+                          Real users test the prototype. I observe, document friction points, run heuristic reviews against Nielsen's 10 principles, and iterate on findings before committing to development. Test early — revise cheaply. This step prevents expensive changes at the build stage.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 6 */}
+                  <div className="process-step" data-step="6">
+                    <div className="step-number-wrapper">
+                      <span className="step-number">06.</span>
+                      <span className="step-label">Build</span>
+                    </div>
+                    <div className="step-marker">
+                      <div className="marker-dot"></div>
+                    </div>
+                    <div className="step-container">
+                      <div className="step-content">
+                        <h3 className="step-title">Development & Handoff</h3>
+                        <p className="step-description">
+                          Designs are implemented in React — responsive, accessible, and performance-optimized. Annotated Figma specs, design tokens, and asset exports support a clean developer handoff. I stay involved during the build to catch implementation gaps before they ship.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 7 */}
+                  <div className="process-step" data-step="7">
+                    <div className="step-number-wrapper">
+                      <span className="step-number">07.</span>
+                      <span className="step-label">Launch</span>
+                    </div>
+                    <div className="step-marker">
+                      <div className="marker-dot"></div>
+                    </div>
+                    <div className="step-container">
+                      <div className="step-content">
+                        <h3 className="step-title">QA, Launch & Iteration</h3>
+                        <p className="step-description">
+                          Cross-browser and device testing, accessibility audits (WCAG), and performance reviews before anything ships. Post-launch, analytics and real user feedback feed the next iteration cycle — because good design is never truly finished.
                         </p>
                       </div>
                     </div>

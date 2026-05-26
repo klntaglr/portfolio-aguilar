@@ -74,7 +74,7 @@ const CASE_STUDIES = [
     subtitle: "Barangay document request  ",
     client: "Barangay Bangkal, Malolos",
     timeline: "Dec 2025 – Jan 2026",
-    role: "Full-stack Web App",
+    role: "Full-stack Developer, Project Lead & UI/UX Designer",
     industry: "Public Service",
     type: "Capstone Project",
     image: bangkal1,
@@ -154,11 +154,12 @@ const CASE_STUDIES = [
       "I designed around visibility: clear status states, predictable steps, strong confirmation feedback, and mobile-first public access.",
       "The full stack covered design through deployment: Figma for UI design, React for the frontend, Firebase and Supabase for real-time data and auth, Node.js and Express.js for the backend API, Vercel for deployment, GSAP for scroll animations and smooth scrolling, Framer Motion for page transitions, and Gemini API for the AI assistive chatbot.",
     ],
-    approachSteps: [
-      { num: "01", title: "Journey Mapping", desc: "Mapped the full request lifecycle for both residents and staff, identifying every decision point and friction moment." },
-      { num: "02", title: "Status Architecture", desc: "Designed a clear status system — submitted, under review, ready to claim — with unambiguous language at each stage." },
-      { num: "03", title: "Staff Dashboard", desc: "Built a prioritized action queue for staff that surfaces the most urgent requests and simplifies validation." },
-      { num: "04", title: "QR Validation", desc: "Replaced manual signature checks with QR-based verification, eliminating the most common source of delays." },
+approachSteps: [
+      { num: "01", title: "Requirement Gathering", desc: "Aligned with Barangay Bangkal staff and the Barangay Captain on functional requirements (document types, roles, approval workflows) and non-functional requirements (security, accessibility, mobile support) before any design work began." },
+      { num: "02", title: "Journey Mapping", desc: "Mapped the full request lifecycle for both residents and staff, identifying every decision point, status state, and friction moment across the end-to-end flow." },
+      { num: "03", title: "Status Architecture", desc: "Designed a clear status system — submitted, under review, ready to claim — with unambiguous plain-language labels tested for low-digital-literacy users." },
+      { num: "04", title: "Staff Dashboard", desc: "Built a prioritized action queue for staff that surfaces the most urgent requests and simplifies the validation and approval workflow." },
+      { num: "05", title: "QR Validation", desc: "Replaced manual signature checks with QR-based verification, eliminating the most common source of delays at the barangay hall." },
     ],
     solution:
       "I mapped the full request journey from submission to claiming, prioritised the highest-frequency actions in the interface, and built a responsive system that keeps both staff and residents informed at every step.",
@@ -305,7 +306,7 @@ const CASE_STUDIES = [
     ],
     approachParagraphs: [
       "Wireframes came first. Before any color or typography decisions, I mapped out all nine sections: hero, turning ideas into impact, featured projects, something great CTA, pricing plans, team introduction, FAQ, contact form, and footer.",
-      "With the structure validated, I built out the visual language — a warm terracotta palette anchored by #993C1D and #DA7756, Lora for editorial headings, Geist Mono for numbers and pricing, and a soft off-white surface (#FAF9F5) that kept the layout breathing.",
+     "With the structure validated, I built out the visual language — a warm terracotta palette anchored by #993C1D and #DA7756, Lora for editorial headings, Geist Mono for numbers and pricing, and a soft off-white surface #FAF9F5 that kept the layout breathing.",
       "Placeholder mockups and sample labels were used throughout so the client could see exactly how the final product would look before committing to real copy and assets. The design was handed off development-ready, with content slots clearly defined.",
     ],
     approachSteps: [
@@ -614,12 +615,12 @@ const CASE_STUDIES = [
     ],
     approachParagraphs: [
       "I read their entire research paper first. Understanding the system's problem statement, evaluation framework, and feature rationale before opening Figma meant every design decision had a reason behind it.",
-      "The visual direction came from two sources: LCUP's institutional identity (blue and orange) and the mental model users already have of social platforms. Familiar patterns, institutional colors, stronger hierarchy — that combination made the redesign feel both trustworthy and immediately usable.",
+      "The visual direction came from two sources: LCUP's institutional identity (blue and purple) and the mental model users already have of social platforms. Familiar patterns, institutional colors, stronger hierarchy — that combination made the redesign feel both trustworthy and immediately usable.",
       "I worked across three deliverables in parallel: the web app screens, iPhone 14/15 Pro Max mobile layouts, and a landing page. Each needed to feel like the same product at different screen sizes — not three separate design exercises.",
     ],
     approachSteps: [
       { num: "01", title: "Research & Feature Study", desc: "Read the full capstone paper and audited existing screens — mapping every feature, flow, and moderation rule before designing a single frame." },
-      { num: "02", title: "Visual Direction", desc: "Established a color system anchored in LCUP blue and orange, with a typographic scale and component language that communicated institutional credibility." },
+      { num: "02", title: "Visual Direction", desc: "Established a color system anchored in LCUP blue and purple, with a typographic scale and component language that communicated institutional credibility." },
       { num: "03", title: "Web App Redesign", desc: "Rebuilt the feed, sidebar navigation, admin dashboard, and category pages with clear visual hierarchy and consistent component styling." },
       { num: "04", title: "Mobile Screens", desc: "Designed iPhone 14/15 Pro Max layouts for the defense presentation — thumb-zone optimized navigation, mobile-first feed structure, and full feature parity with the web version." },
       { num: "05", title: "Landing Page", desc: "Created a multi-section landing page introducing LaConsolaNet! to evaluators — hero, features, how-it-works, and CTA — giving the platform a professional entry point it didn't have before." },
@@ -631,11 +632,11 @@ const CASE_STUDIES = [
       "All three deliverables — web, mobile, and landing page — were completed and handed off within 3–5 days of receiving the brief.",
     ],
     solutionFeatures: [
-      { title: "Web App UI Redesign", desc: "Full redesign of the home feed, category pages, sidebar navigation, and admin dashboard — unified under a consistent component system in LCUP's orange and blue." },
+      { title: "Web App UI Redesign", desc: "Full redesign of the home feed, category pages, sidebar navigation, and admin dashboard — unified under a consistent component system in LCUP's purple and blue." },
       { title: "Mobile Screens — iPhone 14 & 15 Pro Max", desc: "Two mobile frames covering the home feed and announcement flow, thumb-zone optimized with bottom navigation and full feature parity with the web version." },
       { title: "Landing Page", desc: "Multi-section landing page introducing LaConsolaNet! to evaluators — hero with device mockups, features overview, how-it-works section, and a get-started CTA." },
-      { title: "LCUP-Aligned Visual Language", desc: "Color system anchored in LCUP orange (#E8670A) and deep navy (#0D2472), with flat icon illustrations and consistent typography across all three deliverables." },
-      { title: "Gradient System", desc: "Three-stop gradient — #E8670A orange to #3C2F76 mid blue to #0D2472 deep navy — used across the hero, cards, and key UI surfaces to create visual depth and brand cohesion." },
+      { title: "LCUP-Aligned Visual Language", desc: "Color system anchored in LCUP mid blue (#3C2F76) and deep navy (#0D2472), with flat icon illustrations and consistent typography across all three deliverables." },
+      { title: "Gradient System", desc: "Three-stop gradient — #678AFF light blue to #3C2F76 mid blue to #0D2472 deep navy — used across the hero, cards, and key UI surfaces to create visual depth and brand cohesion." },
       { title: "Figma Deliverable", desc: "All screens designed in Figma using the Flat Icons plugin and React Icons plugin for consistent iconography — handed off ready for developer implementation." },
     ],
     reflectionParagraphs: [
@@ -903,7 +904,7 @@ function ProjectNav({ prevProject, nextProject }) {
     rafRef.current = requestAnimationFrame(readRect);
   };
 
-const isTouchDevice = () => window.matchMedia("(hover: none)").matches;
+  const isTouchDevice = () => window.matchMedia("(hover: none)").matches;
 
   const handleEnter = (which) => {
     if (isTouchDevice()) return;
@@ -1062,6 +1063,36 @@ function GalleryCarousel({ images, title, actionHref, websiteHref }) {
   );
 }
 
+// ── Hex-aware inline renderer (no wrapping <p>) ───────────────────────────────
+function HexLine({ text }) {
+  const HEX_RE = /(#[0-9A-Fa-f]{3,8})\b/g;
+  const parts = [];
+  let last = 0;
+  let m;
+  while ((m = HEX_RE.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push(<ColorChip key={m.index} hex={m[1]} />);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return <>{parts}</>;
+}
+
+// ── Hex-aware paragraph renderer ─────────────────────────────────────────────
+function ProseParagraph({ text }) {
+  const HEX_RE = /(#[0-9A-Fa-f]{3,8})\b/g;
+  const parts = [];
+  let last = 0;
+  let m;
+  while ((m = HEX_RE.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push(<ColorChip key={m.index} hex={m[1]} />);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return <p>{parts}</p>;
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1201,7 +1232,7 @@ function Projects() {
             </div>
           </section>
 
-   <div className="pc-hero-marquee-wrap pc-hero-reveal">
+          <div className="pc-hero-marquee-wrap pc-hero-reveal">
             <div className="pc-hero-marquee__track">
               {[...project.gallery, ...project.gallery].map((src, i) => (
                 <div className="pc-hero-marquee__slide" key={i}>
@@ -1213,7 +1244,7 @@ function Projects() {
           {/* ── OVERVIEW ────────────────────────────────────────────────────── */}
           <StickySection label="OVERVIEW" id="overview">
             <div className="pc-prose-block pc-sr">
-              {project.overviewParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+              {project.overviewParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
             </div>
           </StickySection>
 
@@ -1221,7 +1252,7 @@ function Projects() {
           {project.problemParagraphs && (
             <StickySection label="THE PROBLEM" id="problem">
               <div className="pc-prose-block pc-sr">
-                {project.problemParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+                {project.problemParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
                 {project.problemPoints && (
                   <>
                     <hr className="pc-divider" />
@@ -1238,7 +1269,7 @@ function Projects() {
           {/* ── THE CHALLENGE ────────────────────────────────────────────────── */}
           <StickySection label="THE CHALLENGE" id="challenge">
             <div className="pc-prose-block pc-sr">
-              {project.challengeParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+              {project.challengeParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
               {project.challengePoints && (
                 <>
                   <hr className="pc-divider" />
@@ -1261,7 +1292,7 @@ function Projects() {
           {project.researchParagraphs && (
             <StickySection label="USER RESEARCH" id="research">
               <div className="pc-prose-block pc-sr">
-                {project.researchParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+                {project.researchParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
                 {project.researchMethods && (
                   <>
                     <hr className="pc-divider" />
@@ -1294,7 +1325,7 @@ function Projects() {
           {/* ── INDUSTRY CONTEXT / STATS ─────────────────────────────────────── */}
           <StickySection label="INDUSTRY CONTEXT" id="context">
             <div className="pc-prose-block pc-sr">
-              {project.industryParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+              {project.industryParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
               <hr className="pc-divider" />
               <div className="pc-stats-grid">
                 {project.industryStats.map((s) => (
@@ -1310,7 +1341,7 @@ function Projects() {
           {/* ── THE APPROACH ─────────────────────────────────────────────────── */}
           <StickySection label="THE APPROACH" id="approach">
             <div className="pc-prose-block pc-sr">
-              {project.approachParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+              {project.approachParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
               <hr className="pc-divider" />
               <div className="pc-steps-list">
                 {project.approachSteps.map((s) => (
@@ -1318,7 +1349,7 @@ function Projects() {
                     <span className="pc-step-num">{s.num}</span>
                     <div className="pc-step-body">
                       <strong className="pc-step-title">{s.title}</strong>
-                      <p className="pc-step-desc">{s.desc}</p>
+                      <p className="pc-step-desc"><HexLine text={s.desc} /></p>
                     </div>
                   </div>
                 ))}
@@ -1329,13 +1360,13 @@ function Projects() {
           {/* ── THE SOLUTION ─────────────────────────────────────────────────── */}
           <StickySection label="THE SOLUTION" id="solution">
             <div className="pc-prose-block pc-sr">
-              {project.solutionParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+              {project.solutionParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
               <hr className="pc-divider" />
               <div className="pc-features-list">
                 {project.solutionFeatures.map((f) => (
                   <div className="pc-feature" key={f.title}>
                     <strong className="pc-feature-title">{f.title}</strong>
-                    <p className="pc-feature-desc">{f.desc}</p>
+                    <p className="pc-feature-desc"><HexLine text={f.desc} /></p>
                   </div>
                 ))}
               </div>
@@ -1430,7 +1461,7 @@ function Projects() {
           {/* ── REFLECTION ───────────────────────────────────────────────────── */}
           <StickySection label="REFLECTION" id="reflection">
             <div className="pc-prose-block pc-prose-block--italic pc-sr">
-              {project.reflectionParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+           {project.reflectionParagraphs.map((p, i) => <ProseParagraph key={i} text={p} />)}
             </div>
           </StickySection>
 

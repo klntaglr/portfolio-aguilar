@@ -937,46 +937,65 @@ research-grounded decisions and clean, intentional execution.
                     shipping. This keeps decisions grounded and avoids expensive pivots later.
                   </p>
 
-                    <div className="approach-section">
+                  <div className="approach-section">
                     <h4 className="approach-title">Step by step:</h4>
 
                         <ol className="approach-list">
                       <li>
-                        <strong>Research & Discovery</strong> — Stakeholder interviews,
-                        user research, surveys, competitive analysis, and analytics review.
-                        Every decision starts here — grounded in evidence, not assumption.
+                        <strong>Requirement Gathering</strong> — Before anything else,
+                        I align with stakeholders on business goals, technical constraints,
+                        target users, timeline, and scope. This is where functional
+                        requirements (what the system must do) and non-functional
+                        requirements (performance, accessibility, security) are documented
+                        and agreed upon — so the design work never starts from assumption.
                       </li>
                       <li>
-                        <strong>Define & Synthesize</strong> — Research is turned into
-                        user personas, journey maps, and a clear problem statement that
-                        keeps the entire team aligned on what is actually being solved.
+                        <strong>Research & Discovery</strong> — Stakeholder interviews,
+                        user interviews, surveys, competitive analysis, and analytics review.
+                        Every design decision starts here — grounded in evidence, not gut feel.
+                        I observe real users in real contexts before touching a design tool.
+                      </li>
+                      <li>
+                        <strong>Define & Synthesize</strong> — Research findings are turned
+                        into user personas, journey maps, affinity maps, and a sharp problem
+                        statement. This phase keeps the entire team aligned on what is actually
+                        being solved — not just what looks good to build.
                       </li>
                       <li>
                         <strong>Information Architecture</strong> — Content structure,
                         sitemaps, card sorting, and navigation flows — so users find
-                        what they need without thinking too hard.
+                        what they need without thinking too hard. Structure decisions
+                        happen before any visual work begins.
                       </li>
                       <li>
-                        <strong>Wireframing</strong> — Low-fidelity layouts that establish
-                        structure, hierarchy, and screen connections. Fast, cheap, and
-                        built for iteration — no colors, no fonts yet.
+                        <strong>Wireframing & Ideation</strong> — Lo-fi sketches and
+                        digital wireframes that establish layout, hierarchy, and screen
+                        connections. Fast, cheap, and built for rapid iteration —
+                        no colors, no fonts yet. Crazy 8s and user flows happen here.
                       </li>
                       <li>
                         <strong>Visual Design & Prototyping</strong> — High-fidelity UI
-                        in Figma: typography systems, color, spacing, iconography, and
-                        component libraries. Interactive prototypes validate flows before
-                        development begins.
+                        in Figma: typography systems, color tokens, spacing, iconography,
+                        and reusable component libraries. Interactive prototypes validate
+                        flows and micro-interactions before a single line of code is written.
+                      </li>
+                      <li>
+                        <strong>Usability Testing & Iteration</strong> — Real users test
+                        the prototype. I observe, document friction points, run heuristic
+                        reviews against Nielsen's 10 principles, and iterate on findings
+                        before committing to development. Test early — revise cheaply.
                       </li>
                       <li>
                         <strong>Development & Handoff</strong> — Clean, responsive React
-                        implementation. Design specs, annotated interactions, and close
-                        collaboration with developers throughout the build phase.
+                        implementation with annotated Figma specs, design tokens, and
+                        asset exports. I stay involved during the build phase to catch
+                        implementation gaps before they ship.
                       </li>
                       <li>
                         <strong>QA, Launch & Iteration</strong> — Cross-browser and device
-                        testing, usability validation, and performance audits before
-                        launch. Post-launch analytics and user feedback drive continuous
-                        improvement.
+                        testing, accessibility audits (WCAG), and performance reviews before
+                        launch. Post-launch analytics and user feedback feed the next
+                        iteration cycle — because good design is never truly finished.
                       </li>
                     </ol>
                     </div>
@@ -1023,6 +1042,49 @@ research-grounded decisions and clean, intentional execution.
                     <li><span className="bold">Frontend development:</span> React, Next.js, HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, responsive & mobile-first implementation</li>
                     <li><span className="bold">Additional technical experience:</span> Node.js, Express.js, Supabase, Firebase, SQLite, Prisma, Electron, Git & GitHub</li>
                   </ul>
+                  </div>
+
+                  {/* CASE STUDY HIGHLIGHTS */}
+                  <div className="apart-cases">
+                    <h3 className="services-subtitles split-animate">Case Study Highlights</h3>
+                    <div className="apart-cases-grid">
+                      <a href="/projects/qrush" className="apart-case-card">
+                        <div className="apart-case-img">
+                          <img src={bangkal1} alt="QRUSH Barangay Bangkal" draggable="false" />
+                          <div className="rw-card__overlay" />
+                          <div className="rw-card__hover-content">
+                            <span className="rw-card__hover-label">View Case Study</span>
+                            <div className="rw-card__arrow">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M7 17L17 7M17 7H7M17 7v10" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="apart-case-info">
+                          <strong className="apart-case-title">QRUSH — Barangay Bangkal</strong>
+                          <p className="apart-case-desc">Full-stack web app for barangay document requests built from the ground up. I led requirements gathering, stakeholder alignment, user research, and UI/UX design, then implemented the React frontend and Node.js backend for a live deployment. The system includes request tracking, QR verification, and notification flows that reduced repeat visits and shortened turnaround time, and it was evaluated at 4.47/5 against ISO/IEC 25010:2023 with 40 respondents.</p>
+                        </div>
+                      </a>
+                      <a href="/projects/laconslanet" className="apart-case-card">
+                        <div className="apart-case-img">
+                          <img src={laconslanet5} alt="LaConsolaNet!" draggable="false" />
+                          <div className="rw-card__overlay" />
+                          <div className="rw-card__hover-content">
+                            <span className="rw-card__hover-label">View Case Study</span>
+                            <div className="rw-card__arrow">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M7 17L17 7M17 7H7M17 7v10" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="apart-case-info">
+                          <strong className="apart-case-title">LaConsolaNet! — LCUP Social Platform</strong>
+                          <p className="apart-case-desc">Complete UI/UX redesign of a social media web app across web, mobile, and landing page surfaces, delivered in 3 to 5 days before defense. I reviewed the research paper, aligned the information architecture with user priorities, and rebuilt every screen to match LCUP's institutional identity. The result was a cohesive design system, tighter navigation flow, and a clearer visual hierarchy that improved readability, content scanning, and overall usability.</p>
+                        </div>
+                      </a>
+                    </div>
                   </div>
 
                   {/* WORK VALUES */}
