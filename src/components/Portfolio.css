@@ -7833,8 +7833,12 @@ font-size: clamp(1rem, 2vw, 1.6rem);
 @media (max-width: 768px) {
   #heros.portfolio-home .hero-content {
     gap: 16px;
-  }
 
+
+  }
+#heros.about-page .hero-content {
+top: 100px !important; position: relative;
+}
   #heros.portfolio-home .hero-title {
     font-size: clamp(2.1rem, 7.5vw, 3rem);
   }
