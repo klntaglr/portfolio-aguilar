@@ -46,6 +46,7 @@ import mockup2 from "../assets/mockup2.jpg";
 import mockup3 from "../assets/mockup3.png";
 import mockup4 from "../assets/mockup4.jpg";
 import grad from "../assets/grad.jpg";
+import aboutme from "../assets/aboutme.png";
 import soon from "../assets/soon.png";
 import bangkalProject from "../assets/bangkalproject.png";
 import virielleproject from "../assets/virielleorig.png";
@@ -1227,7 +1228,7 @@ function Portfolio() {
                     data-split-mode="hero"
                   >
                     I turn{" "}
-                    <span className="highlight">interfaces</span>{" "}
+                    <span className="highlight hero-highlight">interfaces</span>{" "}
                     into experiences from <br /> pixel to productions
                   </h1>
                   <div className="hero-stats hero-stats-entry">
@@ -1254,9 +1255,10 @@ function Portfolio() {
                     </a>
                   </div>
 
+                 
                 </div>
 
-                <div className="hero-card hero-card-entry">
+                {/* <div className="hero-card hero-card-entry">
                   <TiltedCard
                     imageSrc={grad}
                     altText="Klent Russell Aguilar"
@@ -1271,7 +1273,7 @@ function Portfolio() {
                     showTooltip
                     displayOverlayContent={false}
                   />
-                </div>
+                </div> */}
               </div>
             </motion.main>
           </div>
@@ -2013,7 +2015,7 @@ function Portfolio() {
                 <div className="about-cards">
                   <div
                     className="about-card card-blue card-blue-images"
-                    style={{ backgroundImage: `url(${mockup3})` }}
+                    style={{ backgroundImage: `url(${aboutme})` }}
                   ></div>
                   <div className="about-stats">
                     <div className="stats-item">
