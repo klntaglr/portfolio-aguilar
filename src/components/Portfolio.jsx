@@ -1092,7 +1092,7 @@ function Portfolio() {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div
-            className="portfolio-container"
+            className="portfolio-container portfolio-home"
             id="heros"
             style={{ "--hero-bg-image": `url(${blueBackground1})` }}
           >

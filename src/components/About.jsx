@@ -635,7 +635,7 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
           <div id="smooth-wrapper">
             <div id="smooth-content">
               <div
-                className="portfolio-container"
+                className="portfolio-container about-page"
                 id="heros"
                 style={{ "--hero-bg-image": `url(${blueBackground1})` }}
               >
@@ -782,14 +782,9 @@ import useSplitAnimateReveal from "./useSplitAnimateReveal";
                   <div className="hero-wrapper">
                     <div className="hero-content">
     <p className="tagline hero-tagline-entry">UI/UX Designer & Web Designer</p>
-                      <h1
-                        className="hero-title split-animate hero-title-reveal"
-                        data-split-mode="hero"
-                      >
-             Designing purposeful interfaces —{" "}
-<span className="highlight">backed by research,</span>{" "}
-built with code.
-                      </h1>
+                    <h1 className="hero-title split-animate hero-title-reveal">
+  Designing <span className="highlight">clean interfaces</span> for better user experience.
+</h1>
 
                       <div className="hero-stats hero-stats-entry">
                         <div className="stat-item">
