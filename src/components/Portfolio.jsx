@@ -1626,7 +1626,7 @@ function Portfolio() {
 
               {/* Header Row */}
               <div className="testi-header-row">
-                <span className="testi-eyebrow">REVIEWS — 05</span>
+                <span className="testi-eyebrow">REVIEWS — 04</span>
                 <div className="testi-header-bottom">
                   <h2 className="testi-title">Testimonials</h2>
                   <div className="testi-nav-btns">
