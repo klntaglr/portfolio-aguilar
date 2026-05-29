@@ -34,6 +34,7 @@ import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
+  FaStar,
 } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
@@ -1046,6 +1047,7 @@ function Portfolio() {
         </div>
 
         <ul className="nav-links desktop-nav">
+    
           <li>
             <a href="/about-web-designer" className="nav-link-animated">
               <span className="nav-text">
@@ -1071,6 +1073,23 @@ function Portfolio() {
               </span>
             </a>
           </li>
+          <li>
+            <a href="#process" className="nav-link-animated">
+              <span className="nav-text">
+                <span className="nav-text-top">Process</span>
+                <span className="nav-text-bottom">Process</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#faq" className="nav-link-animated">
+              <span className="nav-text">
+                <span className="nav-text-top">FAQ</span>
+                <span className="nav-text-bottom">FAQ</span>
+              </span>
+            </a>
+          </li>
+      
 
 
           {/* CTA stays untouched */}
@@ -1127,11 +1146,25 @@ function Portfolio() {
                 <ul className="mobile-nav-links">
                   <li className="mobile-nav-item">
                     <a
-                      href="/about-web-designer"
+                      href="#heros"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
                       <span className="nav-number">01</span>
+                      <div className="nav-content">
+                        <span className="nav-label">Home</span>
+                        <span className="nav-description">Back to the top</span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
+                  <li className="mobile-nav-item">
+                    <a
+                      href="/about-web-designer"
+                      onClick={closeMobileMenu}
+                      className="mobile-nav-link"
+                    >
+                      <span className="nav-number">02</span>
                       <div className="nav-content">
                         <span className="nav-label">About</span>
                         <span className="nav-description">
@@ -1143,7 +1176,7 @@ function Portfolio() {
                   </li>
                   <li className="mobile-nav-item">
                     <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
-                      <span className="nav-number">02</span>
+                      <span className="nav-number">03</span>
                       <div className="nav-content">
                         <span className="nav-label">What I Do</span>
                         <span className="nav-description">My capabilities & expertise</span>
@@ -1154,15 +1187,15 @@ function Portfolio() {
 
                   <li className="mobile-nav-item">
                     <a
-                      href="/projects/qrush"
+                      href="#projects"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">03</span>
+                      <span className="nav-number">04</span>
                       <div className="nav-content">
                         <span className="nav-label">Projects</span>
                         <span className="nav-description">
-                          View my latest work
+                          View recent work and case studies
                         </span>
                       </div>
                       <FaArrowRight className="nav-arrow" />
@@ -1175,7 +1208,7 @@ function Portfolio() {
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">04</span>
+                      <span className="nav-number">05</span>
                       <div className="nav-content">
                         <span className="nav-label">Process</span>
                         <span className="nav-description">
@@ -1187,11 +1220,27 @@ function Portfolio() {
                   </li>
                   <li className="mobile-nav-item">
                     <a
+                      href="#faq"
+                      onClick={closeMobileMenu}
+                      className="mobile-nav-link"
+                    >
+                      <span className="nav-number">06</span>
+                      <div className="nav-content">
+                        <span className="nav-label">FAQ</span>
+                        <span className="nav-description">
+                          Common questions answered
+                        </span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
+                  <li className="mobile-nav-item">
+                    <a
                       href="#contact"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">05</span>
+                      <span className="nav-number">07</span>
                       <div className="nav-content">
                         <span className="nav-label">Contact</span>
                         <span className="nav-description">
@@ -1220,8 +1269,11 @@ function Portfolio() {
               <div className="hero-background" aria-hidden="true"></div>
               <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
-                <div className="hero-content">
-                  <p className="tagline hero-tagline-entry">UI/UX Designer & Web Designer</p>
+              <div className="hero-content">
+
+                  <p className="tagline hero-tagline-entry">
+                    UI/UX Designer &amp; Web Designer
+                  </p>
 
                   <h1
                     className="hero-title split-animate hero-title-reveal"
@@ -1229,35 +1281,76 @@ function Portfolio() {
                   >
                     I turn{" "}
                     <span className="highlight hero-highlight">interfaces</span>{" "}
-                    into experiences from <br /> pixel to productions
+                    into experiences,{" "}
+                    <br className="hero-title-br" />
+                    pixel to production
                   </h1>
-                  <div className="hero-stats hero-stats-entry">
-                    <div className="stat-item">
-                      <span className="stat-number">4</span>
-                      <span className="stat-label">Projects</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-number">1+</span>
-                      <span className="stat-label">Year of Practice</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-number">UI/UX</span>
-                      <span className="stat-label">Primary Discipline</span>
+
+                  <div className="hero-social-proof hero-stats-entry">
+                    <div className="hero-proof-pill">
+
+                      {/* Avatars */}
+                      <div className="hero-proof-avatars">
+                        <div className="hero-proof-avatar">
+                          <img src={ladyAvatar} alt="Lady Arielle" />
+                        </div>
+                        <div className="hero-proof-avatar">
+                          <img src={nammerAvatar} alt="Nammer Bulaong" />
+                        </div>
+                        <div className="hero-proof-avatar">
+                          <img src={czarAvatar} alt="Czar Medina" />
+                        </div>
+                        <div className="hero-proof-avatar">
+                          <img src={ellaAvatar} alt="Madelle Ella" />
+                        </div>
+                      </div>
+
+                {/* Rating */}
+                      <div className="hero-proof-text-block">
+                        <div className="hero-proof-stars">
+                          {[...Array(5)].map((_, i) => (
+                            <FaStar key={i} className="hero-proof-star-icon" />
+                          ))}
+                        </div>
+                        <p className="hero-proof-label">
+                          <strong>4.8</strong> · 4 clients
+                        </p>
+                      </div>
+
+                      <span className="hero-proof-sep" />
+
+              {/* Certs */}
+                      <div className="hero-cert-row">
+                        <span className="hero-cert-badge">
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+                            alt="Google"
+                          />
+                          <span>UI/UX</span>
+                        </span>
+                        <span className="hero-cert-divider" />
+                        <span className="hero-cert-badge">
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
+                            alt="Meta"
+                          />
+                          <span> Front-End</span>
+                        </span>
+                      </div>
+
                     </div>
                   </div>
+
                   <div className="hero-cta-group hero-cta-entry">
-                    <a href="#projects" className="cta-button">
+                    <a href="#projects" className="cta-button hero-cta-primary">
                       View My Work
                     </a>
-
-                    <a href="/contact-me" className="cta-buttons1">
+                    <a href="/contact-me" className="cta-buttons1 hero-cta-secondary">
                       Let's Connect
                     </a>
                   </div>
 
-                 
                 </div>
-
                 {/* <div className="hero-card hero-card-entry">
                   <TiltedCard
                     imageSrc={grad}
@@ -1832,7 +1925,7 @@ function Portfolio() {
 
                 </div>
               </div>
-              <div>
+        <div>
                 {/* Basic horizontal loop */}
                 <LogoLoop
                   logos={techLogos}
@@ -1846,6 +1939,56 @@ function Portfolio() {
                   fadeOutColor="#ffffff"
                   ariaLabel="Technology partners"
                 />
+              </div>
+
+           {/* Certifications Strip */}
+              <div className="  ">
+                <span className="cert-strip__label">CERTIFIED BY</span>
+                <div className="cert-strip__logos">
+                   <a
+                    href="https://www.coursera.org/professional-certificates/google-ux-design"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cert-item"
+                  >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" className="cert-logo" />
+                    <span className="cert-name">UX Design</span>
+                    <span className="cert-tooltip">Google UX Design Professional Certificate · Coursera · 2026</span>
+                  </a>
+                  <div className="cert-divider" />
+                   <a
+                    href="https://www.coursera.org/professional-certificates/microsoft-ux-design"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cert-item"
+                  >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" className="cert-logo" />
+                    <span className="cert-name">UX Design Professional</span>
+                    <span className="cert-tooltip">Microsoft UX Design Professional Certificate · Coursera · 2026</span>
+                  </a>
+                  <div className="cert-divider" />
+                   <a
+                    href="https://www.coursera.org/professional-certificates/meta-front-end-developer"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cert-item"
+                  >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta" className="cert-logo" />
+                    <span className="cert-name">Front-End Developer</span>
+                    <span className="cert-tooltip">Meta Front-End Developer Professional Certificate · Coursera · 2026</span>
+                  </a>
+                  <div className="cert-divider" />
+                  <a
+                    href="https://www.freecodecamp.org/certification/klntaglr/front-end-development-libraries"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cert-item"
+                  >
+                    <img src="/fcc_secondary_small.svg" alt="freeCodeCamp" className="cert-logo cert-logo--fcc" />
+                    <span className="cert-name">Front End Libraries</span>
+                    <span className="cert-tooltip">Front End Development Libraries · freeCodeCamp · Dec 2025</span>
+                  </a>
+                </div>
               </div>
 
               <div className="process-divider"></div>
@@ -2036,7 +2179,7 @@ function Portfolio() {
                 </div>
                 <div className="about-stats ">
                   <div className="stats-item">
-                    <h3 className="stats-number">4</h3>
+                    <h3 className="stats-number">4+</h3>
                     <img
                       src={projects}
                       alt="projects watermark"
