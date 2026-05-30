@@ -7923,9 +7923,10 @@ body {
 }
 
 #heros.about-page .hero-title {
-  font-size: clamp(2.4rem, 3.9vw, 3.6rem);
+  font-size: clamp(2.4rem, 3.9vw, 3.6rem) !important;
   line-height: 1.12;
   margin-bottom: 18px;
+  max-width: 1200px;
 }
 
 #heros.about-page .hero-card {
