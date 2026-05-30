@@ -597,29 +597,41 @@ function About() {
 
         <ul className="nav-links desktop-nav">
           <li>
-            <a href="/about-web-designer" className="nav-link-animated">
+            <a href="/" className="nav-link-animated">
+              <span className="nav-text">
+                <span className="nav-text-top">Portfolio</span>
+                <span className="nav-text-bottom">Portfolio</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#about" className="nav-link-animated">
               <span className="nav-text">
                 <span className="nav-text-top">About</span>
                 <span className="nav-text-bottom">About</span>
               </span>
             </a>
           </li>
-
-          <li>
-            <a href="#services" className="nav-link-animated">
+          <li className="nav-dropdown">
+            <button
+              type="button"
+              className="nav-link-animated nav-dropdown-toggle"
+              aria-haspopup="true"
+            >
               <span className="nav-text">
-                <span className="nav-text-top">What I Do</span>
-                <span className="nav-text-bottom">What I Do</span>
+                <span className="nav-text-top">Explore About</span>
+                <span className="nav-text-bottom">Explore About</span>
               </span>
-            </a>
-          </li>
-          <li>
-            <a href="/projects" className="nav-link-animated">
-              <span className="nav-text">
-                <span className="nav-text-top">Projects</span>
-                <span className="nav-text-bottom">Projects</span>
-              </span>
-            </a>
+              <FiChevronDown className="nav-dropdown-icon" />
+            </button>
+            <div className="nav-dropdown-menu" role="menu">
+       
+              <a href="#process" className="nav-dropdown-link" role="menuitem">Process</a>
+              <a href="#certifications" className="nav-dropdown-link" role="menuitem">Certifications</a>
+              <a href="#skills" className="nav-dropdown-link" role="menuitem">Tools</a>
+              <a href="#case" className="nav-dropdown-link" role="menuitem">Case Studies</a>
+              <a href="#faq" className="nav-dropdown-link" role="menuitem">FAQ</a>
+            </div>
           </li>
 
 
@@ -673,11 +685,27 @@ function About() {
                 <ul className="mobile-nav-links">
                   <li className="mobile-nav-item">
                     <a
-                      href="/about-web-designer"
+                      href="/"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
                       <span className="nav-number">01</span>
+                      <div className="nav-content">
+                        <span className="nav-label">Portfolio</span>
+                        <span className="nav-description">
+                          Back to homepage
+                        </span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
+                  <li className="mobile-nav-item">
+                    <a
+                      href="#about"
+                      onClick={closeMobileMenu}
+                      className="mobile-nav-link"
+                    >
+                      <span className="nav-number">02</span>
                       <div className="nav-content">
                         <span className="nav-label">About</span>
                         <span className="nav-description">
@@ -689,7 +717,7 @@ function About() {
                   </li>
                   <li className="mobile-nav-item">
                     <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
-                      <span className="nav-number">02</span>
+                      <span className="nav-number">03</span>
                       <div className="nav-content">
                         <span className="nav-label">What I Do</span>
                         <span className="nav-description">My capabilities & expertise</span>
@@ -697,24 +725,6 @@ function About() {
                       <FaArrowRight className="nav-arrow" />
                     </a>
                   </li>
-
-                  <li className="mobile-nav-item">
-                    <a
-                      href="/projects/qrush"
-                      onClick={closeMobileMenu}
-                      className="mobile-nav-link"
-                    >
-                      <span className="nav-number">03</span>
-                      <div className="nav-content">
-                        <span className="nav-label">Projects</span>
-                        <span className="nav-description">
-                          View my latest work
-                        </span>
-                      </div>
-                      <FaArrowRight className="nav-arrow" />
-                    </a>
-                  </li>
-
                   <li className="mobile-nav-item">
                     <a
                       href="#process"
@@ -733,11 +743,59 @@ function About() {
                   </li>
                   <li className="mobile-nav-item">
                     <a
-                      href="#contact"
+                      href="#certifications"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
                       <span className="nav-number">05</span>
+                      <div className="nav-content">
+                        <span className="nav-label">Certifications</span>
+                        <span className="nav-description">
+                          Credentials and achievements
+                        </span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
+                  <li className="mobile-nav-item">
+                    <a
+                      href="#skills"
+                      onClick={closeMobileMenu}
+                      className="mobile-nav-link"
+                    >
+                      <span className="nav-number">06</span>
+                      <div className="nav-content">
+                        <span className="nav-label">Tools</span>
+                        <span className="nav-description">
+                          My core tools and stack
+                        </span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
+                  <li className="mobile-nav-item">
+                    <a
+                      href="#projects"
+                      onClick={closeMobileMenu}
+                      className="mobile-nav-link"
+                    >
+                      <span className="nav-number">07</span>
+                      <div className="nav-content">
+                        <span className="nav-label">Case Studies</span>
+                        <span className="nav-description">
+                          Highlights and outcomes
+                        </span>
+                      </div>
+                      <FaArrowRight className="nav-arrow" />
+                    </a>
+                  </li>
+                  <li className="mobile-nav-item">
+                    <a
+                      href="#contact"
+                      onClick={closeMobileMenu}
+                      className="mobile-nav-link"
+                    >
+                      <span className="nav-number">08</span>
                       <div className="nav-content">
                         <span className="nav-label">Contact</span>
                         <span className="nav-description">
@@ -867,7 +925,7 @@ function About() {
           </div>
 
           {/* INTRO SECTION */}
-          <section className="about-section">
+          <section className="about-section" id="services">
 
             <div className="services-container">
               <div className="services-header">
@@ -1041,7 +1099,7 @@ function About() {
                 </p>
               </div>
 
-              {/* CASE STUDY HIGHLIGHTS */}
+   
 
 
               {/* CORE CAPABILITIES */}
@@ -1136,7 +1194,7 @@ function About() {
               </div>
 
               {/* CASE STUDY HIGHLIGHTS */}
-              <div className="apart-cases">
+              <div className="apart-cases" id="case">
                 <h3 className="services-subtitles split-animate">Case Study Highlights</h3>
                 <div className="apart-cases-grid">
                   <a href="/projects/qrush" className="apart-case-card">
@@ -1222,7 +1280,7 @@ function About() {
           </section>
 
           {/* FAQ SECTION */}
-          <section className="faq-section">
+          <section className="faq-section" id="faq">
             <div className="faq-container">
               <h2 className="faq-title split-animate">
                 Questions You Might Ask
