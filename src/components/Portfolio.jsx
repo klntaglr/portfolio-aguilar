@@ -1330,11 +1330,12 @@ function Portfolio() {
                         </span>
                         <span className="hero-cert-divider" />
                         <span className="hero-cert-badge">
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
-                            alt="Meta"
-                          />
-                          <span> Front-End</span>
+                       <img
+  src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+  alt="Microsoft"
+  style={{ filter: "brightness(0) invert(1)", opacity: 0.5 }}
+/>
+                          <span>UX Design</span>
                         </span>
                       </div>
 
@@ -1941,55 +1942,7 @@ function Portfolio() {
                 />
               </div>
 
-           {/* Certifications Strip */}
-              <div className="  ">
-                <span className="cert-strip__label">CERTIFIED BY</span>
-                <div className="cert-strip__logos">
-                   <a
-                    href="https://www.coursera.org/professional-certificates/google-ux-design"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cert-item"
-                  >
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" className="cert-logo" />
-                    <span className="cert-name">UX Design</span>
-                    <span className="cert-tooltip">Google UX Design Professional Certificate · Coursera · 2026</span>
-                  </a>
-                  <div className="cert-divider" />
-                   <a
-                    href="https://www.coursera.org/professional-certificates/microsoft-ux-design"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cert-item"
-                  >
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" className="cert-logo" />
-                    <span className="cert-name">UX Design Professional</span>
-                    <span className="cert-tooltip">Microsoft UX Design Professional Certificate · Coursera · 2026</span>
-                  </a>
-                  <div className="cert-divider" />
-                   <a
-                    href="https://www.coursera.org/professional-certificates/meta-front-end-developer"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cert-item"
-                  >
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta" className="cert-logo" />
-                    <span className="cert-name">Front-End Developer</span>
-                    <span className="cert-tooltip">Meta Front-End Developer Professional Certificate · Coursera · 2026</span>
-                  </a>
-                  <div className="cert-divider" />
-                  <a
-                    href="https://www.freecodecamp.org/certification/klntaglr/front-end-development-libraries"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cert-item"
-                  >
-                    <img src="/fcc_secondary_small.svg" alt="freeCodeCamp" className="cert-logo cert-logo--fcc" />
-                    <span className="cert-name">Front End Libraries</span>
-                    <span className="cert-tooltip">Front End Development Libraries · freeCodeCamp · Dec 2025</span>
-                  </a>
-                </div>
-              </div>
+           
 
               <div className="process-divider"></div>
 

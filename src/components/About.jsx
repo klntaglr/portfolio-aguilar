@@ -48,6 +48,7 @@ import ladyAvatar from "../assets/ladyclient.jpg";
 import nammerAvatar from "../assets/nammer1.png";
 import czarAvatar from "../assets/czar.jpg";
 import ellaAvatar from "../assets/ella.jpg";
+import freecodecampLogo from "../assets/freecodecamp.png";
 import "./Portfolio.css";
 
 import TiltedCard from "./TiltedCard";
@@ -394,7 +395,7 @@ function About() {
   }, []);
 
   const [openFAQ, setOpenFAQ] = useState(null);
-
+  const [hoveredCert, setHoveredCert] = useState(null);
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
@@ -824,15 +825,16 @@ function About() {
                             src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
                             alt="Google"
                           />
-                       <span>UI/UX</span>
+                          <span>UI/UX</span>
                         </span>
                         <span className="hero-cert-divider" />
                         <span className="hero-cert-badge">
                           <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
-                            alt="Meta"
+                            src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+                            alt="Microsoft"
+                            style={{ filter: "brightness(0) invert(1)", opacity: 0.5 }}
                           />
-                          <span>Front-End</span>
+                          <span>UX Design</span>
                         </span>
                       </div>
                     </div>
@@ -1059,56 +1061,58 @@ function About() {
                 </ul>
               </div>
 
-              {/* CERTIFICATIONS — placed here to validate capabilities above */}
+              {/* CERTIFICATIONS */}
               <div className="services-content">
                 <h3 className="services-subtitles split-animate" id="certifications">
                   Certifications
                 </h3>
               </div>
               <div className="about-cert-grid">
-                <a href="https://www.coursera.org/professional-certificates/google-ux-design" target="_blank" rel="noopener noreferrer" className="about-cert-card">
+                <a href="https://www.coursera.org/account/accomplishments/professional-cert/VV2F4V6ODWAJ" target="_blank" rel="noopener noreferrer" className="about-cert-card">
                   <div className="about-cert-card__logo">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" />
                   </div>
                   <div className="about-cert-card__body">
                     <strong className="about-cert-card__title">Google UX Design</strong>
                     <span className="about-cert-card__meta">Professional Certificate · Coursera · 2026</span>
+                    <div className="about-cert-card__tools">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" alt="Figma" className="cert-tool-icon" title="Figma" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" className="cert-tool-icon" title="Google" />
+                    </div>
                   </div>
                   <div className="about-cert-card__arrow">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                   </div>
                 </a>
-                <a href="https://www.coursera.org/professional-certificates/microsoft-ux-design" target="_blank" rel="noopener noreferrer" className="about-cert-card">
+
+                <a href="https://www.coursera.org/account/accomplishments/professional-cert/P5944BGSCQGU" target="_blank" rel="noopener noreferrer" className="about-cert-card">
                   <div className="about-cert-card__logo">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" />
                   </div>
                   <div className="about-cert-card__body">
                     <strong className="about-cert-card__title">Microsoft UX Design Professional</strong>
                     <span className="about-cert-card__meta">Professional Certificate · Coursera · 2026</span>
+                    <div className="about-cert-card__tools">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" alt="Figma" className="cert-tool-icon" title="Figma" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" className="cert-tool-icon" title="Microsoft" />
+                    </div>
                   </div>
                   <div className="about-cert-card__arrow">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                   </div>
                 </a>
-                <a href="https://www.coursera.org/professional-certificates/meta-front-end-developer" target="_blank" rel="noopener noreferrer" className="about-cert-card">
-                  <div className="about-cert-card__logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta" />
-                  </div>
-                  <div className="about-cert-card__body">
-                    <strong className="about-cert-card__title">Meta Front-End Developer</strong>
-                    <span className="about-cert-card__meta">Professional Certificate · Coursera · 2026</span>
-                  </div>
-                  <div className="about-cert-card__arrow">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-                  </div>
-                </a>
+
                 <a href="https://www.freecodecamp.org/certification/klntaglr/front-end-development-libraries" target="_blank" rel="noopener noreferrer" className="about-cert-card">
                   <div className="about-cert-card__logo about-cert-card__logo--fcc">
-                    <img src="/fcc_secondary_small.svg" alt="freeCodeCamp" />
+                    <img src={freecodecampLogo} alt="freeCodeCamp" />
                   </div>
                   <div className="about-cert-card__body">
                     <strong className="about-cert-card__title">Front End Development Libraries</strong>
                     <span className="about-cert-card__meta">freeCodeCamp · Dec 2025</span>
+                    <div className="about-cert-card__tools">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React" className="cert-tool-icon" title="React" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js" className="cert-tool-icon" title="Node.js" />
+                    </div>
                   </div>
                   <div className="about-cert-card__arrow">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
