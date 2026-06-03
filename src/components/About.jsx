@@ -625,7 +625,7 @@ function About() {
               <FiChevronDown className="nav-dropdown-icon" />
             </button>
             <div className="nav-dropdown-menu" role="menu">
-       
+
               <a href="#process" className="nav-dropdown-link" role="menuitem">Process</a>
               <a href="#certifications" className="nav-dropdown-link" role="menuitem">Certifications</a>
               <a href="#skills" className="nav-dropdown-link" role="menuitem">Tools</a>
@@ -845,9 +845,14 @@ function About() {
               <div className="hero-entry-overlay" aria-hidden="true"></div>
               <div className="hero-wrapper">
                 <div className="hero-content">
-                  <p className="tagline hero-tagline-entry">UI/UX Designer & Web Designer</p>
+                  <p className="tagline hero-tagline-entry">
+                    UI/UX Designer &amp; Web Designer
+
+                  </p>
                   <h1 className="hero-title split-animate hero-title-reveal">
-                    Designing <span className="highlight">clean interfaces</span> for better user experience.
+                    Designing {" "}
+                    <span className="highlight">clean interfaces</span>{" "}
+                  for better user experience.
                   </h1>
 
                   <div className="hero-social-proof hero-stats-entry">
@@ -942,21 +947,23 @@ function About() {
               </div>
 
               <div className="services-description">
-                <p className="services-paragraph">
-                  I'm <span className="services-highlight">Klent Russell Aguilar,</span> a
-                  UI/UX and web designer focused on creating purposeful, user-centered interfaces. My work spans
-                  product design, mobile UI, web design, and frontend development — with an emphasis on
-                  research-grounded decisions and clean, intentional execution.
-                </p>
+               <p className="services-paragraph">
+  I'm <span className="services-highlight">Klent Russell Aguilar,</span> a UI/UX and web designer
+  based in Bulacan, Philippines — currently completing a BSIT at La Consolacion University
+  Philippines and holding Google UX Design and Microsoft UX Design Professional certificates.
+  My work spans product design, mobile UI, web design, and React frontend development, with
+  an emphasis on research-grounded decisions, accessibility, and clean handoff.
+</p>
 
-                <p className="services-paragraph">
-                  I handle both design and development — not to replace collaboration, but to
-                  strengthen it.{" "}
-                  <span className="services-highlight">
-                    Understanding implementation constraints makes me a stronger designer;
-                  </span>{" "}
-                  understanding user needs makes me a more intentional builder.
-                </p>
+             <p className="services-paragraph">
+  I handle both design and development — not to replace collaboration, but to
+  strengthen it.{" "}
+  <span className="services-highlight">
+    I speak developer and designer fluently,
+  </span>{" "}
+  which means fewer gaps between the Figma file and what actually ships. That's
+  the kind of cross-functional clarity teams hire for.
+</p>
 
                 <div className="services-what-i-do">
                   <p className="services-label">What I do:</p>
@@ -1021,85 +1028,44 @@ function About() {
                   />
                 </div>
 
-                <p className="services-paragraph">
-                  Every project follows the same discipline: understand the user before
-                  touching a design tool, structure before style, and validate before
-                  shipping. This keeps decisions grounded and avoids expensive pivots later.
-                </p>
+            <p className="services-paragraph">
+  Every project follows the same discipline: understand the problem before
+  opening a design tool, validate assumptions with real users, and deliver
+  clean, developer-ready specs — not just pretty screens.
+</p>
 
                 <div className="approach-section">
-                  <h4 className="approach-title">Step by step:</h4>
-
                   <ol className="approach-list">
                     <li>
-                      <strong>Requirement Gathering</strong> — Before anything else,
-                      I align with stakeholders on business goals, technical constraints,
-                      target users, timeline, and scope. This is where functional
-                      requirements (what the system must do) and non-functional
-                      requirements (performance, accessibility, security) are documented
-                      and agreed upon — so the design work never starts from assumption.
+                      <strong>Research & Discovery</strong> — User interviews, competitive
+                      analysis, and success metrics defined before any design tool opens.
                     </li>
                     <li>
-                      <strong>Research & Discovery</strong> — Stakeholder interviews,
-                      user interviews, surveys, competitive analysis, and analytics review.
-                      Every design decision starts here — grounded in evidence, not gut feel.
-                      I observe real users in real contexts before touching a design tool.
+                      <strong>Define & Synthesize</strong> — Personas, journey maps, and a
+                      sharp problem statement that keeps the whole team aligned.
                     </li>
                     <li>
-                      <strong>Define & Synthesize</strong> — Research findings are turned
-                      into user personas, journey maps, affinity maps, and a sharp problem
-                      statement. This phase keeps the entire team aligned on what is actually
-                      being solved — not just what looks good to build.
+                      <strong>Design & Prototype</strong> — Wireframes to high-fidelity Figma
+                      prototypes with design systems and micro-interactions — tested with real
+                      users before dev starts.
                     </li>
                     <li>
-                      <strong>Information Architecture</strong> — Content structure,
-                      sitemaps, card sorting, and navigation flows — so users find
-                      what they need without thinking too hard. Structure decisions
-                      happen before any visual work begins.
-                    </li>
-                    <li>
-                      <strong>Wireframing & Ideation</strong> — Lo-fi sketches and
-                      digital wireframes that establish layout, hierarchy, and screen
-                      connections. Fast, cheap, and built for rapid iteration —
-                      no colors, no fonts yet. Crazy 8s and user flows happen here.
-                    </li>
-                    <li>
-                      <strong>Visual Design & Prototyping</strong> — High-fidelity UI
-                      in Figma: typography systems, color tokens, spacing, iconography,
-                      and reusable component libraries. Interactive prototypes validate
-                      flows and micro-interactions before a single line of code is written.
-                    </li>
-                    <li>
-                      <strong>Usability Testing & Iteration</strong> — Real users test
-                      the prototype. I observe, document friction points, run heuristic
-                      reviews against Nielsen's 10 principles, and iterate on findings
-                      before committing to development. Test early — revise cheaply.
-                    </li>
-                    <li>
-                      <strong>Development & Handoff</strong> — Clean, responsive React
-                      implementation with annotated Figma specs, design tokens, and
-                      asset exports. I stay involved during the build phase to catch
-                      implementation gaps before they ship.
-                    </li>
-                    <li>
-                      <strong>QA, Launch & Iteration</strong> — Cross-browser and device
-                      testing, accessibility audits (WCAG), and performance reviews before
-                      launch. Post-launch analytics and user feedback feed the next
-                      iteration cycle — because good design is never truly finished.
+                      <strong>Test, Ship & Iterate</strong> — Usability testing, WCAG audits,
+                      clean developer handoff, and post-launch analytics. Good design is a
+                      loop, not a handoff.
                     </li>
                   </ol>
                 </div>
 
-                <p className="services-paragraph">
-                  This process isn't rigid — it adapts to project scope and team structure.
-                  But the core discipline stays the same:{" "}
-                  <span className="services-highlight">
-                    validate early, iterate often, and never skip the research.
-                  </span>
-                </p>
+           <p className="services-paragraph">
+  The process adapts to the team, the timeline, and the product stage —{" "}
+  <span className="services-highlight">
+    but the discipline never changes: evidence before assumption, structure before style, test before ship.
+  </span>
+</p>
               </div>
 
-   
+
 
 
               {/* CORE CAPABILITIES */}
@@ -1253,13 +1219,12 @@ function About() {
                   </ul>
                 </div>
 
-                <p className="services-paragraph">
-                  I'm seeking opportunities to contribute to meaningful projects while
-                  continuing to grow as a designer and developer.{" "}
-                  <span className="services-highlight">
-                    Open to full-time roles, internships, and collaborative work.
-                  </span>
-                </p>
+          <p className="services-paragraph">
+  I'm actively seeking full-time UI/UX or web design roles where I can contribute
+  from day one, collaborate with cross-functional teams, and grow under senior
+  mentorship — ready when you are.
+
+</p>
               </div>
             </div>
           </section>
@@ -1325,15 +1290,14 @@ function About() {
               <div className="parallax-reveal-sticky">
                 <div className="parallax-reveal-card">
                   <h2 className="cta-title">
-                    Looking for a <span className="highlight">UI/UX designer</span>?
+                    Open to <span className="highlight">full-time opportunities</span>.
                   </h2>
 
                   <p className="cta-description split-animate">
-                    I create user-focused digital experiences that combine research, design strategy, and smooth Figma-to-code execution. Always ready to bring ideas to life in UI/UX and web design projects.
+                    UI/UX designer with hands-on experience in Figma, React, and end-to-end product design. Ready to contribute to a team from day one — bring me your toughest design problems.
                   </p>
-
                   <div className="cta-actions">
-                    <a href="/contact-me" className="cta-button">Let's Work Together</a>
+                    <a href="/contact-me" className="cta-button">Get In Touch</a>
                     <a href="/resume.pdf" className="cta-buttons1" download>Download CV</a>
                   </div>
                 </div>

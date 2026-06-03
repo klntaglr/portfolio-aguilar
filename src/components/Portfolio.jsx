@@ -1,9 +1,10 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "./Portfolio.css";
 import experienceIcon from "../assets/experience.svg";
 import projects from "../assets/projects.svg";
@@ -34,6 +35,7 @@ import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
+  FaQuoteLeft,
   FaStar,
 } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
@@ -67,49 +69,30 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, ScrollSmoother);
 
 const PROCESS_STEPS = [
   {
-    label: "Requirements",
-    title: "Requirement Gathering",
-    description:
-      "Before any design work begins, I align with stakeholders on business goals, user needs, technical constraints, timeline, and scope. Functional requirements (what the system must do) and non-functional requirements (performance, accessibility, security) are documented and agreed upon — so nothing is assumed.",
-  },
-  {
-    label: "Discovery",
+    label: "Discover",
     title: "Research & Discovery",
     description:
-      "I research the target audience, competitive landscape, and existing analytics. Stakeholder interviews, user interviews, and surveys ground every decision in evidence — not gut feel. I observe real users in real contexts before opening a design tool.",
+      "I align with stakeholders on business goals, user needs, scope, and constraints, then conduct user research, market checks, and initial insights gathering to understand the problem context clearly.",
   },
   {
-    label: "Strategy",
-    title: "Define & Strategy",
+    label: "Define",
+    title: "Define & Strategize",
     description:
-      "Research is synthesized into user personas, journey maps, affinity maps, and a sharp problem statement. Information architecture, sitemaps, and navigation flows are mapped — so users can find what they need intuitively before any screen is designed.",
+      "I synthesize research into clear problem statements, user personas, journeys, and information architecture, ensuring both user needs and business goals are aligned before design decisions begin.",
   },
   {
     label: "Design",
-    title: "Wireframing, UI/UX & Prototyping",
+    title: "Design & Prototype",
     description:
-      "Lo-fi wireframes lock in layout, hierarchy, and screen connections — fast and cheap to change. These evolve into high-fidelity Figma prototypes with typography systems, color tokens, spacing, and component libraries. Interactive prototypes validate flows before a single line of code is written.",
+      "I translate structure into wireframes and evolve them into high-fidelity UI designs in Figma, focusing on layout, hierarchy, interaction flow, and system consistency.",
   },
   {
-    label: "Test",
-    title: "Usability Testing & Iteration",
+    label: "Deliver",
+    title: "Test, Handoff & Iterate",
     description:
-      "Real users test the prototype. I observe, document friction points, run heuristic reviews against Nielsen's 10 principles, and iterate on findings before committing to development. Test early — revise cheaply.",
-  },
-  {
-    label: "Build",
-    title: "Development & Handoff",
-    description:
-      "Designs are implemented in React — responsive, accessible, and performance-optimized. Annotated Figma specs, design tokens, and asset exports support a clean developer handoff. I stay involved during the build phase to catch implementation gaps before they ship.",
-  },
-  {
-    label: "Launch",
-    title: "QA, Launch & Iteration",
-    description:
-      "Cross-browser and device testing, accessibility audits (WCAG), and performance reviews before launch. Post-launch analytics and real user feedback feed the next iteration cycle — because good design is never truly finished.",
-  },
+      "I validate designs through usability testing and feedback, collaborate with developers during implementation, and refine the experience based on real usage and post-launch insights.",
+  }
 ];
-
 function Portfolio() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
@@ -229,6 +212,7 @@ function Portfolio() {
 
 
   const scrollFillRef = useRef(null);
+  const aboutVisualRef = useRef(null);
 
 
 
@@ -241,13 +225,17 @@ function Portfolio() {
   const [navTheme, setNavTheme] = useState("light");
   const navbarRef = useRef(null);
   const smootherRef = useRef(null);
+  const processSectionRef = useRef(null);
+  const [smoothReady, setSmoothReady] = useState(false);
 
-  const leftRef = useRef(null);
-  const sectionRef = useRef(null);
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
+  });
+  const { scrollYProgress: aboutVisualProgress } = useScroll({
+    target: aboutVisualRef,
+    offset: ["start end", "end start"],
   });
 
   const blur = useTransform(
@@ -255,7 +243,8 @@ function Portfolio() {
     [0, 1],
     ["blur(0px)", "blur(10px)"],
   );
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
+  const opacity = useTransform(scrollYProgress, [0, 0.82, 1], [1, 0.15, 0]);
+  const aboutPortraitY = useTransform(aboutVisualProgress, [0, 1], ["-3%", "3%"]);
 
   const techLogos = [
     { node: <SiFigma />, title: "Figma" },
@@ -301,98 +290,232 @@ function Portfolio() {
   }, []);
 
   useEffect(() => {
-    let ctx = gsap.context(() => {
-      const steps = gsap.utils.toArray(".process-step");
+    if (!pageReady || !smoothReady) return undefined;
 
-      /* ===== Timeline Fill ===== */
+    const processSection = processSectionRef.current;
+    if (!processSection) return undefined;
 
-      gsap.to(".timeline-line", {
-        "--progress": "100%",
-        ease: "none",
+    let ctx;
+    let mm;
+    let firstFrame = 0;
+    let secondFrame = 0;
+    let refreshTimer = 0;
 
-        scrollTrigger: {
-          trigger: ".process-timeline",
-          start: "top 60%",
-          end: "bottom 70%",
-          scrub: 1.4,
-        },
-      });
+    const initProcessAnimation = () => {
+      ctx = gsap.context(() => {
+        const q = gsap.utils.selector(processSection);
+        const timeline = q(".process-timeline")[0];
+        const timelineLine = q(".timeline-line")[0];
+        const steps = q(".process-step");
+        const stickyPanel = q(".process-sticky-panel")[0];
+        const stickyDots = q(".process-roll-dot");
+        const rollNumberStack = q(".process-roll-number-stack")[0];
+        const rollLabelStack = q(".process-roll-label-stack")[0];
 
-      /* ===== Dot Activation ===== */
+        if (!timeline || !timelineLine || !steps.length) return;
 
-      steps.forEach((step) => {
-        const dot = step.querySelector(".marker-dot");
-
-        gsap.fromTo(
-          dot,
-          {
-            backgroundColor: "#ffffff",
-            borderColor: "#d0d0d0",
-            scale: 1,
+        gsap.set(timelineLine, { "--progress": "0%" });
+        gsap.to(timelineLine, {
+          "--progress": "100%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: timeline,
+            start: "top center",
+            end: "bottom center",
+            scrub: 0.55,
+            invalidateOnRefresh: true,
           },
-          {
-            backgroundColor: "#4CAF50",
-            borderColor: "#4CAF50",
-            scale: 1.25,
-            ease: "power2.out",
+        });
 
-            scrollTrigger: {
-              trigger: step,
-              start: "top 55%",
-              end: "top 40%",
-              scrub: true,
+        mm = gsap.matchMedia();
+        mm.add("(min-width: 769px)", () => {
+          if (!stickyPanel || !rollNumberStack || !rollLabelStack) {
+            return undefined;
+          }
+
+          let activeStepIndex = -1;
+          const stepMarkers = steps.map((step) => step.querySelector(".step-marker") || step);
+
+          const getStepAtViewportCenter = () => {
+            const viewportCenter = window.innerHeight / 2;
+
+            return stepMarkers.reduce((activeIndex, marker, markerIndex) => {
+              const rect = marker.getBoundingClientRect();
+              const markerCenter = rect.top + rect.height / 2;
+              return markerCenter <= viewportCenter + 1 ? markerIndex : activeIndex;
+            }, 0);
+          };
+
+          const setActiveProcessStep = (nextIndex, immediate = false) => {
+            const activeIndex = gsap.utils.clamp(0, steps.length - 1, nextIndex);
+            if (activeStepIndex === activeIndex && !immediate) return;
+
+            activeStepIndex = activeIndex;
+
+            const numberHeight =
+              rollNumberStack
+                .querySelector(".process-roll-number")
+                ?.getBoundingClientRect().height || 0;
+            const labelHeight =
+              rollLabelStack
+                .querySelector(".process-roll-label")
+                ?.getBoundingClientRect().height || 0;
+            const duration = immediate ? 0 : 0.58;
+
+            gsap.to(rollNumberStack, {
+              y: numberHeight ? -numberHeight * activeIndex : 0,
+              duration,
+              ease: "power3.out",
+              overwrite: "auto",
+            });
+
+            gsap.to(rollLabelStack, {
+              y: labelHeight ? -labelHeight * activeIndex : 0,
+              duration: immediate ? 0 : 0.46,
+              ease: "power3.out",
+              overwrite: "auto",
+            });
+
+            steps.forEach((step, index) => {
+              const marker = step.querySelector(".marker-dot");
+              step.classList.toggle("is-active", index === activeIndex);
+              marker?.classList.toggle("is-active", index <= activeIndex);
+            });
+
+            stickyDots.forEach((dot, index) => {
+              dot.classList.toggle("is-active", index <= activeIndex);
+            });
+          };
+
+          setActiveProcessStep(getStepAtViewportCenter(), true);
+
+          const pinTrigger = ScrollTrigger.create({
+            trigger: timeline,
+            start: "top top",
+            end: "bottom bottom",
+            pin: stickyPanel,
+            pinSpacing: false,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onRefresh: () => {
+              setActiveProcessStep(getStepAtViewportCenter(), true);
             },
-          },
-        );
-      });
+          });
 
-      /* ===== Step Entrance ===== */
+          const stepTriggers = steps.map((step, index) =>
+            ScrollTrigger.create({
+              trigger: stepMarkers[index],
+              start: "center center",
+              end: "center center",
+              invalidateOnRefresh: true,
+              onEnter: () => setActiveProcessStep(index),
+              onEnterBack: () => setActiveProcessStep(index),
+              onRefresh: (self) => {
+                if (self.isActive) {
+                  setActiveProcessStep(index, true);
+                  return;
+                }
 
-      steps.forEach((step) => {
-        gsap.from(step.querySelector(".step-number-wrapper"), {
-          x: -80,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
+                setActiveProcessStep(getStepAtViewportCenter(), true);
+              },
+            }),
+          );
 
-          scrollTrigger: {
-            trigger: step,
-            start: "top 75%",
-            toggleActions: "play reverse play reverse",
-          },
+          return () => {
+            pinTrigger.kill();
+            stepTriggers.forEach((trigger) => trigger.kill());
+          };
         });
 
-        gsap.from(step.querySelector(".step-container"), {
-          x: 80,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
+        steps.forEach((step) => {
+          const markerDot = step.querySelector(".marker-dot");
+          const markerAnchor = step.querySelector(".step-marker") || step;
+          const numberBlock = step.querySelector(".step-number-wrapper");
+          const rightPanel = step.querySelector(".step-container");
 
-          scrollTrigger: {
-            trigger: step,
-            start: "top 75%",
-            toggleActions: "play reverse play reverse",
-          },
+          if (markerDot) {
+            gsap.fromTo(
+              markerDot,
+              {
+                backgroundColor: "#323131",
+                borderColor: "#5a5a5a",
+                scale: 1,
+              },
+              {
+                backgroundColor: "#4CAF50",
+                borderColor: "#4CAF50",
+                scale: 1.25,
+                ease: "power2.out",
+                overwrite: "auto",
+                scrollTrigger: {
+                  trigger: markerAnchor,
+                  start: "center 62%",
+                  end: "center center",
+                  scrub: 0.55,
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
+          }
+
+          if (numberBlock) {
+            gsap.fromTo(
+              numberBlock,
+              { opacity: 0, x: -48 },
+              {
+                opacity: 1,
+                x: 0,
+                duration: 0.78,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: markerAnchor,
+                  start: "center 74%",
+                  toggleActions: "play none none reverse",
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
+          }
+
+          if (rightPanel) {
+            gsap.fromTo(
+              rightPanel,
+              { opacity: 0, x: 72, y: 16 },
+              {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                duration: 0.86,
+                delay: 0.06,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: markerAnchor,
+                  start: "center 72%",
+                  toggleActions: "play none none reverse",
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
+          }
         });
-      });
+      }, processSection);
+
+      ScrollTrigger.refresh();
+      refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 180);
+    };
+
+    firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(initProcessAnimation);
     });
 
-    return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top+=120",
-        end: "bottom bottom",
-        pin: leftRef.current,
-        pinSpacing: false,
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+      window.clearTimeout(refreshTimer);
+      mm?.revert();
+      ctx?.revert();
+    };
+  }, [pageReady, smoothReady]);
   // Smooth scroll for anchor links
   useEffect(() => {
     const handleSmoothScroll = (e) => {
@@ -437,6 +560,8 @@ function Portfolio() {
   useEffect(() => {
     if (!pageReady) return undefined;
 
+    setSmoothReady(false);
+
     const existingSmoother = ScrollSmoother.get();
     if (existingSmoother) {
       existingSmoother.kill();
@@ -451,7 +576,26 @@ function Portfolio() {
     });
     smootherRef.current = smoother;
 
-    ScrollTrigger.refresh();
+    let isActive = true;
+    let readyFrame = 0;
+    let fontsFrame = 0;
+
+    const refreshSmoother = () => {
+      if (!isActive) return;
+      ScrollTrigger.refresh();
+      setSmoothReady(true);
+    };
+
+    readyFrame = window.requestAnimationFrame(refreshSmoother);
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (!isActive) return;
+        fontsFrame = window.requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+        });
+      });
+    }
 
     const updateNavbar = (currentScroll, direction) => {
       const navbar = navbarRef.current;
@@ -488,6 +632,9 @@ function Portfolio() {
     updateNavbar(lastScrollRef.current, 0);
 
     return () => {
+      isActive = false;
+      window.cancelAnimationFrame(readyFrame);
+      window.cancelAnimationFrame(fontsFrame);
       navbarScrollTrigger.kill();
       smoother.kill();
       if (smootherRef.current === smoother) {
@@ -791,69 +938,7 @@ function Portfolio() {
   }, [pageReady]);
   const [openFAQ, setOpenFAQ] = useState(null);
   const [testiIndex, setTestiIndex] = useState(0);
-  const dragRef = useRef(null);
-  const dragStart = useRef(null);
-
-
-
-  const dragOffset = useRef(0);
-  const [dragX, setDragX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [exitDir, setExitDir] = useState(null);
-  const [peekIndex, setPeekIndex] = useState(null);
-
-  const handleDragStart = (e) => {
-    dragStart.current = e.type === 'touchstart'
-      ? e.touches[0].clientX
-      : e.clientX;
-    setIsDragging(true);
-    setExitDir(null);
-  };
-
-  const handleDragMove = (e) => {
-    if (dragStart.current === null) return;
-    const currentX = e.type === 'touchmove'
-      ? e.touches[0].clientX
-      : e.clientX;
-    const diff = currentX - dragStart.current;
-    dragOffset.current = diff;
-    setDragX(diff);
-    if (diff < -30 && testiIndex < testimonials.length - 1) {
-      setPeekIndex(testiIndex + 1);
-    } else if (diff > 30 && testiIndex > 0) {
-      setPeekIndex(testiIndex - 1);
-    } else {
-      setPeekIndex(null);
-    }
-  };
-
-  const handleDragEnd = (e) => {
-    if (dragStart.current === null) return;
-    const diff = dragOffset.current;
-    if (Math.abs(diff) > 80) {
-      if (diff < 0) {
-        setExitDir('left');
-        setTimeout(() => {
-          setTestiIndex(prev => Math.min(testimonials.length - 1, prev + 1));
-          setExitDir(null);
-          setDragX(0);
-        }, 300);
-      } else {
-        setExitDir('right');
-        setTimeout(() => {
-          setTestiIndex(prev => Math.max(0, prev - 1));
-          setExitDir(null);
-          setDragX(0);
-        }, 300);
-      }
-    } else {
-      setDragX(0);
-    }
-    dragStart.current = null;
-    dragOffset.current = 0;
-    setIsDragging(false);
-    setPeekIndex(null);
-  };
+  const [activeTestimonial, setActiveTestimonial] = useState(null);
 
   const testimonials = [{
     quote: "I highly recommend Mr. Russell Aguilar for his excellent work and professionalism. He created my portfolio beautifully and was very responsive, accommodating, and easy to work with throughout the entire process. He listened carefully to my ideas, welcomed revisions, and delivered results that exceeded my expectations. The final output was clean, creative, and high quality, and I’m genuinely very satisfied with his work. Thank you so much!",
@@ -897,37 +982,62 @@ function Portfolio() {
     date: "April 2026",
   },
   ];
-  const totalRating = 4.8;
-  const renderRatingStars = (rating) =>
-    Array.from({ length: 5 }).map((_, index) => {
-      const fill = Math.max(0, Math.min(1, rating - index));
-      const gradientId = `testi-star-${testiIndex}-${index}`;
+  const TESTIMONIALS_PER_PAGE = 2;
+  const totalTestimonialPages = Math.ceil(
+    testimonials.length / TESTIMONIALS_PER_PAGE,
+  );
+  const visibleTestimonials = testimonials
+    .slice(
+      testiIndex * TESTIMONIALS_PER_PAGE,
+      testiIndex * TESTIMONIALS_PER_PAGE + TESTIMONIALS_PER_PAGE,
+    )
+    .map((testimonial, offset) => ({
+      ...testimonial,
+      index: testiIndex * TESTIMONIALS_PER_PAGE + offset,
+    }));
 
-      return (
-        <svg
-          key={index}
-          className="testi-star"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <defs>
-            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset={`${fill * 100}%`} stopColor="currentColor" />
-              <stop offset={`${fill * 100}%`} stopColor="transparent" />
-            </linearGradient>
-          </defs>
-          <path
-            className="testi-star-base"
-            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-          />
-          <path
-            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-            fill={`url(#${gradientId})`}
-          />
-        </svg>
-      );
-    });
+  const showPreviousTestimonial = () => {
+    setTestiIndex((prev) => (prev - 1 + totalTestimonialPages) % totalTestimonialPages);
+  };
+
+  const showNextTestimonial = () => {
+    setTestiIndex((prev) => (prev + 1) % totalTestimonialPages);
+  };
+
+  const getInitials = (name) =>
+    name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2);
+
+  const renderRatingStars = (rating) =>
+    Array.from({ length: 5 }).map((_, index) => (
+      <FaStar
+        key={index}
+        className={`testi-star ${index < Math.round(rating) ? "testi-star--active" : ""}`}
+        aria-hidden="true"
+      />
+    ));
+
+  useEffect(() => {
+    if (!activeTestimonial) return undefined;
+
+    document.body.classList.add("testi-modal-open");
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setActiveTestimonial(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.classList.remove("testi-modal-open");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeTestimonial]);
 
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
@@ -988,9 +1098,11 @@ function Portfolio() {
     const el = scrollFillRef.current;
     if (!el) return;
 
-    // Only target the grey accent span
     const accentEl = el.querySelector(".scroll-fill-text");
     if (!accentEl) return;
+    const fillStyles = window.getComputedStyle(el);
+    const dimColor = fillStyles.getPropertyValue("--about-fill-dim").trim() || "#526376";
+    const activeColor = fillStyles.getPropertyValue("--about-fill-active").trim() || "#f8fbff";
 
     const rawText = accentEl.textContent
       .replace(/\s+/g, " ")
@@ -1009,9 +1121,9 @@ function Portfolio() {
       const spans = accentEl.querySelectorAll(".sf-char");
       gsap.fromTo(
         spans,
-        { color: "#c0c0c0", opacity: 1 },
+        { color: dimColor, opacity: 1 },
         {
-          color: "#1a1a1a",
+          color: activeColor,
           opacity: 1,
           ease: "none",
           stagger: { each: 0.018, from: "start" },
@@ -1057,14 +1169,6 @@ function Portfolio() {
             </a>
           </li>
 
-          <li>
-            <a href="#services" className="nav-link-animated">
-              <span className="nav-text">
-                <span className="nav-text-top">What I Do</span>
-                <span className="nav-text-bottom">What I Do</span>
-              </span>
-            </a>
-          </li>
           <li>
             <a href="#projects" className="nav-link-animated">
               <span className="nav-text">
@@ -1175,23 +1279,12 @@ function Portfolio() {
                     </a>
                   </li>
                   <li className="mobile-nav-item">
-                    <a href="#services" onClick={closeMobileMenu} className="mobile-nav-link">
-                      <span className="nav-number">03</span>
-                      <div className="nav-content">
-                        <span className="nav-label">What I Do</span>
-                        <span className="nav-description">My capabilities & expertise</span>
-                      </div>
-                      <FaArrowRight className="nav-arrow" />
-                    </a>
-                  </li>
-
-                  <li className="mobile-nav-item">
                     <a
                       href="#projects"
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">04</span>
+                      <span className="nav-number">03</span>
                       <div className="nav-content">
                         <span className="nav-label">Projects</span>
                         <span className="nav-description">
@@ -1208,7 +1301,7 @@ function Portfolio() {
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">05</span>
+                      <span className="nav-number">04</span>
                       <div className="nav-content">
                         <span className="nav-label">Process</span>
                         <span className="nav-description">
@@ -1224,7 +1317,7 @@ function Portfolio() {
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">06</span>
+                      <span className="nav-number">05</span>
                       <div className="nav-content">
                         <span className="nav-label">FAQ</span>
                         <span className="nav-description">
@@ -1240,7 +1333,7 @@ function Portfolio() {
                       onClick={closeMobileMenu}
                       className="mobile-nav-link"
                     >
-                      <span className="nav-number">07</span>
+                      <span className="nav-number">06</span>
                       <div className="nav-content">
                         <span className="nav-label">Contact</span>
                         <span className="nav-description">
@@ -1374,73 +1467,55 @@ function Portfolio() {
 
           <section className="about-section" id="about" data-nav-theme="dark">
             <div className="about-container">
-              <h2 className="about-title" ref={scrollFillRef}>
-                <span className="scroll-fill-text about-title-accent">Design isn't just about how it looks. It's about how it works, how users feel, and whether it actually solves the problem it was built for.</span>
-              </h2>
+              <div className="about-statement-grid">
+                <motion.div
+                  className="about-copy"
+                  initial={{ opacity: 0, y: 34 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.28 }}
+                  transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <h2 className="about-title" ref={scrollFillRef}>
+                    <span className="scroll-fill-text about-title-accent">
+                   Design isn't just about how it looks. It's about how it works, how users feel, and whether it actually solves the problem it was built for.
+                    </span>
+                  </h2>
+                </motion.div>
 
-            </div>
-          </section>
-
-          {/* Services Section */}
-          <section className="services-section" data-nav-theme="dark">
-            <div className="services-container">
-              <div className="services-header">
-                <h2 className="services-title" id="services">What I Do</h2>
-              </div>
-
-              <div className="services-content">
-                <span className="services-index">CAPABILITIES — 02</span>
-              </div>
-
-              <div className="services-divider"></div>
-
-              <div className="services-list">
-                <div className="services-items">
-                  {services.map((service, index) => (
-                    <div key={index} className="service-item">
-
-                      {/* HEADER */}
-                      <div
-                        className="service-header"
-                        onClick={() => toggleService(index)}
-                      >
-                        <div className="service-number">{service.number}</div>
-                        <h3 className="service-name">{service.name}</h3>
-                        <button className="service-toggle">
-                          {openService === index ? "−" : "+"}
-                        </button>
-                      </div>
-
-                      {/* DETAILS */}
-                      <div
-                        className={`service-details ${openService === index ? "open" : ""
-                          }`}
-                      >
-                        <p className="service-description">
-                          {service.description}
-                        </p>
-
-                        {/* Tags — CSS-only, no Framer conflict */}
-                        <div className="service-tags">
-                          {service.tags.map((tag, tagIndex) => (
-                            <span
-                              key={tagIndex}
-                              className="tag"
-                              style={{
-                                transitionDelay: openService === index ? `${tagIndex * 0.06}s` : "0s",
-                              }}
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <motion.figure
+                  className="about-visual"
+                  ref={aboutVisualRef}
+                  onMouseMove={(event) => {
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    event.currentTarget.style.setProperty(
+                      "--about-cursor-x",
+                      `${event.clientX - rect.left}px`,
+                    );
+                    event.currentTarget.style.setProperty(
+                      "--about-cursor-y",
+                      `${event.clientY - rect.top}px`,
+                    );
+                  }}
+                  initial={{ opacity: 0, x: 64, scale: 0.96 }}
+                  whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.35 }}
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <motion.img
+                    src={aboutme}
+                    alt="Klent Russell Aguilar portrait"
+                    className="about-portrait"
+                    style={{ y: aboutPortraitY, objectFit: "cover", objectPosition: "center" }}
+                  />
+                  <div className="about-cursor-badge" aria-hidden="true">
+                    <span className="about-cursor-dot"></span>
+                    <span>About me</span>
+                  </div>
+                </motion.figure>
               </div>
             </div>
           </section>
+
           {/* Works Section */}
           <section className="works-section" data-nav-theme="dark">
             <div className="works-container">
@@ -1699,219 +1774,237 @@ function Portfolio() {
 
               {/* Footer Statement */}
               <div className="works-divider" style={{ marginTop: "4rem" }}></div>
-              <div className="works-statement">
-                <p className="statement-text split-animate">
-                  Each project is driven by{" "}
-                  <span className="statement-highlight">
-                    rigorous thinking and uncompromising attention to detail.
-                  </span>
-                </p>
-                <a href="/contact-me" className="cta-button">Discuss Your Project</a>
-              </div>
-
+    
             </div>
           </section>
 
 
 
           {/* Testimonials Section */}
-          <section className="testimonials-section" data-nav-theme="dark">
+          <motion.section
+            className="testimonials-section"
+            data-nav-theme="dark"
+            initial={{ opacity: 0, y: 42 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.24 }}
+            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="testimonials-container">
+              <motion.aside
+                className="testi-intro"
+                initial={{ opacity: 0, x: -28 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <FaQuoteLeft className="testi-quote-mark" aria-hidden="true" />
+                <h2 className="testi-title">What my clients are saying</h2>
 
-              {/* Header Row */}
-              <div className="testi-header-row">
-                <span className="testi-eyebrow">REVIEWS — 04</span>
-                <div className="testi-header-bottom">
-                  <h2 className="testi-title">Testimonials</h2>
-                  <div className="testi-nav-btns">
-                    <button
-                      className="testi-nav-btn"
-                      onClick={() => setTestiIndex((prev) => Math.max(0, prev - 1))}
-                      disabled={testiIndex === 0}
-                      aria-label="Previous testimonial"
-                    >
-                      <MdOutlineArrowBackIos />
-                    </button>
-                    <button
-                      className="testi-nav-btn"
-                      onClick={() => setTestiIndex((prev) => Math.min(testimonials.length - 1, prev + 1))}
-                      disabled={testiIndex === testimonials.length - 1}
-                      aria-label="Next testimonial"
-                    >
-                      <MdOutlineArrowForwardIos />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="testi-divider" />
-
-              {/* Body Row */}
-              <div className="testi-body-row">
-
-                {/* Left — stat */}
-                <div className="testi-left">
-                  <p className="testi-stat-label">TOTAL RATING</p>
-                  <div className="testi-stat-block" key={`stat-${testiIndex}`}>
-                    <span className="testi-stat-number testi-stat--animate">{totalRating.toFixed(1)}</span>
-                    <span className="testi-stat-sub testi-stat-sub--animate">out of 5.0</span>
-                  </div>
-                </div>
-                {/* Right — quote */}
-                <div style={{ position: 'relative', overflow: 'hidden', flex: 1 }}>
-
-                  {peekIndex !== null && (
-                    <div
-                      className="testi-right"
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: dragX < 0 ? '100%' : '-100%',
-                        width: '100%',
-                        opacity: Math.min(0.9, Math.abs(dragX) / 120),
-                        transform: dragX < 0
-                          ? `translateX(${-100 + (Math.abs(dragX) / 4)}%)`
-                          : `translateX(${100 - (Math.abs(dragX) / 4)}%)`,
-                        pointerEvents: 'none',
-                        transition: 'none',
+                <div className="testi-controls" aria-label="Testimonial navigation">
+                  <motion.button
+                    type="button"
+                    className="testi-nav-btn"
+                    onClick={showPreviousTestimonial}
+                    aria-label="Previous testimonial group"
+                    whileHover={{ x: -2 }}
+                    whileTap={{ scale: 0.92 }}
+                  >
+                    <MdOutlineArrowBackIos />
+                  </motion.button>
+                  <div className="testi-progress-track" aria-hidden="true">
+                    <motion.span
+                      className="testi-progress-fill"
+                      animate={{
+                        width: `${((testiIndex + 1) / totalTestimonialPages) * 100}%`,
                       }}
-                    >
-                      <div className="testi-meta-row">
-                        <div className="testi-stars">
-                          {renderRatingStars(testimonials[peekIndex].rating)}
-                          <span className="testi-rating-label">{testimonials[peekIndex].rating.toFixed(1)} / 5.0</span>
-                        </div>
-                        <span className="testi-date">{testimonials[peekIndex].date}</span>
-                      </div>
-                      <blockquote className="testi-quote">"{testimonials[peekIndex].quote}"</blockquote>
-                      <div className="testi-author-row">
-                        <div className="testi-avatar">
-                          {testimonials[peekIndex].avatar ? (
-                            <img
-                              src={testimonials[peekIndex].avatar}
-                              alt={testimonials[peekIndex].name}
-                            />
-                          ) : (
-                            <span className="testi-avatar-initials">
-                              {testimonials[peekIndex].name.split(" ").map(n => n[0]).join("")}
-                            </span>
-                          )}
-                        </div>
-                        <div className="testi-author-info">
-                          <p className="testi-author-name">{testimonials[peekIndex].name}</p>
-                          <p className="testi-author-role">{testimonials[peekIndex].role}</p>
-                        </div>
-                        <div className="testi-brand">
-                          <img
-                            className="testi-brand-logo"
-                            src={testimonials[peekIndex].brandLogo}
-                            alt={`${testimonials[peekIndex].brand} logo`}
-                          />
-                          <span className="testi-brand-name">{testimonials[peekIndex].brand}</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  </div>
+                  <motion.button
+                    type="button"
+                    className="testi-nav-btn"
+                    onClick={showNextTestimonial}
+                    aria-label="Next testimonial group"
+                    whileHover={{ x: 2 }}
+                    whileTap={{ scale: 0.92 }}
+                  >
+                    <MdOutlineArrowForwardIos />
+                  </motion.button>
+                </div>
+              </motion.aside>
 
-                  <div
-                    className="testi-right"
+              <div className="testi-cards-viewport">
+                <AnimatePresence mode="wait">
+                  <motion.div
                     key={testiIndex}
-                    ref={dragRef}
-                    onMouseDown={handleDragStart}
-                    onMouseMove={handleDragMove}
-                    onMouseUp={handleDragEnd}
-                    onMouseLeave={handleDragEnd}
-                    onTouchStart={handleDragStart}
-                    onTouchMove={handleDragMove}
-                    onTouchEnd={handleDragEnd}
-                    style={{
-                      position: 'relative',
-                      cursor: isDragging ? 'grabbing' : 'grab',
-                      userSelect: 'none',
-                      transform: exitDir === 'left'
-                        ? 'translateX(-130%) rotate(-8deg)'
-                        : exitDir === 'right'
-                          ? 'translateX(130%) rotate(8deg)'
-                          : `translateX(${dragX * 0.45}px) rotate(${dragX * 0.014}deg)`,
-                      opacity: exitDir
-                        ? 0
-                        : isDragging
-                          ? Math.max(0.45, 1 - Math.abs(dragX) / 280)
-                          : 1,
-                      transition: isDragging
-                        ? 'none'
-                        : exitDir
-                          ? 'transform 0.32s cubic-bezier(0.4, 0, 1, 1), opacity 0.28s ease'
-                          : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease',
-                      willChange: 'transform',
+                    className="testi-card-track"
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    variants={{
+                      hidden: { opacity: 0, x: 34 },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: {
+                          duration: 0.24,
+                          staggerChildren: 0.12,
+                        },
+                      },
+                      exit: {
+                        opacity: 0,
+                        x: -34,
+                        transition: {
+                          duration: 0.22,
+                          staggerChildren: 0.06,
+                          staggerDirection: -1,
+                        },
+                      },
                     }}
                   >
-                    <div className="testi-meta-row">
-                      <div className="testi-stars">
-                        {renderRatingStars(testimonials[testiIndex].rating)}
-                        <span className="testi-rating-label">{testimonials[testiIndex].rating.toFixed(1)} / 5.0</span>
-                      </div>
-                      <span className="testi-date">{testimonials[testiIndex].date}</span>
-                    </div>
-                    <blockquote className="testi-quote testi-quote--animate">
-                      "{testimonials[testiIndex].quote}"
-                    </blockquote>
-                    <div className="testi-author-row">
-                      <div className="testi-avatar">
-                        {testimonials[testiIndex].avatar ? (
-                          <img
-                            src={testimonials[testiIndex].avatar}
-                            alt={testimonials[testiIndex].name}
-                          />
-                        ) : (
-                          <span className="testi-avatar-initials">
-                            {testimonials[testiIndex].name.split(" ").map(n => n[0]).join("")}
-                          </span>
-                        )}
-                      </div>
-                      <div className="testi-author-info">
-                        <p className="testi-author-name">{testimonials[testiIndex].name}</p>
-                        <p className="testi-author-role">{testimonials[testiIndex].role}</p>
-                      </div>
-                      <div className="testi-brand">
-                        <img
-                          className="testi-brand-logo"
-                          src={testimonials[testiIndex].brandLogo}
-                          alt={`${testimonials[testiIndex].brand} logo`}
-                        />
-                        <span className="testi-brand-name">{testimonials[testiIndex].brand}</span>
-                      </div>
-                    </div>
-                  </div>
+                    {visibleTestimonials.map((testimonial) => (
+                      <motion.article
+                        className="testi-card"
+                        key={`${testimonial.name}-${testimonial.index}`}
+                        variants={{
+                          hidden: { opacity: 0, y: 28, scale: 0.98 },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            transition: {
+                              duration: 0.58,
+                              ease: [0.16, 1, 0.3, 1],
+                            },
+                          },
+                          exit: {
+                            opacity: 0,
+                            y: -18,
+                            scale: 0.98,
+                            transition: {
+                              duration: 0.2,
+                              ease: [0.4, 0, 1, 1],
+                            },
+                          },
+                        }}
+                        whileHover={{ y: -8 }}
+                      >
+                        <div className="testi-speech-card">
+                          <blockquote className="testi-quote">
+                            {testimonial.quote}
+                          </blockquote>
+                          <div className="testi-card-actions">
+                            <div
+                              className="testi-stars"
+                              aria-label={`${Math.round(testimonial.rating)} out of 5 stars`}
+                            >
+                              {renderRatingStars(testimonial.rating)}
+                            </div>
+                            <button
+                              type="button"
+                              className="testi-read-btn"
+                              onClick={() => setActiveTestimonial(testimonial)}
+                            >
+                              Read full comment
+                              <FaArrowRight aria-hidden="true" />
+                            </button>
+                          </div>
+                        </div>
 
-                </div>
-
+                        <div className="testi-author-row">
+                          <div className="testi-avatar">
+                            {testimonial.avatar ? (
+                              <img src={testimonial.avatar} alt={testimonial.name} />
+                            ) : (
+                              <span className="testi-avatar-initials">
+                                {getInitials(testimonial.name)}
+                              </span>
+                            )}
+                          </div>
+                          <div className="testi-author-info">
+                            <p className="testi-author-name">{testimonial.name}</p>
+                            <p className="testi-author-date">{testimonial.date}</p>
+                          </div>
+                        </div>
+                      </motion.article>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
               </div>
-
-              {/* Dots — correct placement: BELOW body row, INSIDE testimonials-container */}
-              <div className="testi-footer">
-                <div className="testi-dots" role="tablist" aria-label="Testimonial navigation">
-                  {testimonials.map((_, i) => (
-                    <button
-                      key={i}
-                      className={`testi-dot ${i === testiIndex ? "testi-dot--active" : ""}`}
-                      onClick={() => setTestiIndex(i)}
-                      aria-label={`Go to testimonial ${i + 1}`}
-                      role="tab"
-                      aria-selected={i === testiIndex}
-                    />
-                  ))}
-                </div>
-                <span className="testi-counter">
-                  <strong>{String(testiIndex + 1).padStart(2, "0")}</strong> / {String(testimonials.length).padStart(2, "0")}
-                </span>
-              </div>
-
             </div>
-          </section>
+
+            {typeof document !== "undefined" &&
+              createPortal(
+                <AnimatePresence>
+                  {activeTestimonial && (
+                    <motion.div
+                      className="testi-modal-backdrop"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.22 }}
+                      onClick={() => setActiveTestimonial(null)}
+                    >
+                      <motion.div
+                        className="testi-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="testi-modal-title"
+                        initial={{ opacity: 0, y: 26, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 18, scale: 0.96 }}
+                        transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        <button
+                          type="button"
+                          className="testi-modal-close"
+                          onClick={() => setActiveTestimonial(null)}
+                          aria-label="Close full testimonial"
+                        >
+                          ×
+                        </button>
+
+                        <FaQuoteLeft className="testi-modal-mark" aria-hidden="true" />
+                        <div
+                          className="testi-stars"
+                          aria-label={`${Math.round(activeTestimonial.rating)} out of 5 stars`}
+                        >
+                          {renderRatingStars(activeTestimonial.rating)}
+                        </div>
+                        <blockquote className="testi-modal-quote">
+                          {activeTestimonial.quote}
+                        </blockquote>
+
+                        <div className="testi-modal-author">
+                          <div className="testi-avatar">
+                            {activeTestimonial.avatar ? (
+                              <img
+                                src={activeTestimonial.avatar}
+                                alt={activeTestimonial.name}
+                              />
+                            ) : (
+                              <span className="testi-avatar-initials">
+                                {getInitials(activeTestimonial.name)}
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <h3 id="testi-modal-title">{activeTestimonial.name}</h3>
+                            <p>{activeTestimonial.role}</p>
+                            <span>{activeTestimonial.date}</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>,
+                document.body,
+              )}
+          </motion.section>
 
           {/* Process Section - Updated Layout */}
-          <section className="process-section" data-nav-theme="light">
+          <section ref={processSectionRef} className="process-section" data-nav-theme="light">
             <div className="process-container">
               <div className="process-header-wrapper">
                 <div className="process-header" id="process">
@@ -1926,13 +2019,13 @@ function Portfolio() {
 
                 </div>
               </div>
-        <div>
+              <div>
                 {/* Basic horizontal loop */}
                 <LogoLoop
                   logos={techLogos}
                   speed={30}
                   direction="left"
-                  logoHeight={window.innerWidth <= 768 ? 40 : 70}
+                  logoHeight={isTouchDevice ? 40 : 70}
                   gap={60}
                   hoverSpeed={0}
                   scaleOnHover
@@ -1947,142 +2040,58 @@ function Portfolio() {
               <div className="process-divider"></div>
 
               <div className="process-timeline">
+                <aside className="process-sticky-panel" aria-hidden="true">
+                  <div className="process-sticky-content">
+                   
+                    <div className="process-roll-number-window">
+                      <div className="process-roll-number-stack">
+                        {PROCESS_STEPS.map((step, index) => (
+                          <span className="process-roll-number" key={step.label}>
+                            {String(index + 1).padStart(2, "0")}.
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="process-roll-label-window">
+                      <div className="process-roll-label-stack">
+                        {PROCESS_STEPS.map((step) => (
+                          <span className="process-roll-label" key={step.label}>
+                            {step.label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+              
+                 
+                  </div>
+                </aside>
                 <div className="timeline-line">
                   <div className="timeline-progress"></div>
                 </div>
-               <div className="process-steps ">
-                  {/* Step 1 */}
-                  <div className="process-step" data-step="1">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">01.</span>
-                      <span className="step-label">Requirements</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">Requirement Gathering</h3>
-                        <p className="step-description">
-                          Before any design work begins, I align with stakeholders on business goals, user needs, technical constraints, timeline, and scope. Functional requirements (what the system must do) and non-functional requirements (performance, accessibility, security) are documented and agreed upon — so nothing is assumed and no pivots happen mid-execution.
-                        </p>
+                <div className="process-steps">
+                  {PROCESS_STEPS.map((step, index) => (
+                    <div
+                      className="process-step"
+                      data-step={index + 1}
+                      key={step.label}
+                    >
+                      <div className="step-number-wrapper">
+                        <span className="step-number">
+                          {String(index + 1).padStart(2, "0")}.
+                        </span>
+                        <span className="step-label">{step.label}</span>
+                      </div>
+                      <div className="step-marker">
+                        <div className="marker-dot"></div>
+                      </div>
+                      <div className="step-container">
+                        <div className="step-content">
+                          <h3 className="step-title">{step.title}</h3>
+                          <p className="step-description">{step.description}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="process-step" data-step="2">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">02.</span>
-                      <span className="step-label">Research</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">Research & Discovery</h3>
-                        <p className="step-description">
-                          I research the target audience, competitive landscape, and existing analytics. Stakeholder interviews, user interviews, and surveys ground every decision in evidence — not gut feel. I observe real users in real contexts before opening a design tool.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="process-step" data-step="3">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">03.</span>
-                      <span className="step-label">Define</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">Define & Strategy</h3>
-                        <p className="step-description">
-                          Research is synthesized into user personas, journey maps, affinity maps, and a sharp problem statement that keeps the entire team aligned. Information architecture, sitemaps, and navigation flows are mapped — so users can find what they need intuitively before any screen is designed.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 4 */}
-                  <div className="process-step" data-step="4">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">04.</span>
-                      <span className="step-label">Wireframe</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">Wireframing & UI/UX Design</h3>
-                        <p className="step-description">
-                          Lo-fi wireframes lock in layout, hierarchy, and screen connections — fast and cheap to change. These evolve into high-fidelity Figma prototypes with typography systems, color tokens, spacing, and component libraries. Everything is validated before a single line of code is written.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 5 */}
-                  <div className="process-step" data-step="5">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">05.</span>
-                      <span className="step-label">Test</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">Usability Testing & Iteration</h3>
-                        <p className="step-description">
-                          Real users test the prototype. I observe, document friction points, run heuristic reviews against Nielsen's 10 principles, and iterate on findings before committing to development. Test early — revise cheaply. This step prevents expensive changes at the build stage.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 6 */}
-                  <div className="process-step" data-step="6">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">06.</span>
-                      <span className="step-label">Build</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">Development & Handoff</h3>
-                        <p className="step-description">
-                          Designs are implemented in React — responsive, accessible, and performance-optimized. Annotated Figma specs, design tokens, and asset exports support a clean developer handoff. I stay involved during the build to catch implementation gaps before they ship.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 7 */}
-                  <div className="process-step" data-step="7">
-                    <div className="step-number-wrapper">
-                      <span className="step-number">07.</span>
-                      <span className="step-label">Launch</span>
-                    </div>
-                    <div className="step-marker">
-                      <div className="marker-dot"></div>
-                    </div>
-                    <div className="step-container">
-                      <div className="step-content">
-                        <h3 className="step-title">QA, Launch & Iteration</h3>
-                        <p className="step-description">
-                          Cross-browser and device testing, accessibility audits (WCAG), and performance reviews before anything ships. Post-launch, analytics and real user feedback feed the next iteration cycle — because good design is never truly finished.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -2165,13 +2174,13 @@ function Portfolio() {
           <section className="parallax-reveal-section" data-nav-theme="dark">
             <div className="parallax-reveal-sticky">
               <div className="parallax-reveal-card">
-                <h2 className="cta-title">
-                  Looking for a <span className="highlight">UI/UX designer</span>?
-                </h2>
+                  <h2 className="cta-title">
+                    Open to <span className="highlight">full-time opportunities</span>.
+                  </h2>
 
-                <p className="cta-description split-animate">
-                  I create user-focused digital experiences that combine research, design strategy, and smooth Figma-to-code execution. Always ready to bring ideas to life in UI/UX and web design projects.
-                </p>
+                  <p className="cta-description split-animate">
+                    UI/UX designer with hands-on experience in Figma, React, and end-to-end product design. Ready to contribute to a team from day one — bring me your toughest design problems.
+                  </p>
                 <div className="cta-actions">
                   <a href="/contact-me" className="cta-button">Let's Work Together</a>
                   <a href="/resume.pdf" className="cta-buttons1" download>Download CV</a>
@@ -2295,9 +2304,6 @@ function Portfolio() {
                         </li>
                         <li>
                           <a href="/about-web-designer">About</a>
-                        </li>
-                        <li>
-                          <a href="#services">Services</a>
                         </li>
                         <li>
                           <a href="/projects/qrush">Projects</a>

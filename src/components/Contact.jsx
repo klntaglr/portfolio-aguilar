@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FiArrowLeft,
   FiChevronRight,
+  FiDownload,
   FiMail,
   FiPhone,
   FiX,
@@ -56,121 +57,120 @@ const investmentRanges = [
 const engagementOptions = [
   {
     id: "hire",
-    title: "Hire me full-time",
-    subtitle: "UI/UX, web design, and React frontend for your team",
-    tag: "Corporate / HR",
+    title: "Open role or headcount",
+    subtitle: "UI/UX Designer, Website Designer, or Frontend Engineer",
+    tag: "Full-time · Contract",
     icon: IoBriefcaseOutline,
   },
   {
     id: "project",
-    title: "Commission a project",
-    subtitle: "Landing page, website, dashboard, or UI/UX work",
-    tag: "Freelance project",
+    title: "Scoped project or initiative",
+    subtitle: "Design system, product redesign, dashboard, or digital product",
+    tag: "Project-based",
     icon: HiOutlineBeaker,
   },
   {
     id: "retainer",
-    title: "Ongoing retainer",
-    subtitle: "Weekly design support, UX audits, and React updates",
-    tag: "Flexible support",
+    title: "Embedded design support",
+    subtitle: "Ongoing UX/UI capacity for your product or engineering team",
+    tag: "Retainer · Part-time",
     icon: MdOutlineWebStories,
   },
 ];
 
 const engagementDetails = {
   hire: {
-    fieldLabel: "Role / Level",
-    stepTitle: "What role are you hiring for?",
-    stepSubtitle: "This keeps the conversation focused on the position, not a project budget.",
+    fieldLabel: "Role Type",
+    stepTitle: "What position are you filling?",
+    stepSubtitle: "This helps me tailor my response to your team's specific need and hiring timeline.",
     options: [
       {
         id: "uiux-designer",
         label: "UI/UX Designer",
-        description: "Interface design, wireframes, prototypes, and user flows.",
+        description: "Research, wireframes, prototypes, and end-to-end product design.",
       },
       {
-        id: "web-designer",
-        label: "Web Designer",
-        description: "Responsive websites, landing pages, and visual systems.",
+        id: "product-designer",
+        label: "Website Designer",
+        description: "Marketing websites, landing pages, and content-driven web experiences.",
       },
       {
         id: "frontend",
-        label: "React Frontend",
-        description: "Design-aware frontend work with React and modern CSS.",
+        label: "Frontend Engineer",
+        description: "React development with strong design sensibility and component systems.",
       },
       {
         id: "discuss",
-        label: "Hybrid role",
-        description: "Use this if the role is still being shaped.",
+        label: "Role still being defined",
+        description: "Reach out early — I'm open to discussing scope before a JD is finalized.",
       },
     ],
   },
   project: {
-    fieldLabel: "Project Type",
-    stepTitle: "What kind of project is this?",
-    stepSubtitle: "Pick the closest match so I can understand the scope quickly.",
+    fieldLabel: "Initiative Type",
+    stepTitle: "What's the nature of the initiative?",
+    stepSubtitle: "Select the closest match — this helps me assess fit and prepare relevant work samples.",
     options: [
       {
-        id: "landing",
-        label: "Landing page",
-        description: "A focused page for campaigns, offers, or product launches.",
+        id: "design-system",
+        label: "Design system",
+        description: "Component library, token architecture, and documentation.",
       },
       {
-        id: "website",
-        label: "Multi-page website",
-        description: "A portfolio, service website, or business web presence.",
-      },
-      {
-        id: "redesign",
-        label: "Website redesign",
-        description: "Improve an existing site's layout, usability, and visuals.",
-      },
-      {
-        id: "uiux",
-        label: "UI/UX design only",
-        description: "Wireframes, flows, and high-fidelity Figma screens.",
+        id: "product-redesign",
+        label: "Product redesign",
+        description: "End-to-end UX overhaul of an existing digital product.",
       },
       {
         id: "webapp",
-        label: "Web app / Dashboard",
-        description: "Product interface, admin panel, or data-heavy UI.",
+        label: "Web app or dashboard",
+        description: "Data-heavy interface, admin panel, or internal tooling.",
+      },
+      {
+        id: "uiux",
+        label: "UX/UI design only",
+        description: "Figma deliverables — flows, wireframes, and high-fidelity screens.",
+      },
+      {
+        id: "website",
+        label: "Corporate website",
+        description: "Marketing site, investor relations, or brand presence.",
       },
       {
         id: "discuss",
-        label: "Not sure yet",
-        description: "Tell me the goal and we can map the right direction.",
+        label: "Exploratory / early stage",
+        description: "Happy to sign an NDA and discuss before scope is set.",
       },
     ],
   },
   retainer: {
-    fieldLabel: "Support Level",
-    stepTitle: "What support level do you need?",
-    stepSubtitle: "Retainers work best when the weekly rhythm is clear from the start.",
+    fieldLabel: "Engagement Model",
+    stepTitle: "How would your team work with me?",
+    stepSubtitle: "Understanding the structure upfront helps me confirm availability and fit for your team.",
     options: [
       {
-        id: "light",
-        label: "Light support",
-        description: "Occasional design updates, page tweaks, or quick fixes.",
+        id: "embedded",
+        label: "Embedded in your team",
+        description: "Attend standups, work in your tools, collaborate daily with engineering.",
       },
       {
         id: "regular",
-        label: "Regular weekly tasks",
-        description: "Design iterations, UX reviews, new sections, and React updates.",
+        label: "Scheduled weekly capacity",
+        description: "Fixed hours per week for design reviews, iterations, and delivery.",
       },
       {
-        id: "heavy",
-        label: "Full support",
-        description: "Ongoing product design and frontend collaboration.",
+        id: "advisory",
+        label: "Design advisory",
+        description: "Audit, strategy, and direction — less execution, more guidance.",
       },
       {
         id: "discuss",
-        label: "Open to discuss",
-        description: "Use this if you want to shape the arrangement together.",
+        label: "Open to structuring together",
+        description: "Let's talk — I'm flexible on how the engagement is shaped.",
       },
     ],
   },
 };
-
 const timelineOptions = {
   hire: [
     { id: "immediate", label: "Available now" },
@@ -286,10 +286,10 @@ function Contact() {
   const canContinueFromBrief = formData.message.trim().length > 8;
   const progressWidth = `${(currentStep / STEP_COUNT) * 100}%`;
 
-  const stepCopy = {
+const stepCopy = {
     1: {
-      title: "What are you looking for?",
-      subtitle: "Choose the path that fits your inquiry best.",
+      title: "What brings you here today?",
+      subtitle: "Select the option that best reflects your organization's need — I'll tailor everything from here.",
     },
     2: {
       title: detailConfig.stepTitle,
@@ -298,20 +298,20 @@ function Contact() {
     3: {
       title:
         selectedEngagement === "hire"
-          ? "Help me understand the role"
+          ? "Tell me about the role and team"
           : selectedEngagement === "retainer"
-            ? "Help me understand the support"
-            : "Help me prepare your consultation",
+            ? "Describe the engagement and team structure"
+            : "Describe the initiative",
       subtitle:
         selectedEngagement === "hire"
-          ? "Share the team, responsibilities, tools, and hiring timeline."
+          ? "Include the team size, reporting line, tech stack, location requirements, and target start date."
           : selectedEngagement === "retainer"
-            ? "Share the recurring tasks, current product, and preferred rhythm."
-            : "Share the goals, audience, pages, and important features.",
+            ? "Describe the product, team composition, tools used, and how design currently fits into the workflow."
+            : "Cover the business goal, target users, scope, constraints, and any existing assets or brand guidelines.",
     },
     4: {
-      title: "Almost there - where should I reply?",
-      subtitle: "I am based in Malolos, Bulacan and usually reply within 24 hours.",
+      title: "Where should I send my reply?",
+      subtitle: "Based in the Philippines (UTC+8) — open to remote, hybrid, or relocation. NDA available on request. I respond within 24 hours.",
     },
   };
 
@@ -761,13 +761,27 @@ function Contact() {
           </p>
         )}
 
-        <button
+     <button
           className="contact-flow-primary"
           disabled={!isFinalReady}
           type="submit"
         >
           {isSubmitting ? "Sending..." : "Send Message"}
         </button>
+
+        <div className="contact-flow-cv-row">
+          <span className="contact-flow-cv-label">Prefer to review first?</span>
+          <a
+            href="/src/assets/resume.pdf"
+            download="Russell_Aguilar_Resume.pdf"
+            className="contact-flow-cv-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FiDownload />
+            Download CV
+          </a>
+        </div>
       </div>
     );
   };
@@ -880,12 +894,12 @@ function Contact() {
         >
           <button type="button" onClick={() => handleCopy(CONTACT_EMAIL, "Email")}>
             <FiMail />
-            Copy email
+           Email Me
           </button>
 
           <button type="button" onClick={() => handleCopy(CONTACT_PHONE, "Phone")}>
             <FiPhone />
-            Copy phone
+         Contact Me
           </button>
 
           <a
