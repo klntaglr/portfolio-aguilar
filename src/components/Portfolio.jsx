@@ -334,7 +334,12 @@ function Portfolio() {
           }
 
           let activeStepIndex = -1;
-          const stepMarkers = steps.map((step) => step.querySelector(".step-marker") || step);
+          const stepMarkers = steps.map(
+            (step) =>
+              step.querySelector(".step-container") ||
+              step.querySelector(".step-marker") ||
+              step,
+          );
 
           const getStepAtViewportCenter = () => {
             const viewportCenter = window.innerHeight / 2;
@@ -391,17 +396,25 @@ function Portfolio() {
 
           const pinTrigger = ScrollTrigger.create({
             trigger: timeline,
-            start: "top top",
-            end: "bottom bottom",
+            start: "top center",
+            end: "bottom center",
             pin: stickyPanel,
             pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            onUpdate: () => {
+              setActiveProcessStep(getStepAtViewportCenter());
+            },
             onRefresh: () => {
               setActiveProcessStep(getStepAtViewportCenter(), true);
             },
+            onLeave: () => {
+              setActiveProcessStep(steps.length - 1);
+            },
+            onLeaveBack: () => {
+              setActiveProcessStep(0);
+            },
           });
-
           const stepTriggers = steps.map((step, index) =>
             ScrollTrigger.create({
               trigger: stepMarkers[index],
@@ -1044,41 +1057,40 @@ function Portfolio() {
   };
   const faqs = [
     {
-      question: "What's your background in UI/UX and web design?",
+      question: "What's your background?",
       answer:
-        "I'm a UI/UX and web designer with 1+ years of hands-on experience building websites, landing pages, and digital interfaces. I've completed 4 projects focusing on user-centered design, responsive development, and creating experiences that balance aesthetics with functionality. I continuously learn and apply modern design principles and development techniques.",
+        "BSIT graduate from La Consolacion University Philippines with 1+ year of hands-on UI/UX and web design experience. I've shipped production projects including a government-deployed barangay system evaluated at 4.47/5.00 under ISO/IEC 25010:2023, a social platform redesign, and a marketing portfolio. I hold Google UX Design, Microsoft UX Design Professional, and Meta Front-End Developer certificates from Coursera.",
+    },
+    {
+      question: "What kind of role are you looking for?",
+      answer:
+        "I'm actively seeking a full-time UI/UX or web design position — entry-level or junior — where I can contribute from day one and grow under senior mentorship. I'm also open to internship opportunities. I want to be part of a team that takes design seriously and values the connection between user research, design decisions, and implementation.",
     },
     {
       question: "What does your design process look like?",
       answer:
-        "I follow a structured approach: research and discovery, wireframing and prototyping, visual design, frontend development, and testing. I prioritize understanding user needs and business goals before moving into execution. Throughout the process, I collaborate closely with stakeholders and iterate based on feedback to ensure the final product meets both user and business objectives.",
+        "I start with research and stakeholder alignment before opening any design tool. From there: define the problem, wireframe, prototype in Figma, test with real users, and hand off clean specs for development. I've shipped that full cycle on every project — from government systems to freelance redesigns. The process adapts to the team and timeline, but the discipline doesn't.",
     },
     {
-      question: "What tools and technologies are you proficient in?",
+      question: "Can you handle both design and development?",
       answer:
-        "Design: Figma, Canva. Development: HTML, CSS, JavaScript, React, Tailwind CSS, GSAP, Framer Motion, Three.js. I'm experienced with responsive design, version control (Git), and performance optimization. I stay current with industry trends and regularly expand my technical skillset to deliver modern, effective solutions.",
+        "Yes. I design in Figma and implement in React — HTML, CSS, JavaScript, Tailwind, GSAP, and Framer Motion. On QRUSH I handled both the Figma prototype and the React frontend without a separate developer. That dual skillset means cleaner handoffs, fewer gaps between the design file and what ships, and faster iteration when changes are needed.",
     },
     {
-      question: "Do you work on both design and development?",
+      question: "What tools do you work with?",
       answer:
-        "I design with implementation in mind. Having built projects from Figma prototypes to deployed React applications, I understand the constraints developers work within — which makes my handoffs cleaner and my design decisions more grounded. I'm a designer first, but one who speaks the developer's language.",
+        "Design: Figma, wireframing, prototyping, design systems, WCAG accessibility. Frontend: React, Next.js, HTML5, CSS3, JavaScript, Tailwind CSS, GSAP, Framer Motion. I've also worked with Firebase, Supabase, Node.js, Express, and Git on production projects.",
     },
     {
-      question: "Can you work with existing design systems or brand guidelines?",
+      question: "Do you have experience working in a team?",
       answer:
-        "Absolutely. I'm comfortable working within established design systems, brand guidelines, and UI component libraries. I understand the importance of consistency and can adapt my work to fit existing frameworks while bringing thoughtful design solutions that align with company standards.",
+        "Yes. On QRUSH I served as group leader and UI/UX designer on a capstone team, coordinating between researchers, developers, and the barangay stakeholders. I've also collaborated with clients one-on-one on freelance projects, adapting to different communication styles and feedback loops. I'm comfortable in both independent and team environments.",
     },
     {
-      question: "What kind of projects are you most interested in?",
+      question: "What's your work style?",
       answer:
-        "I'm drawn to projects that prioritize user experience and solve real problems through design. I enjoy working on websites, landing pages, web applications, dashboards, and digital products where thoughtful UI/UX can make a measurable impact. I'm particularly interested in opportunities where I can contribute to product thinking and collaborate with cross-functional teams.",
+        "I research before I design, and I test before I ship. I ask questions early to avoid costly revisions late. I communicate progress clearly and flag blockers before they become problems. I'm fast to learn, take feedback well, and care about the quality of what goes out — not just getting it done.",
     },
-    {
-      question: "Are you available for full-time positions or freelance work?",
-      answer:
-        "I'm actively looking for a UI/UX or web design role where I can own the full design process — from research and wireframing through to final UI and handoff. I'm eager, fast to learn, and ready to contribute from day one. Open to full-time roles, internships, and select freelance projects.",
-    },
-
   ];
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -1405,9 +1417,8 @@ function Portfolio() {
                             <FaStar key={i} className="hero-proof-star-icon" />
                           ))}
                         </div>
-                        <p className="hero-proof-label">
-                          <strong>4.8</strong> · 4 clients
-                        </p>
+                   
+                     
                       </div>
 
                       <span className="hero-proof-sep" />
@@ -1524,7 +1535,7 @@ function Portfolio() {
               <div className="rw-header-row">
                 <div className="rw-header-left">
                   <span className="rw-eyebrow">Portfolio — 03</span>
-                  <h2 className="works-title" id="projects">Recent Work</h2>
+                  <h2 className="works-title" id="projects">Selected Works</h2>
                 </div>
              
               </div>
@@ -2044,12 +2055,15 @@ function Portfolio() {
                   <div className="process-sticky-content">
                    
                     <div className="process-roll-number-window">
-                      <div className="process-roll-number-stack">
-                        {PROCESS_STEPS.map((step, index) => (
-                          <span className="process-roll-number" key={step.label}>
-                            {String(index + 1).padStart(2, "0")}.
-                          </span>
-                        ))}
+                      <span className="process-roll-number-static">0</span>
+                      <div className="process-roll-number-viewport">
+                        <div className="process-roll-number-stack">
+                          {PROCESS_STEPS.map((step, index) => (
+                            <span className="process-roll-number" key={step.label}>
+                              {index + 1}.
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                     <div className="process-roll-label-window">

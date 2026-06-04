@@ -400,36 +400,41 @@ function About() {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  const faqs = [
+ const faqs = [
     {
-      question: "What's your background and education?",
+      question: "What's your background?",
       answer:
-        "I'm currently a BSIT student at La Consolacion University Philippines, specializing in UI/UX design and frontend development. Over the past year, I've completed 4 projects ranging from landing pages to full websites, combining academic learning with hands-on experience. I'm actively expanding my skills in React, GSAP, and modern web development practices.",
+        "BSIT graduate from La Consolacion University Philippines with 1+ year of hands-on UI/UX and web design experience. I've shipped production projects including a government-deployed barangay system evaluated at 4.47/5.00 under ISO/IEC 25010:2023, a social platform redesign, and a marketing portfolio. I hold Google UX Design, Microsoft UX Design Professional, and Meta Front-End Developer certificates from Coursera.",
     },
     {
-      question: "What kind of work are you looking for?",
+      question: "What kind of role are you looking for?",
       answer:
-        "I'm seeking full-time UI/UX and web design opportunities where I can contribute to meaningful projects while continuing to grow as a designer. I'm particularly interested in roles that value user-centered design, clean code, and collaborative teamwork. I'm also open to internships or entry-level positions that offer mentorship and learning opportunities.",
+        "I'm actively seeking a full-time UI/UX or web design position — entry-level or junior — where I can contribute from day one and grow under senior mentorship. I'm also open to internship opportunities. I want to be part of a team that takes design seriously and values the connection between user research, design decisions, and implementation.",
     },
     {
-      question: "What makes your approach different?",
+      question: "What does your design process look like?",
       answer:
-        "I handle both design and development, which allows me to bridge the gap between visual concepts and technical execution. This dual skillset means I can create cohesive experiences from wireframe to deployment, communicate effectively with both designers and developers, and understand the practical constraints of implementation during the design phase.",
+        "I start with research and stakeholder alignment before opening any design tool. From there: define the problem, wireframe, prototype in Figma, test with real users, and hand off clean specs for development. I've shipped that full cycle on every project — from government systems to freelance redesigns. The process adapts to the team and timeline, but the discipline doesn't.",
     },
     {
-      question: "Can you work with remote teams?",
+      question: "Can you handle both design and development?",
       answer:
-        "Yes. I'm comfortable with remote collaboration tools like Figma, Slack, Git, and video conferencing platforms. I maintain clear communication, provide regular progress updates, and adapt to different team workflows. My academic projects and freelance work have prepared me for both independent work and collaborative environments.",
+        "Yes. I design in Figma and implement in React — HTML, CSS, JavaScript, Tailwind, GSAP, and Framer Motion. On QRUSH I handled both the Figma prototype and the React frontend without a separate developer. That dual skillset means cleaner handoffs, fewer gaps between the design file and what ships, and faster iteration when changes are needed.",
     },
     {
-      question: "What's your typical workflow?",
+      question: "What tools do you work with?",
       answer:
-        "I start by understanding project requirements and user needs through research and stakeholder input. Next, I create wireframes and prototypes for feedback. Once approved, I develop using clean, maintainable code and modern frameworks. Throughout the process, I test across devices, iterate based on feedback, and ensure the final product meets both user and business objectives.",
+        "Design: Figma, wireframing, prototyping, design systems, WCAG accessibility. Frontend: React, Next.js, HTML5, CSS3, JavaScript, Tailwind CSS, GSAP, Framer Motion. I've also worked with Firebase, Supabase, Node.js, Express, and Git on production projects.",
     },
     {
-      question: "Are you available for freelance projects?",
+      question: "Do you have experience working in a team?",
       answer:
-        "While my primary focus is securing a full-time position, I'm open to select freelance opportunities that align with my skills and schedule. I approach every project—whether employment or freelance—with the same commitment to quality, communication, and delivering results. Feel free to reach out to discuss your needs.",
+        "Yes. On QRUSH I served as group leader and UI/UX designer on a capstone team, coordinating between researchers, developers, and the barangay stakeholders. I've also collaborated with clients one-on-one on freelance projects, adapting to different communication styles and feedback loops. I'm comfortable in both independent and team environments.",
+    },
+    {
+      question: "What's your work style?",
+      answer:
+        "I research before I design, and I test before I ship. I ask questions early to avoid costly revisions late. I communicate progress clearly and flag blockers before they become problems. I'm fast to learn, take feedback well, and care about the quality of what goes out — not just getting it done.",
     },
   ];
 
