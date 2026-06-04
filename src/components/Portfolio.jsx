@@ -334,12 +334,7 @@ function Portfolio() {
           }
 
           let activeStepIndex = -1;
-          const stepMarkers = steps.map(
-            (step) =>
-              step.querySelector(".step-container") ||
-              step.querySelector(".step-marker") ||
-              step,
-          );
+          const stepMarkers = steps.map((step) => step.querySelector(".step-marker") || step);
 
           const getStepAtViewportCenter = () => {
             const viewportCenter = window.innerHeight / 2;
@@ -394,25 +389,16 @@ function Portfolio() {
 
           setActiveProcessStep(getStepAtViewportCenter(), true);
 
-          const pinTrigger = ScrollTrigger.create({
+  const pinTrigger = ScrollTrigger.create({
             trigger: timeline,
-            start: "top center",
-            end: "bottom center",
+            start: "top top",
+            end: "bottom bottom",
             pin: stickyPanel,
             pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onUpdate: () => {
-              setActiveProcessStep(getStepAtViewportCenter());
-            },
             onRefresh: () => {
               setActiveProcessStep(getStepAtViewportCenter(), true);
-            },
-            onLeave: () => {
-              setActiveProcessStep(steps.length - 1);
-            },
-            onLeaveBack: () => {
-              setActiveProcessStep(0);
             },
           });
           const stepTriggers = steps.map((step, index) =>
@@ -1055,7 +1041,7 @@ function Portfolio() {
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
-  const faqs = [
+   const faqs = [
     {
       question: "What's your background?",
       answer:
@@ -2055,15 +2041,12 @@ function Portfolio() {
                   <div className="process-sticky-content">
                    
                     <div className="process-roll-number-window">
-                      <span className="process-roll-number-static">0</span>
-                      <div className="process-roll-number-viewport">
-                        <div className="process-roll-number-stack">
-                          {PROCESS_STEPS.map((step, index) => (
-                            <span className="process-roll-number" key={step.label}>
-                              {index + 1}.
-                            </span>
-                          ))}
-                        </div>
+                      <div className="process-roll-number-stack">
+                        {PROCESS_STEPS.map((step, index) => (
+                          <span className="process-roll-number" key={step.label}>
+                            {String(index + 1).padStart(2, "0")}.
+                          </span>
+                        ))}
                       </div>
                     </div>
                     <div className="process-roll-label-window">
@@ -2095,9 +2078,9 @@ function Portfolio() {
                         </span>
                         <span className="step-label">{step.label}</span>
                       </div>
-                      <div className="step-marker">
-                        <div className="marker-dot"></div>
-                      </div>
+              <div className="step-marker" style={{ height: 'auto', display: 'flex', alignItems: 'center', alignSelf: 'start', paddingTop: 'clamp(60px, 8vw, 160px)', marginTop: 0 }}>
+  <div className="marker-dot"></div>
+</div>
                       <div className="step-container">
                         <div className="step-content">
                           <h3 className="step-title">{step.title}</h3>

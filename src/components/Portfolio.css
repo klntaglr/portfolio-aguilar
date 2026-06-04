@@ -2608,7 +2608,6 @@ margin-bottom: 12rem !important;
   --process-grid-side: minmax(280px, 1fr);
   --process-sticky-top: 0px;
   --process-sticky-lift: 0rem;
-  --process-end-spacer: clamp(180px, 24vh, 280px);
   padding: 140px 0 160px;
   background: #181818;
   position: relative;
@@ -2695,25 +2694,16 @@ margin-bottom: 12rem !important;
   display: none;
 }
 
-.process-roll-number-viewport,
+.process-roll-number-window,
 .process-roll-label-window {
   overflow: hidden;
 }
 
 .process-roll-number-window {
-  height: clamp(8rem, 20vw, 17rem);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  overflow: visible;
+  height: clamp(7.5rem, 18vw, 16rem);
+  overflow: hidden;
+  position: relative;
 }
-
-.process-roll-number-viewport {
-  height: clamp(8rem, 20vw, 17rem);
-  flex: 0 0 auto;
-  margin-left: -0.08em;
-}
-
 .process-roll-label-window {
   height: 36px;
   width: 100%;
@@ -2726,11 +2716,11 @@ margin-bottom: 12rem !important;
   will-change: transform;
 }
 
-.process-roll-number-static,
 .process-roll-number {
   display: flex;
   align-items: center;
-  height: clamp(8rem, 20vw, 17rem);
+  justify-content: flex-end;
+  height: clamp(7.5rem, 18vw, 16rem);
   color: rgba(255, 255, 255, 0.72);
   font-family:
     "Inter",
@@ -2741,16 +2731,12 @@ margin-bottom: 12rem !important;
   line-height: 0.78;
   letter-spacing: -0.08em;
 }
-
-.process-roll-number-static {
-  flex: 0 0 auto;
-  justify-content: flex-end;
+.process-roll-number-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
 }
-
-.process-roll-number {
-  justify-content: flex-start;
-}
-
 .process-roll-label {
   display: flex;
   align-items: center;
@@ -2810,33 +2796,30 @@ margin-bottom: 12rem !important;
     grid-template-columns: var(--process-grid-side) 1px var(--process-grid-side);
     column-gap: var(--process-grid-gap);
     align-items: start;
-    padding-bottom: var(--process-end-spacer);
   }
-
-  .process-sticky-panel {
+.process-sticky-panel {
     grid-column: 1;
     grid-row: 1;
     position: sticky;
-    top: var(--process-sticky-top);
+    top: 0;
     z-index: 3;
+    width: 100%;
     height: 100vh;
     height: 100svh;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
+    display: grid;
+    place-items: center end;
     pointer-events: none;
     will-change: transform;
+    padding-right: calc(var(--process-grid-gap) + 1px);
   }
 
   .process-sticky-content {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    transform: translateY(var(--process-sticky-lift));
+    transform: none;
     will-change: transform;
   }
-
   .process-steps {
     grid-column: 1 / -1;
     grid-row: 1;
@@ -2859,8 +2842,8 @@ margin-bottom: 12rem !important;
   background: #4a4a4a;
   transform: translateX(-50%);
   z-index: 1;
-  overflow: hidden;
-  contain: paint;
+  overflow: visible;
+  contain: none;
 }
 
 /* Animated progress line */
@@ -2897,21 +2880,21 @@ margin-bottom: 12rem !important;
 .process-steps {
   display: flex;
   flex-direction: column;
-  gap: clamp(140px, 14vw, 320px);
+  gap: 0;
   position: relative;
 }
 .process-step {
-  padding-block: clamp(40px, 6vw, 120px);
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr);
-  column-gap: var(--process-grid-gap, 80px);
-  row-gap: 24px;
-  align-items: center;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding-block: 0 !important;
+  padding-bottom: clamp(60px, 8vw, 160px) !important;
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr) !important;
+  column-gap: var(--process-grid-gap, 80px) !important;
+  row-gap: 0 !important;
+  align-items: start !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
 }
-
 @media (min-width: 769px) {
   .process-step {
     grid-template-columns: var(--process-grid-side) 1px var(--process-grid-side);
@@ -2922,11 +2905,13 @@ margin-bottom: 12rem !important;
    STEP NUMBER
    ======================================== */
 .step-number-wrapper {
-  grid-column: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
+  grid-column: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+  align-self: start !important;
+  padding-top: clamp(60px, 8vw, 160px) !important;
 }
 .step-number {
   font-size: clamp(10rem, 26vw, 22rem);
@@ -2961,12 +2946,15 @@ margin-bottom: 12rem !important;
    TIMELINE MARKER
    ======================================== */
 .step-marker {
-  grid-column: 2;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
+  grid-column: 2 !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  z-index: 2 !important;
+  align-self: start !important;
+  padding-top: clamp(60px, 8vw, 160px) !important;
+  height: auto !important;
 }
 .marker-dot {
   width: 14px;
@@ -2977,6 +2965,8 @@ margin-bottom: 12rem !important;
   display: block;
   box-sizing: border-box;
   flex-shrink: 0;
+  position: relative;
+  z-index: 4;
 }
 .marker-dot.active,
 .marker-dot.is-active {
@@ -2994,10 +2984,11 @@ margin-bottom: 12rem !important;
    STEP CONTENT
    ======================================== */
 .step-container {
-  grid-column: 3;
-  width: min(100%, 640px);
-  max-width: 640px;
-  align-self: center;
+  grid-column: 3 !important;
+  width: min(100%, 640px) !important;
+  max-width: 640px !important;
+  align-self: start !important;
+  padding-top: clamp(60px, 8vw, 160px) !important;
 }
 .step-content {
   background: transparent;
@@ -3057,16 +3048,16 @@ margin-bottom: 12rem !important;
 
   /* Stack layout for mobile */
   .process-step {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
     gap: 24px;
-    padding: 30px 0 !important;
+    padding: 30px 0;
   }
 
   .step-number-wrapper {
-    grid-column: 1 !important;
-    align-items: flex-start !important;
+    grid-column: 1;
+    align-items: flex-start;
     padding-right: 0;
-    padding-left: 40px !important;
+    padding-left: 40px;
   }
 
   .step-number {
@@ -3087,9 +3078,9 @@ margin-bottom: 12rem !important;
   }
 
   .step-container {
-    grid-column: 1 !important;
-    padding-left: 40px !important;
-    max-width: 100% !important;
+    grid-column: 1;
+    padding-left: 40px;
+    max-width: 100%;
     margin-top: 20px;
   }
 
@@ -7592,26 +7583,22 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid rgba(13, 48, 82, 0.04);
-  border-radius: 8px;
-  background: var(--testi-paper);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  border-right: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
   padding: 1.9rem 2rem 1.65rem;
-  box-shadow: 0 18px 42px rgba(13, 48, 82, 0.08);
+  box-shadow:
+    0 2px 0 0 rgba(255, 255, 255, 0.9) inset,
+    0 8px 32px rgba(13, 48, 82, 0.08),
+    0 1px 2px rgba(13, 48, 82, 0.04);
 }
-
 .testi-speech-card::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -25px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 25px 25px 0 0;
-  border-color: var(--testi-paper) transparent transparent transparent;
-  filter: drop-shadow(7px 8px 8px rgba(13, 48, 82, 0.04));
+  display: none;
 }
-
 .testi-quote {
   margin: 0;
   color: #2b2b2b;
@@ -7660,24 +7647,30 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  border: 1px solid rgba(13, 48, 82, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-bottom-color: rgba(13, 48, 82, 0.12);
+  border-right-color: rgba(13, 48, 82, 0.12);
   border-radius: 999px;
-  background: rgba(13, 48, 82, 0.04);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--testi-theme);
-  padding: 0.42rem 0.78rem;
+  padding: 0.42rem 0.92rem;
   font-family: "Inter", sans-serif;
   font-size: 0.72rem;
   font-weight: 750;
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .testi-read-btn:hover {
-  border-color: rgba(13, 48, 82, 0.28);
-  background: rgba(13, 48, 82, 0.08);
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.9);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 48, 82, 0.1), 0 1px 0 rgba(255,255,255,0.9) inset;
 }
 
 .testi-read-btn svg {
@@ -7698,10 +7691,12 @@ body {
 .testi-avatar {
   width: 52px;
   height: 52px;
-  border: 2px solid #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.85);
   border-radius: 50%;
   background: linear-gradient(135deg, var(--testi-theme), #4a6b8a);
-  box-shadow: 0 12px 24px rgba(13, 48, 82, 0.16);
+  box-shadow:
+    0 4px 16px rgba(13, 48, 82, 0.18),
+    0 0 0 1px rgba(13, 48, 82, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
