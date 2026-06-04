@@ -1479,25 +1479,27 @@ function Portfolio() {
                   </h2>
                 </motion.div>
 
-                <motion.figure
-                  className="about-visual"
-                  ref={aboutVisualRef}
-                  onMouseMove={(event) => {
-                    const rect = event.currentTarget.getBoundingClientRect();
-                    event.currentTarget.style.setProperty(
-                      "--about-cursor-x",
-                      `${event.clientX - rect.left}px`,
-                    );
-                    event.currentTarget.style.setProperty(
-                      "--about-cursor-y",
-                      `${event.clientY - rect.top}px`,
-                    );
-                  }}
-                  initial={{ opacity: 0, x: 64, scale: 0.96 }}
-                  whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                  viewport={{ once: true, amount: 0.35 }}
-                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                >
+              <motion.figure
+  className="about-visual"
+  ref={aboutVisualRef}
+  onClick={() => window.location.href = "/about-web-designer"}
+  style={{ cursor: "pointer" }}
+  onMouseMove={(event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty(
+      "--about-cursor-x",
+      `${event.clientX - rect.left}px`,
+    );
+    event.currentTarget.style.setProperty(
+      "--about-cursor-y",
+      `${event.clientY - rect.top}px`,
+    );
+  }}
+  initial={{ opacity: 0, x: 64, scale: 0.96 }}
+  whileInView={{ opacity: 1, x: 0, scale: 1 }}
+  viewport={{ once: true, amount: 0.35 }}
+  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+>
                   <motion.img
                     src={aboutme}
                     alt="Klent Russell Aguilar portrait"
