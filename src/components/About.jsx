@@ -882,9 +882,7 @@ function About() {
                             <FaStar key={i} className="hero-proof-star-icon" />
                           ))}
                         </div>
-                        <p className="hero-proof-label">
-                          <strong>4.8</strong> · 4 clients
-                        </p>
+                    
                       </div>
                       <span className="hero-proof-sep" />
                       <div className="hero-cert-row">
