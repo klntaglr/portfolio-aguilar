@@ -141,11 +141,11 @@ const CASE_STUDIES = [
       "Republic Act No. 11032 mandates all government offices, including barangays, to streamline citizen transactions and provide online service channels. Most barangays remain non-compliant — not by choice, but by lack of accessible tools.",
       "QRUSH demonstrates that barangay-level digitalization is achievable using cloud-based web technologies, without on-premise servers or a dedicated IT department. The same stack powers startups — it can power a barangay.",
     ],
-    industryStats: [
-      { value: "40", label: "Respondents evaluated the system" },
-      { value: "4.47", label: "Grand mean — ISO/IEC 25010:2023" },
-      { value: "9", label: "Quality characteristics assessed" },
-      { value: "RA 11032", label: "Compliance alignment" },
+ industryStats: [
+      { value: "4.47/5", label: "ISO/IEC 25010:2023 grand mean — Very Good" },
+      { value: "6/9", label: "Quality characteristics rated Excellent" },
+      { value: "40", label: "Respondents — residents, staff, IT professionals" },
+      { value: "Live", label: "Deployed at bangkalqrush.com" },
     ],
     approach:
       "I mapped the full request journey from submission to claiming, prioritised the highest-frequency actions in the interface, and built a responsive system that keeps both staff and residents informed at every step.",
@@ -186,16 +186,19 @@ approachSteps: [
       "The QR validation feature came from watching staff manually match documents to records — a 3-minute process that happened dozens of times a day. The right observation led to the right solution.",
       "If I were to rebuild this today, I'd conduct more structured usability testing earlier — informal walkthroughs with actual barangay residents before finalizing the status language and notification flow. I validated with the staff and the capstone panel, but earlier resident feedback would have surfaced edge cases faster.",
     ],
-    outcomes: [
-      "Residents track requests online without visiting the office",
-      "QR-based validation replaced manual signature checks",
-      "Staff dashboard cut processing time significantly",
-      "Mobile-ready public portal accessible on any device",
+outcomes: [
+      "Deployed live at bangkalqrush.com — actively used by Barangay Bangkal residents and staff",
+      "Walk-in congestion reduced — residents submit and track requests fully online",
+      "QR-based transaction completion replaced manual signature checks at the counter",
+      "Barangay staff now manage all pending requests through a centralized dashboard instead of paper logbooks",
+      "Residents receive SMS and in-app notifications at every stage — no more follow-up visits just to check status",
+      "Masterlist-based verification enforced — only legitimate Barangay Bangkal residents can access the system",
+      "System evaluated by 40 respondents and scored 4.47/5.00 under ISO/IEC 25010:2023 — rated Very Good, cleared for operational deployment",
     ],
-    metrics: [
-      { value: "4", label: "Core user flows designed" },
-      { value: "2", label: "Primary user roles" },
-      { value: "100%", label: "Responsive coverage" },
+metrics: [
+      { value: "4.47", label: "ISO/IEC grand mean" },
+      { value: "6/9", label: "Excellent ratings" },
+      { value: "40", label: "Respondents evaluated" },
     ],
     designSystem: {
       colors: [
