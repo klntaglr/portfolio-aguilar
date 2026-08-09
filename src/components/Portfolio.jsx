@@ -5,12 +5,12 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import "./Portfolio.css";
+import "./dump/Portfolio.css";
 import experienceIcon from "../assets/experience.svg";
 import projects from "../assets/projects.svg";
 import LogoLoop from "./LogoLoop";
 import Maillards from "./Maillards";
-import Preloader from "./Preloader"; // ADD THIS
+// import Preloader from "./Preloader"; // ADD THIS
 
 import {
   MdOutlineArrowBackIos,
@@ -103,8 +103,8 @@ function Portfolio() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const [pageReady, setPageReady] = useState(false);
-  const [heroReady, setHeroReady] = useState(false);
+const [pageReady, setPageReady] = useState(true);
+  const [heroReady, setHeroReady] = useState(true);
   const containerRef = useRef(null);
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -169,7 +169,7 @@ function Portfolio() {
     });
     return () => ctx.revert();
   }, [pageReady]);
-  const [showPreloader, setShowPreloader] = useState(true);
+ const [showPreloader, setShowPreloader] = useState(false);
   const [crs_active, setCrs_active] = useState(false);
 
   const crs_ref = useRef(null);
@@ -901,7 +901,7 @@ function Portfolio() {
       image: mockup2,
     },
   ];
-  const handlePreloaderComplete = () => {
+const handlePreloaderComplete = () => {
     setShowPreloader(false);
 
     setTimeout(() => {
@@ -1145,7 +1145,7 @@ function Portfolio() {
 
   return (
     <>
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+      {/* {showPreloader && <Preloader onComplete={handlePreloaderComplete} />} */}
       <nav
         ref={navbarRef}
         className={`navbar navbar-theme-${navTheme} ${showNavbar ? "navbar-visible" : "navbar-hidden"}`}

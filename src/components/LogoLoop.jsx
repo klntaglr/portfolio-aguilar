@@ -220,6 +220,7 @@ export const LogoLoop = memo(
     const handleMouseEnter = useCallback(() => {
       if (effectiveHoverSpeed !== undefined) setIsHovered(true);
     }, [effectiveHoverSpeed]);
+
     const handleMouseLeave = useCallback(() => {
       if (effectiveHoverSpeed !== undefined) setIsHovered(false);
     }, [effectiveHoverSpeed]);
@@ -235,14 +236,9 @@ export const LogoLoop = memo(
         }
         const isNodeItem = 'node' in item;
         const content = isNodeItem ? (
-         <span
-  className="logoloop__node"
-  aria-hidden={!!item.href && !item.ariaLabel}
-  data-tooltip={item.title}
->
-  {item.node}
-</span>
-
+          <span className="logoloop__node" aria-hidden={!!item.href && !item.ariaLabel}>
+            {item.node}
+          </span>
         ) : (
           <img
             src={item.src}

@@ -1,0 +1,318 @@
+@import "./Russell.css";
+
+.worksv2-root {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+}
+
+.worksv2-hero {
+  min-height: 690px;
+}
+
+.worksv2-hero__bg {
+  filter: grayscale(1) contrast(1.05);
+  background-position: center top;
+}
+
+.worksv2-hero .hero__overlay {
+  background:
+    linear-gradient(155deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.12) 45%, rgba(0, 0, 0, 0.62) 100%),
+    radial-gradient(circle at 20% 35%, rgba(255, 255, 255, 0.06), transparent 34%);
+}
+
+.worksv2-hero__content {
+  padding-bottom: 34vh;
+}
+
+.worksv2-hero__headline {
+  gap: 0;
+}
+
+.worksv2-hero__headline .hero__line {
+  font-size: clamp(44px, 5.2vw, 76px);
+  letter-spacing: -0.06em;
+  line-height: 1.08;
+}
+
+.worksv2-hero__sub {
+  max-width: 390px;
+}
+
+.worksv2-work {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  margin-top: -2px;
+  padding: 124px 0 104px;
+  overflow: hidden;
+  border-radius: 28px 28px 0 0;
+  background: #202020;
+  color: #ffffff;
+}
+
+.worksv2-work__inner {
+  width: 100%;
+  max-width: none;
+  padding: 0 120px;
+  margin: 0 auto;
+}
+
+.worksv2-work__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.worksv2-work__title {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(52px, 5.2vw, 76px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.08;
+}
+
+.worksv2-work__count {
+  margin-top: 4px;
+  color: #ffffff;
+  font-size: clamp(19px, 1.6vw, 25px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.worksv2-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 54px 24px;
+  perspective: 1100px;
+}
+
+.worksv2-card {
+  position: relative;
+  display: block;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  will-change: opacity;
+}
+
+.worksv2-card__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 7px;
+  padding: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 36%),
+    #565d64;
+  transition:
+    background-color 0.45s ease,
+    filter 0.45s ease;
+}
+
+.worksv2-card:nth-child(2) .worksv2-card__media {
+  background:
+    linear-gradient(135deg, transparent 0 52%, rgba(138, 100, 143, 0.45) 52% 76%, transparent 76%),
+    #283442;
+}
+
+.worksv2-card:nth-child(3) .worksv2-card__media {
+  background:
+    linear-gradient(140deg, rgba(40, 105, 69, 0.5), transparent 58%),
+    #657366;
+}
+
+.worksv2-card:nth-child(4) .worksv2-card__media {
+  background:
+    linear-gradient(145deg, rgba(98, 118, 82, 0.45), transparent 62%),
+    #5e6a5f;
+}
+
+.worksv2-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: saturate(0.82) contrast(1.02);
+  transform: scale(1);
+  transition:
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.worksv2-card:hover .worksv2-card__media img {
+  transform: scale(0.975);
+  filter: saturate(1) contrast(1.04);
+}
+
+.worksv2-card__copy {
+  padding-top: 15px;
+}
+
+.worksv2-card__copy h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(19px, 1.45vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+}
+
+.worksv2-card__copy p {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: clamp(13px, 0.95vw, 16px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.worksv2-work__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}
+
+.worksv2-archives-btn {
+  padding: 19px 37px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  cursor: none;
+}
+
+.worksv2-archives-btn .magnetic-btn__fill {
+  background: #ffffff !important;
+}
+
+.worksv2-archives-btn .magnetic-btn__text {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.worksv2-archives-btn:hover .magnetic-btn__text {
+  color: #050505 !important;
+}
+
+.worksv2-footer {
+  margin-top: 0;
+  border-radius: 0;
+}
+
+.worksv2-footer a,
+.worksv2-footer .magnetic-btn,
+.worksv2-footer .magnetic-btn__text,
+.worksv2-footer .footer__bar-link {
+  text-decoration: none !important;
+}
+
+@media (max-width: 1024px) {
+  .worksv2-work__inner {
+    padding: 0 60px;
+  }
+
+  .worksv2-grid {
+    gap: 42px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .worksv2-hero {
+    min-height: 600px;
+  }
+
+  .worksv2-hero__content {
+    top: 220px;
+  }
+
+  .worksv2-work {
+    padding: 72px 0 78px;
+    border-radius: 32px 32px 0 0;
+  }
+
+  .worksv2-work__inner {
+    padding: 0 24px;
+  }
+
+  .worksv2-work__header {
+    margin-bottom: 36px;
+  }
+
+  .worksv2-grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .worksv2-work__cta {
+    margin-top: 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  .worksv2-hero {
+    min-height: 540px;
+  }
+
+  .worksv2-hero__content {
+    top: 186px;
+  }
+
+  .worksv2-hero__headline .hero__line {
+    font-size: clamp(35px, 9.4vw, 48px);
+  }
+
+  .worksv2-work {
+    padding: 58px 0 64px;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .worksv2-work__inner {
+    padding: 0 16px;
+  }
+
+  .worksv2-card__media {
+    aspect-ratio: 16 / 11;
+  }
+
+  .worksv2-archives-btn {
+    padding: 16px 30px !important;
+  }
+
+  .worksv2-archives-btn .magnetic-btn__text {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .worksv2-hero__headline .hero__line {
+    font-size: clamp(30px, 9vw, 40px);
+  }
+
+  .worksv2-work__inner {
+    padding: 0 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .worksv2-card,
+  .worksv2-card__media,
+  .worksv2-card__media img {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
