@@ -186,7 +186,7 @@
 }
 
 .worksv2-archives-btn {
-  padding: 19px 37px !important;
+  padding: 32px 52px !important;
   border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
   background: transparent !important;
   color: #ffffff !important;
@@ -199,7 +199,7 @@
 
 .worksv2-archives-btn .magnetic-btn__text {
   color: #ffffff !important;
-  font-size: 15px !important;
+  font-size: 20px !important;
   font-weight: 500 !important;
   letter-spacing: -0.02em !important;
 }

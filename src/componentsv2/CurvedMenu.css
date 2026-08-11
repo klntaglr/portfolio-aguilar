@@ -1,0 +1,76 @@
+.curved-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 45;
+  width: 100vw;
+  max-width: 640px;
+  height: 100dvh;
+  background: #ffffff;
+}
+
+.curved-menu__inner {
+  height: 100%;
+  padding-top: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.curved-menu__top {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 40px;
+}
+
+.curved-menu__label {
+  color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.curved-menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 32px 0;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.curved-menu__link a { text-decoration: none; }
+
+.curved-menu__link-inner { display: flex; align-items: flex-start; }
+
+.curved-menu__index { color: #000; font-size: 36px; font-weight: 200; margin-right: 8px; }
+
+.curved-menu__heading { display: block; position: relative; z-index: 10; color: #000; font-size: 36px; font-weight: 200; }
+
+.curved-menu__letter { display: inline-block; }
+
+.curved-menu__footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  color: #000;
+  padding: 20px 40px;
+  font-size: 14px;
+}
+
+.curved-menu__curve {
+  position: absolute;
+  top: 0;
+  left: -99px;
+  width: 100px;
+  height: 100%;
+  fill: #ffffff;
+  stroke: none;
+}
+
+@media (max-width: 768px) {
+  .curved-menu__top { padding: 0 24px; }
+  .curved-menu__footer { padding: 20px 24px; }
+}

@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import CurvedMenu from "./CurvedMenu";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -131,6 +132,8 @@ function MagneticButton({ children, className = "", href }) {
 }
 
 export default function Worksv2() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     useEffect(() => {
         const existing = ScrollSmoother.get();
         if (existing) existing.kill();
@@ -189,9 +192,10 @@ export default function Worksv2() {
                         <div className="hero__overlay" />
 
                         <nav className="hero__nav">
-                            <motion.button
+                          <motion.button
                                 className="hero__menu"
                                 type="button"
+                                onClick={() => setIsMenuOpen((prev) => !prev)}
                                 initial={{ opacity: 0, y: -18 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -348,7 +352,13 @@ export default function Worksv2() {
                                 </div>
                             </div>
                         </div>
-                    </footer>
+        </footer>
+
+                    <AnimatePresence mode="wait">
+                        {isMenuOpen && (
+                            <CurvedMenu onClose={() => setIsMenuOpen(false)} />
+                        )}
+                    </AnimatePresence>
                 </main>
             </div>
         </div>
