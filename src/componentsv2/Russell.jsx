@@ -359,7 +359,16 @@ export default function Russell() {
 
                         {/* ── NAV ── */}
                         <nav className="hero__nav">
-                            <motion.button
+             
+                            <motion.a
+                                href="#"
+                                className="hero__logo-wrap"
+                                initial={{ opacity: 0, y: -18 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
+                            </motion.a>               <motion.button
                                 className="hero__menu"
                                 initial={{ opacity: 0, y: -18 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -372,15 +381,6 @@ export default function Russell() {
                                 <span className="menu-label">Menu</span>
                             </motion.button>
 
-                            <motion.a
-                                href="#"
-                                className="hero__logo-wrap"
-                                initial={{ opacity: 0, y: -18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
-                            </motion.a>
                         </nav>
 
                         {/* ── COPY ── */}

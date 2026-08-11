@@ -43,7 +43,7 @@ function NavLink({ heading, href, onNavigate, index }) {
     >
       <a ref={ref} href={href}>
         <div className="curved-menu__link-inner">
-          <span className="curved-menu__index">{index}.</span>
+   
           <motion.span
             variants={{ initial: { x: 0 }, whileHover: { x: -16 } }}
             transition={{ type: "spring", staggerChildren: 0.075, delayChildren: 0.25 }}
@@ -104,10 +104,10 @@ export default function CurvedMenu({ onClose, navItems = defaultNavItems }) {
 
       <div className="curved-menu__inner">
         <div className="curved-menu__top">
-          <div className="curved-menu__label"><p>Navigation</p></div>
+        
           <section className="curved-menu__list">
             {navItems.map((item, index) => (
-              <NavLink key={item.href} {...item} onNavigate={onClose} index={index + 1} />
+              <NavLink key={item.href} {...item} onNavigate={onClose}  />
             ))}
           </section>
         </div>
