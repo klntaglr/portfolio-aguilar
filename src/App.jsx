@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { useLayoutEffect, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 // import Portfolio from "./components/Portfolio"; // commented out — replaced by Russell
 import Russell from "./componentsv2/Russell"; // ← new hero / home page
 // import About from "./components/About";
 import About from "./componentsv2/Aboutv2";
 import Works from "./componentsv2/Worksv2";
-import Contact from "./components/Contact";
+import Contact from "./components/ContactReference";
 import Projects from "./components/Projects";
 
 import './App.css';
@@ -44,27 +45,47 @@ function TitleManager() {
   return null;
 }
 
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location.pathname}
+        className="route-transition"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Routes location={location}>
+          {/* <Route path="/" element={<Portfolio />} /> */}
+          <Route path="/" element={<Russell />} />
+
+          <Route path="/about-web-designer" element={<About />} />
+          <Route path="/works" element={<Works />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:projectId" element={<Projects />} />
+
+          <Route path="/contact-me" element={<Contact />} />
+          <Route path="/free-landing-page/terms-and-conditions" element={<Terms />} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function App() {
   return (
     <Router>
       <TitleManager />
-      <Routes>
-        {/* <Route path="/" element={<Portfolio />} /> */}
-        <Route path="/" element={<Russell />} />
-
-        <Route path="/about-web-designer" element={<About />} />
-        <Route path="/works" element={<Works />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:projectId" element={<Projects />} />
-
-
-
-        <Route path="/contact-me" element={<Contact />} />
-        <Route path="/free-landing-page/terms-and-conditions" element={<Terms />} />
-
-        {/* 404 Route */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AnimatedRoutes />
     </Router>
   );
 }

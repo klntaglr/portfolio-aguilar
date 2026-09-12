@@ -1,36 +1,64 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 import "./Aboutv2.css";
+import CurvedMenu from "./CurvedMenu";
 import logoImage from "../assets/logo.png";
 import portraitImage from "../assets/grad.jpg";
 import awardImage from "../assets/award.png";
 import projectImage from "../assets/sample1.png";
+import enov8tiveLogo from "../assets/enov8tive-full.svg";
+import enov8tive from "../assets/enov8tive.png";
+import rtcImage from "../assets/RTC.png";
+import microsoftCert from "../assets/MicrosoftUX.png";
+import googleCert from "../assets/GoogleUX.png";
+import responsiveCert from "../assets/responsive.png";
+import frontendCert from "../assets/frontend.png";
+import bestDesignCert from "../assets/bestdesign.png";
+import citeCert from "../assets/CITE.png";
 
 import {
+    SiApplemusic,
+    SiBlender,
+    SiCanva,
+    SiClaude,
+    SiCodesandbox,
+    SiDribbble,
     SiFigma,
+    SiFramer,
+    SiGreensock,
     SiGithub,
+    SiJira,
     SiNotion,
     SiOpenai,
-    SiSlack,
-    SiSpotify,
+    SiReact,
+    SiThreedotjs,
 } from "react-icons/si";
-import { BsMicrosoftTeams } from "react-icons/bs";
 
 /* ─────────────────────────────────────────────
    Static data
 ───────────────────────────────────────────── */
 const TOOLS = [
-    { icon: <SiOpenai />, label: "OpenAI" },
-    { icon: <SiSlack />, label: "Slack" },
-    { icon: <BsMicrosoftTeams />, label: "Microsoft Teams" },
-    { icon: <SiSpotify />, label: "Spotify" },
-    { icon: <SiFigma />, label: "Figma" },
-    { icon: <SiNotion />, label: "Notion" },
-    { icon: <SiGithub />, label: "GitHub" },
+  { icon: <SiFigma />, label: "Figma" },
+  { icon: <SiFramer />, label: "Framer" },
+  { icon: <SiDribbble />, label: "Dribbble" },
+  { icon: <SiCanva />, label: "Canva" },
+
+  { icon: <SiOpenai />, label: "OpenAI" },
+  { icon: <SiClaude />, label: "Claude" },
+  { icon: <SiNotion />, label: "Notion" },
+  { icon: <SiJira />, label: "Jira" },
+  { icon: <SiGithub />, label: "GitHub" },
+
+  { icon: <SiReact />, label: "React" },
+  { icon: <SiGreensock />, label: "GSAP" },
+  { icon: <SiThreedotjs />, label: "Three.js" },
+  { icon: <SiBlender />, label: "Blender" },
+
+  { icon: <SiApplemusic />, label: "Apple Music" },
 ];
 
 const SCREEN_PROMPTS = [
@@ -41,46 +69,125 @@ const SCREEN_PROMPTS = [
 
 const MENU_SONGS = ["Night Drive", "Golden Hour", "Static Bloom", "Slow Orbit"];
 
-const SERVICES = [
+const AWARD_SLIDES = [
+    {
+        id: "enov8tive",
+        image: enov8tiveLogo,
+        label: "UI/UX Designer at Enov8tive",
+    },
+    {
+        id: "bestdesign",
+        image: awardImage,
+        label: "La Consolacion University Philippines",
+    },
+];
+
+const SERVICES = [   
     "UI/UX Design",
-    "Web Design",
-    "User Research",
-    "Interaction Design",
-    "SEO Basics",
+    "Web Design", 
+    "User Research & Testing",
+    "User Experience",
+    "Design Thinking",
+
+    "Design Systems","Landing Pages",
+     "Motion Design", 
+      
+    "Portfolio Design",
+   
+ 
     "Wireframing & Prototyping",
+    
     "Frontend Development",
-    "Information Architecture",
-    "Visual Hierarchy",
-    "Accessibility (WCAG AA)",
-    "Responsive Design",
+   
+
 ];
 
-const CERT_GROUPS = [
+const EXPERIENCE_DATA = [
     {
-        label: "Certifications",
-        rows: [
-            ["Microsoft", "UX Design Professional Certificate", "2026", "Coursera"],
-            ["Google", "UX Design Certificate", "2026", "Coursera"],
-            ["freeCodeCamp", "Responsive Web Design", "Jan 2026", "Self-paced"],
-            ["freeCodeCamp", "Front End Development Libraries V8", "Dec 2025", "Self-paced"],
-        ],
+        id: "enov8tive",
+        logo: enov8tive,
+        company: "Enov8tive",
+        role: "UI/UX Designer",
+        date: "June 2026 - Present",
+        location: "Taguig City",
+        preview: projectImage,
+        current: true,
     },
     {
-        label: "Where I've Been",
-        rows: [
-            ["Regional Trial Court", "UI/UX Designer & Frontend Dev Intern", "Feb - May 2026", "Malolos, Bulacan"],
-        ],
-    },
-    {
-        label: "Honours",
-        rows: [
-            ["La Consolacion University", "Best in System Design", "May 2026", "Malolos, Bulacan"],
-            ["CITE Research Colloquium", "Certificate of Participation", "May 2026", "Malolos, Bulacan"],
-        ],
+        id: "rtc",
+        logo: null,
+        company: "Regional Trial Court",
+        role: "UI/UX Designer & Frontend Dev Intern",
+        date: "Feb – May 2026",
+        location: "Malolos, Bulacan",
+        preview: rtcImage,
+        current: false,
     },
 ];
 
-function Av2CertPreview({ pos, visible, imgSrc }) {
+const EARNED_DATA = [
+    {
+        id: "microsoft",
+        issuer: "Microsoft",
+        title: "UX Design Professional Certificate",
+        date: "2026",
+        source: "Coursera",
+        preview: microsoftCert,
+        link: "https://www.coursera.org/account/accomplishments/specialization/P5944BGSCQGU",
+    },
+    {
+        id: "google",
+        issuer: "Google",
+        title: "UX Design Certificate",
+        date: "2026",
+        source: "Coursera",
+        preview: googleCert,
+        link: "https://www.coursera.org/account/accomplishments/specialization/VV2F4V6ODWAJ",
+    },
+    {
+        id: "responsive",
+        issuer: "freeCodeCamp",
+        title: "Responsive Web Design",
+        date: "Jan 2026",
+        source: "Self-paced",
+        preview: responsiveCert,
+        link: "https://freecodecamp.org/certification/klntaglr/responsive-web-design-v9",
+    },
+    {
+        id: "frontend",
+        issuer: "freeCodeCamp",
+        title: "Front End Development Libraries V8",
+        date: "Dec 2025",
+        source: "Self-paced",
+        preview: frontendCert,
+        link: "https://freecodecamp.org/certification/klntaglr/front-end-development-libraries",
+    },
+];
+
+const HONOURS_DATA = [
+    {
+        id: "bestdesign",
+        issuer: "La Consolacion University",
+        title: "Best in System Design",
+        date: "May 2026",
+        source: "Malolos, Bulacan",
+        preview: bestDesignCert,
+        link: "https://www.facebook.com/share/1BzPMK8U96/",
+    },
+    {
+        id: "cite",
+        issuer: "CITE Research Colloquium",
+        title: "Certificate of Participation",
+        date: "May 2026",
+        source: "Malolos, Bulacan",
+        preview: citeCert,
+        link: null,
+    },
+];
+
+const TOTAL_CERTS = EXPERIENCE_DATA.length + EARNED_DATA.length + HONOURS_DATA.length;
+
+function Av2CertPreview({ pos, visible, imgSrc, showButton = true }) {
     return (
         <motion.div
             className="av2-certs__preview"
@@ -98,9 +205,11 @@ function Av2CertPreview({ pos, visible, imgSrc }) {
             }}
         >
             {imgSrc && <img src={imgSrc} alt="certification preview" />}
-            <div className="av2-certs__preview-circle">
-                <span>View</span>
-            </div>
+            {showButton && (
+                <div className="av2-certs__preview-circle">
+                    <span>Verify</span>
+                </div>
+            )}
         </motion.div>
     );
 }
@@ -198,10 +307,67 @@ function MagneticButton({ children, className = "", ...props }) {
    Component
 ───────────────────────────────────────────── */
 export default function Aboutv2() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const rollingRef = useRef(null);
-const mediaStageRef = useRef(null);
+    const mediaStageRef = useRef(null);
     const certsRef = useRef(null);
-    const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null });
+    const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null, hasLink: true });
+
+    const [awardIndex, setAwardIndex] = useState(0);
+
+    useEffect(() => {
+        const smoother = ScrollSmoother.get();
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousHtmlOverflow = document.documentElement.style.overflow;
+        const preventScroll = (event) => event.preventDefault();
+        const preventKeyScroll = (event) => {
+            if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) {
+                event.preventDefault();
+            }
+        };
+
+        if (isMenuOpen) {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+            smoother?.paused(true);
+            window.addEventListener("wheel", preventScroll, { passive: false });
+            window.addEventListener("touchmove", preventScroll, { passive: false });
+            window.addEventListener("keydown", preventKeyScroll, { passive: false });
+        }
+
+        return () => {
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousHtmlOverflow;
+            smoother?.paused(false);
+            window.removeEventListener("wheel", preventScroll);
+            window.removeEventListener("touchmove", preventScroll);
+            window.removeEventListener("keydown", preventKeyScroll);
+        };
+    }, [isMenuOpen]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAwardIndex((prev) => (prev + 1) % AWARD_SLIDES.length);
+        }, 8000);
+        return () => clearInterval(interval);
+    }, []);
+    const handleCertHover = (item) => {
+        setCertPreview({ visible: true, x: 0, y: 0, img: item.preview, hasLink: !!item.link });
+    };
+
+    const handleCertMove = (e) => {
+        const rect = certsRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        setCertPreview((prev) => ({ ...prev, x: e.clientX - rect.left, y: e.clientY - rect.top }));
+    };
+
+    const handleCertLeave = () => {
+        setCertPreview((prev) => ({ ...prev, visible: false }));
+    };
+
+    const handleCertClick = (link) => {
+        if (link) window.open(link, "_blank", "noopener,noreferrer");
+    };
     const ipodRef = useRef(null);
     const promptViewRef = useRef(null);
     const promptTextRef = useRef(null);
@@ -250,7 +416,7 @@ const mediaStageRef = useRef(null);
             const interval = window.setInterval(roll, 3000);
             rollingRef.current._interval = interval;
         }, 500);
-return () => {
+        return () => {
             window.clearTimeout(timer);
             if (rollingRef.current?._interval) {
                 window.clearInterval(rollingRef.current._interval);
@@ -258,7 +424,7 @@ return () => {
         };
     }, []);
 
-    /* ── iPod: idle float + scroll reveal + mouse parallax tilt ── */
+ 
     useEffect(() => {
         const stage = mediaStageRef.current;
         const ipod = ipodRef.current;
@@ -275,7 +441,7 @@ return () => {
             .to(ipod, { y: -8, rotationZ: 1.4, duration: 3 })
             .to(ipod, { y: 3, rotationZ: -1.2, duration: 2.4 }, ">-0.3");
 
-        // one-time cinematic flip-in when it scrolls into view
+
         const revealTween = gsap.fromTo(
             ipod,
             { autoAlpha: 0, rotationY: 70, scale: 0.85 },
@@ -305,7 +471,7 @@ return () => {
             quickRotX(0);
         };
 
-   stage.addEventListener("mousemove", handleMove);
+        stage.addEventListener("mousemove", handleMove);
         stage.addEventListener("mouseleave", handleLeave);
 
         return () => {
@@ -437,7 +603,7 @@ return () => {
 
                         {/* NAV */}
                         <nav className="hero__nav">
-                           
+
                             <motion.a
                                 href="/"
                                 className="hero__logo-wrap"
@@ -447,7 +613,11 @@ return () => {
                             >
                                 <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
                             </motion.a> <motion.button
+                                type="button"
                                 className="hero__menu"
+                                aria-expanded={isMenuOpen}
+                                aria-controls="site-navigation"
+                                onClick={() => setIsMenuOpen((prev) => !prev)}
                                 initial={{ opacity: 0, y: -18 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -530,37 +700,59 @@ return () => {
                                     alt="Russell Aguilar"
                                     className="av2-bento__portrait-img"
                                 />
-                               
+
                                 <time className="av2-bento__portrait-time">From The Philippines.</time>
                             </div>
 
                             <div className="av2-bento__card av2-bento__card--brief">
                                 <h2 className="av2-bento__brief-title">
-                                    Me in brief 
-                                <span className="av2-bento__brief-count"> (6) </span>
+                                    Who I am
+                                    <span className="av2-bento__brief-count"> (6) </span>
                                 </h2>
                                 <p className="av2-bento__brief-body">
-                                    I've always fallen in love with others' work. Visually stunning,
-                                    but more importantly design that works. It motivates me, wanting to
-                                    make the most out of myself. Now I'm working towards being that
-                                    someone, who can inspire someone else the same way others did to me.
+                                    I’ve always been drawn to work that makes me feel something. Work that is beautiful, thoughtful, and quietly purposeful. It makes me want to grow, create, and someday leave that same feeling in someone else.
+
                                 </p>
                             </div>
 
                             <div className="av2-bento__card av2-bento__card--music">
-                                <img
-                                    src={awardImage}
-                                    alt="Best in system design award"
-                                    className="av2-bento__award-img"
-                                />
-                                <p className="av2-bento__award-label">
-                                    La Consolacion University Philippines
-                                </p>
+                                <AnimatePresence mode="wait" initial={false}>
+                                    <motion.div
+                                        key={AWARD_SLIDES[awardIndex].id}
+                                        className="av2-bento__award-slide"
+                                        initial={{ opacity: 0, scale: 0.96 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.96 }}
+                                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                                    >
+                                        <div className="av2-bento__award-img-wrap">
+                                            <img
+                                                src={AWARD_SLIDES[awardIndex].image}
+                                                alt={AWARD_SLIDES[awardIndex].label}
+                                                className={`av2-bento__award-img${AWARD_SLIDES[awardIndex].id === "enov8tive" ? " av2-bento__award-img--logo" : ""}`}
+                                            />
+                                        </div>
+                                        <p className="av2-bento__award-label">
+                                            {AWARD_SLIDES[awardIndex].label}
+                                        </p>
+                                    </motion.div>
+                                </AnimatePresence>
+                                <div className="av2-bento__award-dots">
+                                    {AWARD_SLIDES.map((slide, i) => (
+                                        <button
+                                            key={slide.id}
+                                            type="button"
+                                            className={`av2-bento__award-dot${i === awardIndex ? " is-active" : ""}`}
+                                            onClick={() => setAwardIndex(i)}
+                                            aria-label={`Show ${slide.label}`}
+                                        />
+                                    ))}
+                                </div>
                             </div>
 
                             <div className="av2-bento__card av2-bento__card--tools">
                                 <h3 className="av2-bento__card-title">
-                                    Tools I love 
+                                    Tools I love
                                     <span> (7) </span>
                                 </h3>
                                 <div className="av2-bento__tools-marquee" aria-label="Tools I love">
@@ -589,7 +781,7 @@ return () => {
                             <div className="av2-bento__card av2-bento__card--services">
                                 <h3 className="av2-bento__card-title">
                                     What I do
-                                    <span> (11) </span>
+                                    <span> (12) </span>
                                 </h3>
                                 <div className="av2-bento__skills-pills">
                                     {SERVICES.map((skill) => (
@@ -599,10 +791,10 @@ return () => {
                                     ))}
                                 </div>
                             </div>
-<div className="av2-bento__card av2-bento__card--media">
+                            <div className="av2-bento__card av2-bento__card--media">
                                 <div className="av2-bento__media-stage" ref={mediaStageRef}>
                                     <span className="av2-bento__pixel-tag" aria-hidden="true" />
-                                <div className="av2-ipod" aria-hidden="true">
+                                    <div className="av2-ipod" aria-hidden="true">
                                         <div className="av2-ipod__screen">
                                             <div className="av2-ipod__view av2-ipod__view--prompt" ref={promptViewRef}>
                                                 <div className="av2-ipod__prompt-line">
@@ -650,43 +842,90 @@ return () => {
                             pos={{ x: certPreview.x, y: certPreview.y }}
                             visible={certPreview.visible}
                             imgSrc={certPreview.img}
+                            showButton={certPreview.hasLink}
                         />
 
                         <div className="av2-certs__header">
                             <h2 className="av2-certs__title">Certifications & Experience</h2>
-                            <span className="av2-certs__badge">(3)</span>
+                            <span className="av2-certs__badge">({TOTAL_CERTS})</span>
                         </div>
 
-                        {CERT_GROUPS.map((group) => (
-                            <div className="av2-certs__group" key={group.label}>
-                                <span className="av2-certs__label">{group.label}</span>
-                                <table className="av2-certs__table">
-                                    <tbody>
-                                        {group.rows.map((row) => (
-                                            <tr
-                                                className="av2-certs__row"
-                                                key={row.join("-")}
-                                                onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                                onMouseMove={(e) => {
-                                                    const rect = certsRef.current?.getBoundingClientRect();
-                                                    if (!rect) return;
-                                                    setCertPreview((prev) => ({
-                                                        ...prev,
-                                                        x: e.clientX - rect.left,
-                                                        y: e.clientY - rect.top,
-                                                    }));
-                                                }}
-                                                onMouseLeave={() => setCertPreview((prev) => ({ ...prev, visible: false }))}
-                                            >
-                                                {row.map((cell) => (
-                                                    <td key={cell}>{cell}</td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ))}
+                        <div className="av2-certs__group">
+                            <span className="av2-certs__label">Where I've Been</span>
+                            <table className="av2-certs__table">
+                                <tbody>
+                                    {EXPERIENCE_DATA.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className={`av2-certs__row${item.current ? " av2-certs__row--current" : ""}`}
+                                            onMouseEnter={() => handleCertHover(item)}
+                                            onMouseMove={handleCertMove}
+                                            onMouseLeave={handleCertLeave}
+                                        >
+                                            <td>
+                                                <span className="av2-certs__company">
+                                                    {item.logo && (
+                                                        <img src={item.logo} alt={item.company} className="av2-certs__logo" />
+                                                    )}
+                                                    {item.company}
+                                                </span>
+                                            </td>
+                                            <td>{item.role}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.location}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="av2-certs__group">
+                            <span className="av2-certs__label">Certifications</span>
+                            <table className="av2-certs__table">
+                                <tbody>
+                                    {EARNED_DATA.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className="av2-certs__row"
+                                            onMouseEnter={() => handleCertHover(item)}
+                                            onMouseMove={handleCertMove}
+                                            onMouseLeave={handleCertLeave}
+                                            onClick={() => handleCertClick(item.link)}
+                                            style={{ cursor: item.link ? "pointer" : "default" }}
+                                        >
+                                            <td>{item.issuer}</td>
+                                            <td>{item.title}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.source}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="av2-certs__group">
+                            <span className="av2-certs__label">Honours</span>
+                            <table className="av2-certs__table">
+                                <tbody>
+                                    {HONOURS_DATA.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className="av2-certs__row"
+                                            onMouseEnter={() => handleCertHover(item)}
+                                            onMouseMove={handleCertMove}
+                                            onMouseLeave={handleCertLeave}
+                                            onClick={() => handleCertClick(item.link)}
+                                            style={{ cursor: item.link ? "pointer" : "default" }}
+                                        >
+                                            <td>{item.issuer}</td>
+                                            <td>{item.title}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.source}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </section>
 
                     <footer className="av2-footer footer">
@@ -722,10 +961,11 @@ return () => {
                             <div className="footer__bar-col">
                                 <span className="footer__bar-label">Contact</span>
                                 <div className="footer__bar-links">
-                                    <a href="https://linkedin.com" className="footer__bar-link">LinkedIn</a>
-                                    <a href="https://instagram.com" className="footer__bar-link">Instagram</a>
-                                    <a href="https://github.com" className="footer__bar-link">Github</a>
-                                    <a href="mailto:klentaguilar@gmail.com" className="footer__bar-link">Email</a>
+                                    <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" className="footer__bar-link">LinkedIn</a>
+                                 <a href="https://www.behance.net/klentaguilar/projects" className="footer__bar-link">Behance</a>     <a href="https://www.instagram.com/klntaglr/" className="footer__bar-link">Instagram</a>
+                                    <a href="https://www.tiktok.com/@klntaglr" className="footer__bar-link">TikTok</a>
+                                  
+                                    <a href="https://github.com/klntaglr" className="footer__bar-link">GitHub</a>
                                 </div>
                             </div>
                             <div className="footer__bar-menu">
@@ -739,6 +979,15 @@ return () => {
                             </div>
                         </div>
                     </footer>
+
+                    <AnimatePresence mode="wait">
+                        {isMenuOpen && (
+                            <CurvedMenu
+                                id="site-navigation"
+                                onClose={() => setIsMenuOpen(false)}
+                            />
+                        )}
+                    </AnimatePresence>
 
                 </main>
             </div>

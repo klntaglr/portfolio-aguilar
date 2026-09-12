@@ -135,6 +135,36 @@ export default function Worksv2() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
+        const smoother = ScrollSmoother.get();
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousHtmlOverflow = document.documentElement.style.overflow;
+        const preventScroll = (event) => event.preventDefault();
+        const preventKeyScroll = (event) => {
+            if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) {
+                event.preventDefault();
+            }
+        };
+
+        if (isMenuOpen) {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+            smoother?.paused(true);
+            window.addEventListener("wheel", preventScroll, { passive: false });
+            window.addEventListener("touchmove", preventScroll, { passive: false });
+            window.addEventListener("keydown", preventKeyScroll, { passive: false });
+        }
+
+        return () => {
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousHtmlOverflow;
+            smoother?.paused(false);
+            window.removeEventListener("wheel", preventScroll);
+            window.removeEventListener("touchmove", preventScroll);
+            window.removeEventListener("keydown", preventKeyScroll);
+        };
+    }, [isMenuOpen]);
+
+    useEffect(() => {
         const existing = ScrollSmoother.get();
         if (existing) existing.kill();
 
@@ -187,7 +217,7 @@ export default function Worksv2() {
             <div id="smooth-content">
                 <main className="worksv2-root">
                     <section className="hero worksv2-hero">
-                        <div className="hero__bg worksv2-hero__bg" style={{ backgroundImage: `url(${bgImage})` }} />
+                                            <div className="hero__bg worksv2-hero__bg" />
                         <div className="hero__glow" />
                         <div className="hero__overlay" />
 
@@ -336,10 +366,11 @@ export default function Worksv2() {
                             <div className="footer__bar-col">
                                 <span className="footer__bar-label">Contact</span>
                                 <div className="footer__bar-links">
-                                    <a href="https://linkedin.com" className="footer__bar-link">LinkedIn</a>
-                                    <a href="https://instagram.com" className="footer__bar-link">Instagram</a>
-                                    <a href="https://github.com" className="footer__bar-link">Github</a>
-                                    <a href="mailto:klentaguilar@gmail.com" className="footer__bar-link">Email</a>
+                                    <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" className="footer__bar-link">LinkedIn</a>
+                                    <a href="https://www.behance.net/klentaguilar/projects" className="footer__bar-link">Behance</a>       <a href="https://www.instagram.com/klntaglr/" className="footer__bar-link">Instagram</a>
+                                    <a href="https://www.tiktok.com/@klntaglr" className="footer__bar-link">TikTok</a>
+                             
+                                    <a href="https://github.com/klntaglr" className="footer__bar-link">GitHub</a>
                                 </div>
                             </div>
                             <div className="footer__bar-menu">

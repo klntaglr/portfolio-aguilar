@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { Link } from "react-router-dom";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 import "./Russell.css";
+import CurvedMenu from "./CurvedMenu";
 import LogoLoop from "../components/LogoLoop";
 import { TbPointer } from "react-icons/tb";
 import { PiCursorClick } from "react-icons/pi";
@@ -12,7 +14,15 @@ import bgImage from "../assets/v2bg.png";
 import logoImage from "../assets/logo.png";
 import projectImage from "../assets/sample1.png";
 import portraitImage from "../assets/grad.jpg"; // ← your about photo
-function MagneticButton({ children, ...props }) {
+import enov8tiveLogo from "../assets/enov8tive.png";
+import rtcImage from "../assets/RTC.png";
+import microsoftCert from "../assets/MicrosoftUX.png";
+import googleCert from "../assets/GoogleUX.png";
+import responsiveCert from "../assets/responsive.png";
+import frontendCert from "../assets/frontend.png";
+import bestDesignCert from "../assets/bestdesign.png";
+import citeCert from "../assets/CITE.png";
+function MagneticButton({ children, href, ...props }) {
     const btnRef = useRef(null);
     const fillRef = useRef(null);
 
@@ -84,9 +94,13 @@ function MagneticButton({ children, ...props }) {
         });
     }, []);
 
+    const Component = href ? Link : "button";
+
     return (
-        <button
+        <Component
             ref={btnRef}
+            to={href}
+            type={href ? undefined : "button"}
             className={`magnetic-btn${props.className ? ` ${props.className}` : ""}`}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
@@ -94,7 +108,7 @@ function MagneticButton({ children, ...props }) {
         >
             <span ref={fillRef} className="magnetic-btn__fill" />
             <span className="magnetic-btn__text">{children}</span>
-        </button>
+        </Component>
     );
 }
 
@@ -129,7 +143,7 @@ function CardCursor({ hovered }) {
         </div>
     );
 }
-function CertPreview({ pos, visible, imgSrc }) {
+function CertPreview({ pos, visible, imgSrc, showButton = true }) {
     return (
         <motion.div
             className="certs__preview"
@@ -147,20 +161,126 @@ function CertPreview({ pos, visible, imgSrc }) {
             }}
         >
             {imgSrc && <img src={imgSrc} alt="cert preview" />}
-            <div className="certs__preview-circle">
-                <span>View</span>
-            </div>
+            {showButton && (
+                <div className="certs__preview-circle">
+                    <span>Verify</span>
+                </div>
+            )}
         </motion.div>
     );
 }
 export default function Russell() {
     const rollingRef = useRef(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hoveredCard, setHoveredCard] = useState(null);
     const cardRefs = useRef([]);
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
     const [cursorVisible, setCursorVisible] = useState(false);
-    const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null });
+    const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null, hasLink: true });
     const certsRef = useRef(null);
+
+    const experienceData = [
+        {
+            id: "enov8tive",
+            logo: enov8tiveLogo,
+            company: "Enov8tive",
+            role: "UI/UX Designer",
+            date: "June 2026 - Present",
+            location: "Taguig City",
+            preview: projectImage,
+            current: true,
+        },
+        {
+            id: "rtc",
+            logo: null,
+            company: "Regional Trial Court",
+            role: "UI/UX Designer & Frontend Dev Intern",
+            date: "Feb – May 2026",
+            location: "Malolos, Bulacan",
+            preview: rtcImage,
+            current: false,
+        },
+    ];
+
+    const earnedData = [
+        {
+            id: "microsoft",
+            issuer: "Microsoft",
+            title: "UX Design Professional Certificate",
+            date: "2026",
+            source: "Coursera",
+            preview: microsoftCert,
+            link: "https://www.coursera.org/account/accomplishments/specialization/P5944BGSCQGU",
+        },
+        {
+            id: "google",
+            issuer: "Google",
+            title: "UX Design Certificate",
+            date: "2026",
+            source: "Coursera",
+            preview: googleCert,
+            link: "https://www.coursera.org/account/accomplishments/specialization/VV2F4V6ODWAJ",
+        },
+        {
+            id: "responsive",
+            issuer: "freeCodeCamp",
+            title: "Responsive Web Design",
+            date: "Jan 2026",
+            source: "Self-paced",
+            preview: responsiveCert,
+            link: "https://freecodecamp.org/certification/klntaglr/responsive-web-design-v9",
+        },
+        {
+            id: "frontend",
+            issuer: "freeCodeCamp",
+            title: "Front End Development Libraries V8",
+            date: "Dec 2025",
+            source: "Self-paced",
+            preview: frontendCert,
+            link: "https://freecodecamp.org/certification/klntaglr/front-end-development-libraries",
+        },
+    ];
+
+    const honoursData = [
+        {
+            id: "bestdesign",
+            issuer: "La Consolacion University",
+            title: "Best in System Design",
+            date: "May 2026",
+            source: "Malolos, Bulacan",
+            preview: bestDesignCert,
+            link: "https://www.facebook.com/share/1BzPMK8U96/",
+        },
+        {
+            id: "cite",
+            issuer: "CITE Research Colloquium",
+            title: "Certificate of Participation",
+            date: "May 2026",
+            source: "Malolos, Bulacan",
+            preview: citeCert,
+            link: null,
+        },
+    ];
+
+    const totalCerts = experienceData.length + earnedData.length + honoursData.length;
+
+    const handleCertHover = (item) => {
+        setCertPreview({ visible: true, x: 0, y: 0, img: item.preview, hasLink: !!item.link });
+    };
+
+    const handleCertMove = (e) => {
+        const rect = certsRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        setCertPreview((p) => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
+    };
+
+    const handleCertLeave = () => {
+        setCertPreview((p) => ({ ...p, visible: false }));
+    };
+
+    const handleCertClick = (link) => {
+        if (link) window.open(link, "_blank", "noopener,noreferrer");
+    };
     const handleCardMouseMove = useCallback((e, cardId) => {
         setHoveredCard(cardId);
         const rect = e.currentTarget.getBoundingClientRect();
@@ -180,7 +300,38 @@ export default function Russell() {
         setCursorVisible(false);
         e.currentTarget.style.transform = `perspective(900px) rotateY(0deg) rotateX(0deg)`;
     }, []);
-    const rollingItems = ["UI/UX Designer.", "Web Designer.", "Fresh Graduate."];
+    const rollingItems = ["UI/UX Designer.", "Web Designer.", "Product Designer."];
+
+    useEffect(() => {
+        const smoother = ScrollSmoother.get();
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousHtmlOverflow = document.documentElement.style.overflow;
+        const preventScroll = (event) => event.preventDefault();
+        const preventKeyScroll = (event) => {
+            if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) {
+                event.preventDefault();
+            }
+        };
+
+        if (isMenuOpen) {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+            smoother?.paused(true);
+            window.addEventListener("wheel", preventScroll, { passive: false });
+            window.addEventListener("touchmove", preventScroll, { passive: false });
+            window.addEventListener("keydown", preventKeyScroll, { passive: false });
+        }
+
+        return () => {
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousHtmlOverflow;
+            smoother?.paused(false);
+            window.removeEventListener("wheel", preventScroll);
+            window.removeEventListener("touchmove", preventScroll);
+            window.removeEventListener("keydown", preventKeyScroll);
+        };
+    }, [isMenuOpen]);
+
     /* ── rolling text loop ── */
     useEffect(() => {
         const items = rollingRef.current?.querySelectorAll(".roll-item");
@@ -216,44 +367,7 @@ export default function Russell() {
         };
     }, []);
 
-    /* ── card scroll-rise animation ── */
-    useEffect(() => {
-        const cards = cardRefs.current;
-        if (!cards.length) return;
 
-        cards.forEach((card) => {
-            if (!card) return;
-
-            gsap.fromTo(
-                card,
-                {
-                    y: 80,
-                    opacity: 0,
-                    rotateX: 14,
-                    scale: 0.96,
-                },
-                {
-                    y: 0,
-                    opacity: 1,
-                    rotateX: 0,
-                    scale: 1,
-                    duration: 1.1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 88%",
-                        end: "top 40%",
-                        scrub: false,
-                        once: true,
-                    },
-                }
-            );
-        });
-
-        return () => {
-            ScrollTrigger.getAll().forEach((t) => t.kill());
-        };
-    }, []);
 
 
 
@@ -350,8 +464,8 @@ export default function Russell() {
                     {/* circle cursor */}
                     {/* moved INSIDE the works section below — delete this */}
                     <section className="hero">
-                        {/* bg image */}
-                        <div className="hero__bg" style={{ backgroundImage: `url(${bgImage})` }} />
+                                    {/* bg gradient */}
+                        <div className="hero__bg" />
                         {/* ambient glow */}
                         <div className="hero__glow" />
                         {/* vignette */}
@@ -359,7 +473,7 @@ export default function Russell() {
 
                         {/* ── NAV ── */}
                         <nav className="hero__nav">
-             
+
                             <motion.a
                                 href="#"
                                 className="hero__logo-wrap"
@@ -369,7 +483,11 @@ export default function Russell() {
                             >
                                 <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
                             </motion.a>               <motion.button
+                                type="button"
                                 className="hero__menu"
+                                aria-expanded={isMenuOpen}
+                                aria-controls="site-navigation"
+                                onClick={() => setIsMenuOpen((prev) => !prev)}
                                 initial={{ opacity: 0, y: -18 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -403,9 +521,9 @@ export default function Russell() {
                                 >
                                     <span className="dim">I'm a </span>
                                     <span className="bright roll-wrap" ref={rollingRef}>
-                                        {/* ghost spacer so the line holds its width */}
+                                                                        {/* ghost spacer so the line holds its width */}
                                         <span className="roll-item" aria-hidden="true">
-                                            UI/UX Designer.
+                                            Product Designer.
                                         </span>
                                         {rollingItems.map((text) => (
                                             <span key={text} className="roll-item">
@@ -645,133 +763,95 @@ export default function Russell() {
                             </div>
                         </div>
                         <div className="works__cta">
-                            <MagneticButton>See All Works <sup className="magnetic-btn__sup">(11)</sup></MagneticButton>
+                            <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(11)</sup></MagneticButton>
                         </div>
                     </section>
 
                     <section className="certs" ref={certsRef}>
-                        <CertPreview
+                                            <CertPreview
                             pos={{ x: certPreview.x, y: certPreview.y }}
                             visible={certPreview.visible}
                             imgSrc={certPreview.img}
+                            showButton={certPreview.hasLink}
                         />
 
-                        <div className="certs__header">
+                                    <div className="certs__header">
                             <h2 className="certs__title">Certifications & Experience</h2>
-                            <span className="certs__badge">(3)</span>
+                            <span className="certs__badge">({totalCerts})</span>
                         </div>
-
-                        <div className="certs__group">
-                            <span className="certs__label">What I've Earned</span>
-                            <table className="certs__table">
-                                <tbody>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>Microsoft</td>
-                                        <td>UX Design Professional Certificate</td>
-                                        <td>2026</td>
-                                        <td>Coursera</td>
-                                    </tr>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>Google</td>
-                                        <td>UX Design Certificate</td>
-                                        <td>2026</td>
-                                        <td>Coursera</td>
-                                    </tr>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>freeCodeCamp</td>
-                                        <td>Responsive Web Design</td>
-                                        <td>Jan 2026</td>
-                                        <td>Self-paced</td>
-                                    </tr>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>freeCodeCamp</td>
-                                        <td>Front End Development Libraries V8</td>
-                                        <td>Dec 2025</td>
-                                        <td>Self-paced</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="certs__group">
+                      
+                                              <div className="certs__group">
                             <span className="certs__label">Where I've Been</span>
                             <table className="certs__table">
                                 <tbody>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>Regional Trial Court</td>
-                                        <td>UI/UX Designer & Frontend Dev Intern</td>
-                                        <td>Feb – May 2026</td>
-                                        <td>Malolos, Bulacan</td>
-                                    </tr>
+                                    {experienceData.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className={`certs__row${item.current ? " certs__row--current" : ""}`}
+                                            onMouseEnter={() => handleCertHover(item)}
+                                            onMouseMove={handleCertMove}
+                                            onMouseLeave={handleCertLeave}
+                                        >
+                                            <td>
+                                                <span className="certs__company">
+                                                    {item.logo && (
+                                                        <img src={item.logo} alt={item.company} className="certs__logo" />
+                                                    )}
+                                                    {item.company}
+                                                </span>
+                                            </td>
+                                            <td>{item.role}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.location}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                                               <div className="certs__group">
+                            <span className="certs__label">What I've Earned</span>
+                            <table className="certs__table">
+                                <tbody>
+                                    {earnedData.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className="certs__row"
+                                            onMouseEnter={() => handleCertHover(item)}
+                                            onMouseMove={handleCertMove}
+                                            onMouseLeave={handleCertLeave}
+                                            onClick={() => handleCertClick(item.link)}
+                                            style={{ cursor: item.link ? "pointer" : "default" }}
+                                        >
+                                            <td>{item.issuer}</td>
+                                            <td>{item.title}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.source}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
 
-                        <div className="certs__group">
+                                             <div className="certs__group">
                             <span className="certs__label">Honours</span>
                             <table className="certs__table">
                                 <tbody>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>La Consolacion University</td>
-                                        <td>Best in System Design</td>
-                                        <td>May 2026</td>
-                                        <td>Malolos, Bulacan</td>
-                                    </tr>
-                                    <tr className="certs__row"
-                                        onMouseEnter={() => setCertPreview({ visible: true, x: 0, y: 0, img: projectImage })}
-                                        onMouseMove={(e) => {
-                                            const rect = certsRef.current?.getBoundingClientRect();
-                                            if (!rect) return;
-                                            setCertPreview(p => ({ ...p, x: e.clientX - rect.left, y: e.clientY - rect.top }));
-                                        }}
-                                        onMouseLeave={() => setCertPreview(p => ({ ...p, visible: false }))}>
-                                        <td>CITE Research Colloquium</td>
-                                        <td>Certificate of Participation</td>
-                                        <td>May 2026</td>
-                                        <td>Malolos, Bulacan</td>
-                                    </tr>
+                                    {honoursData.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className="certs__row"
+                                            onMouseEnter={() => handleCertHover(item)}
+                                            onMouseMove={handleCertMove}
+                                            onMouseLeave={handleCertLeave}
+                                            onClick={() => handleCertClick(item.link)}
+                                            style={{ cursor: item.link ? "pointer" : "default" }}
+                                        >
+                                            <td>{item.issuer}</td>
+                                            <td>{item.title}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.source}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
@@ -807,40 +887,42 @@ export default function Russell() {
                         </div>
 
                         <div className="about__card-wrap">
-                            <div
-                                className="about__card"
-                                ref={aboutCardRef}
-                                onMouseMove={handleAboutMouseMove}
-                                onMouseEnter={handleAboutMouseEnter}
-                                onMouseLeave={handleAboutMouseLeave}
-                            >
-                                <div className="about__card-inner">
-                                    <img
-                                        src={portraitImage}
-                                        alt="Russell Aguilar"
-                                    />
-                                </div>
-                                <motion.div
-                                    className="about__card-badge"
-                                    animate={{
-                                        x: aboutBadgePos.x,
-                                        y: aboutBadgePos.y,
-                                        opacity: aboutBadgeVisible ? 1 : 0,
-                                        scale: aboutBadgeVisible ? 1 : 0.7,
-                                    }}
-                                    transition={{
-                                        x: { duration: 0.08, ease: "linear" },
-                                        y: { duration: 0.08, ease: "linear" },
-                                        opacity: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
-                                        scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                    }}
-                                    ref={aboutBadgeRef}
+                            <Link to="/about-web-designer" className="about__card-link" aria-label="Read more about Russell Aguilar">
+                                <div
+                                    className="about__card"
+                                    ref={aboutCardRef}
+                                    onMouseMove={handleAboutMouseMove}
+                                    onMouseEnter={handleAboutMouseEnter}
+                                    onMouseLeave={handleAboutMouseLeave}
                                 >
-                                    <div className="about__card-badge-inner">
-                                        <span>• About Me</span>
+                                    <div className="about__card-inner">
+                                        <img
+                                            src={portraitImage}
+                                            alt="Russell Aguilar"
+                                        />
                                     </div>
-                                </motion.div>
-                            </div>
+                                    <motion.div
+                                        className="about__card-badge"
+                                        animate={{
+                                            x: aboutBadgePos.x,
+                                            y: aboutBadgePos.y,
+                                            opacity: aboutBadgeVisible ? 1 : 0,
+                                            scale: aboutBadgeVisible ? 1 : 0.7,
+                                        }}
+                                        transition={{
+                                            x: { duration: 0.08, ease: "linear" },
+                                            y: { duration: 0.08, ease: "linear" },
+                                            opacity: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                                        }}
+                                        ref={aboutBadgeRef}
+                                    >
+                                        <div className="about__card-badge-inner">
+                                            <span>• About Me</span>
+                                        </div>
+                                    </motion.div>
+                                </div>
+                            </Link>
                         </div>
                     </section>
 
@@ -877,10 +959,11 @@ export default function Russell() {
                             <div className="footer__bar-col">
                                 <span className="footer__bar-label">Contact</span>
                                 <div className="footer__bar-links">
-                                    <a href="https://linkedin.com" className="footer__bar-link">LinkedIn</a>
-                                    <a href="https://instagram.com" className="footer__bar-link">Instagram</a>
-                                    <a href="https://github.com" className="footer__bar-link">Github</a>
-                                    <a href="mailto:klentaguilar@gmail.com" className="footer__bar-link">Email</a>
+                                    <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" className="footer__bar-link">LinkedIn</a>
+                                <a href="https://www.behance.net/klentaguilar/projects" className="footer__bar-link">Behance</a>    <a href="https://www.instagram.com/klntaglr/" className="footer__bar-link">Instagram</a>
+                                    <a href="https://www.tiktok.com/@klntaglr" className="footer__bar-link">TikTok</a>
+                                    
+                                    <a href="https://github.com/klntaglr" className="footer__bar-link">GitHub</a>
                                 </div>
                             </div>
                             <div className="footer__bar-menu">
@@ -894,6 +977,15 @@ export default function Russell() {
                             </div>
                         </div>
                     </footer>
+
+                    <AnimatePresence mode="wait">
+                        {isMenuOpen && (
+                            <CurvedMenu
+                                id="site-navigation"
+                                onClose={() => setIsMenuOpen(false)}
+                            />
+                        )}
+                    </AnimatePresence>
                 </main>
             </div>
         </div>

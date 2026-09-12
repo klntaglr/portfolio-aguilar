@@ -7,6 +7,8 @@
   max-width: 640px;
   height: 100dvh;
   background: #ffffff;
+  color: #000000;
+  font-family: "Inter", sans-serif;
 }
 
 .curved-menu__inner {
@@ -29,19 +31,42 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
   font-size: 14px;
+
 }
 
 .curved-menu__link {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 12px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   padding: 32px 0;
   text-transform: uppercase;
-  cursor: pointer;
+  cursor: pointer;  
+}
+
+.curved-menu__active-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.curved-menu__link.is-active .curved-menu__active-dot {
+  background: #3c3ff0;
+}
+
+.curved-menu__link.is-active a,
+.curved-menu__link.is-active .curved-menu__heading {
+  color: #3c3ff0;   font-weight: 500;
 }
 
 .curved-menu__link a {
+  display: block;
+  color: inherit;
+  font-family: inherit;
   text-decoration: none;
 }
 
@@ -62,6 +87,7 @@
   position: relative;
   z-index: 10;
   color: #000;
+  font-family: inherit;
   font-size: 40px;
   font-weight: 400;
 }
@@ -116,6 +142,7 @@
 
 .curved-menu__close {
   position: absolute;
+  display: block;
   top: 24px;
   right: 24px;
   z-index: 20;
@@ -128,6 +155,7 @@
   border-radius: 50%;
   background: transparent;
   color: #000;
+  font-family: inherit;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.25s ease;
 }
