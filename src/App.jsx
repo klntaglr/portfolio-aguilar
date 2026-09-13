@@ -6,7 +6,7 @@ import Russell from "./componentsv2/Russell"; // ← new hero / home page
 // import About from "./components/About";
 import About from "./componentsv2/Aboutv2";
 import Works from "./componentsv2/Worksv2";
-import Contact from "./components/ContactReference";
+import Contact from "./componentsv2/ContactReference";
 import Projects from "./components/Projects";
 
 import './App.css';

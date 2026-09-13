@@ -4,6 +4,7 @@ import CurvedMenu from "./CurvedMenu";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { Link } from "react-router-dom";
 import "./Worksv2.css";
 
 import bgImage from "../assets/v2bg.png";
@@ -13,37 +14,19 @@ import bangkalProject from "../assets/bangkalproject.png";
 import laconslanetProject from "../assets/laconslanetproject.png";
 import virielleProject from "../assets/virielleproject.png";
 import arielleProject from "../assets/arielleproject.png";
+import soonProject from "../assets/placeholder.png";
+import { FiCheck } from "react-icons/fi";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const WORKS = [
-    {
-        title: "bol's inspiring way of gift giving.",
-        meta: "AI Design / Web Research & Writeup / UX Design",
-        image: arielleProject,
-        href: "/projects/virielle",
-    },
-    {
-        title: "kqulity's data visualization.",
-        meta: "Product Design / Dashboard / Computing",
-        image: laconslanetProject,
-        href: "/projects/laconslanet",
-    },
-    {
-        title: "Central Belher's salvation mirror.",
-        meta: "Service Design / Computing / App Design",
-        image: bangkalProject,
-        href: "/projects/qrush",
-    },
-    {
-        title: "Greenpatch tree with accessibility.",
-        meta: "Product Design / User Research & Testing / A11Y",
-        image: virielleProject,
-        href: "/projects/virielle",
-    },
+    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
+    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
+    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
+    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
 ];
 
-function MagneticButton({ children, className = "", href }) {
+function MagneticButton({ children, className = "", href, onClick }) {
     const btnRef = useRef(null);
     const fillRef = useRef(null);
 
@@ -113,14 +96,15 @@ function MagneticButton({ children, className = "", href }) {
         });
     }, []);
 
-    const Component = href ? "a" : "button";
+    const Component = href ? Link : "button";
 
     return (
         <Component
             ref={btnRef}
-            href={href}
+            to={href}
             type={href ? undefined : "button"}
             className={`magnetic-btn${className ? ` ${className}` : ""}`}
+            onClick={onClick}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -132,7 +116,59 @@ function MagneticButton({ children, className = "", href }) {
 }
 
 export default function Worksv2() {
+    const rollingRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [copiedLabel, setCopiedLabel] = useState("");
+const rollingItems = [
+  "healthtech.",
+  "govtech.",
+   "other areas.",
+ 
+];
+
+    const copyContact = async (value, label) => {
+        try {
+            await navigator.clipboard.writeText(value);
+            setCopiedLabel(label);
+            window.setTimeout(() => setCopiedLabel(""), 2200);
+        } catch {
+            setCopiedLabel("");
+        }
+    };
+
+    useEffect(() => {
+        const items = rollingRef.current?.querySelectorAll(".roll-item");
+        if (!items || items.length === 0) return;
+
+        Array.from(items).forEach((item, index) => {
+            item.style.transform = index === 1 ? "translateY(0%)" : "translateY(100%)";
+            item.style.opacity = index === 1 ? "1" : "0";
+            item.style.transition = "transform 0.65s cubic-bezier(0.76,0,0.24,1), opacity 0.65s cubic-bezier(0.76,0,0.24,1)";
+        });
+
+        let current = 1;
+        const roll = () => {
+            const next = current + 1 >= items.length ? 1 : current + 1;
+            items[current].style.transform = "translateY(-100%)";
+            items[current].style.opacity = "0";
+            window.setTimeout(() => {
+                items[next].style.transform = "translateY(0%)";
+                items[next].style.opacity = "1";
+            }, 50);
+            current = next;
+        };
+
+        const timer = window.setTimeout(() => {
+            rollingRef.current._interval = window.setInterval(roll, 3000);
+        }, 500);
+
+        return () => {
+            window.clearTimeout(timer);
+            if (rollingRef.current?._interval) {
+                window.clearInterval(rollingRef.current._interval);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         const smoother = ScrollSmoother.get();
@@ -266,7 +302,16 @@ export default function Worksv2() {
                                     transition={{ duration: 1.1, delay: 0.57, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     <span className="dim">I've worked in </span>
-                                    <span className="bright">technology.</span>
+                                    <span className="bright roll-wrap" ref={rollingRef}>
+                                        <span className="roll-item" aria-hidden="true">
+                                           on other projects
+                                        </span>
+                                        {rollingItems.map((text) => (
+                                            <span key={text} className="roll-item">
+                                                {text}
+                                            </span>
+                                        ))}
+                                    </span>
                                 </motion.span>
                             </h1>
 
@@ -276,7 +321,7 @@ export default function Worksv2() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
                             >
-                                Passionately creating innovative digital experiences, rooted in user needs.
+                   For questions, collaborations, or other work, feel free to reach out.
                             </motion.p>
                         </div>
 
@@ -299,31 +344,29 @@ export default function Worksv2() {
                     <section className="worksv2-work" id="work">
                         <div className="worksv2-work__inner">
                             <div className="worksv2-work__header">
-                                <h2 className="worksv2-work__title">Work</h2>
-                                <span className="worksv2-work__count">(4)</span>
+                                                               <h2 className="worksv2-work__title">Work</h2>
+                                <span className="worksv2-work__count">(0)</span>
                             </div>
-
-                            <div className="worksv2-grid">
-                                {WORKS.map((work) => (
-                                    <a
-                                        className="worksv2-card"
-                                        href={work.href}
-                                        key={work.title}
+                                                  <div className="worksv2-grid">
+                                {WORKS.map((work, i) => (
+                                    <div
+                                        className="worksv2-card worksv2-card--upcoming"
+                                        key={i}
                                     >
-                                        <div className="worksv2-card__media">
-                                            <img src={work.image} alt={`${work.title} project preview`} />
+                                        <div className="worksv2-card__media worksv2-card__media--upcoming">
+                                            <img src={work.image} alt="Case study coming soon" />
                                         </div>
                                         <div className="worksv2-card__copy">
                                             <h3>{work.title}</h3>
                                             <p>{work.meta}</p>
                                         </div>
-                                    </a>
+                                    </div>
                                 ))}
                             </div>
 
                             <div className="worksv2-work__cta">
                                 <MagneticButton className="worksv2-archives-btn">
-                                    Archives <sup className="magnetic-btn__sup">(11)</sup>
+                                    Archives <sup className="magnetic-btn__sup">(0)</sup>
                                 </MagneticButton>
                             </div>
                         </div>
@@ -348,11 +391,11 @@ export default function Worksv2() {
                         </div>
 
                         <div className="footer__contacts">
-                            <MagneticButton className="footer__pill-btn" href="mailto:klentaguilar@gmail.com">
-                                klentaguilar@gmail.com
+                            <MagneticButton className={`footer__pill-btn${copiedLabel === "Email" ? " is-copied" : ""}`} onClick={() => copyContact("klentaguilar@gmail.com", "Email")}>
+                                {copiedLabel === "Email" ? <><FiCheck aria-hidden="true" /> Email copied</> : "klentaguilar@gmail.com"}
                             </MagneticButton>
-                            <MagneticButton className="footer__pill-btn" href="tel:+639672179685">
-                                +63 967 217 9685
+                            <MagneticButton className={`footer__pill-btn${copiedLabel === "Phone" ? " is-copied" : ""}`} onClick={() => copyContact("+63 967 217 9685", "Phone")}>
+                                {copiedLabel === "Phone" ? <><FiCheck aria-hidden="true" /> Phone copied</> : "+63 967 217 9685"}
                             </MagneticButton>
                         </div>
 
@@ -376,10 +419,10 @@ export default function Worksv2() {
                             <div className="footer__bar-menu">
                                 <span className="footer__bar-label">Menu</span>
                                 <div className="footer__bar-links">
-                                    <a href="/" className="footer__bar-link">Home</a>
-                                    <a href="/works" className="footer__bar-link">Work</a>
-                                    <a href="/about-web-designer" className="footer__bar-link">About</a>
-                                    <a href="/contact-me" className="footer__bar-link">Contact</a>
+                                    <Link to="/" className="footer__bar-link">Home</Link>
+                                    <Link to="/works" className="footer__bar-link">Work</Link>
+                                    <Link to="/about-web-designer" className="footer__bar-link">About</Link>
+                                    <Link to="/contact-me" className="footer__bar-link">Contact</Link>
                                 </div>
                             </div>
                         </div>

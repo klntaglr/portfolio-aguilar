@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { Link } from "react-router-dom";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 import "./Aboutv2.css";
 import CurvedMenu from "./CurvedMenu";
 import logoImage from "../assets/logo.png";
 import portraitImage from "../assets/grad.jpg";
+import portraitImage1 from "../assets/mockup3.png";
 import awardImage from "../assets/award.png";
 import projectImage from "../assets/sample1.png";
 import enov8tiveLogo from "../assets/enov8tive-full.svg";
@@ -19,6 +21,7 @@ import responsiveCert from "../assets/responsive.png";
 import frontendCert from "../assets/frontend.png";
 import bestDesignCert from "../assets/bestdesign.png";
 import citeCert from "../assets/CITE.png";
+import { FiCheck } from "react-icons/fi";
 
 import {
     SiApplemusic,
@@ -214,7 +217,7 @@ function Av2CertPreview({ pos, visible, imgSrc, showButton = true }) {
     );
 }
 
-function MagneticButton({ children, className = "", ...props }) {
+function MagneticButton({ children, className = "", href, onClick }) {
     const btnRef = useRef(null);
     const fillRef = useRef(null);
 
@@ -287,19 +290,22 @@ function MagneticButton({ children, className = "", ...props }) {
         });
     }, []);
 
+    const Component = href ? Link : "button";
+
     return (
-        <button
+        <Component
             ref={btnRef}
-            type="button"
+            to={href}
+            type={href ? undefined : "button"}
             className={`magnetic-btn${className ? ` ${className}` : ""}`}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            {...props}
+            onClick={onClick}
         >
             <span ref={fillRef} className="magnetic-btn__fill" />
             <span className="magnetic-btn__text">{children}</span>
-        </button>
+        </Component>
     );
 }
 
@@ -308,12 +314,23 @@ function MagneticButton({ children, className = "", ...props }) {
 ───────────────────────────────────────────── */
 export default function Aboutv2() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [copiedLabel, setCopiedLabel] = useState("");
     const rollingRef = useRef(null);
     const mediaStageRef = useRef(null);
     const certsRef = useRef(null);
     const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null, hasLink: true });
 
     const [awardIndex, setAwardIndex] = useState(0);
+
+    const copyContact = async (value, label) => {
+        try {
+            await navigator.clipboard.writeText(value);
+            setCopiedLabel(label);
+            window.setTimeout(() => setCopiedLabel(""), 2200);
+        } catch {
+            setCopiedLabel("");
+        }
+    };
 
     useEffect(() => {
         const smoother = ScrollSmoother.get();
@@ -636,8 +653,8 @@ export default function Aboutv2() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 1.1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    <span className="dim">A page </span>
-                                    <span className="bright">About me.</span>
+                                    <span className="dim">A little about</span>
+                                    <span className="bright"> who I am.</span>
                                 </motion.span>
                                 <motion.span
                                     className="hero__line"
@@ -669,8 +686,7 @@ export default function Aboutv2() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
                             >
-                                If I'm not working, I'm probably thinking about my next trip.
-                                Or nerding out over games, comics, and fashion.
+                             When I'm not designing, I'm usually somewhere enjoying the little things, trying something new, or finding my next obsession.
                             </motion.p>
                         </div>
 
@@ -696,7 +712,7 @@ export default function Aboutv2() {
                         <div className="av2-bento__grid">
                             <div className="av2-bento__card av2-bento__card--portrait">
                                 <img
-                                    src={portraitImage}
+                                    src={portraitImage1}
                                     alt="Russell Aguilar"
                                     className="av2-bento__portrait-img"
                                 />
@@ -753,7 +769,7 @@ export default function Aboutv2() {
                             <div className="av2-bento__card av2-bento__card--tools">
                                 <h3 className="av2-bento__card-title">
                                     Tools I love
-                                    <span> (7) </span>
+                                    <span> (14) </span>
                                 </h3>
                                 <div className="av2-bento__tools-marquee" aria-label="Tools I love">
                                     <div className="av2-bento__tools-track">
@@ -781,7 +797,7 @@ export default function Aboutv2() {
                             <div className="av2-bento__card av2-bento__card--services">
                                 <h3 className="av2-bento__card-title">
                                     What I do
-                                    <span> (12) </span>
+                                    <span> (11) </span>
                                 </h3>
                                 <div className="av2-bento__skills-pills">
                                     {SERVICES.map((skill) => (
@@ -943,12 +959,16 @@ export default function Aboutv2() {
 
                         <div className="footer__divider-row">
                             <div className="footer__divider-line" />
-                            <MagneticButton className="footer__cta">Get in Touch</MagneticButton>
+                            <MagneticButton href="/contact-me" className="footer__cta">Get in Touch</MagneticButton>
                         </div>
 
                         <div className="footer__contacts">
-                            <MagneticButton className="footer__pill-btn">klentaguilar@gmail.com</MagneticButton>
-                            <MagneticButton className="footer__pill-btn">+63 967 217 9685</MagneticButton>
+                            <MagneticButton className={`footer__pill-btn${copiedLabel === "Email" ? " is-copied" : ""}`} onClick={() => copyContact("klentaguilar@gmail.com", "Email")}>
+                                {copiedLabel === "Email" ? <><FiCheck aria-hidden="true" /> Email copied</> : "klentaguilar@gmail.com"}
+                            </MagneticButton>
+                            <MagneticButton className={`footer__pill-btn${copiedLabel === "Phone" ? " is-copied" : ""}`} onClick={() => copyContact("+63 967 217 9685", "Phone")}>
+                                {copiedLabel === "Phone" ? <><FiCheck aria-hidden="true" /> Phone copied</> : "+63 967 217 9685"}
+                            </MagneticButton>
                         </div>
 
                         <div className="footer__bar">
@@ -971,10 +991,10 @@ export default function Aboutv2() {
                             <div className="footer__bar-menu">
                                 <span className="footer__bar-label">Menu</span>
                                 <div className="footer__bar-links">
-                                    <a href="#" className="footer__bar-link">Home</a>
-                                    <a href="#" className="footer__bar-link">Work</a>
-                                    <a href="#" className="footer__bar-link">About</a>
-                                    <a href="#" className="footer__bar-link">Contact</a>
+                                    <Link to="/" className="footer__bar-link">Home</Link>
+                                    <Link to="/works" className="footer__bar-link">Work</Link>
+                                    <Link to="/about-web-designer" className="footer__bar-link">About</Link>
+                                    <Link to="/contact-me" className="footer__bar-link">Contact</Link>
                                 </div>
                             </div>
                         </div>

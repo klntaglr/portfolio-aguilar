@@ -31,7 +31,7 @@
 }
 
 .worksv2-hero__content {
-  padding-bottom: 34vh;
+  padding-bottom: 37vh;
 }
 
 .worksv2-hero__headline {
@@ -45,7 +45,7 @@
 }
 
 .worksv2-hero__sub {
-  max-width: 390px;
+  max-width: 340px;
 }
 
 .worksv2-work {
@@ -126,24 +126,26 @@
     filter 0.45s ease;
 }
 
-.worksv2-card:nth-child(2) .worksv2-card__media {
+
+
+.worksv2-card--upcoming {
+  cursor: default;
+}
+.worksv2-card__media--upcoming {
   background:
-    linear-gradient(135deg, transparent 0 52%, rgba(138, 100, 143, 0.45) 52% 76%, transparent 76%),
-    #283442;
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 45%),
+    linear-gradient(315deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+    #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.worksv2-card:nth-child(3) .worksv2-card__media {
-  background:
-    linear-gradient(140deg, rgba(40, 105, 69, 0.5), transparent 58%),
-    #657366;
+.worksv2-card--upcoming .worksv2-card__copy h3 {
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.worksv2-card:nth-child(4) .worksv2-card__media {
-  background:
-    linear-gradient(145deg, rgba(98, 118, 82, 0.45), transparent 62%),
-    #5e6a5f;
+.worksv2-card--upcoming .worksv2-card__copy p {
+  color: rgba(255, 255, 255, 0.32);
 }
-
 .worksv2-card__media img {
   display: block;
   width: 100%;
@@ -153,14 +155,12 @@
   filter: saturate(0.82) contrast(1.02);
   transform: scale(1);
   transition:
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
 .worksv2-card:hover .worksv2-card__media img {
   transform: scale(0.975);
-  filter: saturate(1) contrast(1.04);
 }
 
 .worksv2-card__copy {
@@ -243,6 +243,7 @@
 
   .worksv2-hero__content {
     top: 220px;
+    padding: 0 24px;
   }
 
   .worksv2-work {
@@ -275,6 +276,7 @@
 
   .worksv2-hero__content {
     top: 186px;
+    padding: 0 20px;
   }
 
   .worksv2-hero__headline .hero__line {

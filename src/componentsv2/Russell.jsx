@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -10,10 +10,13 @@ import CurvedMenu from "./CurvedMenu";
 import LogoLoop from "../components/LogoLoop";
 import { TbPointer } from "react-icons/tb";
 import { PiCursorClick } from "react-icons/pi";
+import { FiCheck } from "react-icons/fi";
 import bgImage from "../assets/v2bg.png";
 import logoImage from "../assets/logo.png";
-import projectImage from "../assets/sample1.png";
-import portraitImage from "../assets/grad.jpg"; // ← your about photo
+import projectImage from "../assets/placeholder.png";
+import portraitImage from "../assets/grad.jpg";
+import portraitImage1 from "../assets/mockup4.jpg";
+// ← your about photo
 import enov8tiveLogo from "../assets/enov8tive.png";
 import rtcImage from "../assets/RTC.png";
 import microsoftCert from "../assets/MicrosoftUX.png";
@@ -102,6 +105,7 @@ function MagneticButton({ children, href, ...props }) {
             to={href}
             type={href ? undefined : "button"}
             className={`magnetic-btn${props.className ? ` ${props.className}` : ""}`}
+            onClick={props.onClick}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -172,9 +176,11 @@ function CertPreview({ pos, visible, imgSrc, showButton = true }) {
 export default function Russell() {
     const rollingRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [copiedLabel, setCopiedLabel] = useState("");
     const [hoveredCard, setHoveredCard] = useState(null);
     const cardRefs = useRef([]);
-    const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+    const cursorX = useMotionValue(0);
+    const cursorY = useMotionValue(0);
     const [cursorVisible, setCursorVisible] = useState(false);
     const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null, hasLink: true });
     const certsRef = useRef(null);
@@ -281,13 +287,24 @@ export default function Russell() {
     const handleCertClick = (link) => {
         if (link) window.open(link, "_blank", "noopener,noreferrer");
     };
+
+    const copyContact = async (value, label) => {
+        try {
+            await navigator.clipboard.writeText(value);
+            setCopiedLabel(label);
+            window.setTimeout(() => setCopiedLabel(""), 2200);
+        } catch {
+            setCopiedLabel("");
+        }
+    };
     const handleCardMouseMove = useCallback((e, cardId) => {
         setHoveredCard(cardId);
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
         e.currentTarget.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg)`;
-        setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+        cursorX.set(e.clientX - rect.left);
+        cursorY.set(e.clientY - rect.top);
     }, []);
 
     const handleCardMouseEnter = useCallback((cardId) => {
@@ -300,7 +317,7 @@ export default function Russell() {
         setCursorVisible(false);
         e.currentTarget.style.transform = `perspective(900px) rotateY(0deg) rotateX(0deg)`;
     }, []);
-    const rollingItems = ["UI/UX Designer.", "Web Designer.", "Product Designer."];
+    const rollingItems = ["UI/UX designer.", "web designer.", "product designer."];
 
     useEffect(() => {
         const smoother = ScrollSmoother.get();
@@ -464,7 +481,7 @@ export default function Russell() {
                     {/* circle cursor */}
                     {/* moved INSIDE the works section below — delete this */}
                     <section className="hero">
-                                    {/* bg gradient */}
+                        {/* bg gradient */}
                         <div className="hero__bg" />
                         {/* ambient glow */}
                         <div className="hero__glow" />
@@ -521,7 +538,7 @@ export default function Russell() {
                                 >
                                     <span className="dim">I'm a </span>
                                     <span className="bright roll-wrap" ref={rollingRef}>
-                                                                        {/* ghost spacer so the line holds its width */}
+                                        {/* ghost spacer so the line holds its width */}
                                         <span className="roll-item" aria-hidden="true">
                                             Product Designer.
                                         </span>
@@ -540,8 +557,7 @@ export default function Russell() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
                             >
-                                Passionately creating innovative digital
-                                experiences, rooted in user needs.
+                               Passionately creating digital experiences that look good, feel right, and work for people.
                             </motion.p>
                         </div>
 
@@ -566,11 +582,11 @@ export default function Russell() {
                         {/* heading */}
                         <div className="works__header">
                             <h2 className="works__title">Selected works</h2>
-                            <span className="works__badge">(3)</span>
+                            <span className="works__badge">(0)</span>
                         </div>
 
-                        <div className="works__list">
-                            <div className="works__item">
+                                              <div className="works__list">
+                            {/* <div className="works__item">
                                 <div className="works__marquee" aria-hidden="true">
                                     <LogoLoop
                                         logos={[
@@ -585,6 +601,7 @@ export default function Russell() {
                                         logoHeight={130}
                                         gap={48}
                                         pauseOnHover={false}
+                                        pauseWhenOffscreen
                                         ariaLabel=""
                                     />
                                 </div>
@@ -597,9 +614,8 @@ export default function Russell() {
                                 >
                                     <motion.div
                                         className="works__circle-cursor"
+                                        style={{ x: cursorX, y: cursorY }}
                                         animate={{
-                                            x: hoveredCard === "card1" ? cursorPos.x : cursorPos.x,
-                                            y: hoveredCard === "card1" ? cursorPos.y : cursorPos.y,
                                             opacity: hoveredCard === "card1" ? 1 : 0,
                                             scale: hoveredCard === "card1" ? 1 : 0.5,
                                         }}
@@ -613,7 +629,6 @@ export default function Russell() {
                                         <span>View</span>
                                     </motion.div>
                                     <div className="works__card-img">
-
                                         <img
                                             src={projectImage}
                                             alt="AI Gift Finder app mockup"
@@ -649,24 +664,24 @@ export default function Russell() {
                                         logoHeight={130}
                                         gap={48}
                                         pauseOnHover={false}
+                                        pauseWhenOffscreen
                                         ariaLabel=""
                                     />
                                 </div>
 
                                 <div
                                     className="works__card"
-                                    ref={(el) => (cardRefs.current[0] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card1")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card1")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card1")}
+                                    ref={(el) => (cardRefs.current[1] = el)}
+                                    onMouseEnter={() => handleCardMouseEnter("card2")}
+                                    onMouseMove={(e) => handleCardMouseMove(e, "card2")}
+                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card2")}
                                 >
                                     <motion.div
                                         className="works__circle-cursor"
+                                        style={{ x: cursorX, y: cursorY }}
                                         animate={{
-                                            x: hoveredCard === "card1" ? cursorPos.x : cursorPos.x,
-                                            y: hoveredCard === "card1" ? cursorPos.y : cursorPos.y,
-                                            opacity: hoveredCard === "card1" ? 1 : 0,
-                                            scale: hoveredCard === "card1" ? 1 : 0.5,
+                                            opacity: hoveredCard === "card2" ? 1 : 0,
+                                            scale: hoveredCard === "card2" ? 1 : 0.5,
                                         }}
                                         transition={{
                                             x: { duration: 0.08, ease: "linear" },
@@ -678,70 +693,6 @@ export default function Russell() {
                                         <span>View</span>
                                     </motion.div>
                                     <div className="works__card-img">
-
-                                        <img
-                                            src={projectImage}
-                                            alt="Project Two mockup"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">Project Two</span>
-                                        </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">UI/UX</span>
-                                            <span className="works__pill">Branding</span>
-                                            <span className="works__pill">Web Design</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <div className="works__item">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="left"
-                                        logoHeight={130}
-                                        gap={48}
-                                        pauseOnHover={false}
-                                        ariaLabel=""
-                                    />
-                                </div>
-
-                                <div
-                                    className="works__card"
-                                    ref={(el) => (cardRefs.current[0] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card1")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card1")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card1")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        animate={{
-                                            x: hoveredCard === "card1" ? cursorPos.x : cursorPos.x,
-                                            y: hoveredCard === "card1" ? cursorPos.y : cursorPos.y,
-                                            opacity: hoveredCard === "card1" ? 1 : 0,
-                                            scale: hoveredCard === "card1" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
-                                    >
-                                        <span>View</span>
-                                    </motion.div>
-                                    <div className="works__card-img">
-
                                         <img
                                             src={projectImage}
                                             alt="Project Two mockup"
@@ -761,26 +712,276 @@ export default function Russell() {
                                     </div>
                                 </div>
                             </div>
+
+                            <div className="works__item">
+                                <div className="works__marquee" aria-hidden="true">
+                                    <LogoLoop
+                                        logos={[
+                                            { node: <span className="works__marquee-word">BOL</span> },
+                                            { node: <span className="works__marquee-word">BOL</span> },
+                                            { node: <span className="works__marquee-word">BOL</span> },
+                                            { node: <span className="works__marquee-word">BOL</span> },
+                                            { node: <span className="works__marquee-word">BOL</span> },
+                                        ]}
+                                        speed={200}
+                                        direction="left"
+                                        logoHeight={130}
+                                        gap={48}
+                                        pauseOnHover={false}
+                                        pauseWhenOffscreen
+                                        ariaLabel=""
+                                    />
+                                </div>
+
+                                <div
+                                    className="works__card"
+                                    ref={(el) => (cardRefs.current[2] = el)}
+                                    onMouseEnter={() => handleCardMouseEnter("card3")}
+                                    onMouseMove={(e) => handleCardMouseMove(e, "card3")}
+                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card3")}
+                                >
+                                    <motion.div
+                                        className="works__circle-cursor"
+                                        style={{ x: cursorX, y: cursorY }}
+                                        animate={{
+                                            opacity: hoveredCard === "card3" ? 1 : 0,
+                                            scale: hoveredCard === "card3" ? 1 : 0.5,
+                                        }}
+                                        transition={{
+                                            x: { duration: 0.08, ease: "linear" },
+                                            y: { duration: 0.08, ease: "linear" },
+                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                                        }}
+                                    >
+                                        <span>View</span>
+                                    </motion.div>
+                                    <div className="works__card-img">
+                                        <img
+                                            src={projectImage}
+                                            alt="Project Two mockup"
+                                            className="works__card-screenshot"
+                                        />
+                                    </div>
+
+                                    <div className="works__card-footer">
+                                        <div className="works__card-meta">
+                                            <span className="works__card-name">Project Two</span>
+                                        </div>
+                                        <div className="works__card-badges">
+                                            <span className="works__pill">UI/UX</span>
+                                            <span className="works__pill">Branding</span>
+                                            <span className="works__pill">Web Design</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> */}
+
+                          
+
+                            <div className="works__item">
+                                <div className="works__marquee" aria-hidden="true">
+                                    <LogoLoop
+                                        logos={[
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                        ]}
+                                        speed={200}
+                                        direction="left"
+                                        logoHeight={130}
+                                        gap={90}
+                                        pauseOnHover={false}
+                                        pauseWhenOffscreen
+                                        ariaLabel=""
+                                    />
+                                </div>
+                                <div
+                                    className="works__card works__card--upcoming"
+                                    ref={(el) => (cardRefs.current[0] = el)}
+                                    onMouseEnter={() => handleCardMouseEnter("card1")}
+                                    onMouseMove={(e) => handleCardMouseMove(e, "card1")}
+                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card1")}
+                                >
+                                    <motion.div
+                                        className="works__circle-cursor"
+                                        style={{ x: cursorX, y: cursorY }}
+                                        animate={{
+                                            opacity: hoveredCard === "card1" ? 1 : 0,
+                                            scale: hoveredCard === "card1" ? 1 : 0.5,
+                                        }}
+                                        transition={{
+                                            x: { duration: 0.08, ease: "linear" },
+                                            y: { duration: 0.08, ease: "linear" },
+                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                                        }}
+                                    >
+                                        <span>Soon</span>
+                                    </motion.div>
+                                    <div className="works__card-img works__card-img--upcoming">
+                                        <img
+                                            src={projectImage}
+                                            alt="Case study coming soon"
+                                            className="works__card-screenshot"
+                                        />
+                                    </div>
+                                    <div className="works__card-footer">
+                                        <div className="works__card-meta">
+                                            <span className="works__card-name">Case study coming soon.</span>
+                                        </div>
+                                        <div className="works__card-badges">
+                                            <span className="works__pill">In progress</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="works__item works__item--right">
+                                <div className="works__marquee" aria-hidden="true">
+                                    <LogoLoop
+                                        logos={[
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                        ]}
+                                        speed={200}
+                                        direction="right"
+                                        logoHeight={130}
+                                        gap={90}
+                                        pauseOnHover={false}
+                                        pauseWhenOffscreen
+                                        ariaLabel=""
+                                    />
+                                </div>
+                                <div
+                                    className="works__card works__card--upcoming"
+                                    ref={(el) => (cardRefs.current[1] = el)}
+                                    onMouseEnter={() => handleCardMouseEnter("card2")}
+                                    onMouseMove={(e) => handleCardMouseMove(e, "card2")}
+                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card2")}
+                                >
+                                    <motion.div
+                                        className="works__circle-cursor"
+                                        style={{ x: cursorX, y: cursorY }}
+                                        animate={{
+                                            opacity: hoveredCard === "card2" ? 1 : 0,
+                                            scale: hoveredCard === "card2" ? 1 : 0.5,
+                                        }}
+                                        transition={{
+                                            x: { duration: 0.08, ease: "linear" },
+                                            y: { duration: 0.08, ease: "linear" },
+                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                                        }}
+                                    >
+                                        <span>Soon</span>
+                                    </motion.div>
+                                    <div className="works__card-img works__card-img--upcoming">
+                                        <img
+                                            src={projectImage}
+                                            alt="Case study coming soon"
+                                            className="works__card-screenshot"
+                                        />
+                                    </div>
+                                    <div className="works__card-footer">
+                                        <div className="works__card-meta">
+                                            <span className="works__card-name">Case study coming soon.</span>
+                                        </div>
+                                        <div className="works__card-badges">
+                                            <span className="works__pill">In progress</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="works__item">
+                                <div className="works__marquee" aria-hidden="true">
+                                    <LogoLoop
+                                        logos={[
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                            { node: <span className="works__marquee-word">SOON</span> },
+                                        ]}
+                                        speed={200}
+                                        direction="left"
+                                        logoHeight={130}
+                                        gap={90}
+                                        pauseOnHover={false}
+                                        pauseWhenOffscreen
+                                        ariaLabel=""
+                                    />
+                                </div>
+                                <div
+                                    className="works__card works__card--upcoming"
+                                    ref={(el) => (cardRefs.current[2] = el)}
+                                    onMouseEnter={() => handleCardMouseEnter("card3")}
+                                    onMouseMove={(e) => handleCardMouseMove(e, "card3")}
+                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card3")}
+                                >
+                                    <motion.div
+                                        className="works__circle-cursor"
+                                        style={{ x: cursorX, y: cursorY }}
+                                        animate={{
+                                            opacity: hoveredCard === "card3" ? 1 : 0,
+                                            scale: hoveredCard === "card3" ? 1 : 0.5,
+                                        }}
+                                        transition={{
+                                            x: { duration: 0.08, ease: "linear" },
+                                            y: { duration: 0.08, ease: "linear" },
+                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                                        }}
+                                    >
+                                        <span>Soon</span>
+                                    </motion.div>
+                                    <div className="works__card-img works__card-img--upcoming">
+                                        <img
+                                            src={projectImage}
+                                            alt="Case study coming soon"
+                                            className="works__card-screenshot"
+                                        />
+                                    </div>
+                                    <div className="works__card-footer">
+                                        <div className="works__card-meta">
+                                            <span className="works__card-name">Case study coming soon.</span>
+                                        </div>
+                                        <div className="works__card-badges">
+                                            <span className="works__pill">In progress</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                    <div className="works__cta">
+                                <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(0)</sup></MagneticButton>
+                            </div>
+                            </div>
+
+                        
                         </div>
-                        <div className="works__cta">
-                            <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(11)</sup></MagneticButton>
-                        </div>
+                      
                     </section>
 
                     <section className="certs" ref={certsRef}>
-                                            <CertPreview
+                        <CertPreview
                             pos={{ x: certPreview.x, y: certPreview.y }}
                             visible={certPreview.visible}
                             imgSrc={certPreview.img}
                             showButton={certPreview.hasLink}
                         />
 
-                                    <div className="certs__header">
+                        <div className="certs__header">
                             <h2 className="certs__title">Certifications & Experience</h2>
                             <span className="certs__badge">({totalCerts})</span>
                         </div>
-                      
-                                              <div className="certs__group">
+
+                        <div className="certs__group">
                             <span className="certs__label">Where I've Been</span>
                             <table className="certs__table">
                                 <tbody>
@@ -808,7 +1009,7 @@ export default function Russell() {
                                 </tbody>
                             </table>
                         </div>
-                                               <div className="certs__group">
+                        <div className="certs__group">
                             <span className="certs__label">What I've Earned</span>
                             <table className="certs__table">
                                 <tbody>
@@ -832,7 +1033,7 @@ export default function Russell() {
                             </table>
                         </div>
 
-                                             <div className="certs__group">
+                        <div className="certs__group">
                             <span className="certs__label">Honours</span>
                             <table className="certs__table">
                                 <tbody>
@@ -862,22 +1063,18 @@ export default function Russell() {
                         <div className="about__copy">
                             <h2 className="about__headline">
                                 {[
-                                    " I love to inspire,",
-                                    " because",
-                                    " I know",
-                                    " what",
-                                    " it's",
-                                    " like",
-                                    " to be",
-                                    " inspired.",
-                                    " Seeing",
-                                    " design",
-                                    " work",
-                                    " and having",
-                                    " fun,",
-                                    " that's",
-                                    " what it's",
-                                    " all about.",
+                                    "I make things ",
+                                    "that make me feel.",
+                                    "Because once, ",
+                                    "someone else's work",
+                                    "made me feel ",
+                                    "the same. ",
+                                    "Now I create",
+                                    "with the hope ",
+                                    "of passing ",
+                                    "that feeling on."
+
+
                                 ].map((text, i) => (
                                     <span key={i} className="about__word">
                                         {text}
@@ -943,11 +1140,15 @@ export default function Russell() {
                         {/* divider with circle CTA sitting on the line */}
                         <div className="footer__divider-row">
                             <div className="footer__divider-line" />
-                            <MagneticButton className="footer__cta">Get in Touch</MagneticButton>
+                            <MagneticButton href="/contact-me" className="footer__cta">Get in Touch</MagneticButton>
                         </div>
                         <div className="footer__contacts">
-                            <MagneticButton className="footer__pill-btn">klentaguilar@gmail.com</MagneticButton>
-                            <MagneticButton className="footer__pill-btn">+63 967 217 9685</MagneticButton>
+                            <MagneticButton className={`footer__pill-btn${copiedLabel === "Email" ? " is-copied" : ""}`} onClick={() => copyContact("klentaguilar@gmail.com", "Email")}>
+                                {copiedLabel === "Email" ? <><FiCheck aria-hidden="true" /> Email copied</> : "klentaguilar@gmail.com"}
+                            </MagneticButton>
+                            <MagneticButton className={`footer__pill-btn${copiedLabel === "Phone" ? " is-copied" : ""}`} onClick={() => copyContact("+63 967 217 9685", "Phone")}>
+                                {copiedLabel === "Phone" ? <><FiCheck aria-hidden="true" /> Phone copied</> : "+63 967 217 9685"}
+                            </MagneticButton>
                         </div>
                         <div className="footer__bar">
                             <div className="footer__bar-col">
@@ -960,19 +1161,19 @@ export default function Russell() {
                                 <span className="footer__bar-label">Contact</span>
                                 <div className="footer__bar-links">
                                     <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" className="footer__bar-link">LinkedIn</a>
-                                <a href="https://www.behance.net/klentaguilar/projects" className="footer__bar-link">Behance</a>    <a href="https://www.instagram.com/klntaglr/" className="footer__bar-link">Instagram</a>
+                                    <a href="https://www.behance.net/klentaguilar/projects" className="footer__bar-link">Behance</a>    <a href="https://www.instagram.com/klntaglr/" className="footer__bar-link">Instagram</a>
                                     <a href="https://www.tiktok.com/@klntaglr" className="footer__bar-link">TikTok</a>
-                                    
+
                                     <a href="https://github.com/klntaglr" className="footer__bar-link">GitHub</a>
                                 </div>
                             </div>
                             <div className="footer__bar-menu">
                                 <span className="footer__bar-label">Menu</span>
                                 <div className="footer__bar-links">
-                                    <a href="#" className="footer__bar-link">Home</a>
-                                    <a href="#" className="footer__bar-link">Work</a>
-                                    <a href="#" className="footer__bar-link">About</a>
-                                    <a href="#" className="footer__bar-link">Contact</a>
+                                    <Link to="/" className="footer__bar-link">Home</Link>
+                                    <Link to="/works" className="footer__bar-link">Work</Link>
+                                    <Link to="/about-web-designer" className="footer__bar-link">About</Link>
+                                    <Link to="/contact-me" className="footer__bar-link">Contact</Link>
                                 </div>
                             </div>
                         </div>

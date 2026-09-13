@@ -202,7 +202,7 @@ body::-webkit-scrollbar {
   position: absolute;
   bottom: 0;
   left: 0;
-  padding: 0 120px 35vh;
+  padding: 0 120px 38vh;
   z-index: 10;
 }
 
@@ -247,8 +247,15 @@ body::-webkit-scrollbar {
   top: 0;
   white-space: nowrap;
   display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
   will-change: transform, opacity;
   line-height: 1.16;
+}
+
+.roll-item:nth-child(2) {
+  transform: translateY(0%);
+  opacity: 1;
 }
 
 .roll-item:first-child {
@@ -417,7 +424,7 @@ body::-webkit-scrollbar {
 .works__marquee-word {
   font-size: clamp(72px, 10vw, 130px);
   font-weight: 600;
-  letter-spacing: -0.04em;
+  letter-spacing: normal;
   color:#01010145;
   line-height: 1;
   user-select: none;
@@ -479,6 +486,28 @@ body::-webkit-scrollbar {
   transform: scale(0.985);
 }
 
+.works__card-img--upcoming {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 45%),
+    linear-gradient(315deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+    #1c1c1c;
+  border-radius: 6px;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.works__card--upcoming:hover .works__card-img--upcoming {
+  transform: scale(0.985);
+}
+
+.works__card--upcoming .works__card-name {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.works__card--upcoming .works__pill {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+}
 
 
 .works__card-cursor svg {
@@ -1599,6 +1628,7 @@ body::-webkit-scrollbar {
   font-weight: 500;
   line-height: 1.18;
   letter-spacing: -0.055em;
+  max-width: 1300px;
   margin: 0;
 }
 
@@ -1854,8 +1884,39 @@ font-size: clamp(55px, 7.1vw, 110px);
   transition: color 0.4s ease;
 }
 
+.footer__pill-btn .magnetic-btn__text svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 3;
+}
+
+.footer__pill-btn.is-copied {
+  border-color: rgba(44, 192, 99, .72) !important;
+
+  box-shadow: 0 0 0 3px rgba(44, 192, 99, .08);
+}
+
+.footer__pill-btn.is-copied .magnetic-btn__text,
+.footer__pill-btn.is-copied .magnetic-btn__text svg {
+  color: #2CC063 !important;
+}
+
 .footer__pill-btn:hover .magnetic-btn__text {
   color: #010101 !important;
+}
+
+.footer__pill-btn.is-copied .magnetic-btn__fill {
+  display: none;
+}
+
+.footer__pill-btn.is-copied .magnetic-btn__text,
+.footer__pill-btn.is-copied:hover .magnetic-btn__text {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #2CC063 !important;
 }
 
 /* ── bottom bar ── */

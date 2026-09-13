@@ -5,7 +5,7 @@ import { FiCheck, FiX } from "react-icons/fi";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { Link } from "react-router-dom";
-import CurvedMenu from "../componentsv2/CurvedMenu";
+import CurvedMenu from "./CurvedMenu";
 import logo from "../assets/logo.png";
 import portrait from "../assets/grad.jpg";
 import "./ContactReference.css";
@@ -16,7 +16,7 @@ const CONTACT_EMAIL = "klentaguilar@gmail.com";
 const CONTACT_PHONE = "+63 967 217 9685";
 const INITIAL_FORM = { name: "", email: "", company: "", role: "", message: "" };
 
-function MagneticButton({ children, type = "button" }) {
+function MagneticButton({ children, type = "button", disabled = false }) {
     const buttonRef = useRef(null);
     const fillRef = useRef(null);
 
@@ -56,7 +56,7 @@ function MagneticButton({ children, type = "button" }) {
     }, []);
 
     return (
-        <button ref={buttonRef} className="contact-form__submit" type={type} onMouseMove={handleMove} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+        <button ref={buttonRef} className="contact-form__submit" type={type} disabled={disabled} aria-busy={disabled} onMouseMove={handleMove} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
             <span ref={fillRef} className="contact-form__submit-fill" />
             <span className="contact-form__submit-text">{children}</span>
         </button>
@@ -68,6 +68,9 @@ export default function ContactReference() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [status, setStatus] = useState({ type: "idle", message: "" });
     const [copiedLabel, setCopiedLabel] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [website, setWebsite] = useState("");
+    const lastSubmitRef = useRef(0);
 
     useEffect(() => {
         const smoother = ScrollSmoother.create({ wrapper: "#contact-smooth-wrapper", content: "#contact-smooth-content", smooth: 1.35, effects: true, smoothTouch: 0.08 });
@@ -107,11 +110,23 @@ export default function ContactReference() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (isSubmitting) return;
+        if (website.trim()) return;
+
+        const now = Date.now();
+        if (now - lastSubmitRef.current < 5000) {
+            setStatus({ type: "error", message: "Please wait a moment before sending again." });
+            return;
+        }
+
+        lastSubmitRef.current = now;
+        setIsSubmitting(true);
         const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
         const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
         const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
         if (!serviceId || !templateId || !publicKey) {
             setStatus({ type: "error", message: "Email service is not configured yet." });
+            setIsSubmitting(false);
             return;
         }
         try {
@@ -127,6 +142,8 @@ export default function ContactReference() {
             setStatus({ type: "success", message: "Thanks. I will get back to you soon." });
         } catch {
             setStatus({ type: "error", message: "Something went wrong. Please email me directly." });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -149,12 +166,16 @@ export default function ContactReference() {
                                 Let&apos;s start a<br />project together
                             </motion.h1>
                             <form className="contact-form" onSubmit={handleSubmit}>
-                                <label className="contact-form__row"><span className="contact-form__number">01</span><span className="contact-form__field"><strong>What&apos;s your name?</strong><input name="name" value={formData.name} onChange={updateField} placeholder="John Doe *" required /></span></label>
+                                <div className="contact-form__honeypot" aria-hidden="true">
+                                    <label htmlFor="website">Website</label>
+                                    <input id="website" name="website" value={website} onChange={(event) => setWebsite(event.target.value)} tabIndex="-1" autoComplete="off" />
+                                </div>
+                                <label className="contact-form__row"><span className="contact-form__number">01</span><span className="contact-form__field"><strong>What&apos;s your name?</strong><input name="name" value={formData.name} onChange={updateField} placeholder="John Doe *" maxLength={80} required /><span className="contact-form__counter" aria-live="polite">{formData.name.length}/80</span></span></label>
                                 <label className="contact-form__row"><span className="contact-form__number">02</span><span className="contact-form__field"><strong>What&apos;s your email?</strong><input name="email" type="email" value={formData.email} onChange={updateField} placeholder="john@doe.com *" required /></span></label>
-                                <label className="contact-form__row"><span className="contact-form__number">03</span><span className="contact-form__field"><strong>Where are you from? (company/organization)</strong><input name="company" value={formData.company} onChange={updateField} placeholder="John & Doe ®" /></span></label>
-                                <label className="contact-form__row"><span className="contact-form__number">04</span><span className="contact-form__field"><strong>What role are you hiring for?</strong><input name="role" value={formData.role} onChange={updateField} placeholder="UI/UX Designer, Web Designer ..." /></span></label>
-                                <label className="contact-form__row contact-form__row--message"><span className="contact-form__number">05</span><span className="contact-form__field"><strong>Your message</strong><textarea name="message" value={formData.message} onChange={updateField} placeholder="Hi Russell, we'd like to ... *" required /></span></label>
-                                <div className="contact-form__submit-row"><span className="contact-form__submit-line" /><MagneticButton type="submit">Send it</MagneticButton></div>
+                                <label className="contact-form__row"><span className="contact-form__number">03</span><span className="contact-form__field"><strong>Where are you from? (company/organization)</strong><input name="company" value={formData.company} onChange={updateField} placeholder="John & Doe ®" maxLength={100} /><span className="contact-form__counter" aria-live="polite">{formData.company.length}/100</span></span></label>
+                                <label className="contact-form__row"><span className="contact-form__number">04</span><span className="contact-form__field"><strong>What role are you hiring for?</strong><input name="role" value={formData.role} onChange={updateField} placeholder="UI/UX Designer, Web Designer ..." maxLength={80} /><span className="contact-form__counter" aria-live="polite">{formData.role.length}/80</span></span></label>
+                                <label className="contact-form__row contact-form__row--message"><span className="contact-form__number">05</span><span className="contact-form__field"><strong>Your message</strong><span className="contact-form__textarea-wrap"><textarea name="message" value={formData.message} onChange={updateField} placeholder="Hi Russell, we'd like to ... *" maxLength={1000} required /><span className="contact-form__counter contact-form__counter--textarea" aria-live="polite">{formData.message.length}/1000</span></span></span></label>
+                                <div className="contact-form__submit-row"><span className="contact-form__submit-line" /><MagneticButton type="submit" disabled={isSubmitting}>{isSubmitting ? <><span className="contact-form__spinner" aria-hidden="true" /> Sending...</> : "Send it"}</MagneticButton></div>
                                 {status.message && <p className={`contact-form__status is-${status.type}`}>{status.message}</p>}
                             </form>
                         </div>
