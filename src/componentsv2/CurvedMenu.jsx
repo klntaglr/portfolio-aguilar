@@ -44,7 +44,6 @@ function NavLink({ heading, href, onNavigate, index }) {
 
   return (
     <motion.div
-      onClick={onNavigate}
       initial="initial"
       whileHover="whileHover"
       className={`curved-menu__link${isActive ? " is-active" : ""}`}
@@ -133,7 +132,6 @@ export default function CurvedMenu({ id, onClose, navItems = defaultNavItems }) 
         </div>
         <MenuFooter />
       </div>
-      <Curve />
     </motion.div>
   );
 }

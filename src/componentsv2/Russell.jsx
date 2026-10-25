@@ -24,7 +24,8 @@ import googleCert from "../assets/GoogleUX.png";
 import responsiveCert from "../assets/responsive.png";
 import frontendCert from "../assets/frontend.png";
 import bestDesignCert from "../assets/bestdesign.png";
-import citeCert from "../assets/CITE.png";
+import citeCert from "../assets/CITE1.png";
+import enoCerti from "../assets/enocerti.jpg";
 function MagneticButton({ children, href, ...props }) {
     const btnRef = useRef(null);
     const fillRef = useRef(null);
@@ -248,7 +249,15 @@ export default function Russell() {
     ];
 
     const honoursData = [
-        {
+       {
+            id: "enov8tive-recognition",
+            issuer: "Enov8tive",
+            title: "Most Promising New Hire",
+            date: "Sep 2026",
+            source: "Taguig City",
+            preview: enoCerti,
+            link: null,
+        },  {
             id: "bestdesign",
             issuer: "La Consolacion University",
             title: "Best in System Design",
@@ -257,7 +266,7 @@ export default function Russell() {
             preview: bestDesignCert,
             link: "https://www.facebook.com/share/1BzPMK8U96/",
         },
-        {
+            {
             id: "cite",
             issuer: "CITE Research Colloquium",
             title: "Certificate of Participation",
@@ -266,6 +275,7 @@ export default function Russell() {
             preview: citeCert,
             link: null,
         },
+       
     ];
 
     const totalCerts = experienceData.length + earnedData.length + honoursData.length;
@@ -317,7 +327,7 @@ export default function Russell() {
         setCursorVisible(false);
         e.currentTarget.style.transform = `perspective(900px) rotateY(0deg) rotateX(0deg)`;
     }, []);
-    const rollingItems = ["UI/UX designer.", "web designer.", "product designer."];
+    const rollingItems = ["UI/UX designer.", "web designer.", "mobile designer."];
 
     useEffect(() => {
         const smoother = ScrollSmoother.get();
@@ -540,7 +550,7 @@ export default function Russell() {
                                     <span className="bright roll-wrap" ref={rollingRef}>
                                         {/* ghost spacer so the line holds its width */}
                                         <span className="roll-item" aria-hidden="true">
-                                            Product Designer.
+                                            mobile designer.
                                         </span>
                                         {rollingItems.map((text) => (
                                             <span key={text} className="roll-item">

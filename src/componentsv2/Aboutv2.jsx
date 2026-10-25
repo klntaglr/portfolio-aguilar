@@ -8,11 +8,12 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 import "./Aboutv2.css";
 import CurvedMenu from "./CurvedMenu";
 import logoImage from "../assets/logo.png";
-import portraitImage from "../assets/grad.jpg";
+import portraitImage from "../assets/unnamed.png";
 import portraitImage1 from "../assets/mockup3.png";
-import awardImage from "../assets/award.png";
+import awardImage from "../assets/CITE1.png";
+import enoCerti from "../assets/enocerti.jpg";
 import projectImage from "../assets/sample1.png";
-import enov8tiveLogo from "../assets/enov8tive-full.svg";
+import enov8tiveLogo from "../assets/Group.svg";
 import enov8tive from "../assets/enov8tive.png";
 import rtcImage from "../assets/RTC.png";
 import microsoftCert from "../assets/MicrosoftUX.png";
@@ -20,7 +21,7 @@ import googleCert from "../assets/GoogleUX.png";
 import responsiveCert from "../assets/responsive.png";
 import frontendCert from "../assets/frontend.png";
 import bestDesignCert from "../assets/bestdesign.png";
-import citeCert from "../assets/CITE.png";
+import citeCert from "../assets/CITE1.png";
 import { FiCheck } from "react-icons/fi";
 
 import {
@@ -77,12 +78,17 @@ const AWARD_SLIDES = [
         id: "enov8tive",
         image: enov8tiveLogo,
         label: "UI/UX Designer at Enov8tive",
+    },{
+        id: "enocerti",
+        image: enoCerti,
+        label: "Most Promising New Hire at Enov8tive",
     },
     {
         id: "bestdesign",
         image: awardImage,
-        label: "La Consolacion University Philippines",
+        label: "Best in System Design at LCUP",
     },
+    
 ];
 
 const SERVICES = [   
@@ -95,7 +101,7 @@ const SERVICES = [
     "Design Systems","Landing Pages",
      "Motion Design", 
       
-    "Portfolio Design",
+    "Mobile App Design",
    
  
     "Wireframing & Prototyping",
@@ -168,7 +174,15 @@ const EARNED_DATA = [
 ];
 
 const HONOURS_DATA = [
-    {
+       {
+        id: "enov8tive-recognition",
+        issuer: "Enov8tive",
+        title: "Most Promising New Hire",
+        date: "Sep 2026",
+        source: "Taguig City",
+        preview: enoCerti,
+        link: null,
+    },{
         id: "bestdesign",
         issuer: "La Consolacion University",
         title: "Best in System Design",
@@ -186,6 +200,7 @@ const HONOURS_DATA = [
         preview: citeCert,
         link: null,
     },
+ 
 ];
 
 const TOTAL_CERTS = EXPERIENCE_DATA.length + EARNED_DATA.length + HONOURS_DATA.length;
@@ -712,7 +727,7 @@ export default function Aboutv2() {
                         <div className="av2-bento__grid">
                             <div className="av2-bento__card av2-bento__card--portrait">
                                 <img
-                                    src={portraitImage1}
+                                    src={portraitImage}
                                     alt="Russell Aguilar"
                                     className="av2-bento__portrait-img"
                                 />
