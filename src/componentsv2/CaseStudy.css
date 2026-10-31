@@ -1,0 +1,441 @@
+/* ════════════════════════════════════════════════
+   CaseStudy.css
+   Builds on Russell.css (hero bg/nav/scroll, magnetic
+   button, footer, cursor). Sizes + spacing mirror it.
+════════════════════════════════════════════════ */
+
+.cs {
+  background: #0a0a0a;
+  font-family: "Inter", sans-serif;
+  color: #fff;
+}
+
+/* ── masked word reveal (SplitText) ── */
+.cs__mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.cs__mask-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ══════════════════════════════
+   HERO  (reuses .hero / .hero__bg)
+══════════════════════════════ */
+.cs__hero-content {
+  position: absolute;
+  top: 36%;
+  left: 0;
+  right: 0;
+  padding: 0 120px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  will-change: transform, opacity;
+}
+
+.cs__title {
+  font-size: clamp(44px, 5.2vw, 78px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.16;
+  color: #ffffff;
+  max-width: 1100px;
+  margin-bottom: 64px;
+}
+
+.cs__meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.cs__meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.cs__meta-col--services {
+  min-width: 0;
+}
+
+.cs__meta-label {
+  font-size: 15px;
+  font-weight: 400;
+  color: #A6A6A6;
+  letter-spacing: -0.04em;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.cs__meta-value {
+  font-size: 17px;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 1.4;
+}
+
+/* ══════════════════════════════
+   BODY CARD
+══════════════════════════════ */
+.cs__body {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 110px 120px 100px;
+  isolation: isolate;
+}
+
+.cs__cover {
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #6b7488;
+  margin: 0 0 120px;
+}
+
+.cs__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.cs__block {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 128px;
+}
+
+/* Background + Challenge group (wider gap, like the ref) */
+.cs__block--loose {
+  gap: 128px;
+}
+
+.cs__row {
+  display: grid;
+  grid-template-columns: 24.4% 1fr;
+  align-items: start;
+}
+.cs__row-label {
+  font-size: 15px;
+  font-weight: 400;
+  color: #a3a3a3;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.cs__row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-width: 1250px;
+}
+
+.cs__row-body p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #f2f2f2;
+}
+.cs__link {
+  display: inline-block;
+  width: fit-content;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.25s ease;
+}
+
+.cs__link:hover {
+  opacity: 0.6;
+}
+
+.cs__link-dot {
+  display: none;
+}
+
+.cs__heading {
+  font-size: clamp(44px, 5.2vw, 78px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.16;
+  color: #ffffff;
+  margin-bottom: 50px;
+}
+
+/* ── gallery ── */
+.cs__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: none;
+  margin: 40px 0 0;
+}
+.cs__shot {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #cfd6ff;
+}
+
+.cs__shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.cs__shot figcaption {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 2;
+  max-width: 55%;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: #2a2fa8;
+}
+
+.cs__shot--main {
+  aspect-ratio: 16 / 7.6;
+}
+
+.cs__shot--main figcaption {
+  top: auto;
+  bottom: 38%;
+  left: auto;
+  right: 7%;
+  max-width: 180px;
+  font-size: 20px;
+}
+.cs__shots-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.cs__shots-grid .cs__shot {
+  aspect-ratio: 16 / 9;
+}
+
+/* ══════════════════════════════
+   NEXT CASE  (white, sits under the dark card)
+══════════════════════════════ */
+.cs__next {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  background: #ffffff;
+  margin-top: -40px;
+  padding: 180px 120px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cs__next-label {
+  font-size: 15px;
+  font-weight: 400;
+  color: #999999;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.cs__next-title {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(44px, 5.2vw, 78px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.16;
+  color: #010101;
+  margin-bottom: 48px;
+  transition: color 0.5s ease;
+}
+
+/* ── hover: card grows upward over the title, title turns gray ── */
+.cs__next.is-hovered .cs__next-title {
+  color: #cfcfcf;
+}
+
+.cs__next.is-hovered .cs__next-card {
+  height: 290px;
+  margin-top: -100px;
+}
+.cs__next-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: 190px;
+  padding: 0;
+  background: #1a1a1a;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  z-index: 2;
+  cursor: none;
+  transition:
+    transform 0.12s ease-out,
+    height 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    margin-top 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+}
+
+.cs__next-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 0;
+}
+
+.cs__next-line {
+  width: 100%;
+  max-width: 1000px;
+  height: 1px;
+  background: #d9d9d9;
+}
+
+.cs__next .works__cta {
+  margin-top: 80px;
+  margin-bottom: 20px;
+}
+
+/* outline "See All Works" button */
+.cs__outline-btn {
+  background: transparent;
+  border: 1.5px solid #010101;
+  padding: 22px 48px;
+}
+
+.cs__outline-btn .magnetic-btn__text {
+  color: #010101;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* footer = bar only */
+.cs__footer {
+  padding-top: 40px;
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE  (same breakpoints as Russell.css)
+══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .cs__hero-content { padding: 0 60px; }
+  .cs__body { padding: 70px 60px 110px; }
+  .cs__cover { margin-bottom: 100px; }
+  .cs__block { margin-bottom: 100px; gap: 52px; }
+  .cs__row { grid-template-columns: 28% 1fr; }
+  .cs__next { padding: 160px 60px 40px; }
+}
+
+@media (max-width: 768px) {
+  .cs__hero-content {
+    top: 250px;
+    padding: 0 24px;
+  }
+
+  .cs__title { margin-bottom: 40px; }
+  .cs__meta-col { min-width: 96px; }
+  .cs__meta-label { font-size: 13px; }
+  .cs__meta-value { font-size: 15px; }
+
+  .cs__body {
+    padding: 48px 24px 80px;
+    border-radius: 32px;
+  }
+
+  .cs__cover { margin-bottom: 72px; }
+  .cs__block { gap: 36px; margin-bottom: 72px; }
+  .cs__row { grid-template-columns: 1fr; gap: 10px; }
+  .cs__row-body p, .cs__link { font-size: 15px; }
+  .cs__heading { margin-bottom: 40px; }
+
+  .cs__shots-grid { grid-template-columns: 1fr; gap: 16px; }
+  .cs__shot--main { aspect-ratio: 4 / 3; }
+  .cs__shot figcaption { font-size: 16px; top: 14px; left: 16px; }
+  .cs__shot--main figcaption { font-size: 16px; max-width: 130px; }
+
+  .cs__next { padding: 120px 24px 30px; }
+  .cs__next-card { cursor: pointer; }
+  .cs__next .works__cta { margin-top: 60px; }
+  .cs__footer { padding-top: 24px; }
+  .cs__next-card { max-width: 280px; height: 110px; }
+  .cs__next.is-hovered .cs__next-card { height: 110px; margin-top: 0; }
+  .cs__next.is-hovered .cs__next-title { color: #010101; }
+}
+
+@media (max-width: 480px) {
+  .cs__hero-content { top: 190px; padding: 0 20px; }
+  .cs__body { padding: 40px 16px 64px; border-radius: 28px; }
+  .cs__next { padding: 100px 16px 24px; }
+  .cs__title { margin-bottom: 32px; }
+  .cs__meta-col { min-width: 84px; }
+}
+
+@media (max-width: 320px) {
+  .cs__hero-content { top: 155px; padding: 0 14px; }
+}/* ── glass liquid circle cursor (Next Case card) ── */
+.works__circle-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 110px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.28);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -8px 16px rgba(255, 255, 255, 0.12),
+    0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.works__circle-cursor span {
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-align: center;
+  line-height: 1.2;
+}

@@ -1,16 +1,18 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { useGSAP } from "@gsap/react";
+import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import { Link } from "react-router-dom";
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, useGSAP, GSAPSplitText);
 import "./Russell.css";
 import CurvedMenu from "./CurvedMenu";
-import LogoLoop from "../components/LogoLoop";
-import { TbPointer } from "react-icons/tb";
-import { PiCursorClick } from "react-icons/pi";
+import TiltMenu from "./TiltMenu";
 import { FiCheck } from "react-icons/fi";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cursor02Icon, MousePointerClickIcon } from "@hugeicons/core-free-icons";
 import bgImage from "../assets/v2bg.png";
 import logoImage from "../assets/logo.png";
 import projectImage from "../assets/placeholder.png";
@@ -26,7 +28,8 @@ import frontendCert from "../assets/frontend.png";
 import bestDesignCert from "../assets/bestdesign.png";
 import citeCert from "../assets/CITE1.png";
 import enoCerti from "../assets/enocerti.jpg";
-function MagneticButton({ children, href, ...props }) {
+import spiralBackground from "../assets/spiralbg.webp";
+export function MagneticButton({ children, href, ...props }) {
     const btnRef = useRef(null);
     const fillRef = useRef(null);
 
@@ -117,37 +120,6 @@ function MagneticButton({ children, href, ...props }) {
     );
 }
 
-function CardCursor({ hovered }) {
-    return (
-        <div className="works__card-cursor">
-            <AnimatePresence mode="wait">
-                {!hovered ? (
-                    <motion.span
-                        key="default"
-                        initial={{ opacity: 0, y: 10, rotate: -10 }}
-                        animate={{ opacity: 1, y: 0, rotate: 0 }}
-                        exit={{ opacity: 0, y: -10, rotate: 10 }}
-                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                        style={{ position: "absolute", display: "flex" }}
-                    >
-                        <TbPointer className="icon-default" aria-hidden="true" />
-                    </motion.span>
-                ) : (
-                    <motion.span
-                        key="hover"
-                        initial={{ opacity: 0, y: 10, rotate: -10 }}
-                        animate={{ opacity: 1, y: 0, rotate: 0 }}
-                        exit={{ opacity: 0, y: -10, rotate: 10 }}
-                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                        style={{ position: "absolute", display: "flex" }}
-                    >
-                        <PiCursorClick className="icon-hover" aria-hidden="true" />
-                    </motion.span>
-                )}
-            </AnimatePresence>
-        </div>
-    );
-}
 function CertPreview({ pos, visible, imgSrc, showButton = true }) {
     return (
         <motion.div
@@ -174,15 +146,29 @@ function CertPreview({ pos, visible, imgSrc, showButton = true }) {
         </motion.div>
     );
 }
+/* ── SplitText: masked word-by-word reveal ── */
+function SplitText({ as: Tag = "h2", className = "", children, ...rest }) {
+    const words = String(children).split(" ");
+    return (
+        <Tag className={className} {...rest}>
+            {words.map((w, i) => (
+                <span key={i}>
+                    <span className="rs-mask">
+                        <span className="rs-mask__inner">{w}</span>
+                    </span>
+                    {i < words.length - 1 ? " " : ""}
+                </span>
+            ))}
+        </Tag>
+    );
+}
+
 export default function Russell() {
+    const rootRef = useRef(null);
+    const showcaseRef = useRef(null);
     const rollingRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [copiedLabel, setCopiedLabel] = useState("");
-    const [hoveredCard, setHoveredCard] = useState(null);
-    const cardRefs = useRef([]);
-    const cursorX = useMotionValue(0);
-    const cursorY = useMotionValue(0);
-    const [cursorVisible, setCursorVisible] = useState(false);
     const [certPreview, setCertPreview] = useState({ visible: false, x: 0, y: 0, img: null, hasLink: true });
     const certsRef = useRef(null);
 
@@ -249,7 +235,7 @@ export default function Russell() {
     ];
 
     const honoursData = [
-       {
+        {
             id: "enov8tive-recognition",
             issuer: "Enov8tive",
             title: "Most Promising New Hire",
@@ -257,7 +243,7 @@ export default function Russell() {
             source: "Taguig City",
             preview: enoCerti,
             link: null,
-        },  {
+        }, {
             id: "bestdesign",
             issuer: "La Consolacion University",
             title: "Best in System Design",
@@ -266,7 +252,7 @@ export default function Russell() {
             preview: bestDesignCert,
             link: "https://www.facebook.com/share/1BzPMK8U96/",
         },
-            {
+        {
             id: "cite",
             issuer: "CITE Research Colloquium",
             title: "Certificate of Participation",
@@ -275,7 +261,7 @@ export default function Russell() {
             preview: citeCert,
             link: null,
         },
-       
+
     ];
 
     const totalCerts = experienceData.length + earnedData.length + honoursData.length;
@@ -307,26 +293,6 @@ export default function Russell() {
             setCopiedLabel("");
         }
     };
-    const handleCardMouseMove = useCallback((e, cardId) => {
-        setHoveredCard(cardId);
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        e.currentTarget.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg)`;
-        cursorX.set(e.clientX - rect.left);
-        cursorY.set(e.clientY - rect.top);
-    }, []);
-
-    const handleCardMouseEnter = useCallback((cardId) => {
-        setHoveredCard(cardId);
-        setCursorVisible(true);
-    }, []);
-
-    const handleCardMouseLeave = useCallback((e, cardId) => {
-        setHoveredCard(null);
-        setCursorVisible(false);
-        e.currentTarget.style.transform = `perspective(900px) rotateY(0deg) rotateX(0deg)`;
-    }, []);
     const rollingItems = ["UI/UX designer.", "web designer.", "mobile designer."];
 
     useEffect(() => {
@@ -398,14 +364,7 @@ export default function Russell() {
 
 
 
-    useEffect(() => {
-        ScrollSmoother.create({
-            wrapper: "#smooth-wrapper",
-            content: "#smooth-content",
-            smooth: 1.5,
-            effects: true,
-        });
-    }, []);
+    /* smoother is created in the gsap effect below */
 
     /* ── about: text-fill + card bidirectional scroll ── */
     const aboutCardRef = useRef(null);
@@ -428,71 +387,466 @@ export default function Russell() {
     const handleAboutMouseLeave = useCallback(() => {
         setAboutBadgeVisible(false);
     }, []);
-    useEffect(() => {
-        /* 1. card — bidirectional scrub (scroll down = rise, scroll up = fall) */
-        const card = aboutCardRef.current;
-        if (card) {
+    /* ── ScrollSmoother + every gsap scroll animation ── */
+    useLayoutEffect(() => {
+        ScrollSmoother.get()?.kill();
+        const smoother = ScrollSmoother.create({
+            wrapper: "#smooth-wrapper",
+            content: "#smooth-content",
+            smooth: 1.2,
+            effects: true,
+        });
+        smoother.scrollTop(0);
+
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) {
+            document.querySelectorAll(".about__word").forEach((w) => (w.style.color = "#ffffff"));
+            return () => smoother.kill();
+        }
+
+        const ctx = gsap.context(() => {
+            const q = gsap.utils.selector(rootRef);
+
+            /* 1. hero: copy fades out on scroll (bg stays still, cheaper) */
+            gsap.to(q(".hero__content"), {
+                y: -70,
+                opacity: 0,
+                ease: "none",
+                scrollTrigger: { trigger: ".hero", start: "top top", end: "65% top", scrub: true },
+            });
+            gsap.to(q(".hero__scroll"), {
+                opacity: 0,
+                ease: "none",
+                scrollTrigger: { trigger: ".hero", start: "top top", end: "25% top", scrub: true },
+            });
+
+            /* 1b. works title + badge */
             gsap.fromTo(
-                card,
-                { y: 90, opacity: 0 },
+                q(".works__title .rs-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".works__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".works__badge"),
+                { y: 30, opacity: 0 },
                 {
                     y: 0,
                     opacity: 1,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 92%",
-                        end: "top 38%",
-                        scrub: 1.2,   /* lag = smoothness, bidirectional by default */
-                    },
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: { trigger: ".works__title", start: "top 88%", toggleActions: "play none none reverse" },
                 }
             );
-        }
 
-        /* 2. smooth word-by-word colour fill via gsap scrub */
-        const words = document.querySelectorAll(".about__word");
-        if (!words.length) return;
+            /* 2. certs title + badge */
+            gsap.fromTo(
+                q(".certs__title .rs-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".certs__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".certs__badge"),
+                { y: 30, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: { trigger: ".certs__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
 
-        const total = words.length;
+            /* 5. cert groups: label + table stagger */
+            q(".certs__group").forEach((group) => {
+                gsap.fromTo(
+                    group.children,
+                    { y: 44, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1.1,
+                        ease: "power3.out",
+                        stagger: 0.12,
+                        scrollTrigger: { trigger: group, start: "top 88%", toggleActions: "play none none reverse" },
+                    }
+                );
+            });
 
-        /* give each word its own quick tween target driven by a proxy value */
-        words.forEach((w) => {
-            gsap.set(w, { color: "#2a2a2a" });
-        });
+            /* 6. about card — bidirectional scrub */
+            const card = aboutCardRef.current;
+            if (card) {
+                gsap.fromTo(
+                    card,
+                    { y: 90, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        ease: "none",
+                        scrollTrigger: { trigger: card, start: "top 92%", end: "top 38%", scrub: 1.2 },
+                    }
+                );
+            }
 
-        ScrollTrigger.create({
-            trigger: ".about__headline",
-            start: "top 78%",
-            end: "bottom 55%",
-            scrub: 1.8,
-            onUpdate(self) {
-                const progress = self.progress;
-                const band = 1 / total;
-                words.forEach((w, i) => {
-                    const wordProgress = Math.max(
-                        0,
-                        Math.min(1, (progress - (i / total) * 0.6) / (band * 2.2))
-                    );
-                    const v = Math.round(wordProgress * (255 - 42) + 42);
-                    w.style.color = `rgb(${v}, ${v}, ${v})`;
+            /* 7. about: word-by-word colour fill */
+            const words = q(".about__word");
+            if (words.length) {
+                const total = words.length;
+                words.forEach((w) => gsap.set(w, { color: "#2a2a2a" }));
+
+                ScrollTrigger.create({
+                    trigger: ".about__headline",
+                    start: "top 78%",
+                    end: "bottom 55%",
+                    scrub: 1.8,
+                    onUpdate(self) {
+                        const band = 1 / total;
+                        words.forEach((w, i) => {
+                            const wordProgress = Math.max(
+                                0,
+                                Math.min(1, (self.progress - (i / total) * 0.6) / (band * 2.2))
+                            );
+                            const v = Math.round(wordProgress * (255 - 42) + 42);
+                            w.style.color = `rgb(${v}, ${v}, ${v})`;
+                        });
+                    },
                 });
-            },
-        });
+            }
+
+            /* 8. footer */
+            gsap.fromTo(
+                q(".footer .rs-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".footer__top", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".footer__avatar"),
+                { scale: 0, opacity: 0 },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "back.out(1.6)",
+                    scrollTrigger: { trigger: ".footer__top", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".footer__divider-line"),
+                { scaleX: 0, transformOrigin: "left center" },
+                {
+                    scaleX: 1,
+                    duration: 1.4,
+                    ease: "expo.out",
+                    scrollTrigger: { trigger: ".footer__divider-row", start: "top 92%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".footer__contacts, .footer__bar"),
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.1,
+                    ease: "power3.out",
+                    stagger: 0.15,
+                    scrollTrigger: { trigger: ".footer__contacts", start: "top 95%", toggleActions: "play none none reverse" },
+                }
+            );
+        }, rootRef);
 
         return () => {
-            ScrollTrigger.getAll().forEach((t) => t.kill());
+            ctx.revert();
+            smoother.kill();
         };
     }, []);
+
+    const showcaseAnimation = useGSAP(() => {
+        const showcase = showcaseRef.current;
+        if (!showcase) return undefined;
+
+        gsap.ticker.lagSmoothing(500, 33);
+
+        const PERSPECTIVE = 1300;
+        const card = showcase.querySelector(".showcase__card");
+        const marqueeWrap = showcase.querySelector(".showcase__marquee");
+        const revealWrap = showcase.querySelector(".showcase__reveal");
+        const flippers = [card];
+        const layers = Array.from(showcase.querySelectorAll(".showcase__layer"));
+        const images = Array.from(showcase.querySelectorAll(".showcase__media img"));
+        const marqueeTracks = Array.from(showcase.querySelectorAll(".showcase__marquee-track"));
+        const revealWords = Array.from(showcase.querySelectorAll(".showcase__reveal-word"));
+        const splitRecords = revealWords.map((element) => ({
+            project: element.dataset.projectWord,
+            split: new GSAPSplitText(element, {
+                type: "chars",
+                mask: "chars",
+                charsClass: "showcase__char",
+                aria: "auto",
+            }),
+        }));
+        const charsByProject = {
+            bol: splitRecords.filter((record) => record.project === "bol").flatMap((record) => record.split.chars),
+            iquality: splitRecords.filter((record) => record.project === "iquality").flatMap((record) => record.split.chars),
+        };
+
+        const marqueeUnits = marqueeTracks.map((track) => track.firstElementChild);
+        const marqueeSizes = marqueeTracks.map(() => 0);
+        const marqueeOffsets = marqueeTracks.map(() => 0);
+        const marqueeClones = [];
+        marqueeTracks.forEach((track, i) => {
+            const unit = marqueeUnits[i];
+            const w = unit.getBoundingClientRect().width;
+            marqueeSizes[i] = w;
+            if (!w) return;
+            const copies = Math.ceil(Math.max(window.innerWidth, window.screen.width) / w) + 2;
+            for (let c = 0; c < copies; c += 1) {
+                const clone = unit.cloneNode(true);
+                track.appendChild(clone);
+                marqueeClones.push(clone);
+            }
+        });
+        const unitObserver = typeof ResizeObserver === "undefined"
+            ? null
+            : new ResizeObserver((entries) => {
+                entries.forEach((entry) => {
+                    const i = marqueeUnits.indexOf(entry.target);
+                    if (i > -1) marqueeSizes[i] = entry.target.getBoundingClientRect().width;
+                });
+            });
+        marqueeUnits.forEach((unit) => unitObserver?.observe(unit));
+
+        const MARQUEE_SPEED = 70; // px per second, taasan para bumilis
+        const marqueeTick = (time, deltaTime) => {
+            if (!motionAllowed || !inView || document.hidden) return;
+            const i = activeIndex;
+            const w = marqueeSizes[i];
+            if (!w) return;
+            const dir = i === 0 ? -1 : 1;
+            marqueeOffsets[i] = (marqueeOffsets[i] + (dir * MARQUEE_SPEED * deltaTime) / 1000) % w;
+            const x = marqueeOffsets[i] > 0 ? marqueeOffsets[i] - w : marqueeOffsets[i];
+            marqueeTracks[i].style.transform = `translate3d(${x}px, -50%, 0)`;
+        };
+        gsap.ticker.add(marqueeTick);
+
+        const marqueeOut = Array.from(marqueeTracks[0].children);
+        const marqueeIn = Array.from(marqueeTracks[1].children);
+
+        let disposed = false;
+        let media;
+        let resizeTimer;
+        let imagesReady = false;
+        let inView = true;
+        let motionAllowed = true;
+        let activeIndex = 0;
+
+        const syncMarqueePlayback = () => {
+            const pageVisible = !document.hidden;
+            marqueeTracks.forEach((track, index) => {
+                const active = activeIndex === index;
+                const shouldRun = motionAllowed && inView && pageVisible && active;
+                track.dataset.active = String(active);
+                track.style.opacity = active ? "1" : "0";
+                track.style.animationPlayState = shouldRun ? "running" : "paused";
+                track.style.willChange = shouldRun ? "transform" : "auto";
+            });
+        };
+
+        const applyActive = (idx, { fade = false, force = false } = {}) => {
+            if (!force && idx === activeIndex) return;
+            activeIndex = idx;
+            layers.forEach((layer, i) => {
+                const on = i === idx;
+                if (!fade) gsap.set(layer, { autoAlpha: on ? 1 : 0 });
+                layer.style.pointerEvents = on ? "auto" : "none";
+                layer.setAttribute("aria-hidden", on ? "false" : "true");
+                layer.tabIndex = on ? 0 : -1;
+            });
+            syncMarqueePlayback();
+        };
+
+        const observer = typeof IntersectionObserver === "undefined"
+            ? null
+            : new IntersectionObserver(([entry]) => {
+                inView = entry.isIntersecting;
+                syncMarqueePlayback();
+            }, { threshold: 0.05 });
+        if (observer) observer.observe(showcase);
+        else inView = true;
+
+        const handleVisibilityChange = () => syncMarqueePlayback();
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        const handleResize = () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(() => {
+                if (imagesReady && !disposed) ScrollTrigger.refresh();
+            }, 220);
+        };
+        window.addEventListener("resize", handleResize, { passive: true });
+
+        const initializeTimelines = showcaseAnimation.contextSafe(() => {
+            if (disposed) return;
+
+            media = gsap.matchMedia();
+            media.add({
+                reduce: "(prefers-reduced-motion: reduce)",
+                mobile: "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
+                desktop: "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+            }, ({ conditions }) => {
+                const { reduce, mobile } = conditions;
+                const lowPower = typeof navigator !== "undefined" && (navigator.hardwareConcurrency || 8) <= 4;
+                const revealStagger = mobile || lowPower ? 0 : 0.012;
+                motionAllowed = !reduce;
+                syncMarqueePlayback();
+
+                gsap.set(flippers, { rotateX: 0, willChange: "auto" });
+                gsap.set([marqueeWrap, revealWrap], { transformPerspective: PERSPECTIVE });
+                gsap.set(layers[0], { autoAlpha: 1, opacity: 1 });
+                gsap.set(layers[1], reduce ? { autoAlpha: 1, opacity: 0 } : { autoAlpha: 0 });
+                gsap.set(revealWords, { opacity: reduce ? 0 : 1 });
+                gsap.set(revealWords[0], { opacity: 1 });
+                applyActive(0, { fade: reduce, force: true });
+                gsap.set(marqueeOut, { yPercent: 0 });
+                gsap.set(marqueeIn, { yPercent: reduce ? 0 : -100 });
+                gsap.set(charsByProject.bol, { yPercent: 0 });
+                gsap.set(charsByProject.iquality, { yPercent: reduce ? 0 : 100 });
+
+                const timeline = gsap.timeline({
+                    defaults: { ease: "none" },
+                    scrollTrigger: {
+                        trigger: showcase,
+                        start: "top top",
+                        end: () => `+=${Math.round(window.innerHeight * 1.65)}`,
+                        pin: true,
+                        pinSpacing: true,
+                        scrub: 0.5,
+                        invalidateOnRefresh: true,
+                        refreshPriority: 1,
+                    },
+                });
+                timeline.addLabel("start", 0).addLabel("mid", 0.5).addLabel("end", 1);
+                timeline.eventCallback("onUpdate", () =>
+                    applyActive(timeline.progress() >= 0.5 ? 1 : 0, { fade: reduce })
+                );
+
+                if (reduce) {
+                    timeline
+                        .to(layers[0], { opacity: 0, duration: 1 }, "start")
+                        .to(layers[1], { opacity: 1, duration: 1 }, "start")
+                        .to(revealWords.filter((word) => word.dataset.projectWord === "bol"), { opacity: 0, duration: 1 }, "start")
+                        .to(revealWords.filter((word) => word.dataset.projectWord === "iquality"), { opacity: 1, duration: 1 }, "start");
+                } else {
+                    const maxRotation = 90;
+                    const revealDuration = 0.12;
+                    const outgoingStaggerSpan = revealStagger * Math.max(0, charsByProject.bol.length - 1);
+                    const outgoingStart = 0.5 - revealDuration - outgoingStaggerSpan;
+                    timeline
+                        .to(flippers, { rotateX: maxRotation, duration: 0.5, ease: "power1.in" }, "start")
+                        .to(marqueeOut, { yPercent: 100, duration: 0.5, ease: "power1.in" }, "start")
+                        .fromTo(marqueeIn,
+                            { yPercent: -100 },
+                            { yPercent: 0, duration: 0.5, ease: "power1.out", immediateRender: false },
+                            "mid")
+                        .to(charsByProject.bol, {
+                            yPercent: -100,
+                            duration: revealDuration,
+                            ease: "power2.in",
+                            stagger: revealStagger,
+                        }, outgoingStart)
+                        .fromTo(charsByProject.iquality,
+                            { yPercent: 100 },
+                            {
+                                yPercent: 0,
+                                duration: revealDuration,
+                                ease: "power2.out",
+                                stagger: revealStagger,
+                                immediateRender: false,
+                            }, 0.475)
+                        .fromTo(flippers,
+                            { rotateX: -maxRotation },
+                            {
+                                rotateX: 0,
+                                duration: 0.5,
+                                ease: "power1.out",
+                                immediateRender: false,
+                            }, "mid");
+                }
+
+                if (!reduce) {
+                    const clearCardWillChange = () => gsap.set(flippers, { clearProps: "willChange" });
+                    timeline.eventCallback("onStart", () => gsap.set(flippers, { willChange: "transform" }));
+                    timeline.eventCallback("onComplete", clearCardWillChange);
+                    timeline.eventCallback("onReverseComplete", clearCardWillChange);
+                }
+
+                return () => {
+                    timeline.scrollTrigger?.kill();
+                    timeline.kill();
+                };
+            });
+
+            imagesReady = true;
+            ScrollTrigger.refresh();
+            syncMarqueePlayback();
+        });
+
+        Promise.all(images.map((image) => (
+            typeof image.decode === "function"
+                ? image.decode().catch(() => undefined)
+                : Promise.resolve()
+        ))).then(initializeTimelines);
+
+        return () => {
+            disposed = true;
+            gsap.ticker.remove(marqueeTick);
+            unitObserver?.disconnect();
+            marqueeClones.forEach((node) => node.remove());
+            marqueeTracks.forEach((track) => track.style.removeProperty("transform"));
+            observer?.disconnect();
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            window.removeEventListener("resize", handleResize);
+            window.clearTimeout(resizeTimer);
+            media?.revert();
+            splitRecords.forEach(({ split }) => split.revert());
+            gsap.set(flippers, { clearProps: "willChange" });
+            marqueeTracks.forEach((track, index) => {
+                track.style.removeProperty("animation-play-state");
+                track.style.removeProperty("will-change");
+                track.style.removeProperty("opacity");
+                track.dataset.active = String(index === 0);
+            });
+        };
+    }, { scope: showcaseRef });
 
     return (
         <div id="smooth-wrapper">
             <div id="smooth-content">
-                <main className="site-root">
+                <main className="site-root" ref={rootRef}>
                     {/* circle cursor */}
                     {/* moved INSIDE the works section below — delete this */}
                     <section className="hero">
                         {/* bg gradient */}
-                        <div className="hero__bg" />
+                        <div
+                            className="hero__bg"
+                            style={{ backgroundImage: `url(${spiralBackground})` }}
+                            aria-hidden="true"
+                        />
                         {/* ambient glow */}
                         <div className="hero__glow" />
                         {/* vignette */}
@@ -501,15 +855,7 @@ export default function Russell() {
                         {/* ── NAV ── */}
                         <nav className="hero__nav">
 
-                            <motion.a
-                                href="#"
-                                className="hero__logo-wrap"
-                                initial={{ opacity: 0, y: -18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
-                            </motion.a>               <motion.button
+                            <motion.button
                                 type="button"
                                 className="hero__menu"
                                 aria-expanded={isMenuOpen}
@@ -525,7 +871,15 @@ export default function Russell() {
                                 </span>
                                 <span className="menu-label">Menu</span>
                             </motion.button>
-
+                            <motion.a
+                                href="#"
+                                className="hero__logo-wrap"
+                                initial={{ opacity: 0, y: -18 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
+                            </motion.a>
                         </nav>
 
                         {/* ── COPY ── */}
@@ -567,7 +921,7 @@ export default function Russell() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
                             >
-                               Passionately creating digital experiences that look good, feel right, and work for people.
+                                Passionately creating digital experiences that look good, feel right, and work for people.
                             </motion.p>
                         </div>
 
@@ -588,396 +942,103 @@ export default function Russell() {
                         </motion.div>
                     </section>
 
-                    <section className="works">
-                        {/* heading */}
+                    <section className="works" id="selected-works">
                         <div className="works__header">
-                            <h2 className="works__title">Selected works</h2>
-                            <span className="works__badge">(0)</span>
+                            <SplitText className="works__title">Selected works</SplitText>
+                            <span className="works__badge">(2)</span>
                         </div>
 
-                                              <div className="works__list">
-                            {/* <div className="works__item">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="left"
-                                        logoHeight={130}
-                                        gap={48}
-                                        pauseOnHover={false}
-                                        pauseWhenOffscreen
-                                        ariaLabel=""
-                                    />
+                        <div className="works__showcase" ref={showcaseRef} role="region" aria-label="Featured project showcase">
+                            <div className="showcase__marquee" aria-hidden="true">
+                                <div className="showcase__marquee-track" data-project-word="bol" data-active="true">
+                                    <span>BOL</span>
                                 </div>
-                                <div
-                                    className="works__card"
-                                    ref={(el) => (cardRefs.current[0] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card1")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card1")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card1")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        style={{ x: cursorX, y: cursorY }}
-                                        animate={{
-                                            opacity: hoveredCard === "card1" ? 1 : 0,
-                                            scale: hoveredCard === "card1" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
-                                    >
-                                        <span>View</span>
-                                    </motion.div>
-                                    <div className="works__card-img">
-                                        <img
-                                            src={projectImage}
-                                            alt="AI Gift Finder app mockup"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">AI Gift Finder</span>
-                                        </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">AI</span>
-                                            <span className="works__pill">UX Research</span>
-                                            <span className="works__pill">App Design</span>
-                                        </div>
-                                    </div>
+                                <div className="showcase__marquee-track" data-project-word="iquality" data-active="false">
+                                    <span>IQUALITY</span>
                                 </div>
                             </div>
 
-                            <div className="works__item works__item--right">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="right"
-                                        logoHeight={130}
-                                        gap={48}
-                                        pauseOnHover={false}
-                                        pauseWhenOffscreen
-                                        ariaLabel=""
-                                    />
-                                </div>
-
-                                <div
-                                    className="works__card"
-                                    ref={(el) => (cardRefs.current[1] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card2")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card2")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card2")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        style={{ x: cursorX, y: cursorY }}
-                                        animate={{
-                                            opacity: hoveredCard === "card2" ? 1 : 0,
-                                            scale: hoveredCard === "card2" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
-                                    >
-                                        <span>View</span>
-                                    </motion.div>
-                                    <div className="works__card-img">
-                                        <img
-                                            src={projectImage}
-                                            alt="Project Two mockup"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">Project Two</span>
-                                        </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">UI/UX</span>
-                                            <span className="works__pill">Branding</span>
-                                            <span className="works__pill">Web Design</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="showcase__reveal" aria-hidden="true">
+                                <span className="showcase__reveal-mask">
+                                    <span className="showcase__reveal-word" data-project-word="bol">BOL</span>
+                                </span>
+                                <span className="showcase__reveal-mask">
+                                    <span className="showcase__reveal-word" data-project-word="iquality">IQUALITY</span>
+                                </span>
                             </div>
 
-                            <div className="works__item">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                            { node: <span className="works__marquee-word">BOL</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="left"
-                                        logoHeight={130}
-                                        gap={48}
-                                        pauseOnHover={false}
-                                        pauseWhenOffscreen
-                                        ariaLabel=""
-                                    />
-                                </div>
-
-                                <div
-                                    className="works__card"
-                                    ref={(el) => (cardRefs.current[2] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card3")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card3")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card3")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        style={{ x: cursorX, y: cursorY }}
-                                        animate={{
-                                            opacity: hoveredCard === "card3" ? 1 : 0,
-                                            scale: hoveredCard === "card3" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
+                            <div className="showcase__stage">
+                                <div className="showcase__card">
+                                    <Link
+                                        to="/works/bol"
+                                        className="showcase__layer showcase__layer--a"
+                                        aria-label="View AI Gift Finder project"
+                                        aria-hidden="false"
+                                        tabIndex={0}
                                     >
-                                        <span>View</span>
-                                    </motion.div>
-                                    <div className="works__card-img">
-                                        <img
-                                            src={projectImage}
-                                            alt="Project Two mockup"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">Project Two</span>
+                                        <div className="showcase__media">
+                                            <div className="showcase__frame">
+                                                <img
+                                                    src={projectImage}
+                                                    alt="AI Gift Finder app mockup"
+                                                    decoding="async"
+                                                    fetchPriority="high"
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">UI/UX</span>
-                                            <span className="works__pill">Branding</span>
-                                            <span className="works__pill">Web Design</span>
+                                        <span className="showcase__notch" aria-hidden="true">
+                                            <HugeiconsIcon icon={Cursor02Icon} className="showcase__icon showcase__icon--idle" />
+                                            <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
+                                        </span>
+                                        <div className="showcase__footer">
+                                            <h3>AI Gift Finder</h3>
+                                            <div className="showcase__tags" aria-label="Project disciplines">
+                                                <span>AI</span>
+                                                <span>UX research</span>
+                                                <span>App design</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div> */}
+                                    </Link>
 
-                          
-
-                            <div className="works__item">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="left"
-                                        logoHeight={130}
-                                        gap={90}
-                                        pauseOnHover={false}
-                                        pauseWhenOffscreen
-                                        ariaLabel=""
-                                    />
-                                </div>
-                                <div
-                                    className="works__card works__card--upcoming"
-                                    ref={(el) => (cardRefs.current[0] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card1")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card1")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card1")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        style={{ x: cursorX, y: cursorY }}
-                                        animate={{
-                                            opacity: hoveredCard === "card1" ? 1 : 0,
-                                            scale: hoveredCard === "card1" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
+                                    <Link
+                                        to="/works"
+                                        className="showcase__layer showcase__layer--b"
+                                        aria-label="View Iquality's Dashboard project"
+                                        aria-hidden="true"
+                                        tabIndex={-1}
                                     >
-                                        <span>Soon</span>
-                                    </motion.div>
-                                    <div className="works__card-img works__card-img--upcoming">
-                                        <img
-                                            src={projectImage}
-                                            alt="Case study coming soon"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">Case study coming soon.</span>
+                                        <div className="showcase__media">
+                                            <div className="showcase__frame">
+                                                <img
+                                                    src={projectImage}
+                                                    alt="Iquality's Dashboard project mockup"
+                                                    decoding="async"
+                                                    loading="eager"
+                                                    fetchPriority="low"
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">In progress</span>
+                                        <span className="showcase__notch" aria-hidden="true">
+                                            <HugeiconsIcon icon={Cursor02Icon} className="showcase__icon showcase__icon--idle" />
+                                            <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
+                                        </span>
+                                        <div className="showcase__footer">
+                                            <h3>Iquality's Dashboard</h3>
+                                            <div className="showcase__tags" aria-label="Project disciplines">
+                                                <span>Product design</span>
+                                                <span>Design system</span>
+                                                <span>Branding</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </div>
                             </div>
-
-                            <div className="works__item works__item--right">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="right"
-                                        logoHeight={130}
-                                        gap={90}
-                                        pauseOnHover={false}
-                                        pauseWhenOffscreen
-                                        ariaLabel=""
-                                    />
-                                </div>
-                                <div
-                                    className="works__card works__card--upcoming"
-                                    ref={(el) => (cardRefs.current[1] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card2")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card2")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card2")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        style={{ x: cursorX, y: cursorY }}
-                                        animate={{
-                                            opacity: hoveredCard === "card2" ? 1 : 0,
-                                            scale: hoveredCard === "card2" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
-                                    >
-                                        <span>Soon</span>
-                                    </motion.div>
-                                    <div className="works__card-img works__card-img--upcoming">
-                                        <img
-                                            src={projectImage}
-                                            alt="Case study coming soon"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">Case study coming soon.</span>
-                                        </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">In progress</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="works__item">
-                                <div className="works__marquee" aria-hidden="true">
-                                    <LogoLoop
-                                        logos={[
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                            { node: <span className="works__marquee-word">SOON</span> },
-                                        ]}
-                                        speed={200}
-                                        direction="left"
-                                        logoHeight={130}
-                                        gap={90}
-                                        pauseOnHover={false}
-                                        pauseWhenOffscreen
-                                        ariaLabel=""
-                                    />
-                                </div>
-                                <div
-                                    className="works__card works__card--upcoming"
-                                    ref={(el) => (cardRefs.current[2] = el)}
-                                    onMouseEnter={() => handleCardMouseEnter("card3")}
-                                    onMouseMove={(e) => handleCardMouseMove(e, "card3")}
-                                    onMouseLeave={(e) => handleCardMouseLeave(e, "card3")}
-                                >
-                                    <motion.div
-                                        className="works__circle-cursor"
-                                        style={{ x: cursorX, y: cursorY }}
-                                        animate={{
-                                            opacity: hoveredCard === "card3" ? 1 : 0,
-                                            scale: hoveredCard === "card3" ? 1 : 0.5,
-                                        }}
-                                        transition={{
-                                            x: { duration: 0.08, ease: "linear" },
-                                            y: { duration: 0.08, ease: "linear" },
-                                            opacity: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                            scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                                        }}
-                                    >
-                                        <span>Soon</span>
-                                    </motion.div>
-                                    <div className="works__card-img works__card-img--upcoming">
-                                        <img
-                                            src={projectImage}
-                                            alt="Case study coming soon"
-                                            className="works__card-screenshot"
-                                        />
-                                    </div>
-                                    <div className="works__card-footer">
-                                        <div className="works__card-meta">
-                                            <span className="works__card-name">Case study coming soon.</span>
-                                        </div>
-                                        <div className="works__card-badges">
-                                            <span className="works__pill">In progress</span>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                    <div className="works__cta">
-                                <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(0)</sup></MagneticButton>
-                            </div>
-                            </div>
-
-                        
                         </div>
-                      
+
+                        <div className="works__cta">
+                            <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(2)</sup></MagneticButton>
+                        </div>
                     </section>
-
                     <section className="certs" ref={certsRef}>
                         <CertPreview
                             pos={{ x: certPreview.x, y: certPreview.y }}
@@ -987,7 +1048,7 @@ export default function Russell() {
                         />
 
                         <div className="certs__header">
-                            <h2 className="certs__title">Certifications & Experience</h2>
+                            <SplitText className="certs__title">Certifications & Experience</SplitText>
                             <span className="certs__badge">({totalCerts})</span>
                         </div>
 
@@ -1141,9 +1202,9 @@ export default function Russell() {
                                     <div className="footer__avatar">
                                         <img src={portraitImage} alt="Russell Aguilar" />
                                     </div>
-                                    <h2 className="footer__title">Let's work</h2>
+                                    <SplitText className="footer__title">Let's work</SplitText>
                                 </div>
-                                <h2 className="footer__title">together</h2>
+                                <SplitText className="footer__title">together</SplitText>
                             </div>
                         </div>
 
@@ -1189,14 +1250,7 @@ export default function Russell() {
                         </div>
                     </footer>
 
-                    <AnimatePresence mode="wait">
-                        {isMenuOpen && (
-                            <CurvedMenu
-                                id="site-navigation"
-                                onClose={() => setIsMenuOpen(false)}
-                            />
-                        )}
-                    </AnimatePresence>
+                    <TiltMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
                 </main>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useLayoutEffect, useMemo } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 // import Portfolio from "./components/Portfolio"; // commented out — replaced by Russell
 import Russell from "./componentsv2/Russell"; // ← new hero / home page
@@ -8,6 +8,7 @@ import About from "./componentsv2/Aboutv2";
 import Works from "./componentsv2/Worksv2";
 import Contact from "./componentsv2/ContactReference";
 import Projects from "./components/Projects";
+import CaseStudy from "./componentsv2/CaseStudy";
 
 import './App.css';
 import NotFound from "./components/NotFound";
@@ -24,6 +25,7 @@ function useRouteTitle() {
     if (path === "/") return "UI/UX Designer | Russell Aguilar";
     if (path === "/about-web-designer") return "About | Russell Aguilar";
     if (path === "/works") return "Work | Russell Aguilar";
+    if (path.startsWith("/works/")) return "Case Study | Russell Aguilar";
     if (path.startsWith("/projects")) return "Projects | Russell Aguilar";
     if (path === "/free-landing-page") return "Free Landing Page | Russell Aguilar";
     if (path === "/contact-me") return "Contact | Russell Aguilar";
@@ -67,7 +69,8 @@ function AnimatedRoutes() {
           <Route path="/" element={<Russell />} />
 
           <Route path="/about-web-designer" element={<About />} />
-          <Route path="/works" element={<Works />} />
+             <Route path="/works" element={<Works />} />
+          <Route path="/works/bol" element={<CaseStudy />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects/:projectId" element={<Projects />} />
 
@@ -82,6 +85,23 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  useEffect(() => {
+    const preventContextMenu = (event) => event.preventDefault();
+    const preventImageDrag = (event) => {
+      if (event.target instanceof HTMLImageElement) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", preventContextMenu);
+    document.addEventListener("dragstart", preventImageDrag);
+
+    return () => {
+      document.removeEventListener("contextmenu", preventContextMenu);
+      document.removeEventListener("dragstart", preventImageDrag);
+    };
+  }, []);
+
   return (
     <Router>
       <TitleManager />

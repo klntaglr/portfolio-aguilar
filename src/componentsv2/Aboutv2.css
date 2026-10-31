@@ -54,16 +54,11 @@
   left: 0;
   width: 100%;
   height: calc(100% + 250px);
-  background:
-    radial-gradient(ellipse 45% 70% at 12% 8%, rgba(255, 255, 255, 0.1) 0%, transparent 55%),
-    radial-gradient(ellipse 35% 85% at 28% 55%, rgba(200, 200, 210, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 8% 90%, rgba(255, 255, 255, 0.05) 0%, transparent 65%),
-    linear-gradient(115deg, #030303 0%, #0e0e0f 22%, #1c1c1e 34%, #131315 46%, #060607 62%, #030303 100%);
-  background-size: 140% 140%;
-  background-position: 0% 50%;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
-  animation: hero-bg-drift 22s ease-in-out infinite;
 } 
 /* ── GLOW ── */
 .av2-hero__glow {
@@ -2484,4 +2479,17 @@
     transition: none !important;
     animation: none !important;
   }
+}
+/* ── masked word reveal (SplitText) ── */
+.av2-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.av2-mask__inner {
+  display: inline-block;
+  will-change: transform;
 }

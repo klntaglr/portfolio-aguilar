@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CurvedMenu from "./CurvedMenu";
+import TiltMenu from "./TiltMenu";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -16,14 +17,35 @@ import virielleProject from "../assets/virielleproject.png";
 import arielleProject from "../assets/arielleproject.png";
 import soonProject from "../assets/placeholder.png";
 import { FiCheck } from "react-icons/fi";
+import spiralBackground from "../assets/spiralbg.webp";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const WORKS = [
-    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
-    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
-    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
-    { title: "Case study coming soon.", meta: "In progress", image: soonProject },
+    {
+        title: "bol's inspiring way of gift giving.",
+        tags: ["AI Design", "User research & Testing", "UX Design"],
+        image: soonProject, // palitan ng actual image mo
+        href: "/works/bol",
+    },
+    {
+        title: "Iquality's data visualization.",
+        tags: ["Product Design", "Design System", "Concepting"],
+        image: soonProject, // palitan ng actual image mo
+        href: "/works",
+    },
+    {
+        title: "Case study coming soon.",
+        tags: ["In progress"],
+        image: soonProject,
+        href: "/works",
+    },
+    {
+        title: "Case study coming soon.",
+        tags: ["In progress"],
+        image: soonProject,
+        href: "/works",
+    },
 ];
 
 function MagneticButton({ children, className = "", href, onClick }) {
@@ -115,16 +137,34 @@ function MagneticButton({ children, className = "", href, onClick }) {
     );
 }
 
+/* ── SplitText: masked word-by-word reveal ── */
+function SplitText({ as: Tag = "h2", className = "", children, ...rest }) {
+    const words = String(children).split(" ");
+    return (
+        <Tag className={className} {...rest}>
+            {words.map((w, i) => (
+                <span key={i}>
+                    <span className="wv2-mask">
+                        <span className="wv2-mask__inner">{w}</span>
+                    </span>
+                    {i < words.length - 1 ? " " : ""}
+                </span>
+            ))}
+        </Tag>
+    );
+}
+
 export default function Worksv2() {
+    const rootRef = useRef(null);
     const rollingRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [copiedLabel, setCopiedLabel] = useState("");
-const rollingItems = [
-  "healthtech.",
-  "govtech.",
-   "other areas.",
- 
-];
+    const rollingItems = [
+        "healthtech.",
+        "govtech.",
+        "other areas.",
+
+    ];
 
     const copyContact = async (value, label) => {
         try {
@@ -200,75 +240,195 @@ const rollingItems = [
         };
     }, [isMenuOpen]);
 
-    useEffect(() => {
-        const existing = ScrollSmoother.get();
-        if (existing) existing.kill();
-
+    /* ── ScrollSmoother + every gsap scroll animation ── */
+    useLayoutEffect(() => {
+        ScrollSmoother.get()?.kill();
         const smoother = ScrollSmoother.create({
             wrapper: "#smooth-wrapper",
             content: "#smooth-content",
-            smooth: 1.5,
+            smooth: 1.2,
             effects: true,
             smoothTouch: 0.08,
         });
+        smoother.scrollTop(0);
 
-        ScrollTrigger.refresh();
-        return () => {
-            smoother?.kill();
-        };
-    }, []);
-
-    useEffect(() => {
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) return () => smoother.kill();
 
         const ctx = gsap.context(() => {
-            gsap.utils.toArray(".worksv2-card").forEach((card) => {
+            const q = gsap.utils.selector(rootRef);
+
+            /* 1. hero: copy fades out on scroll (bg stays still, cheaper) */
+            gsap.to(q(".worksv2-hero__content"), {
+                y: -70,
+                opacity: 0,
+                ease: "none",
+                scrollTrigger: { trigger: ".worksv2-hero", start: "top top", end: "65% top", scrub: true },
+            });
+            gsap.to(q(".worksv2-hero .hero__scroll"), {
+                opacity: 0,
+                ease: "none",
+                scrollTrigger: { trigger: ".worksv2-hero", start: "top top", end: "25% top", scrub: true },
+            });
+
+            /* 2. work section: no scroll animation (cheaper) */
+
+            /* 3. title: masked word reveal + count */
+            gsap.fromTo(
+                q(".worksv2-work__title .wv2-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".worksv2-work__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".worksv2-work__count"),
+                { y: 30, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: { trigger: ".worksv2-work__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+
+            /* 4. cards: light fade + rise, plays once (no scrub, no clip-path, no 3D) */
+            q(".worksv2-card").forEach((card, i) => {
+                const media = card.querySelector(".worksv2-card__media");
+                const img = card.querySelector(".worksv2-card__media img");
+                const copy = card.querySelector(".worksv2-card__copy");
+
                 gsap.fromTo(
-                    card,
-                    reduceMotion
-                        ? { autoAlpha: 0 }
-                        : { autoAlpha: 0, y: 44, rotateX: 10, scale: 0.98 },
+                    media,
+                    { clipPath: "inset(14% 6% round 18px)", y: 60, opacity: 0 },
                     {
-                        autoAlpha: 1,
+                        clipPath: "inset(0% 0% round 7px)",
                         y: 0,
-                        rotateX: 0,
+                        opacity: 1,
+                        duration: 1.3,
+                        delay: i * 0.12,
+                        ease: "expo.out",
+                        scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" },
+                    }
+                );
+                gsap.fromTo(
+                    img,
+                    { scale: 1.2 },
+                    {
                         scale: 1,
-                        duration: 0.9,
+                        ease: "none",
+                        scrollTrigger: { trigger: card, start: "top 95%", end: "bottom 45%", scrub: 1 },
+                    }
+                );
+                gsap.fromTo(
+                    copy,
+                    { y: 30, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        delay: 0.15 + i * 0.12,
                         ease: "power3.out",
-                        scrollTrigger: {
-                            trigger: card,
-                            start: "top 88%",
-                            once: true,
-                        },
+                        scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none reverse" },
                     }
                 );
             });
-        });
 
-        return () => ctx.revert();
+            /* 5. archives button */
+            gsap.fromTo(
+                q(".worksv2-work__cta"),
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.1,
+                    ease: "power3.out",
+                    scrollTrigger: { trigger: ".worksv2-work__cta", start: "top 95%", toggleActions: "play none none reverse" },
+                }
+            );
+
+            /* 6. footer */
+            gsap.fromTo(
+                q(".worksv2-footer .wv2-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".worksv2-footer .footer__top", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".worksv2-footer .footer__avatar"),
+                { scale: 0, opacity: 0 },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "back.out(1.6)",
+                    scrollTrigger: { trigger: ".worksv2-footer .footer__top", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".worksv2-footer .footer__divider-line"),
+                { scaleX: 0, transformOrigin: "left center" },
+                {
+                    scaleX: 1,
+                    duration: 1.4,
+                    ease: "expo.out",
+                    scrollTrigger: { trigger: ".worksv2-footer .footer__divider-row", start: "top 92%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".worksv2-footer .footer__contacts, .worksv2-footer .footer__bar"),
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.1,
+                    ease: "power3.out",
+                    stagger: 0.15,
+                    scrollTrigger: { trigger: ".worksv2-footer .footer__contacts", start: "top 95%", toggleActions: "play none none reverse" },
+                }
+            );
+        }, rootRef);
+
+        const refresh = () => ScrollTrigger.refresh();
+        window.addEventListener("load", refresh);
+        const t = setTimeout(refresh, 400);
+        const t2 = setTimeout(refresh, 1200);
+
+        return () => {
+            clearTimeout(t);
+            clearTimeout(t2);
+            window.removeEventListener("load", refresh);
+            ctx.revert();
+            smoother.kill();
+        };
     }, []);
 
     return (
         <div id="smooth-wrapper">
             <div id="smooth-content">
-                <main className="worksv2-root">
+                <main className="worksv2-root" ref={rootRef}>
                     <section className="hero worksv2-hero">
-                                            <div className="hero__bg worksv2-hero__bg" />
+                        <div
+                            className="hero__bg worksv2-hero__bg"
+                            style={{ backgroundImage: `url(${spiralBackground})` }}
+                            aria-hidden="true"
+                        />
                         <div className="hero__glow" />
                         <div className="hero__overlay" />
 
                         <nav className="hero__nav">
-             
 
-                            <motion.a
-                                href="/"
-                                className="hero__logo-wrap"
-                                initial={{ opacity: 0, y: -18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
-                            </motion.a>             <motion.button
+                            <motion.button
                                 className="hero__menu"
                                 type="button"
                                 onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -282,6 +442,15 @@ const rollingItems = [
                                 </span>
                                 <span className="menu-label">Menu</span>
                             </motion.button>
+                            <motion.a
+                                href="/"
+                                className="hero__logo-wrap"
+                                initial={{ opacity: 0, y: -18 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
+                            </motion.a>
                         </nav>
 
                         <div className="hero__content worksv2-hero__content">
@@ -304,7 +473,7 @@ const rollingItems = [
                                     <span className="dim">I've worked in </span>
                                     <span className="bright roll-wrap" ref={rollingRef}>
                                         <span className="roll-item" aria-hidden="true">
-                                           on other projects
+                                            on other projects
                                         </span>
                                         {rollingItems.map((text) => (
                                             <span key={text} className="roll-item">
@@ -321,7 +490,7 @@ const rollingItems = [
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
                             >
-                   For questions, collaborations, or other work, feel free to reach out.
+                                For questions, collaborations, or other work, feel free to reach out.
                             </motion.p>
                         </div>
 
@@ -344,23 +513,22 @@ const rollingItems = [
                     <section className="worksv2-work" id="work">
                         <div className="worksv2-work__inner">
                             <div className="worksv2-work__header">
-                                                               <h2 className="worksv2-work__title">Work</h2>
-                                <span className="worksv2-work__count">(0)</span>
+                                <SplitText className="worksv2-work__title">Work</SplitText>
+                                <span className="worksv2-work__count">({WORKS.length})</span>
                             </div>
-                                                  <div className="worksv2-grid">
-                                {WORKS.map((work, i) => (
-                                    <div
-                                        className="worksv2-card worksv2-card--upcoming"
-                                        key={i}
-                                    >
-                                        <div className="worksv2-card__media worksv2-card__media--upcoming">
-                                            <img src={work.image} alt="Case study coming soon" />
+                            <div className="worksv2-grid">
+                                {WORKS.map((work) => (
+                                    <Link className="worksv2-card" key={work.title + work.tags[0]} to={work.href}>
+                                        <div className="worksv2-card__lift">
+                                            <div className="worksv2-card__media">
+                                                <img src={work.image} alt={work.title} decoding="async" />
+                                            </div>
                                         </div>
                                         <div className="worksv2-card__copy">
                                             <h3>{work.title}</h3>
-                                            <p>{work.meta}</p>
+                                            <p>{work.tags.join("  /  ")}</p>
                                         </div>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
 
@@ -379,9 +547,9 @@ const rollingItems = [
                                     <div className="footer__avatar">
                                         <img src={portraitImage} alt="Russell Aguilar" />
                                     </div>
-                                    <h2 className="footer__title">Let's work</h2>
+                                    <SplitText className="footer__title">Let's work</SplitText>
                                 </div>
-                                <h2 className="footer__title">together</h2>
+                                <SplitText className="footer__title">together</SplitText>
                             </div>
                         </div>
 
@@ -412,7 +580,7 @@ const rollingItems = [
                                     <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" className="footer__bar-link">LinkedIn</a>
                                     <a href="https://www.behance.net/klentaguilar/projects" className="footer__bar-link">Behance</a>       <a href="https://www.instagram.com/klntaglr/" className="footer__bar-link">Instagram</a>
                                     <a href="https://www.tiktok.com/@klntaglr" className="footer__bar-link">TikTok</a>
-                             
+
                                     <a href="https://github.com/klntaglr" className="footer__bar-link">GitHub</a>
                                 </div>
                             </div>
@@ -426,13 +594,9 @@ const rollingItems = [
                                 </div>
                             </div>
                         </div>
-        </footer>
+                    </footer>
 
-                    <AnimatePresence mode="wait">
-                        {isMenuOpen && (
-                            <CurvedMenu onClose={() => setIsMenuOpen(false)} />
-                        )}
-                    </AnimatePresence>
+                    <TiltMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
                 </main>
             </div>
         </div>

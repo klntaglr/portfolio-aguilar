@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,6 +8,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 import "./Aboutv2.css";
 import CurvedMenu from "./CurvedMenu";
 import logoImage from "../assets/logo.png";
+import portraitImages from "../assets/grad.jpg";
 import portraitImage from "../assets/unnamed.png";
 import portraitImage1 from "../assets/mockup3.png";
 import awardImage from "../assets/CITE1.png";
@@ -23,7 +24,8 @@ import frontendCert from "../assets/frontend.png";
 import bestDesignCert from "../assets/bestdesign.png";
 import citeCert from "../assets/CITE1.png";
 import { FiCheck } from "react-icons/fi";
-
+import spiralBackground from "../assets/spiralbg.webp";
+import TiltMenu from "./TiltMenu";
 import {
     SiApplemusic,
     SiBlender,
@@ -325,11 +327,31 @@ function MagneticButton({ children, className = "", href, onClick }) {
 }
 
 /* ─────────────────────────────────────────────
+   SplitText — masked word-by-word reveal
+───────────────────────────────────────────── */
+function SplitText({ as: Tag = "h2", className = "", children, ...rest }) {
+    const words = String(children).split(" ");
+    return (
+        <Tag className={className} {...rest}>
+            {words.map((w, i) => (
+                <span key={i}>
+                    <span className="av2-mask">
+                        <span className="av2-mask__inner">{w}</span>
+                    </span>
+                    {i < words.length - 1 ? " " : ""}
+                </span>
+            ))}
+        </Tag>
+    );
+}
+
+/* ─────────────────────────────────────────────
    Component
 ───────────────────────────────────────────── */
 export default function Aboutv2() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [copiedLabel, setCopiedLabel] = useState("");
+    const rootRef = useRef(null);
     const rollingRef = useRef(null);
     const mediaStageRef = useRef(null);
     const certsRef = useRef(null);
@@ -409,15 +431,128 @@ export default function Aboutv2() {
     const npTitleRef = useRef(null);
     const npProgressRef = useRef(null);
 
-    /* ── ScrollSmoother ── */
-    useEffect(() => {
+    /* ── ScrollSmoother + gsap scroll animations ── */
+    useLayoutEffect(() => {
+        ScrollSmoother.get()?.kill();
         const smoother = ScrollSmoother.create({
             wrapper: "#smooth-wrapper",
             content: "#smooth-content",
             smooth: 1.5,
             effects: true,
         });
-        return () => smoother?.kill();
+        smoother.scrollTop(0);
+
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) return () => smoother.kill();
+
+        const ctx = gsap.context(() => {
+            const q = gsap.utils.selector(rootRef);
+
+            /* 1. hero parallax: bg lags, copy drifts + fades */
+            gsap.to(q(".av2-hero .hero__bg"), {
+                y: 250,
+                ease: "none",
+                scrollTrigger: { trigger: ".av2-hero", start: "top top", end: "bottom top", scrub: true },
+            });
+            gsap.to(q(".av2-hero__content"), {
+                y: -70,
+                opacity: 0,
+                ease: "none",
+                scrollTrigger: { trigger: ".av2-hero", start: "top top", end: "65% top", scrub: true },
+            });
+            gsap.to(q(".av2-hero .hero__scroll"), {
+                opacity: 0,
+                ease: "none",
+                scrollTrigger: { trigger: ".av2-hero", start: "top top", end: "25% top", scrub: true },
+            });
+
+            /* 2. bento cards: staggered rise as they enter */
+            const cards = q(".av2-bento__card");
+            gsap.set(cards, { y: 70, opacity: 0 });
+            ScrollTrigger.batch(cards, {
+                start: "top 92%",
+                onEnter: (batch) =>
+                    gsap.to(batch, { y: 0, opacity: 1, duration: 1.1, ease: "power3.out", stagger: 0.12, overwrite: true }),
+                onLeaveBack: (batch) =>
+                    gsap.to(batch, { y: 70, opacity: 0, duration: 0.5, ease: "power2.in", overwrite: true }),
+            });
+
+            /* 3. portrait: inner image scale scrub */
+            gsap.fromTo(
+                q(".av2-bento__portrait-img"),
+                { scale: 1.2 },
+                {
+                    scale: 1,
+                    ease: "none",
+                    scrollTrigger: { trigger: ".av2-bento__card--portrait", start: "top 95%", end: "bottom 40%", scrub: 1.2 },
+                }
+            );
+
+            /* 4. certs title: masked word reveal */
+            gsap.fromTo(
+                q(".av2-certs__title .av2-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".av2-certs__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".av2-certs__badge"),
+                { y: 30, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: { trigger: ".av2-certs__title", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+
+            /* 5. cert groups: label + table stagger */
+            q(".av2-certs__group").forEach((group) => {
+                gsap.fromTo(
+                    group.children,
+                    { y: 44, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1.1,
+                        ease: "power3.out",
+                        stagger: 0.12,
+                        scrollTrigger: { trigger: group, start: "top 88%", toggleActions: "play none none reverse" },
+                    }
+                );
+            });
+
+            /* 6. footer */
+            gsap.fromTo(
+                q(".av2-footer .footer__top, .av2-footer .footer__contacts, .av2-footer .footer__bar"),
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.1,
+                    ease: "power3.out",
+                    stagger: 0.12,
+                    scrollTrigger: { trigger: ".av2-footer", start: "top 80%", toggleActions: "play none none reverse" },
+                }
+            );
+        }, rootRef);
+
+        const refresh = () => ScrollTrigger.refresh();
+        window.addEventListener("load", refresh);
+        const t = setTimeout(refresh, 400);
+
+        return () => {
+            clearTimeout(t);
+            window.removeEventListener("load", refresh);
+            ctx.revert();
+            smoother.kill();
+        };
     }, []);
 
     /* ── Hero headline staggered reveal ── */
@@ -625,26 +760,20 @@ export default function Aboutv2() {
     return (
         <div id="smooth-wrapper">
             <div id="smooth-content">
-                <main className="av2-root">
-
+                <main className="av2-root" ref={rootRef}>
                     {/* ══ HERO ══ */}
                     <section className="av2-hero hero">
-                        <div className="hero__bg av2-hero__bg" />
+                        <div
+                            className="hero__bg av2-hero__bg"
+                            style={{ backgroundImage: `url(${spiralBackground})` }}
+                            aria-hidden="true"
+                        />
                         <div className="hero__glow" />
                         <div className="hero__overlay" />
 
                         {/* NAV */}
                         <nav className="hero__nav">
-
-                            <motion.a
-                                href="/"
-                                className="hero__logo-wrap"
-                                initial={{ opacity: 0, y: -18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
-                            </motion.a> <motion.button
+ <motion.button
                                 type="button"
                                 className="hero__menu"
                                 aria-expanded={isMenuOpen}
@@ -657,6 +786,15 @@ export default function Aboutv2() {
                                 <span className="menu-icon"><span /><span /></span>
                                 <span className="menu-label">Menu</span>
                             </motion.button>
+                            <motion.a
+                                href="/"
+                                className="hero__logo-wrap"
+                                initial={{ opacity: 0, y: -18 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
+                            </motion.a>
                         </nav>
 
                         {/* COPY */}
@@ -877,7 +1015,7 @@ export default function Aboutv2() {
                         />
 
                         <div className="av2-certs__header">
-                            <h2 className="av2-certs__title">Certifications & Experience</h2>
+                              <SplitText className="av2-certs__title">Certifications & Experience</SplitText>
                             <span className="av2-certs__badge">({TOTAL_CERTS})</span>
                         </div>
 
@@ -964,7 +1102,7 @@ export default function Aboutv2() {
                             <div>
                                 <div className="footer__heading-wrap">
                                     <div className="footer__avatar">
-                                        <img src={portraitImage} alt="Russell Aguilar" />
+                                        <img src={portraitImages} alt="Russell Aguilar" />
                                     </div>
                                     <h2 className="footer__title">Let's work</h2>
                                 </div>
@@ -1015,14 +1153,7 @@ export default function Aboutv2() {
                         </div>
                     </footer>
 
-                    <AnimatePresence mode="wait">
-                        {isMenuOpen && (
-                            <CurvedMenu
-                                id="site-navigation"
-                                onClose={() => setIsMenuOpen(false)}
-                            />
-                        )}
-                    </AnimatePresence>
+                    <TiltMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
                 </main>
             </div>
