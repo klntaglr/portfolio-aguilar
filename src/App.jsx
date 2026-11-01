@@ -54,15 +54,32 @@ function AnimatedRoutes() {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location.pathname]);
 
+  const instant = !!location.state?.fromMenu;
+
+  const routeVariants = {
+    initial: (skip) => ({ opacity: skip ? 1 : 0, y: skip ? 0 : 10 }),
+    animate: (skip) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: skip ? 0 : 0.42, ease: [0.16, 1, 0.3, 1] },
+    }),
+    exit: (skip) => ({
+      opacity: skip ? 1 : 0,
+      y: skip ? 0 : -10,
+      transition: { duration: skip ? 0 : 0.42, ease: [0.16, 1, 0.3, 1] },
+    }),
+  };
+
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="wait" initial={false} custom={instant}>
       <motion.div
         key={location.pathname}
         className="route-transition"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+        custom={instant}
+        variants={routeVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
       >
         <Routes location={location}>
           {/* <Route path="/" element={<Portfolio />} /> */}
@@ -70,7 +87,7 @@ function AnimatedRoutes() {
 
           <Route path="/about-web-designer" element={<About />} />
              <Route path="/works" element={<Works />} />
-          <Route path="/works/bol" element={<CaseStudy />} />
+          <Route path="/works/:slug" element={<CaseStudy />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects/:projectId" element={<Projects />} />
 

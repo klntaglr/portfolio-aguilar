@@ -1,35 +1,94 @@
 import { useLayoutEffect, useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { Link } from "react-router-dom";
+import { Link, useParams, Navigate } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 import "./Russell.css"; /* shared: smooth wrapper, hero nav/bg, magnetic btn, footer */
 import "./CaseStudy.css";
-import CurvedMenu from "./CurvedMenu";
+import TiltMenu from "./TiltMenu";
 
 import logoImage from "../assets/logo.png";
 import spiralBackground from "../assets/spiralbg.webp";
-import portraitImage from "../assets/grad.jpg";
-import projectImage from "../assets/placeholder.png";
+import projectImage from "../assets/CI.svg";
+/* TODO: palitan ng actual screenshots */
 const galleryMain = projectImage;
-const galleryEntry = projectImage;
-const galleryIntro = projectImage;
+const galleryOne = projectImage;
+const galleryTwo = projectImage;
 const galleryThree = projectImage;
 const galleryFour = projectImage;
-const growpadImage = projectImage;
+const giftFinderImage = projectImage;
 const coverImage = projectImage;
+
 /* ════════════════════════════════════════════════
-   CONTENT — swap this object per project
+   CONTENT — Community Intelligence
+   (mga may [TODO] ay kailangan mong punan ng totoong data mo)
 ════════════════════════════════════════════════ */
-const caseStudy = {
-    title: "bol's inspiring way of gift giving.",
+const ciCase = {
+    title: "Community Intelligence",
+    client: "Enov8tive",
+    year: "2026",
+    services: ["Mobile App Design", "UX Design", "Product Design"],
+    cover: coverImage,
+    background: {
+         text: "Community Intelligence is Enov8tive's mobile platform for Local Government Units (LGUs) in the Philippines. Registered patients are grouped into households, and each household profile holds its address, members, and living conditions. Through Pulso ng Masa, field personnel and household representatives answer surveys on each household's needs, from disaster readiness to social assistance. The responses are attached to the household record, so LGUs can see who needs help and plan their next move from real data.",
+        link: { label: "Visit client website.", href: "#" },
+    },
+    challenge: [
+        "The app is used in the field, on small screens, often while talking to a family. Every household has many members, and every survey asks a lot of questions. My role was to design the mobile flows for household management and the Pulso ng Masa surveys, so that data entry stays quick and clear. [TODO: kumpirmahin ang exact role mo]",
+        "The core questions: how do we separate household-level and member-level surveys without confusing the user, how do we keep long forms from feeling long, and how do we keep records accurate when families change, such as when a member moves, a head is replaced, or a whole household is deactivated?",
+    ],
+    findings: [
+        {
+            label: "Two levels of data",
+            text: "Some questions belong to the whole household, others to one person. The flow starts with a \"Who's Answering the Form?\" step, then leads to separate lists. Households get eight surveys, such as Community Needs, Disaster Readiness, and Social Assistance, while individual members get their own socioeconomic survey. Each list shows a summary and a progress count, so the user always knows who the answers are for.",
+        },
+        {
+            label: "Long forms, short steps",
+            text: "The Environmental Assessment is split into three short screens, and the Disaster Readiness survey adds Next and Previous controls. Instead of typing, users tap checkbox tiles, add searchable chips, use number steppers, or give star ratings. Typing is only needed when someone picks \"Others\".",
+        },
+        {
+            label: "Protecting the data",
+            text: "Field staff should never lose a half-finished survey by accident, and should never submit one by mistake. Surveys use \"Complete Form?\" and \"Abort Form?\" prompts, and household edits are not final until the user confirms \"Save Household Changes?\". Each confirmation says clearly what will be saved or lost.",
+        },
+        {
+            label: "Keeping records accurate",
+            text: "Families change, and the statistics must follow. Members can be transferred to another household in a guided four-step flow, or deactivated with a reason and date. When a head is deactivated, a new head must be chosen first, and the other members' relationship tags change to \"Others\". Deactivated members stop counting toward statistics but stay visible under the Inactive and Transferred tabs.",
+        },
+        {
+            label: "Finding the right household fast",
+            text: "With hundreds of households, search has to be quick. The list shows the total count, highlights matching letters, and reports how many results were found. A filter narrows down from region to street, and an Active and Deactivated toggle separates current households from old ones. If nothing matches, the empty state invites the user to create that household.",
+        },
+    ],
+    results: [
+        {
+            label: "What I delivered",
+            paragraphs: [
+                "A complete mobile experience for the household lifecycle: creating, editing, listing, and deactivating households, adding members, transferring them, and deactivating them. On top of that, I designed the Pulso ng Masa survey flows, with eight household surveys and one member survey, all linked back to the household profile.",
+                "Every feature was handed off with a workflow, acceptance criteria, relevant screens, and a Figma prototype to the development team. [TODO: magdagdag ng totoong resulta, halimbawa: kung ilang LGUs o households na ang gumagamit, feedback ng stakeholders, o bilis ng survey completion]",
+            ],
+        },
+    ],
+    gallery: {
+        main: { src: galleryMain, caption: "Pulso ng Masa survey list for a household" },
+        small: [
+            { src: galleryOne, caption: "Household profile" },
+            { src: galleryTwo, caption: "Member transfer flow" },
+            { src: galleryThree, caption: "" },
+            { src: galleryFour, caption: "" },
+        ],
+    },
+    next: "bol",
+};
+
+const bolCase = {
+    title: "AI Gift Finder",
     client: "bol",
     year: "2025",
-    services: ["AI Design", "User research & Testing", "UX Design"],
+    services: ["Mobile App Design", "User research & Testing", "UX Design"],
     cover: coverImage,
     background: {
         text: "In preparation for the holiday season, bol wants to support their users in finding gifts for their loved ones. In comes the AI Gift Finder/Cadeauhulp. This conversational AI chatting experience, helps users with finding inspirational ideas for a gift, or a direct product that may fit their needs.",
@@ -39,7 +98,7 @@ const caseStudy = {
         "At this point in time, DEPT® had already done concepting for the Gift Finder. Though bol felt there were still design opportunities to enhance the user experience before releasing it to the public. My role here was to seek the answers to the questions; learning about how users behave with a conversational chat, learning about the value of output, learning about how intuitive the navigation feels, and more.",
         "Seeking answers to these questions had been done so, by setting up and running the pilot for the Gift Finder. Consisting of a mixed methodology approach with usability tests and retrospective interviews in a lab environment. Learning about what users do, think, and say regarding finding gifts with the Gift Finder.",
     ],
-     findings: [
+    findings: [
         {
             label: "Suggestions and chip behavior",
             text: "Users struggled in getting enough variety in products per output, variety in product categories, as well as the product amount. With the limit being set to 4 products per output, a behavioral pattern occured where users often relied on repeated use of the quick suggestion chips. Using it in order to quickly gain more product suggestions, as well as quickly navigate oneself through the conversation.",
@@ -53,8 +112,8 @@ const caseStudy = {
             text: "When navigating between a product detail page and a chat, users on some occasions double tapped the back button. The back button for both product detail pages, as well as the chat are on the same position, this made users exit the chat and lose their history. In other occassions, users also had performance issues. This either made a chat wipe, or made users want to restart their chat.",
         },
         {
-            label: "FAB's and mental modals",
-            text: "Entering the Gift Finder, goes via the floating action button on the home page. In some cases, users expected the entry point for the Gift Finder to be within a search, a gift page, or a card on the home page. For them, this aligns more with their mental modal of how they see and imagine the layout of the bol app.",
+            label: "FAB's and mental models",
+            text: "Entering the Gift Finder, goes via the floating action button on the home page. In some cases, users expected the entry point for the Gift Finder to be within a search, a gift page, or a card on the home page. For them, this aligns more with their mental model of how they see and imagine the layout of the bol app.",
         },
     ],
     results: [
@@ -69,17 +128,25 @@ const caseStudy = {
     gallery: {
         main: { src: galleryMain, caption: "Basic navigation to find the gifts quicker" },
         small: [
-            { src: galleryEntry, caption: "Main entry point" },
-            { src: galleryIntro, caption: "Intro screens" },
+            { src: galleryOne, caption: "Main entry point" },
+            { src: galleryTwo, caption: "Intro screens" },
             { src: galleryThree, caption: "" },
             { src: galleryFour, caption: "" },
         ],
     },
-    next: { name: "Growpad", href: "/works", image: growpadImage },
+    next: "community-intelligence",
+};
+
+/* ── LAHAT NG CASE STUDIES. Ang key = URL:  /works/<key> ──
+   Para magdagdag ng bago: gumawa ng object tulad ng ciCase,
+   tapos ilagay dito. `next` = key ng susunod na case study. */
+const CASE_STUDIES = {
+    "community-intelligence": ciCase,
+    bol: bolCase,
 };
 
 /* ════════════════════════════════════════════════
-   REUSABLE: MagneticButton  (same as Russell.jsx)
+   REUSABLE: MagneticButton
 ════════════════════════════════════════════════ */
 function MagneticButton({ children, href, ...props }) {
     const btnRef = useRef(null);
@@ -169,7 +236,7 @@ function SplitText({ as: Tag = "h2", className = "", children, ...rest }) {
 }
 
 /* ════════════════════════════════════════════════
-   REUSABLE: InfoRow — label + body (like the ref)
+   REUSABLE: InfoRow
 ════════════════════════════════════════════════ */
 function InfoRow({ label, children }) {
     return (
@@ -219,11 +286,10 @@ function Footer() {
 /* ════════════════════════════════════════════════
    PAGE
 ════════════════════════════════════════════════ */
-export default function CaseStudy() {
+function CaseStudyPage({ caseStudy }) {
     const rootRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    /* next-case card: tilt + "View" cursor (same behaviour as works cards) */
     const [nextHovered, setNextHovered] = useState(false);
     const cursorX = useMotionValue(0);
     const cursorY = useMotionValue(0);
@@ -242,7 +308,6 @@ export default function CaseStudy() {
         e.currentTarget.style.transform = "perspective(900px) rotateY(0deg) rotateX(0deg)";
     }, []);
 
-    /* ── smooth scroll + every gsap scroll animation ── */
     useLayoutEffect(() => {
         ScrollSmoother.get()?.kill();
         const smoother = ScrollSmoother.create({
@@ -256,18 +321,11 @@ export default function CaseStudy() {
         const ctx = gsap.context(() => {
             const q = gsap.utils.selector(rootRef);
 
-            /* 1. hero intro */
             const tl = gsap.timeline({ delay: 0.25, defaults: { ease: "expo.out" } });
             tl.fromTo(q(".cs__hero .cs__mask-inner"), { yPercent: 115 }, { yPercent: 0, duration: 1.3, stagger: 0.07 })
-              .fromTo(q(".cs__meta-col"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.1 }, "-=0.8")
-              .fromTo(q(".hero__scroll"), { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.6");
+                .fromTo(q(".cs__meta-col"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.1 }, "-=0.8")
+                .fromTo(q(".hero__scroll"), { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.6");
 
-            /* 2. hero parallax: bg lags, copy drifts + fades */
-            gsap.to(q(".cs__hero .hero__bg"), {
-                y: 250,
-                ease: "none",
-                scrollTrigger: { trigger: ".cs__hero", start: "top top", end: "bottom top", scrub: true },
-            });
             gsap.to(q(".cs__hero-content"), {
                 y: -70,
                 opacity: 0,
@@ -280,7 +338,6 @@ export default function CaseStudy() {
                 scrollTrigger: { trigger: ".cs__hero", start: "top top", end: "25% top", scrub: true },
             });
 
-            /* 3. body card rises in */
             gsap.fromTo(
                 q(".cs__body"),
                 { y: 70 },
@@ -291,7 +348,6 @@ export default function CaseStudy() {
                 }
             );
 
-            /* 4. cover: clip-path open + inner scale (scrub, bidirectional) */
             gsap.fromTo(
                 q(".cs__cover"),
                 { clipPath: "inset(10% 8% round 28px)" },
@@ -301,17 +357,7 @@ export default function CaseStudy() {
                     scrollTrigger: { trigger: ".cs__cover", start: "top 90%", end: "top 25%", scrub: 1.2 },
                 }
             );
-            gsap.fromTo(
-                q(".cs__cover img"),
-                { scale: 1.25 },
-                {
-                    scale: 1,
-                    ease: "none",
-                    scrollTrigger: { trigger: ".cs__cover", start: "top 90%", end: "bottom 40%", scrub: 1.2 },
-                }
-            );
 
-            /* 5. info rows: label + body stagger */
             q(".cs__row").forEach((row) => {
                 gsap.fromTo(
                     row.children,
@@ -327,7 +373,6 @@ export default function CaseStudy() {
                 );
             });
 
-            /* 6. big headings: masked word reveal */
             q(".cs__heading, .cs__next-title").forEach((h) => {
                 gsap.fromTo(
                     h.querySelectorAll(".cs__mask-inner"),
@@ -342,7 +387,6 @@ export default function CaseStudy() {
                 );
             });
 
-            /* 7. gallery: rise + inner image scale scrub */
             q(".cs__shot").forEach((shot) => {
                 gsap.fromTo(
                     shot,
@@ -355,18 +399,8 @@ export default function CaseStudy() {
                         scrollTrigger: { trigger: shot, start: "top 92%", toggleActions: "play none none reverse" },
                     }
                 );
-                gsap.fromTo(
-                    shot.querySelector("img"),
-                    { scale: 1.15 },
-                    {
-                        scale: 1,
-                        ease: "none",
-                        scrollTrigger: { trigger: shot, start: "top 95%", end: "bottom 40%", scrub: 1.2 },
-                    }
-                );
             });
 
-            /* 8. next case */
             gsap.fromTo(
                 q(".cs__next-label, .cs__next-card, .cs__next .works__cta"),
                 { y: 50, opacity: 0 },
@@ -393,7 +427,6 @@ export default function CaseStudy() {
         };
     }, []);
 
-    /* ── lock scroll while the menu is open (same as Russell.jsx) ── */
     useEffect(() => {
         const smoother = ScrollSmoother.get();
         const prevBody = document.body.style.overflow;
@@ -426,7 +459,7 @@ export default function CaseStudy() {
         <div id="smooth-wrapper">
             <div id="smooth-content">
                 <main className="site-root cs" ref={rootRef}>
-                    {/* ═════════ HERO ═════════ */}
+                    {/* HERO */}
                     <section className="hero cs__hero">
                         <div
                             className="hero__bg"
@@ -437,17 +470,7 @@ export default function CaseStudy() {
                         <div className="hero__overlay" />
 
                         <nav className="hero__nav">
-                           
-
-                            <motion.a
-                                href="/"
-                                className="hero__logo-wrap"
-                                initial={{ opacity: 0, y: -18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
-                            </motion.a> <motion.button
+                            <motion.button
                                 type="button"
                                 className="hero__menu"
                                 aria-expanded={isMenuOpen}
@@ -463,6 +486,16 @@ export default function CaseStudy() {
                                 </span>
                                 <span className="menu-label">Menu</span>
                             </motion.button>
+
+                            <motion.a
+                                href="/"
+                                className="hero__logo-wrap"
+                                initial={{ opacity: 0, y: -18 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <img src={logoImage} alt="Russell Aguilar" className="hero__logo" />
+                            </motion.a>
                         </nav>
 
                         <div className="cs__hero-content">
@@ -497,13 +530,13 @@ export default function CaseStudy() {
                         </div>
                     </section>
 
-                    {/* ═════════ BODY CARD ═════════ */}
+                    {/* BODY CARD */}
                     <section className="cs__body">
                         <div className="cs__cover">
                             <img src={caseStudy.cover} alt={`${caseStudy.client} project overview`} />
                         </div>
 
-                                              <div className="cs__block cs__block--loose">
+                        <div className="cs__block cs__block--loose">
                             <InfoRow label="Background">
                                 <p>{caseStudy.background.text}</p>
                                 <a
@@ -524,7 +557,7 @@ export default function CaseStudy() {
                             </InfoRow>
                         </div>
 
-                        <SplitText className="cs__heading">Key findings</SplitText>
+                        <SplitText className="cs__heading">Key design decisions</SplitText>
                         <div className="cs__block">
                             {caseStudy.findings.map((f) => (
                                 <InfoRow key={f.label} label={f.label}>
@@ -560,7 +593,7 @@ export default function CaseStudy() {
                         </div>
                     </section>
 
-                    {/* ═════════ NEXT CASE ═════════ */}
+                    {/* NEXT CASE */}
                     <section className={`cs__next${nextHovered ? " is-hovered" : ""}`}>
                         <span className="cs__next-label">Next Case</span>
                         <SplitText className="cs__next-title">{caseStudy.next.name}</SplitText>
@@ -597,16 +630,30 @@ export default function CaseStudy() {
                         </div>
                     </section>
 
-                    {/* ═════════ FOOTER ═════════ */}
                     <Footer />
 
-                    <AnimatePresence mode="wait">
-                        {isMenuOpen && (
-                            <CurvedMenu id="site-navigation" onClose={() => setIsMenuOpen(false)} />
-                        )}
-                    </AnimatePresence>
+                    <TiltMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
                 </main>
             </div>
         </div>
     );
+}
+
+/* ── kinukuha ang tamang case study base sa URL (/works/:slug) ── */
+export default function CaseStudy() {
+    const { slug } = useParams();
+    const data = CASE_STUDIES[slug];
+    if (!data) return <Navigate to="/works" replace />;
+
+    const nextEntry = CASE_STUDIES[data.next];
+    const caseStudy = {
+        ...data,
+        next: {
+            name: nextEntry.title,
+            href: `/works/${data.next}`,
+            image: nextEntry.cover,
+        },
+    };
+
+    return <CaseStudyPage key={slug} caseStudy={caseStudy} />;
 }

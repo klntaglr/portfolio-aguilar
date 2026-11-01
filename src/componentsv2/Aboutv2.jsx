@@ -530,15 +530,47 @@ export default function Aboutv2() {
 
             /* 6. footer */
             gsap.fromTo(
-                q(".av2-footer .footer__top, .av2-footer .footer__contacts, .av2-footer .footer__bar"),
+                q(".av2-footer .av2-mask__inner"),
+                { yPercent: 115 },
+                {
+                    yPercent: 0,
+                    duration: 1.2,
+                    ease: "expo.out",
+                    stagger: 0.08,
+                    scrollTrigger: { trigger: ".av2-footer .footer__top", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".av2-footer .footer__avatar"),
+                { scale: 0, opacity: 0 },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "back.out(1.6)",
+                    scrollTrigger: { trigger: ".av2-footer .footer__top", start: "top 88%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".av2-footer .footer__divider-line"),
+                { scaleX: 0, transformOrigin: "left center" },
+                {
+                    scaleX: 1,
+                    duration: 1.4,
+                    ease: "expo.out",
+                    scrollTrigger: { trigger: ".av2-footer .footer__divider-row", start: "top 92%", toggleActions: "play none none reverse" },
+                }
+            );
+            gsap.fromTo(
+                q(".av2-footer .footer__contacts, .av2-footer .footer__bar"),
                 { y: 50, opacity: 0 },
                 {
                     y: 0,
                     opacity: 1,
                     duration: 1.1,
                     ease: "power3.out",
-                    stagger: 0.12,
-                    scrollTrigger: { trigger: ".av2-footer", start: "top 80%", toggleActions: "play none none reverse" },
+                    stagger: 0.15,
+                    scrollTrigger: { trigger: ".av2-footer .footer__contacts", start: "top 95%", toggleActions: "play none none reverse" },
                 }
             );
         }, rootRef);
@@ -1104,9 +1136,9 @@ export default function Aboutv2() {
                                     <div className="footer__avatar">
                                         <img src={portraitImages} alt="Russell Aguilar" />
                                     </div>
-                                    <h2 className="footer__title">Let's work</h2>
+                                    <SplitText className="footer__title">Let's work</SplitText>
                                 </div>
-                                <h2 className="footer__title">together</h2>
+                                <SplitText className="footer__title">together</SplitText>
                             </div>
                         </div>
 

@@ -566,4 +566,4 @@
         width: 96px;
         height: 96px;
     }
-}
+}#contact-smooth-wrapper { position: fixed; inset: 0; overflow: hidden; background: #202020; z-index: 1; }

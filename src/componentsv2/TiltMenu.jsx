@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import menuImage from "../assets/behindbg.jpg";
 
@@ -13,14 +13,21 @@ const LINKS = [
     { label: "Contact", to: "/contact-me" },
 ];
 
+/* shared flag: the next page's TiltMenu starts tilted, then closes */
+export const menuNav = { pending: false };
+
+const getWrapper = () =>
+    document.getElementById("smooth-wrapper") || document.getElementById("contact-smooth-wrapper");
+
 export default function TiltMenu({ open, onClose }) {
     const panelRef = useRef(null);
     const closeRef = useRef(null);
     const first = useRef(true);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    useEffect(() => {
-        const wrapper = document.getElementById("smooth-wrapper");
+    useLayoutEffect(() => {
+        const wrapper = getWrapper();
         const panel = panelRef.current;
         const closeBtn = closeRef.current;
         if (!wrapper || !panel) return;
@@ -29,11 +36,50 @@ export default function TiltMenu({ open, onClose }) {
         const inners = panel.querySelectorAll(".tm__link-inner");
         const bg = panel.querySelector(".tm__img");
 
+        const closeAnim = (delay = 0) => {
+            gsap.to(closeBtn, { autoAlpha: 0, duration: 0.25, delay });
+            gsap.to(inners, { autoAlpha: 0, duration: 0.25, stagger: 0.02, delay });
+            gsap.to(wrapper, {
+                rotate: 0,
+                scale: 1,
+                x: 0,
+                y: 0,
+                borderRadius: 0,
+                duration: 0.9,
+                delay,
+                ease: "power3.inOut",
+                onComplete: () => {
+                    gsap.set(wrapper, { clearProps: "transform,willChange,transformOrigin" });
+                    gsap.set(panel, { autoAlpha: 0 });
+                    gsap.set(inners, { yPercent: 115, autoAlpha: 1 });
+                },
+            });
+        };
+
         if (first.current) {
             first.current = false;
-            gsap.set(panel, { autoAlpha: 0 });
-            gsap.set(closeBtn, { autoAlpha: 0 });
-            gsap.set(inners, { yPercent: 115 });
+
+            if (menuNav.pending) {
+                /* arrived from the menu: start already tilted, then close smoothly */
+                menuNav.pending = false;
+                gsap.set(wrapper, {
+                    transformOrigin: "0% 0%",
+                    rotate: reduce ? 0 : TILT.rotate,
+                    scale: TILT.scale,
+                    x: window.innerWidth * TILT.xVW,
+                    y: window.innerHeight * TILT.yVH,
+                    willChange: "transform",
+                });
+                gsap.set(panel, { autoAlpha: 1 });
+                gsap.set(closeBtn, { autoAlpha: 1 });
+                gsap.set(inners, { yPercent: 0, autoAlpha: 1 });
+                gsap.set(bg, { y: 0, opacity: 1 });
+                closeAnim(0.35);
+            } else {
+                gsap.set(panel, { autoAlpha: 0 });
+                gsap.set(closeBtn, { autoAlpha: 0 });
+                gsap.set(inners, { yPercent: 115 });
+            }
             return;
         }
 
@@ -54,29 +100,14 @@ export default function TiltMenu({ open, onClose }) {
             gsap.set(bg, { y: 0, opacity: 1 });
             gsap.to(inners, { yPercent: 0, duration: 1, ease: "expo.out", stagger: 0.08, delay: 0.35 });
         } else {
-            gsap.to(closeBtn, { autoAlpha: 0, duration: 0.25 });
-            gsap.to(inners, { autoAlpha: 0, duration: 0.25, stagger: 0.02 });
-            gsap.to(wrapper, {
-                rotate: 0,
-                scale: 1,
-                x: 0,
-                y: 0,
-                borderRadius: 0,
-                duration: 0.9,
-                ease: "power3.inOut",
-                onComplete: () => {
-                    gsap.set(wrapper, { clearProps: "transform,willChange,transformOrigin" });
-                    gsap.set(panel, { autoAlpha: 0 });
-                    gsap.set(inners, { yPercent: 115, autoAlpha: 1 });
-                },
-            });
+            closeAnim(0);
         }
     }, [open]);
 
     /* Esc + click the tilted page to close */
     useEffect(() => {
         if (!open) return undefined;
-        const wrapper = document.getElementById("smooth-wrapper");
+        const wrapper = getWrapper();
         const onKey = (e) => e.key === "Escape" && onClose();
         const onWrapperClick = (e) => {
             e.preventDefault();
@@ -93,8 +124,12 @@ export default function TiltMenu({ open, onClose }) {
 
     const go = (e, to) => {
         e.preventDefault();
-        onClose();
-        window.setTimeout(() => navigate(to), 700);
+        if (to === location.pathname) {
+            onClose();
+            return;
+        }
+        menuNav.pending = true;
+        navigate(to, { state: { fromMenu: true } });
     };
 
     return createPortal(

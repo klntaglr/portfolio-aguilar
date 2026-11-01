@@ -16,6 +16,9 @@ import laconslanetProject from "../assets/laconslanetproject.png";
 import virielleProject from "../assets/virielleproject.png";
 import arielleProject from "../assets/arielleproject.png";
 import soonProject from "../assets/placeholder.png";
+import reseProject from "../assets/rese.svg";
+import kanrielProject from "../assets/Kanriel.svg";
+import revampProject from "../assets/Revamp.svg";
 import { FiCheck } from "react-icons/fi";
 import spiralBackground from "../assets/spiralbg.webp";
 
@@ -23,27 +26,39 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const WORKS = [
     {
-        title: "bol's inspiring way of gift giving.",
-        tags: ["AI Design", "User research & Testing", "UX Design"],
-        image: soonProject, // palitan ng actual image mo
-        href: "/works/bol",
+        title: "Community Intelligence and Pulso ng Masa surveys.",
+        tags: ["GovTech", "Survey Platform", "UX Design"],
+        image: soonProject,
+        href: "/works/community-intelligence",
     },
     {
-        title: "Iquality's data visualization.",
-        tags: ["Product Design", "Design System", "Concepting"],
-        image: soonProject, // palitan ng actual image mo
+        title: "Cafe Rese's landing page.",
+        tags: ["Landing Page", "Web Design", "Branding"],
+        image: reseProject,
         href: "/works",
     },
     {
-        title: "Case study coming soon.",
-        tags: ["In progress"],
+        title: "Enov8tive LAB.",
+        tags: ["Web Design", "UX Design"],
         image: soonProject,
         href: "/works",
     },
     {
-        title: "Case study coming soon.",
-        tags: ["In progress"],
+        title: "Enov8tive MD.",
+        tags: ["HealthTech", "Product Design", "UX Design"],
         image: soonProject,
+        href: "/works",
+    },
+    {
+        title: "Enov8tive's login page revamp.",
+        tags: ["UI Design", "UX Design", "Redesign"],
+        image: revampProject,
+        href: "/works",
+    },
+    {
+        title: "Kanriel, a Japanese reviewer app.",
+        tags: ["Mobile App Design", "Learning App", "UX Design"],
+        image: kanrielProject,
         href: "/works",
     },
 ];

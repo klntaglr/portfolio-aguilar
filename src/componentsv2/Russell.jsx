@@ -15,7 +15,10 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Cursor02Icon, MousePointerClickIcon } from "@hugeicons/core-free-icons";
 import bgImage from "../assets/v2bg.png";
 import logoImage from "../assets/logo.png";
-import projectImage from "../assets/placeholder.png";
+import projectImage from "../assets/CI.svg";
+import reseImage from "../assets/rese.svg";
+import kanrielImage from "../assets/Kanriel.svg";
+import revampImage from "../assets/Revamp.svg";
 import portraitImage from "../assets/grad.jpg";
 import portraitImage1 from "../assets/mockup4.jpg";
 // ← your about photo
@@ -601,10 +604,8 @@ export default function Russell() {
                 aria: "auto",
             }),
         }));
-        const charsByProject = {
-            bol: splitRecords.filter((record) => record.project === "bol").flatMap((record) => record.split.chars),
-            iquality: splitRecords.filter((record) => record.project === "iquality").flatMap((record) => record.split.chars),
-        };
+        const charsByIndex = splitRecords.map((record) => record.split.chars);
+        const COUNT = layers.length;
 
         const marqueeUnits = marqueeTracks.map((track) => track.firstElementChild);
         const marqueeSizes = marqueeTracks.map(() => 0);
@@ -638,15 +639,13 @@ export default function Russell() {
             const i = activeIndex;
             const w = marqueeSizes[i];
             if (!w) return;
-            const dir = i === 0 ? -1 : 1;
+            const dir = i % 2 === 0 ? -1 : 1;
             marqueeOffsets[i] = (marqueeOffsets[i] + (dir * MARQUEE_SPEED * deltaTime) / 1000) % w;
             const x = marqueeOffsets[i] > 0 ? marqueeOffsets[i] - w : marqueeOffsets[i];
             marqueeTracks[i].style.transform = `translate3d(${x}px, -50%, 0)`;
         };
         gsap.ticker.add(marqueeTick);
-
-        const marqueeOut = Array.from(marqueeTracks[0].children);
-        const marqueeIn = Array.from(marqueeTracks[1].children);
+        const marqueeKids = marqueeTracks.map((track) => Array.from(track.children));
 
         let disposed = false;
         let media;
@@ -717,22 +716,22 @@ export default function Russell() {
 
                 gsap.set(flippers, { rotateX: 0, willChange: "auto" });
                 gsap.set([marqueeWrap, revealWrap], { transformPerspective: PERSPECTIVE });
-                gsap.set(layers[0], { autoAlpha: 1, opacity: 1 });
-                gsap.set(layers[1], reduce ? { autoAlpha: 1, opacity: 0 } : { autoAlpha: 0 });
+                layers.forEach((layer, i) => {
+                    if (i === 0) gsap.set(layer, { autoAlpha: 1, opacity: 1 });
+                    else gsap.set(layer, reduce ? { autoAlpha: 1, opacity: 0 } : { autoAlpha: 0 });
+                });
                 gsap.set(revealWords, { opacity: reduce ? 0 : 1 });
                 gsap.set(revealWords[0], { opacity: 1 });
                 applyActive(0, { fade: reduce, force: true });
-                gsap.set(marqueeOut, { yPercent: 0 });
-                gsap.set(marqueeIn, { yPercent: reduce ? 0 : -100 });
-                gsap.set(charsByProject.bol, { yPercent: 0 });
-                gsap.set(charsByProject.iquality, { yPercent: reduce ? 0 : 100 });
+                marqueeKids.forEach((kids, i) => gsap.set(kids, { yPercent: i === 0 || reduce ? 0 : -100 }));
+                charsByIndex.forEach((chars, i) => gsap.set(chars, { yPercent: i === 0 || reduce ? 0 : 100 }));
 
                 const timeline = gsap.timeline({
                     defaults: { ease: "none" },
                     scrollTrigger: {
                         trigger: showcase,
                         start: "top top",
-                        end: () => `+=${Math.round(window.innerHeight * 1.65)}`,
+                        end: () => `+=${Math.round(window.innerHeight * 1.4 * (COUNT - 1))}`,
                         pin: true,
                         pinSpacing: true,
                         scrub: 0.5,
@@ -742,50 +741,62 @@ export default function Russell() {
                 });
                 timeline.addLabel("start", 0).addLabel("mid", 0.5).addLabel("end", 1);
                 timeline.eventCallback("onUpdate", () =>
-                    applyActive(timeline.progress() >= 0.5 ? 1 : 0, { fade: reduce })
+                    applyActive(
+                        Math.min(COUNT - 1, Math.floor(timeline.progress() * (COUNT - 1) + 0.5)),
+                        { fade: reduce }
+                    )
                 );
 
                 if (reduce) {
-                    timeline
-                        .to(layers[0], { opacity: 0, duration: 1 }, "start")
-                        .to(layers[1], { opacity: 1, duration: 1 }, "start")
-                        .to(revealWords.filter((word) => word.dataset.projectWord === "bol"), { opacity: 0, duration: 1 }, "start")
-                        .to(revealWords.filter((word) => word.dataset.projectWord === "iquality"), { opacity: 1, duration: 1 }, "start");
+                    for (let i = 0; i < COUNT - 1; i += 1) {
+                        timeline
+                            .to(layers[i], { opacity: 0, duration: 1 }, i)
+                            .to(layers[i + 1], { opacity: 1, duration: 1 }, i)
+                            .to(revealWords[i], { opacity: 0, duration: 1 }, i)
+                            .to(revealWords[i + 1], { opacity: 1, duration: 1 }, i);
+                    }
                 } else {
                     const maxRotation = 90;
                     const revealDuration = 0.12;
-                    const outgoingStaggerSpan = revealStagger * Math.max(0, charsByProject.bol.length - 1);
-                    const outgoingStart = 0.5 - revealDuration - outgoingStaggerSpan;
-                    timeline
-                        .to(flippers, { rotateX: maxRotation, duration: 0.5, ease: "power1.in" }, "start")
-                        .to(marqueeOut, { yPercent: 100, duration: 0.5, ease: "power1.in" }, "start")
-                        .fromTo(marqueeIn,
-                            { yPercent: -100 },
-                            { yPercent: 0, duration: 0.5, ease: "power1.out", immediateRender: false },
-                            "mid")
-                        .to(charsByProject.bol, {
-                            yPercent: -100,
-                            duration: revealDuration,
-                            ease: "power2.in",
-                            stagger: revealStagger,
-                        }, outgoingStart)
-                        .fromTo(charsByProject.iquality,
-                            { yPercent: 100 },
-                            {
-                                yPercent: 0,
-                                duration: revealDuration,
-                                ease: "power2.out",
-                                stagger: revealStagger,
-                                immediateRender: false,
-                            }, 0.475)
-                        .fromTo(flippers,
-                            { rotateX: -maxRotation },
-                            {
-                                rotateX: 0,
-                                duration: 0.5,
-                                ease: "power1.out",
-                                immediateRender: false,
-                            }, "mid");
+                    for (let i = 0; i < COUNT - 1; i += 1) {
+                        const outgoingStaggerSpan = revealStagger * Math.max(0, charsByIndex[i].length - 1);
+                        const outgoingStart = i + 0.5 - revealDuration - outgoingStaggerSpan;
+                        timeline
+                            .fromTo(flippers,
+                                { rotateX: 0 },
+                                { rotateX: maxRotation, duration: 0.5, ease: "power1.in", immediateRender: false },
+                                i)
+                            .fromTo(marqueeKids[i],
+                                { yPercent: 0 },
+                                { yPercent: 100, duration: 0.5, ease: "power1.in", immediateRender: false },
+                                i)
+                            .fromTo(marqueeKids[i + 1],
+                                { yPercent: -100 },
+                                { yPercent: 0, duration: 0.5, ease: "power1.out", immediateRender: false },
+                                i + 0.5)
+                            .fromTo(charsByIndex[i],
+                                { yPercent: 0 },
+                                {
+                                    yPercent: -100,
+                                    duration: revealDuration,
+                                    ease: "power2.in",
+                                    stagger: revealStagger,
+                                    immediateRender: false,
+                                }, outgoingStart)
+                            .fromTo(charsByIndex[i + 1],
+                                { yPercent: 100 },
+                                {
+                                    yPercent: 0,
+                                    duration: revealDuration,
+                                    ease: "power2.out",
+                                    stagger: revealStagger,
+                                    immediateRender: false,
+                                }, i + 0.475)
+                            .fromTo(flippers,
+                                { rotateX: -maxRotation },
+                                { rotateX: 0, duration: 0.5, ease: "power1.out", immediateRender: false },
+                                i + 0.5);
+                    }
                 }
 
                 if (!reduce) {
@@ -945,34 +956,46 @@ export default function Russell() {
                     <section className="works" id="selected-works">
                         <div className="works__header">
                             <SplitText className="works__title">Selected works</SplitText>
-                            <span className="works__badge">(2)</span>
+                            <span className="works__badge">(4)</span>
                         </div>
 
                         <div className="works__showcase" ref={showcaseRef} role="region" aria-label="Featured project showcase">
                             <div className="showcase__marquee" aria-hidden="true">
-                                <div className="showcase__marquee-track" data-project-word="bol" data-active="true">
-                                    <span>BOL</span>
+                                <div className="showcase__marquee-track" data-project-word="ci" data-active="true">
+                                    <span>COMMUNITY INTELLIGENCE</span>
                                 </div>
-                                <div className="showcase__marquee-track" data-project-word="iquality" data-active="false">
-                                    <span>IQUALITY</span>
+                                <div className="showcase__marquee-track" data-project-word="cafe" data-active="false">
+                                    <span>CAFE RESE</span>
+                                </div>
+                                <div className="showcase__marquee-track" data-project-word="kanriel" data-active="false">
+                                    <span>KANRIEL</span>
+                                </div>
+                                <div className="showcase__marquee-track" data-project-word="login" data-active="false">
+                                    <span>ENOV8TIVE LOGIN</span>
                                 </div>
                             </div>
 
                             <div className="showcase__reveal" aria-hidden="true">
                                 <span className="showcase__reveal-mask">
-                                    <span className="showcase__reveal-word" data-project-word="bol">BOL</span>
+                                    <span className="showcase__reveal-word" data-project-word="ci">CI</span>
                                 </span>
                                 <span className="showcase__reveal-mask">
-                                    <span className="showcase__reveal-word" data-project-word="iquality">IQUALITY</span>
+                                    <span className="showcase__reveal-word" data-project-word="cafe">CAFE RESE</span>
+                                </span>
+                                <span className="showcase__reveal-mask">
+                                    <span className="showcase__reveal-word" data-project-word="kanriel">KANRIEL</span>
+                                </span>
+                                <span className="showcase__reveal-mask">
+                                    <span className="showcase__reveal-word" data-project-word="login">LOGIN</span>
                                 </span>
                             </div>
 
                             <div className="showcase__stage">
                                 <div className="showcase__card">
                                     <Link
-                                        to="/works/bol"
+                                        to="/works/community-intelligence"
                                         className="showcase__layer showcase__layer--a"
-                                        aria-label="View AI Gift Finder project"
+                                        aria-label="View Community Intelligence project"
                                         aria-hidden="false"
                                         tabIndex={0}
                                     >
@@ -980,7 +1003,7 @@ export default function Russell() {
                                             <div className="showcase__frame">
                                                 <img
                                                     src={projectImage}
-                                                    alt="AI Gift Finder app mockup"
+                                                    alt="Community Intelligence platform mockup"
                                                     decoding="async"
                                                     fetchPriority="high"
                                                 />
@@ -991,27 +1014,26 @@ export default function Russell() {
                                             <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
                                         </span>
                                         <div className="showcase__footer">
-                                            <h3>AI Gift Finder</h3>
+                                            <h3>Community Intelligence</h3>
                                             <div className="showcase__tags" aria-label="Project disciplines">
-                                                <span>AI</span>
-                                                <span>UX research</span>
-                                                <span>App design</span>
+                                                <span>GovTech</span>
+                                                <span>Surveys</span>
+                                                <span>UX design</span>
                                             </div>
                                         </div>
                                     </Link>
-
                                     <Link
                                         to="/works"
                                         className="showcase__layer showcase__layer--b"
-                                        aria-label="View Iquality's Dashboard project"
+                                        aria-label="View Cafe Rese landing page project"
                                         aria-hidden="true"
                                         tabIndex={-1}
                                     >
                                         <div className="showcase__media">
                                             <div className="showcase__frame">
                                                 <img
-                                                    src={projectImage}
-                                                    alt="Iquality's Dashboard project mockup"
+                                                    src={reseImage}
+                                                    alt="Cafe Rese landing page"
                                                     decoding="async"
                                                     loading="eager"
                                                     fetchPriority="low"
@@ -1023,11 +1045,75 @@ export default function Russell() {
                                             <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
                                         </span>
                                         <div className="showcase__footer">
-                                            <h3>Iquality's Dashboard</h3>
+                                            <h3>Cafe Rese Landing Page</h3>
                                             <div className="showcase__tags" aria-label="Project disciplines">
-                                                <span>Product design</span>
-                                                <span>Design system</span>
+                                                <span>Landing page</span>
+                                                <span>Web design</span>
                                                 <span>Branding</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+
+                                    <Link
+                                        to="/works"
+                                        className="showcase__layer showcase__layer--c"
+                                        aria-label="View Kanriel project"
+                                        aria-hidden="true"
+                                        tabIndex={-1}
+                                    >
+                                        <div className="showcase__media">
+                                            <div className="showcase__frame">
+                                                <img
+                                                    src={kanrielImage}
+                                                    alt="Kanriel Japanese reviewer app mockup"
+                                                    decoding="async"
+                                                    loading="eager"
+                                                    fetchPriority="low"
+                                                />
+                                            </div>
+                                        </div>
+                                        <span className="showcase__notch" aria-hidden="true">
+                                            <HugeiconsIcon icon={Cursor02Icon} className="showcase__icon showcase__icon--idle" />
+                                            <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
+                                        </span>
+                                        <div className="showcase__footer">
+                                            <h3>Kanriel</h3>
+                                            <div className="showcase__tags" aria-label="Project disciplines">
+                                                <span>Mobile app</span>
+                                                <span>Learning app</span>
+                                                <span>UX design</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+
+                                    <Link
+                                        to="/works"
+                                        className="showcase__layer showcase__layer--d"
+                                        aria-label="View Enov8tive login page revamp project"
+                                        aria-hidden="true"
+                                        tabIndex={-1}
+                                    >
+                                        <div className="showcase__media">
+                                            <div className="showcase__frame">
+                                                <img
+                                                    src={revampImage}
+                                                    alt="Enov8tive login page revamp mockup"
+                                                    decoding="async"
+                                                    loading="eager"
+                                                    fetchPriority="low"
+                                                />
+                                            </div>
+                                        </div>
+                                        <span className="showcase__notch" aria-hidden="true">
+                                            <HugeiconsIcon icon={Cursor02Icon} className="showcase__icon showcase__icon--idle" />
+                                            <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
+                                        </span>
+                                        <div className="showcase__footer">
+                                            <h3>Enov8tive Login Revamp</h3>
+                                            <div className="showcase__tags" aria-label="Project disciplines">
+                                                <span>UI design</span>
+                                                <span>UX design</span>
+                                                <span>Redesign</span>
                                             </div>
                                         </div>
                                     </Link>
@@ -1036,7 +1122,7 @@ export default function Russell() {
                         </div>
 
                         <div className="works__cta">
-                            <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(2)</sup></MagneticButton>
+                            <MagneticButton href="/works">See All Works <sup className="magnetic-btn__sup">(7)</sup></MagneticButton>
                         </div>
                     </section>
                     <section className="certs" ref={certsRef}>

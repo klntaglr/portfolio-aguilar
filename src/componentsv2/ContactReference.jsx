@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { Link } from "react-router-dom";
 import CurvedMenu from "./CurvedMenu";
+import TiltMenu from "./TiltMenu";
 import logo from "../assets/logo.png";
 import portrait from "../assets/grad.jpg";
 import "./ContactReference.css";
@@ -152,12 +153,12 @@ export default function ContactReference() {
             <div id="contact-smooth-content">
                 <main className="contact-page">
                     <header className="contact-page__nav">
-                        <Link to="/" className="contact-page__logo" aria-label="Back to home">
+                         <button className="contact-page__menu" type="button" aria-expanded={isMenuOpen} aria-controls="contact-navigation" onClick={() => setIsMenuOpen((current) => !current)}>
+                            {isMenuOpen ? <FiX aria-hidden="true" /> : <span className="contact-page__burger" aria-hidden="true"><span /><span /></span>}<span>Menu</span>
+                        </button> <Link to="/" className="contact-page__logo" aria-label="Back to home">
                             <img src={logo} alt="Russell Aguilar" />
                         </Link>
-                        <button className="contact-page__menu" type="button" aria-expanded={isMenuOpen} aria-controls="contact-navigation" onClick={() => setIsMenuOpen((current) => !current)}>
-                            {isMenuOpen ? <FiX aria-hidden="true" /> : <span className="contact-page__burger" aria-hidden="true"><span /><span /></span>}<span>Menu</span>
-                        </button>
+                      
                     </header>
 
                     <section className="contact-page__layout">
@@ -192,13 +193,13 @@ export default function ContactReference() {
                                 </a>
                             </div>
                             <div className="contact-page__details"><span>Socials</span>
-                            <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" target="_blank" rel="noreferrer">LinkedIn</a>
-                               <a href="https://www.behance.net/klentaguilar/projects" target="_blank" rel="noreferrer">Behance</a>
-                                  <a href="https://github.com/klntaglr" target="_blank" rel="noreferrer">GitHub</a>
-                       <a href="https://www.tiktok.com/@klntaglr" target="_blank" rel="noreferrer">TikTok</a>
-                            <a href="https://www.instagram.com/klntaglr/" target="_blank" rel="noreferrer">Instagram</a>
-                         </div>
-                         
+                                <a href="https://www.linkedin.com/in/klent-russell-aguilar-b6929739b/" target="_blank" rel="noreferrer">LinkedIn</a>
+                                <a href="https://www.behance.net/klentaguilar/projects" target="_blank" rel="noreferrer">Behance</a>
+                                <a href="https://github.com/klntaglr" target="_blank" rel="noreferrer">GitHub</a>
+                                <a href="https://www.tiktok.com/@klntaglr" target="_blank" rel="noreferrer">TikTok</a>
+                                <a href="https://www.instagram.com/klntaglr/" target="_blank" rel="noreferrer">Instagram</a>
+                            </div>
+
                         </aside>
                     </section>
 
@@ -208,7 +209,7 @@ export default function ContactReference() {
                         <div><span>Menu</span><small><Link to="/">Home</Link><Link to="/works">Work</Link><Link to="/about-web-designer">About</Link><Link to="/contact-me">Contact</Link></small></div>
                     </footer>
 
-                    <AnimatePresence mode="wait">{isMenuOpen && <CurvedMenu id="contact-navigation" onClose={() => setIsMenuOpen(false)} />}</AnimatePresence>
+                    <TiltMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
                 </main>
             </div>
         </div>
