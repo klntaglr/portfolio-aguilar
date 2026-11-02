@@ -35,7 +35,7 @@ const WORKS = [
         title: "Cafe Rese's landing page.",
         tags: ["Landing Page", "Web Design", "Branding"],
         image: reseProject,
-        href: "/works",
+        href: "/works/cafe-rese",
     },
     {
         title: "Enov8tive LAB.",
@@ -53,13 +53,13 @@ const WORKS = [
         title: "Enov8tive's login page revamp.",
         tags: ["UI Design", "UX Design", "Redesign"],
         image: revampProject,
-        href: "/works",
+        href: "/works/enov8tive-login-revamp",
     },
     {
-        title: "Kanriel, a Japanese reviewer app.",
-        tags: ["Mobile App Design", "Learning App", "UX Design"],
+        title: "Kanriel, a JLPT reviewer app built for a Japanese language student.",
+        tags: ["Product Design", "Learning App", "UX Design"],
         image: kanrielProject,
-        href: "/works",
+        href: "/works/kanriel",
     },
 ];
 
@@ -262,7 +262,7 @@ export default function Worksv2() {
             wrapper: "#smooth-wrapper",
             content: "#smooth-content",
             smooth: 1.2,
-            effects: true,
+            effects: false,
             smoothTouch: 0.08,
         });
         smoother.scrollTop(0);
@@ -312,49 +312,7 @@ export default function Worksv2() {
                 }
             );
 
-            /* 4. cards: light fade + rise, plays once (no scrub, no clip-path, no 3D) */
-            q(".worksv2-card").forEach((card, i) => {
-                const media = card.querySelector(".worksv2-card__media");
-                const img = card.querySelector(".worksv2-card__media img");
-                const copy = card.querySelector(".worksv2-card__copy");
-
-                gsap.fromTo(
-                    media,
-                    { clipPath: "inset(14% 6% round 18px)", y: 60, opacity: 0 },
-                    {
-                        clipPath: "inset(0% 0% round 7px)",
-                        y: 0,
-                        opacity: 1,
-                        duration: 1.3,
-                        delay: i * 0.12,
-                        ease: "expo.out",
-                        scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" },
-                    }
-                );
-                gsap.fromTo(
-                    img,
-                    { scale: 1.2 },
-                    {
-                        scale: 1,
-                        ease: "none",
-                        scrollTrigger: { trigger: card, start: "top 95%", end: "bottom 45%", scrub: 1 },
-                    }
-                );
-                gsap.fromTo(
-                    copy,
-                    { y: 30, opacity: 0 },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        duration: 1,
-                        delay: 0.15 + i * 0.12,
-                        ease: "power3.out",
-                        scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none reverse" },
-                    }
-                );
-            });
-
-            /* 5. archives button */
+            /* 4. archives button */
             gsap.fromTo(
                 q(".worksv2-work__cta"),
                 { y: 50, opacity: 0 },

@@ -1023,7 +1023,7 @@ export default function Russell() {
                                         </div>
                                     </Link>
                                     <Link
-                                        to="/works"
+                                        to="/works/cafe-rese"
                                         className="showcase__layer showcase__layer--b"
                                         aria-label="View Cafe Rese landing page project"
                                         aria-hidden="true"
@@ -1055,7 +1055,7 @@ export default function Russell() {
                                     </Link>
 
                                     <Link
-                                        to="/works"
+                                        to="/works/kanriel"
                                         className="showcase__layer showcase__layer--c"
                                         aria-label="View Kanriel project"
                                         aria-hidden="true"
@@ -1087,7 +1087,7 @@ export default function Russell() {
                                     </Link>
 
                                     <Link
-                                        to="/works"
+                                        to="/works/enov8tive-login-revamp"
                                         className="showcase__layer showcase__layer--d"
                                         aria-label="View Enov8tive login page revamp project"
                                         aria-hidden="true"

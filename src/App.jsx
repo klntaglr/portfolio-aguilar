@@ -8,38 +8,96 @@ import About from "./componentsv2/Aboutv2";
 import Works from "./componentsv2/Worksv2";
 import Contact from "./componentsv2/ContactReference";
 import Projects from "./components/Projects";
-import CaseStudy from "./componentsv2/CaseStudy";
+import CaseStudy, { CASE_STUDIES } from "./componentsv2/CaseStudy";
 
 import './App.css';
 import NotFound from "./components/NotFound";
 import Terms from "./components/Terms";
 
-const TITLE_FALLBACK = "Russell Aguilar";
+const SITE_NAME = "Russell Aguilar";
+const SITE_URL = "https://YOUR-DOMAIN.com"; // TODO: palitan ng totoong domain
+const DEFAULT_DESC =
+  "Russell Aguilar is a UI/UX designer in the Philippines. Case studies in mobile apps, web, healthtech, and govtech.";
+
+const trimText = (text, max = 155) => {
+  const clean = String(text).replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  return clean.slice(0, max - 1).replace(/\s+\S*$/, "") + "…";
+};
+
+function getMeta(pathname) {
+  const path = pathname.replace(/\/+$/, "") || "/";
+
+  if (path === "/") {
+    return { path, title: `UI/UX Designer | ${SITE_NAME}`, description: DEFAULT_DESC };
+  }
+  if (path === "/about-web-designer") {
+    return {
+      path,
+      title: `About | ${SITE_NAME}`,
+      description: "About Russell Aguilar, a UI/UX designer who also builds what he designs.",
+    };
+  }
+  if (path === "/works") {
+    return {
+      path,
+      title: `UI/UX Design Case Studies | ${SITE_NAME}`,
+      description: "Selected UI/UX case studies in healthtech, govtech, and learning apps by Russell Aguilar.",
+    };
+  }
+  if (path.startsWith("/works/")) {
+    const slug = path.split("/")[2];
+    const cs = CASE_STUDIES[slug];
+    if (cs) {
+      return {
+        path,
+        title: `${cs.title} | ${SITE_NAME}`,
+        description: trimText(`${cs.title} for ${cs.client}. ${cs.background.text}`),
+      };
+    }
+    return { path, title: `Case Study | ${SITE_NAME}`, description: DEFAULT_DESC };
+  }
+  if (path.startsWith("/projects")) {
+    return { path, title: `Projects | ${SITE_NAME}`, description: DEFAULT_DESC };
+  }
+  if (path === "/contact-me") {
+    return {
+      path,
+      title: `Contact | ${SITE_NAME}`,
+      description: "Get in touch with Russell Aguilar for UI/UX design projects and collaborations.",
+    };
+  }
+  if (path === "/free-landing-page/terms-and-conditions") {
+    return { path, title: `Terms | ${SITE_NAME}`, description: DEFAULT_DESC };
+  }
+  return { path, title: SITE_NAME, description: DEFAULT_DESC };
+}
+
+function upsertTag(tagName, matchAttr, matchValue, valueAttr, value) {
+  let el = document.head.querySelector(`${tagName}[${matchAttr}="${matchValue}"]`);
+  if (!el) {
+    el = document.createElement(tagName);
+    el.setAttribute(matchAttr, matchValue);
+    document.head.appendChild(el);
+  }
+  el.setAttribute(valueAttr, value);
+}
 
 function useRouteTitle() {
   const location = useLocation();
-
-  const title = useMemo(() => {
-    const path = location.pathname.replace(/\/+$/, "") || "/";
-
-    if (path === "/") return "UI/UX Designer | Russell Aguilar";
-    if (path === "/about-web-designer") return "About | Russell Aguilar";
-    if (path === "/works") return "Work | Russell Aguilar";
-    if (path.startsWith("/works/")) return "Case Study | Russell Aguilar";
-    if (path.startsWith("/projects")) return "Projects | Russell Aguilar";
-    if (path === "/free-landing-page") return "Free Landing Page | Russell Aguilar";
-    if (path === "/contact-me") return "Contact | Russell Aguilar";
-    
-    if (path === "/free-landing-page/terms-and-conditions") {
-      return "Terms | Russell Aguilar";
-    }
-
-    return TITLE_FALLBACK;
-  }, [location.pathname]);
+  const meta = useMemo(() => getMeta(location.pathname), [location.pathname]);
 
   useLayoutEffect(() => {
-    document.title = title;
-  }, [title]);
+    const url = `${SITE_URL}${meta.path === "/" ? "/" : meta.path}`;
+    document.title = meta.title;
+    upsertTag("meta", "name", "description", "content", meta.description);
+    upsertTag("link", "rel", "canonical", "href", url);
+    upsertTag("meta", "property", "og:title", "content", meta.title);
+    upsertTag("meta", "property", "og:description", "content", meta.description);
+    upsertTag("meta", "property", "og:url", "content", url);
+    upsertTag("meta", "name", "twitter:title", "content", meta.title);
+    upsertTag("meta", "name", "twitter:description", "content", meta.description);
+  }, [meta]);
 }
 
 function TitleManager() {
