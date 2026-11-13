@@ -108,6 +108,17 @@
   margin: 0 0 120px;
 }
 
+.cs__cover video {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.cs__gallery.cs__reference {
+  margin: 0 0 128px;
+}
+
 .cs__cover img {
   display: block;
   width: 100%;
@@ -411,15 +422,20 @@
 
 .cs__shot figcaption {
   position: absolute;
-  top: 20px;
-  left: 24px;
+  top: 18px;
+  left: 20px;
   z-index: 2;
-  max-width: 55%;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.15;
-  color: #2a2fa8;
+  max-width: calc(100% - 40px);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #000000;
+}
+
+.cs__shots-grid .cs__shot:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 7;
 }
 
 .cs__shot--main {
@@ -427,12 +443,8 @@
 }
 
 .cs__shot--main figcaption {
-  top: auto;
-  bottom: 38%;
-  left: auto;
-  right: 7%;
-  max-width: 180px;
-  font-size: 20px;
+  font-size: 16px;
+  padding: 10px 20px;
 }
 .cs__shots-grid {
   display: grid;

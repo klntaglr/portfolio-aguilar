@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 import "./Russell.css"; /* shared: smooth wrapper, hero nav/bg, magnetic btn, footer */
 import "./CaseStudy.css";
 import TiltMenu from "./TiltMenu";
+import { WORKS } from "./Worksv2";
 
 import logoImage from "../assets/logo.png";
 import spiralBackground from "../assets/spiralbg.webp";
@@ -24,6 +25,24 @@ import rese3Image from "../assets/Rese3.svg";
 import rese4Image from "../assets/Rese4.svg";
 import loginBefore from "../assets/originallogin.svg";
 import loginAfter from "../assets/revamplogin.svg";
+import kanji1Image from "../assets/kanriel1.svg";
+import kanji2Image from "../assets/kanriel2.svg";
+import kanji3Image from "../assets/kanriel3.svg";
+import kanji4Image from "../assets/kanriel4.svg";
+import bangkalCover from "../assets/bangkalproject.png";
+import bangkal1 from "../assets/bangkal1.png";
+import bangkal2 from "../assets/bangkal2.png";
+import bangkal3 from "../assets/bangkal3.png";
+import bangkal4 from "../assets/bangkal4.png";
+import bangkal5 from "../assets/bangkal5.png";
+import bangkal6 from "../assets/bangkal6.png";
+import bangkal7 from "../assets/bangkal7.png";
+import bangkal8 from "../assets/bangkal8.png";
+import bangkal9 from "../assets/bangkal9.png";
+import bangkal10 from "../assets/bangkal10.png";
+import patsVideo from "../assets/PATS.mp4";
+import patsPoster from "../assets/PATSSHOOL.svg";
+import patsReference from "../assets/PATSSHOOL.svg";
 /* TODO: palitan ng actual screenshots */
 const galleryMain = projectImage;
 const galleryOne = projectImage;
@@ -83,10 +102,10 @@ const ciCase = {
         },
     ],
     gallery: {
-        main: { src: galleryMain, caption: "Pulso ng Masa survey list for a household" },
+    
         small: [
-            { src: galleryOne, caption: "Household profile" },
-            { src: galleryTwo, caption: "Member transfer flow" },
+            { src: galleryOne,  },
+            { src: galleryTwo,  },
             { src: galleryThree, caption: "" },
             { src: galleryFour, caption: "" },
         ],
@@ -157,7 +176,7 @@ const kanrielCase = {
 
     background: {
         text: "Kanriel is a JLPT reviewer app built for Lady Arielle, a Japanese language student at PATS in Arayat, Pampanga. Her school gave students a reviewer website that was often down and a mobile app that only worked on Android, while the actual reviewers were printed on paper. She uses iOS devices, so she asked me to build something that works for her, and I made it an installable Progressive Web App that runs on any device. Together we shaped the idea, and I designed and built the whole app, from the interface to the database and storage behind it, to support her studies. Her classmates later started using it too, since they review the same material.",
-        link: { label: "View the app.", href: "#" }, // [TODO: ilagay ang live link]
+        link: { label: "View the app.", href: "https://kanriel.vercel.app/" }, // [TODO: ilagay ang live link]
     },
 
     challenge: [
@@ -233,15 +252,11 @@ const kanrielCase = {
     ],
 
     gallery: {
-        main: {
-            src: kanrielImage,
-            caption: "Reviewer dashboard with progress",
-        },
         small: [
-            { src: kanrielImage, caption: "CSV import" },
-            { src: kanrielImage, caption: "Flashcards" },
-            { src: kanrielImage, caption: "Quiz results" },
-            { src: kanrielImage, caption: "Study Library" },
+            { src: kanji3Image},
+            { src: kanji2Image },
+            { src: kanji1Image},
+                        { src: kanji4Image},
         ],
     },
     next: "cafe-rese",
@@ -257,7 +272,7 @@ const loginCase = {
     cover: revampImage,
     background: {
         text: "The login page is the first screen every Enov8tive subscriber sees. Accounts are only for registered users who bought or subscribed to the apps, so there is no public sign-up. I redesigned the login, the forgot-password flow, and the security states added after QA feedback, then handed the screens and specs to the engineers.",
-        link: { label: "Visit client website.", href: "#" }, // [TODO: ilagay ang link o alisin]
+        link: { label: "Visit prototype.", href: "#" }, // [TODO: ilagay ang link o alisin]
     },
     challenge: [
         "The original page looked unfinished. A faded stock photo of a laptop and smartwatch felt like a generic tech product and said nothing about healthcare, and it competed with the form instead of supporting it. On top of that, the login card squeezed the logo, social sign-in, form, legal text, app store badges, and social links into one small box. The main action was hard to spot, and nothing told users when the app was working or had failed.",
@@ -311,12 +326,12 @@ const loginCase = {
         },
     ],
     gallery: {
-        main: { src: loginAfter, caption: "Redesigned login page" },
+    
         small: [
-            { src: revampImage, caption: "Loading and error states" },
-            { src: revampImage, caption: "reCAPTCHA and account lockout" },
-            { src: revampImage, caption: "Forgot password" },
-            { src: revampImage, caption: "Set a new password" },
+            { src: revampImage },
+            { src: revampImage, },
+            { src: revampImage,  },
+            { src: revampImage, },
         ],
     },
     next: "kanriel",
@@ -325,68 +340,190 @@ const loginCase = {
 const reseCase = {
     title: "Cafe RESÉ",
     client: "Cafe RESÉ",
-    year: "2026", // [TODO: kumpirmahin]
-    services: ["Landing Page Design", "Web Design", "Branding"], // [TODO: idagdag ang "Front-End Development" kung ikaw ang nag-code]
+    year: "2026",
+    services: ["UI Design", "UX Design"],
     cover: reseImage,
     background: {
-        text: "Cafe Rese is a cafe in Malolos, Bulacan that is always busy, with a steady stream of customers coming in. Nobody asked me to build anything. I noticed how many people visited and how much the cafe had to offer, and I wanted to see how it would look online. So I designed a landing page on my own initiative that showcases its services, menu, and customer feedback in one place. [TODO: ilagay ang eksaktong detalye, halimbawa kung anong klaseng cafe, signature drinks, o ano ang gusto mong ipakita]",
+        text: "Cafe RESÉ is a cafe in Malolos, Bulacan that is always busy, with a steady stream of customers coming in. Nobody asked me to build anything. When I looked them up, I found that they only had a Facebook page and an Instagram account, and no website. So I designed one on my own initiative. This is a UI and UX template that shows how the cafe could present its story, menu, and services online. It has not been developed or deployed.",
         link: {
             label: "View the prototype.",
             href: "https://www.figma.com/proto/vcYZJzNfJjc4Miy8LpwP9T/UI-UX-Portfolio?node-id=247-2969&t=En7mVMQtOhTKvMHK-0&scaling=scale-down-width&content-scaling=fixed&page-id=38%3A1422&starting-point-node-id=247%3A2969&hide-ui=1",
         },
     },
     challenge: [
-        "Cafe Rese already has people walking in, but a new customer who has not visited yet has no single place to see what the cafe offers, what is on the menu, or what other customers think. [TODO: kumpirmahin kung ano talaga ang walang online ngayon, halimbawa Facebook page lang o wala]",
-        "This was a self-initiated project with no client brief, so I set my own questions: what does a first-time visitor need to know within a few seconds, how do I present the menu so it is easy to scan, and how do I make the page feel like the cafe itself instead of a generic template?",
+        "Facebook and Instagram are good for posts, but they are hard to use when someone is new to the cafe. A first-time visitor has to scroll through old posts to find the menu, learn the story, or check how to get there.",
+        "This was a self-initiated project with no client brief, so I set my own questions: what does a first-time visitor need to see right away, how do I give the menu and the cafe's story room to breathe, and how do I make contact and feedback easy to find?",
     ],
     findings: [
         {
-            label: "One page, clear sections",
-            text: "A landing page works best when a visitor can scroll once and understand the whole cafe. I organized the page into short sections for services, menu, and feedback, so people find what they came for without jumping between pages. [TODO: ilista ang eksaktong sections sa page mo]",
+            label: "A website where there was none",
+            text: "The cafe was only reachable through social media, so the main goal was a single place that gathers everything a new customer looks for. The design is a template, so the cafe can fill in its own content later.",
         },
         {
-            label: "A menu that is easy to scan",
-            text: "Visitors usually look at the menu first, so it gets its own section with items grouped by category. Names and prices are easy to read at a glance, even on a phone. [TODO: ilagay ang categories at kung may photos ba]",
+            label: "A clear home page",
+            text: "The home page walks the visitor through four sections in order: a hero that says who the cafe is, an About section, the Services, and customer Feedbacks. A visitor can scroll once and understand the cafe without opening another page.",
         },
         {
-            label: "Showing what the cafe offers",
-            text: "The services section tells visitors what they can do at Cafe Rese before they arrive, so they know what to expect. [TODO: ilagay ang totoong services, halimbawa dine-in, takeout, events]",
+            label: "A page just for the menu",
+            text: "The menu is what most visitors want to see first, so it has its own page instead of being squeezed into the home page. This gives the items space and makes the list easier to scan.",
         },
         {
-            label: "Room for customer feedback",
-            text: "The page has a feedback section so future visitors can see what other customers say. Cafe Rese has not collected feedback yet, so this section is designed and ready to be filled in. [TODO: tanggalin ito kung hindi mo nilagay sa page]",
+            label: "Our Story",
+            text: "A busy cafe usually has a story behind it. The Our Story page gives that story its own space, so the brand feels personal and not like a generic template.",
         },
         {
-            label: "A look that matches the cafe",
-            text: "The colors, type, and imagery are chosen to match the cafe's warm, welcoming feel, and the layout stays simple so the content leads. [TODO: ilagay ang palette, fonts, at inspirasyon]",
-        },
-        {
-            label: "Works on a phone",
-            text: "Most people look up a cafe on their phone, often while deciding where to go, so the layout is designed to read well on small screens first. [TODO: kumpirmahin na responsive talaga]",
+            label: "Easy to reach",
+            text: "A dedicated Contact page puts the details a visitor needs in one place, so they don't have to look through social media posts to find them. The Feedbacks section shows what other customers say.",
         },
     ],
     results: [
         {
             label: "What I delivered",
             paragraphs: [
-                "A complete landing page for Cafe Rese that presents its services, menu, and customer feedback in one place, designed to be easy to browse on any device.",
-                "This was a self-initiated concept, so there is no client feedback or usage data to share yet. [TODO: i-update kapag naipakita mo na sa owner, nailunsad na, o may feedback na]",
+                "A UI and UX design for the Cafe RESÉ website: a home page with Hero, About, Services, and Feedbacks sections, plus separate Menu, Our Story, and Contact pages.",
+                "This is a self-initiated template that has not been developed, deployed, or shown to the cafe yet, so there is no client feedback or usage data to share.",
             ],
         },
     ],
     gallery: {
-        main: { src: reseImage, caption: "" },
+
         small: [
             { src: reseImage, caption: "" },
             { src: rese4Image, caption: "" },
             { src: rese2Image, caption: "" },
             { src: rese3Image, caption: "" },
-
         ],
     },
     next: "community-intelligence",
 };
 
+const bangkalCase = {
+    title: "QRUSH",
+    client: "Barangay Bangkal",
+    year: "2025",
+    services: ["UI Design", "UX Design", "Full-Stack Development", "System Design"],
+    cover: bangkalCover,
+    background: {
+        text: "QRUSH is a web-based document request system for Barangay Bangkal, built as my capstone project. Residents can request barangay documents online, and barangay staff can verify, process, and track each request in one place. I was the project lead and the only developer, so I designed and built the whole system, from the interface to the database, and deployed it as a live website.",
+        link: { label: "Visit the live site.", href: "https://bangkalqrush.com" },
+    },
+    challenge: [
+        "Barangay documents are usually requested in person, which means travel, waiting, and paperwork. Moving the process online brings new problems: the system must confirm that the requester is a real resident, protect personal data, and stay easy to use for people who are not used to online forms.",
+        "I set out to answer three questions: how do we verify residents when not everyone has a working phone number on file, how do we guide residents through a request without mistakes, and how do we keep every request traceable from submission to release?",
+    ],
+    findings: [
+        {
+            label: "Verifying real residents",
+            text: "Requests are checked against the barangay masterlist, so only registered residents can proceed. This keeps the system limited to the people it is meant to serve and gives staff more confidence in each request.",
+        },
+        {
+            label: "Two paths to verification",
+            text: "Residents don't consistently have working phone numbers on file, so OTP alone would lock some of them out. I designed two paths: OTP authentication for residents with a working number, and manual verification for those without one. No resident is left without a way in.",
+        },
+        {
+            label: "Guided, step-by-step requests",
+            text: "Many residents are unfamiliar with online forms, so each request is split into short guided steps instead of one long form. Each step asks for one thing at a time, which reduces errors and makes the process less intimidating.",
+        },
+        {
+            label: "Tracking with QR codes",
+            text: "Every transaction gets a QR code, so a request can be tracked and checked from submission to release. Residents and staff share the same reference, and nobody has to guess where a request is.",
+        },
+        {
+            label: "Accessible by design",
+            text: "The interface was designed to meet WCAG AA, with readable text, clear contrast, and simple layouts, so it works for residents of different ages and abilities.",
+        },
+        {
+            label: "Security for a government system",
+            text: "Because the system holds resident information, I added API rate limiting on top of OTP authentication and masterlist verification, to guard against repeated and automated attempts. I chose Firebase and Supabase so one person could build and maintain the system faster while still meeting these security needs.",
+        },
+    ],
+    results: [
+        {
+            label: "Evaluation",
+            paragraphs: [
+                "The system was evaluated against ISO/IEC 25010:2023 with 40 respondents and earned an overall rating of 4.67 out of 5.00.",
+                "It also received the Best in System Design award for the capstone.",
+            ],
+        },
+        {
+            label: "What I delivered",
+            paragraphs: [
+                "A full-stack production web app that is live at bangkalqrush.com, covering resident verification, guided document requests, QR-code tracking, and secure access, built and deployed solo as project lead. [TODO: idagdag kung ilan na ang requests o users, o kung ginagamit na talaga ng barangay]",
+            ],
+        },
+    ],
+    gallery: {
+        small: [
+            { src: bangkal1 },
+            { src: bangkal2 },
+            { src: bangkal3 },
+            { src: bangkal4 },
+
+            { src: bangkal7 },
+            { src: bangkal8 },
+            { src: bangkal9 },
+            { src: bangkal10 },
+        ],
+    },
+    next: "playground",
+};
+
+
+
+const playgroundCase = {
+    title: "PATS Winter Playground",
+    client: "Personal project",
+    year: "2026",
+    services: ["Motion Design", "GSAP Animation", "Frontend Development"],
+    cover: patsPoster,
+    coverVideo: patsVideo,
+    background: {
+        text: "This is a motion playground, not a client project. I modeled an animated school scene after the Philippines Arayat Training School (PATS) building, with mountains behind it, and built it in React with GSAP. Because the year-end is coming, I turned it into a winter scene with falling snow, snowy trees, and a snowy roof. It's a space for me to practice frontend motion design.",
+        link: { label: "View the playground.", href: "https://klyk-inky.vercel.app/" }, // [TODO: ilagay ang live link]
+    },
+    challenge: [
+        "I wanted to find out how far I could push a single illustrated scene with only code. The questions I set for myself: how do I make a still picture feel alive, how do I show the time of day changing without swapping images, and how do I make people want to click around?",
+        "The scene also had to feel like PATS, so I used the real building as my reference and kept its brick walls, white columns, and triangular entrance.",
+    ],
+    reference: [
+        { src: patsReference, },
+    ],
+    findings: [
+        {
+            label: "A scene that changes through the day",
+            text: "The scenery changes between morning, noon, evening, and night. The sun moves, the sky color shifts, and the mood of the whole school changes with it, so the page looks different each time someone visits.",
+        },
+        {
+            label: "Winter for the year-end",
+            text: "Since the year is ending, I added snow falling over the scene, snow on the roof and trees, and a cold blue sky, so the school feels ready for the holidays.",
+        },
+        {
+            label: "People who make it feel alive",
+            text: "Students walk across the front of the school, and a sensei is part of the scene too. Each character moves at its own pace, so the scene never looks like a loop of the same movement.",
+        },
+        {
+            label: "Interactions",
+            text: "The scene responds to the visitor. Characters and objects react when clicked or hovered, which turns the picture into something to explore, not just look at. [TODO: ilista ang eksaktong interactions, halimbawa kung ano ang nangyayari pag nag-click sa estudyante o sensei]",
+        },
+        {
+            label: "The year-end photo booth",
+            text: "PATS has a photo booth during its year-end event, so I added one to the scene, next to the Student Council booth. A tooltip invites visitors to click and view photos, and a speech bubble in English and Japanese invites them to try the booth.",
+        },
+    ],
+    results: [
+        {
+            label: "What I built",
+            paragraphs: [
+                "An animated, interactive winter scene of PATS built with React and GSAP, with a day-and-night cycle, moving students and a sensei, and a photo booth tied to the year-end event.",
+                "It's a personal practice project, so there's no client feedback or usage data to share. [TODO: idagdag kung may reaction ang mga kaklase o ang school]",
+            ],
+        },
+    ],
+    gallery: {
+        small: [], // [TODO: optional, ilagay ang screenshots ng morning/night, halimbawa { src: patsNight, caption: "Night" }]
+    },
+    next: "community-intelligence",
+};
 /* ── LAHAT NG CASE STUDIES. Ang key = URL:  /works/<key> ──
     Para magdagdag ng bago: gumawa ng object tulad ng ciCase,
     tapos ilagay dito. `next` = key ng susunod na case study. */
@@ -396,6 +533,8 @@ export const CASE_STUDIES = {
     kanriel: kanrielCase,
     "enov8tive-login-revamp": loginCase,
     "cafe-rese": reseCase,
+    "bangkal-qrush": bangkalCase,
+    playground: playgroundCase,
 };
 
 /* ════════════════════════════════════════════════
@@ -817,7 +956,19 @@ function CaseStudyPage({ caseStudy }) {
                     {/* BODY CARD */}
                     <section className="cs__body">
                         <div className="cs__cover">
-                            <img src={caseStudy.cover} alt={`${caseStudy.client} project overview`} />
+                            {caseStudy.coverVideo ? (
+                                <video
+                                    src={caseStudy.coverVideo}
+                                    poster={caseStudy.cover}
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    preload="metadata"
+                                />
+                            ) : (
+                                <img src={caseStudy.cover} alt={`${caseStudy.client} project overview`} />
+                            )}
                         </div>
 
                         <div className="cs__block cs__block--loose">
@@ -850,6 +1001,20 @@ function CaseStudyPage({ caseStudy }) {
                                         <InfoRow key={p.label} label={p.label}>
                                             <p>{p.text}</p>
                                         </InfoRow>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+
+                        {caseStudy.reference && (
+                            <>
+                                <SplitText className="cs__heading">Reference</SplitText>
+                                <div className="cs__gallery cs__reference">
+                                    {caseStudy.reference.map((r, i) => (
+                                        <figure key={i} className="cs__shot cs__shot--main">
+                                            <img src={r.src} alt={r.caption || "Reference"} />
+                                            {r.caption && <figcaption>{r.caption}</figcaption>}
+                                        </figure>
                                     ))}
                                 </div>
                             </>
@@ -915,11 +1080,13 @@ function CaseStudyPage({ caseStudy }) {
                         )}
 
                         <div className="cs__gallery">
-                            <figure className="cs__shot cs__shot--main">
-                                <img src={caseStudy.gallery.main.src} alt={caseStudy.gallery.main.caption || `${caseStudy.title} screen`} />
-                                {caseStudy.gallery.main.caption && <figcaption>{caseStudy.gallery.main.caption}</figcaption>}
-                            </figure>
-                            <div className="cs__shots-grid">
+                            {caseStudy.gallery.main && (
+                                <figure className="cs__shot cs__shot--main">
+                                    <img src={caseStudy.gallery.main.src} alt={caseStudy.gallery.main.caption || `${caseStudy.title} screen`} />
+                                    {caseStudy.gallery.main.caption && <figcaption>{caseStudy.gallery.main.caption}</figcaption>}
+                                </figure>
+                            )}
+                            <div className={`cs__shots-grid${caseStudy.gallery.small.length === 3 ? " cs__shots-grid--three" : ""}`}>
                                 {caseStudy.gallery.small.map((s, i) => (
                                     <figure key={i} className="cs__shot">
                                         <img src={s.src} alt={s.caption || `Screen ${i + 1}`} />
@@ -962,7 +1129,7 @@ function CaseStudyPage({ caseStudy }) {
 
                         <div className="works__cta">
                             <MagneticButton href="/works" className="cs__outline-btn">
-                                See All Works <sup className="magnetic-btn__sup">(0)</sup>
+                                See All Works <sup className="magnetic-btn__sup">({WORKS.length})</sup>
                             </MagneticButton>
                         </div>
                     </section>
