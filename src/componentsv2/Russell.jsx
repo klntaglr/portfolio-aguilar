@@ -16,6 +16,7 @@ import { Cursor02Icon, MousePointerClickIcon } from "@hugeicons/core-free-icons"
 import bgImage from "../assets/v2bg.png";
 import logoImage from "../assets/logo.png";
 import projectImage from "../assets/CI.svg";
+import corpoImage from "../assets/corpo.svg";
 import reseImage from "../assets/rese.svg";
 import kanrielImage from "../assets/Kanriel.svg";
 import revampImage from "../assets/Revamp.svg";
@@ -962,7 +963,7 @@ export default function Russell() {
                         <div className="works__showcase" ref={showcaseRef} role="region" aria-label="Featured project showcase">
                             <div className="showcase__marquee" aria-hidden="true">
                                 <div className="showcase__marquee-track" data-project-word="ci" data-active="true">
-                                    <span>COMMUNITY INTELLIGENCE</span>
+                                    <span>ENOV8TIVE WEBSITE</span>
                                 </div>
                                 <div className="showcase__marquee-track" data-project-word="cafe" data-active="false">
                                     <span>CAFE RESE</span>
@@ -977,7 +978,7 @@ export default function Russell() {
 
                             <div className="showcase__reveal" aria-hidden="true">
                                 <span className="showcase__reveal-mask">
-                                    <span className="showcase__reveal-word" data-project-word="ci">CI</span>
+                                    <span className="showcase__reveal-word" data-project-word="ci">CORPO</span>
                                 </span>
                                 <span className="showcase__reveal-mask">
                                     <span className="showcase__reveal-word" data-project-word="cafe">CAFE RESE</span>
@@ -993,17 +994,17 @@ export default function Russell() {
                             <div className="showcase__stage">
                                 <div className="showcase__card">
                                     <Link
-                                        to="/works/community-intelligence"
+                                        to="/works/enov8tive-corporate-website"
                                         className="showcase__layer showcase__layer--a"
-                                        aria-label="View Community Intelligence project"
+                                        aria-label="View Enov8tive Corporate Website project"
                                         aria-hidden="false"
                                         tabIndex={0}
                                     >
                                         <div className="showcase__media">
                                             <div className="showcase__frame">
                                                 <img
-                                                    src={projectImage}
-                                                    alt="Community Intelligence platform mockup"
+                                                    src={corpoImage}
+                                                    alt="Enov8tive corporate website mockup"
                                                     decoding="async"
                                                     fetchPriority="high"
                                                 />
@@ -1014,10 +1015,10 @@ export default function Russell() {
                                             <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
                                         </span>
                                         <div className="showcase__footer">
-                                            <h3>Community Intelligence</h3>
+                                            <h3>Enov8tive Corporate Website</h3>
                                             <div className="showcase__tags" aria-label="Project disciplines">
-                                                <span>GovTech</span>
-                                                <span>Surveys</span>
+                                                <span>Landing page</span>
+                                                <span>Web design</span>
                                                 <span>UX design</span>
                                             </div>
                                         </div>

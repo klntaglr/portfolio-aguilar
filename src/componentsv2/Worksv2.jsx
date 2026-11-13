@@ -20,6 +20,7 @@ import patsPoster from "../assets/PATSHOOLL.svg";
 import reseProject from "../assets/rese.svg";
 import kanrielProject from "../assets/Kanriel.svg";
 import revampProject from "../assets/Revamp.svg";
+import corpoProject from "../assets/corpo.svg";
 import { FiCheck } from "react-icons/fi";
 import spiralBackground from "../assets/spiralbg.webp";
 
@@ -27,22 +28,10 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export const WORKS = [
     {
-        title: "Cafe Rese's landing page.",
-        tags: ["Landing Page", "Web Design", "Branding"],
-        image: reseProject,
-        href: "/works/cafe-rese",
-    },
-    // {
-    //     title: "Enov8tive Corporate Website.",
-    //     tags: ["Landing Page", "Web Design", "UX Design"],
-    //     image: soonProject,
-    //     href: "/works/enov8tive-corporate-website",
-    // },
-    {
-        title: "Community Intelligence and Pulso ng Masa surveys.",
-        tags: ["GovTech", "Survey Platform", "UX Design"],
-        image: soonProject,
-        href: "/works/community-intelligence",
+        title: "Enov8tive Corporate Website.",
+        tags: ["Landing Page", "Web Design", "UX Design"],
+        image: corpoProject,
+        href: "/works/enov8tive-corporate-website",
     },
 
     {
@@ -50,19 +39,33 @@ export const WORKS = [
         tags: ["UI Design", "UX Design", "Redesign"],
         image: revampProject,
         href: "/works/enov8tive-login-revamp",
+    }, {
+        title: "Cafe Rese's landing page.",
+        tags: ["Landing Page", "Web Design", "Branding"],
+        image: reseProject,
+        href: "/works/cafe-rese",
     },
+
+    // {
+    //     title: "Community Intelligence and Pulso ng Masa surveys.",
+    //     tags: ["GovTech", "Survey Platform", "UX Design"],
+    //     image: soonProject,
+    //     href: "/works/community-intelligence",
+    // },
+
+
     {
         title: "Kanriel, Learning App.",
         tags: ["Product Design", "Learning App", "UX Design"],
         image: kanrielProject,
         href: "/works/kanriel",
-    },    {
+    }, {
         title: "QRUSH, Barangay Bangkal's document request system.",
         tags: ["Capstone", "Full-Stack", "System Design"],
         image: bangkalProject,
         href: "/works/bangkal-qrush",
     },
-      {
+    {
         title: "PATS Winter Playground.",
         tags: ["Motion Design", "GSAP Animation", "Frontend Development"],
         image: patsPoster,

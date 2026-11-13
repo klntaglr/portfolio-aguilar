@@ -3,6 +3,7 @@ import { motion, useMotionValue } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { createPortal } from "react-dom";
 import { Link, useParams, Navigate } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -43,6 +44,16 @@ import bangkal10 from "../assets/bangkal10.png";
 import patsVideo from "../assets/PATS.mp4";
 import patsPoster from "../assets/PATSSHOOL.svg";
 import patsReference from "../assets/PATSSHOOL.svg";
+import corpoCover from "../assets/corpo.svg";
+import corpo1 from "../assets/corpo1.svg";
+import corpo2 from "../assets/corpo2.svg";
+import corpo3 from "../assets/corpo3.svg";
+import corpo4 from "../assets/corpo4.svg";
+import corpo5 from "../assets/corpo5.svg";
+import corpo6 from "../assets/corpo6.svg";
+import corpo7 from "../assets/corpo7.svg";
+import corpoOriginalVideo from "../assets/corpo1.mp4";
+import corpoEnhancedVideo from "../assets/corpo.mp4";
 /* TODO: palitan ng actual screenshots */
 const galleryMain = projectImage;
 const galleryOne = projectImage;
@@ -524,6 +535,52 @@ const playgroundCase = {
     },
     next: "community-intelligence",
 };
+const corporateCase = {
+    title: "Enov8tive Corporate Website",
+    client: "Enov8tive",
+    year: "2026",
+    services: ["Web Design", "UI Design", "UX Design"],
+    cover: corpoCover,
+    coverCompare: {
+        original: corpoOriginalVideo,
+        enhanced: corpoEnhancedVideo,
+    },
+    background: {
+        text: "[TODO: isulat ang background ng corporate website ng Enov8tive at ang role mo.]",
+        links: [
+            { label: "Visit the website.", href: "#" },
+            { label: "View the prototype.", href: "https://www.figma.com/proto/6SQPSy8GHbNR0q2e1sR5Mx/Corpo-Redesing?node-id=21-1140&t=ExMedrxxMF6fAlxq-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&hide-ui=1" },
+        ],
+    },
+    challenge: [
+        "[TODO: ano ang problema sa original website?]",
+        "[TODO: ano ang mga tanong na sinagot mo sa redesign?]",
+    ],
+    findings: [
+        { label: "[TODO: decision 1]", text: "[TODO]" },
+        { label: "[TODO: decision 2]", text: "[TODO]" },
+    ],
+    results: [
+        {
+            label: "What I delivered",
+            paragraphs: ["[TODO: isulat ang final output at resulta]"],
+        },
+    ],
+    gallery: { small: [] },
+    galleryCompare: {
+        // TODO: palitan ng actual BEFORE images ang original
+        original: [
+            { src: corpoCover }, { src: corpo1 }, { src: corpo2 }, { src: corpo3 },
+            { src: corpo4 }, { src: corpo5 }, { src: corpo6 }, { src: corpo7 },
+        ],
+        enhanced: [
+            { src: corpoCover }, { src: corpo1 }, { src: corpo2 }, { src: corpo3 },
+            { src: corpo4 }, { src: corpo5 }, { src: corpo6 }, { src: corpo7 },
+        ],
+    },
+    next: "kanriel",
+};
+
 /* ── LAHAT NG CASE STUDIES. Ang key = URL:  /works/<key> ──
     Para magdagdag ng bago: gumawa ng object tulad ng ciCase,
     tapos ilagay dito. `next` = key ng susunod na case study. */
@@ -535,6 +592,7 @@ export const CASE_STUDIES = {
     "cafe-rese": reseCase,
     "bangkal-qrush": bangkalCase,
     playground: playgroundCase,
+    "enov8tive-corporate-website": corporateCase,
 };
 
 /* ════════════════════════════════════════════════
@@ -669,6 +727,65 @@ function BeforeAfter({ before, after }) {
     );
 }
 
+function VersionTabs({ value, onChange }) {
+    const tabs = [
+        { id: "original", label: "Original" },
+        { id: "enhanced", label: "Enhanced version" },
+    ];
+    const idx = Math.max(0, tabs.findIndex((t) => t.id === value));
+    return (
+        <div className="cs__tabs" role="tablist" style={{ "--i": idx }}>
+            <span className="cs__tab-pill" aria-hidden="true" />
+            {tabs.map((t) => (
+                <button
+                    key={t.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={value === t.id}
+                    className={`cs__tab${value === t.id ? " is-active" : ""}`}
+                    onClick={() => onChange(t.id)}
+                >
+                    {t.label}
+                </button>
+            ))}
+        </div>
+    );
+}
+
+function GalleryShot({ className, onOpen, children }) {
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const [hover, setHover] = useState(false);
+    const move = (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        x.set(e.clientX - r.left);
+        y.set(e.clientY - r.top);
+    };
+    return (
+        <figure
+            className={className}
+            onClick={onOpen}
+            onMouseMove={move}
+            onMouseEnter={(e) => { move(e); setHover(true); }}
+            onMouseLeave={() => setHover(false)}
+        >
+            <motion.div
+                className="works__circle-cursor"
+                style={{ x, y }}
+                initial={false}
+                animate={{ opacity: hover ? 1 : 0, scale: hover ? 1 : 0.5 }}
+                transition={{
+                    opacity: { duration: 0.2 },
+                    scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                }}
+            >
+                <span>View</span>
+            </motion.div>
+            {children}
+        </figure>
+    );
+}
+
 function Footer() {
     return (
         <footer className="footer cs__footer">
@@ -714,6 +831,22 @@ function CaseStudyPage({ caseStudy }) {
     const fbList = caseStudy.feedback || [];
     const fb = fbList[fbIndex];
     const fbStep = (d) => setFbIndex((i) => (i + d + fbList.length) % fbList.length);
+    const [preview, setPreview] = useState(null);
+    const [coverTab, setCoverTab] = useState("enhanced");
+    const [galleryTab, setGalleryTab] = useState("enhanced");
+    const smallShots = caseStudy.galleryCompare
+        ? caseStudy.galleryCompare[galleryTab]
+        : caseStudy.gallery.small;
+    const mainOffset = caseStudy.gallery.main ? 1 : 0;
+    const galleryList = [
+        ...(caseStudy.gallery.main ? [caseStudy.gallery.main] : []),
+        ...smallShots,
+    ];
+    const lbStep = useCallback(
+        (d) => setPreview((i) => (i === null ? i : (i + d + galleryList.length) % galleryList.length)),
+        [galleryList.length]
+    );
+
     const cursorX = useMotionValue(0);
     const cursorY = useMotionValue(0);
 
@@ -810,7 +943,7 @@ function CaseStudyPage({ caseStudy }) {
                 );
             });
 
-            q(".cs__shot, .cs__compare").forEach((shot) => {
+            q(".cs__compare, .cs__reference .cs__shot").forEach((shot) => {
                 gsap.fromTo(
                     shot,
                     { y: 80, opacity: 0 },
@@ -849,6 +982,22 @@ function CaseStudyPage({ caseStudy }) {
             smoother.kill();
         };
     }, []);
+
+    useEffect(() => {
+        if (preview === null) return;
+        const smoother = ScrollSmoother.get();
+        smoother?.paused(true);
+        const onKey = (e) => {
+            if (e.key === "Escape") setPreview(null);
+            if (e.key === "ArrowRight") lbStep(1);
+            if (e.key === "ArrowLeft") lbStep(-1);
+        };
+        window.addEventListener("keydown", onKey);
+        return () => {
+            smoother?.paused(false);
+            window.removeEventListener("keydown", onKey);
+        };
+    }, [preview]);
 
     useEffect(() => {
         const smoother = ScrollSmoother.get();
@@ -955,8 +1104,20 @@ function CaseStudyPage({ caseStudy }) {
 
                     {/* BODY CARD */}
                     <section className="cs__body">
+                        {caseStudy.coverCompare && <VersionTabs value={coverTab} onChange={setCoverTab} />}
                         <div className="cs__cover">
-                            {caseStudy.coverVideo ? (
+                            {caseStudy.coverCompare ? (
+                                <video
+                                    key={coverTab}
+                                    src={caseStudy.coverCompare[coverTab]}
+                                    poster={caseStudy.cover}
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    preload="metadata"
+                                />
+                            ) : caseStudy.coverVideo ? (
                                 <video
                                     src={caseStudy.coverVideo}
                                     poster={caseStudy.cover}
@@ -974,15 +1135,18 @@ function CaseStudyPage({ caseStudy }) {
                         <div className="cs__block cs__block--loose">
                             <InfoRow label="Background">
                                 <p>{caseStudy.background.text}</p>
-                                <a
-                                    className="cs__link"
-                                    href={caseStudy.background.link.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <span className="cs__link-dot" />
-                                    {caseStudy.background.link.label}
-                                </a>
+                                {(caseStudy.background.links || [caseStudy.background.link]).map((l) => (
+                                    <a
+                                        key={l.label}
+                                        className="cs__link"
+                                        href={l.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span className="cs__link-dot" />
+                                        {l.label}
+                                    </a>
+                                ))}
                             </InfoRow>
 
                             <InfoRow label="Challenge">
@@ -1079,19 +1243,27 @@ function CaseStudyPage({ caseStudy }) {
                             </>
                         )}
 
+                        {caseStudy.galleryCompare && <VersionTabs value={galleryTab} onChange={setGalleryTab} />}
                         <div className="cs__gallery">
                             {caseStudy.gallery.main && (
-                                <figure className="cs__shot cs__shot--main">
+                                <GalleryShot
+                                    className="cs__shot cs__shot--main cs__shot--click"
+                                    onOpen={() => setPreview(0)}
+                                >
                                     <img src={caseStudy.gallery.main.src} alt={caseStudy.gallery.main.caption || `${caseStudy.title} screen`} />
                                     {caseStudy.gallery.main.caption && <figcaption>{caseStudy.gallery.main.caption}</figcaption>}
-                                </figure>
+                                </GalleryShot>
                             )}
-                            <div className={`cs__shots-grid${caseStudy.gallery.small.length === 3 ? " cs__shots-grid--three" : ""}`}>
-                                {caseStudy.gallery.small.map((s, i) => (
-                                    <figure key={i} className="cs__shot">
+                            <div key={galleryTab} className={`cs__shots-grid${smallShots.length === 3 ? " cs__shots-grid--three" : ""}`}>
+                                {smallShots.map((s, i) => (
+                                    <GalleryShot
+                                        key={i}
+                                        className="cs__shot cs__shot--click"
+                                        onOpen={() => setPreview(mainOffset + i)}
+                                    >
                                         <img src={s.src} alt={s.caption || `Screen ${i + 1}`} />
                                         {s.caption && <figcaption>{s.caption}</figcaption>}
-                                    </figure>
+                                    </GalleryShot>
                                 ))}
                             </div>
                         </div>
@@ -1138,6 +1310,53 @@ function CaseStudyPage({ caseStudy }) {
 
                     <TiltMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
                 </main>
+                                       {preview !== null && galleryList[preview] &&
+                    createPortal(
+                        <div
+                            className="cs__lightbox"
+                            role="dialog"
+                            aria-modal="true"
+                            onClick={() => setPreview(null)}
+                        >
+                            <img
+                                key={preview}
+                                src={galleryList[preview].src}
+                                alt={galleryList[preview].caption || "Preview"}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+
+                            <button
+                                type="button"
+                                className="cs__lb-nav cs__lb-nav--prev"
+                                aria-label="Previous image"
+                                onClick={(e) => { e.stopPropagation(); lbStep(-1); }}
+                            >
+                                ‹
+                            </button>
+                            <button
+                                type="button"
+                                className="cs__lb-nav cs__lb-nav--next"
+                                aria-label="Next image"
+                                onClick={(e) => { e.stopPropagation(); lbStep(1); }}
+                            >
+                                ›
+                            </button>
+
+                            <span className="cs__lightbox-count">
+                                {String(preview + 1).padStart(2, "0")} / {String(galleryList.length).padStart(2, "0")}
+                            </span>
+
+                            <button
+                                type="button"
+                                className="cs__lightbox-close"
+                                aria-label="Close preview"
+                                onClick={(e) => { e.stopPropagation(); setPreview(null); }}
+                            >
+                                ×
+                            </button>
+                        </div>,
+                        document.body
+                    )}
             </div>
         </div>
     );
