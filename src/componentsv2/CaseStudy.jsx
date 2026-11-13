@@ -53,7 +53,7 @@ import corpo5 from "../assets/corpo5.svg";
 import corpo6 from "../assets/corpo6.svg";
 import corpo7 from "../assets/corpo7.svg";
 import corpoOriginalVideo from "../assets/corpo1.mp4";
-import corpoEnhancedVideo from "../assets/corpo.mp4";
+import corpoEnhancedVideo from "../assets/Corpo.mp4";
 /* TODO: palitan ng actual screenshots */
 const galleryMain = projectImage;
 const galleryOne = projectImage;
