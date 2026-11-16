@@ -978,7 +978,7 @@ export default function Russell() {
 
                             <div className="showcase__reveal" aria-hidden="true">
                                 <span className="showcase__reveal-mask">
-                                    <span className="showcase__reveal-word" data-project-word="ci">CORPO</span>
+                                    <span className="showcase__reveal-word" data-project-word="ci">ENOV8TIVE</span>
                                 </span>
                                 <span className="showcase__reveal-mask">
                                     <span className="showcase__reveal-word" data-project-word="cafe">CAFE RESE</span>
@@ -996,7 +996,7 @@ export default function Russell() {
                                     <Link
                                         to="/works/enov8tive-corporate-website"
                                         className="showcase__layer showcase__layer--a"
-                                        aria-label="View Enov8tive Corporate Website project"
+                                        aria-label="View Enov8tive Corporate Website redesign concept"
                                         aria-hidden="false"
                                         tabIndex={0}
                                     >
@@ -1004,7 +1004,7 @@ export default function Russell() {
                                             <div className="showcase__frame">
                                                 <img
                                                     src={corpoImage}
-                                                    alt="Enov8tive corporate website mockup"
+                                                    alt="Enov8tive corporate website redesign concept"
                                                     decoding="async"
                                                     fetchPriority="high"
                                                 />
@@ -1015,11 +1015,11 @@ export default function Russell() {
                                             <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
                                         </span>
                                         <div className="showcase__footer">
-                                            <h3>Enov8tive Corporate Website</h3>
+                                            <h3>Enov8tive Corporate Website Redesign</h3>
                                             <div className="showcase__tags" aria-label="Project disciplines">
-                                                <span>Landing page</span>
+                                                <span>UX audit</span>
                                                 <span>Web design</span>
-                                                <span>UX design</span>
+                                                <span>Motion design</span>
                                             </div>
                                         </div>
                                     </Link>

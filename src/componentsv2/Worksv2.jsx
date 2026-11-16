@@ -28,18 +28,19 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export const WORKS = [
     {
-        title: "Enov8tive Corporate Website.",
-        tags: ["Landing Page", "Web Design", "UX Design"],
+                title: "Enov8tive's corporate website redesign.",
+        tags: ["UX Audit", "Web Design", "Motion Design"],
         image: corpoProject,
         href: "/works/enov8tive-corporate-website",
     },
 
+    // {
+    //     title: "Enov8tive's login page revamp.",
+    //     tags: ["UI Design", "UX Design", "Redesign"],
+    //     image: revampProject,
+    //     href: "/works/enov8tive-login-revamp",
+    // },
     {
-        title: "Enov8tive's login page revamp.",
-        tags: ["UI Design", "UX Design", "Redesign"],
-        image: revampProject,
-        href: "/works/enov8tive-login-revamp",
-    }, {
         title: "Cafe Rese's landing page.",
         tags: ["Landing Page", "Web Design", "Branding"],
         image: reseProject,
@@ -144,12 +145,12 @@ function MagneticButton({ children, className = "", href, onClick }) {
     }, []);
 
     const Component = href ? Link : "button";
+    const linkProps = href ? { to: href } : { type: "button" };
 
     return (
         <Component
             ref={btnRef}
-            to={href}
-            type={href ? undefined : "button"}
+            {...linkProps}
             className={`magnetic-btn${className ? ` ${className}` : ""}`}
             onClick={onClick}
             onMouseMove={handleMouseMove}
@@ -278,7 +279,10 @@ export default function Worksv2() {
         smoother.scrollTop(0);
 
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reduceMotion) return () => smoother.kill();
+        if (reduceMotion) {
+            gsap.set(".wv2-mask__inner", { yPercent: 0 });
+            return () => smoother.kill();
+        }
 
         const ctx = gsap.context(() => {
             const q = gsap.utils.selector(rootRef);

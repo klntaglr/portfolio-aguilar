@@ -67,48 +67,48 @@ const coverImage = projectImage;
 CONTENT — Community Intelligence
 (mga may [TODO] ay kailangan mong punan ng totoong data mo)
 ════════════════════════════════════════════════ */
-const ciCase = {
+/* const ciCase = {
     title: "Community Intelligence",
     client: "Enov8tive",
     year: "2026",
     services: ["Mobile App Design", "UX Design", "Product Design"],
     cover: coverImage,
-    background: {
-        text: "Community Intelligence is Enov8tive's mobile platform for Local Government Units (LGUs) in the Philippines. Registered patients are grouped into households, and each household profile holds its address, members, and living conditions. Through Pulso ng Masa, field personnel and household representatives answer surveys on each household's needs, from disaster readiness to social assistance. The responses are attached to the household record, so LGUs can see who needs help and plan their next move from real data.",
+      background: {
+        text: "Community Intelligence is Enov8tive's mobile platform for Local Government Units (LGUs) in the Philippines. Registered patients are grouped into households, and each household profile holds its address, members, and living conditions. Field personnel and household representatives answer Pulso ng Masa surveys about each household's needs, from disaster readiness to social assistance, and the responses attach to the household record so LGUs can plan from real data. I designed the mobile flows for household management and the survey experience.",
         link: { label: "Visit client website.", href: "#" },
     },
     challenge: [
-        "The app is used in the field, on small screens, often while talking to a family. Every household has many members, and every survey asks a lot of questions. My role was to design the mobile flows for household management and the Pulso ng Masa surveys, so that data entry stays quick and clear. [TODO: kumpirmahin ang exact role mo]",
-        "The core questions: how do we separate household-level and member-level surveys without confusing the user, how do we keep long forms from feeling long, and how do we keep records accurate when families change, such as when a member moves, a head is replaced, or a whole household is deactivated?",
+        "The primary user is a field worker holding a phone, standing in front of a family, often interrupted. The data is hierarchical (a household contains many members), the surveys are long, and the records change over time. Any design that treats this like a desktop form would be slow, error-prone, and awkward to use in someone's home.",
+        "I framed the work around three questions: how do we separate household-level and member-level data so the user always knows who they are answering for, how do we make long surveys feel short and recoverable, and how do we keep records and statistics accurate when families change?",
     ],
     findings: [
         {
-            label: "Two levels of data",
-            text: "Some questions belong to the whole household, others to one person. The flow starts with a \"Who's Answering the Form?\" step, then leads to separate lists. Households get eight surveys, such as Community Needs, Disaster Readiness, and Social Assistance, while individual members get their own socioeconomic survey. Each list shows a summary and a progress count, so the user always knows who the answers are for.",
+            label: "Model the data the way people think about it",
+            text: "Some questions belong to the household and others to one person. Instead of one flat list, the flow opens with \"Who's Answering the Form?\" and branches into two lists: eight household surveys (such as Community Needs, Disaster Readiness, and Social Assistance) and one socioeconomic survey per member. Each list shows a summary and a progress count, so context is never ambiguous.",
         },
         {
-            label: "Long forms, short steps",
-            text: "The Environmental Assessment is split into three short screens, and the Disaster Readiness survey adds Next and Previous controls. Instead of typing, users tap checkbox tiles, add searchable chips, use number steppers, or give star ratings. Typing is only needed when someone picks \"Others\".",
+            label: "Reduce typing, chunk the effort",
+            text: "Field input on a small screen is expensive, so I replaced free text with checkbox tiles, searchable chips, number steppers, and star ratings. Typing is reserved for \"Others\". Long surveys are split into short screens (the Environmental Assessment runs across three, and Disaster Readiness adds Next and Previous), which keeps each step light and shows progress.",
         },
         {
-            label: "Protecting the data",
-            text: "Field staff should never lose a half-finished survey by accident, and should never submit one by mistake. Surveys use \"Complete Form?\" and \"Abort Form?\" prompts, and household edits are not final until the user confirms \"Save Household Changes?\". Each confirmation says clearly what will be saved or lost.",
+            label: "Protect the data at irreversible moments",
+            text: "Losing a half-finished survey, or submitting one by mistake, are the two costliest errors in this context. I added \"Complete Form?\" and \"Abort Form?\" confirmations, and household edits stay unsaved until the user confirms \"Save Household Changes?\". Each dialog states exactly what will be saved or lost, so users don't have to guess.",
         },
         {
-            label: "Keeping records accurate",
-            text: "Families change, and the statistics must follow. Members can be transferred to another household in a guided four-step flow, or deactivated with a reason and date. When a head is deactivated, a new head must be chosen first, and the other members' relationship tags change to \"Others\". Deactivated members stop counting toward statistics but stay visible under the Inactive and Transferred tabs.",
+            label: "Design for change, not just creation",
+            text: "Families move, heads change, and the statistics must follow. Members can be transferred through a guided four-step flow or deactivated with a reason and date. If a head is deactivated, a new head must be chosen first and the other members' relationship tags reset to \"Others\", which prevents orphaned households. Deactivated members drop out of statistics but remain visible under Inactive and Transferred tabs, so history is preserved without polluting the numbers.",
         },
         {
-            label: "Finding the right household fast",
-            text: "With hundreds of households, search has to be quick. The list shows the total count, highlights matching letters, and reports how many results were found. A filter narrows down from region to street, and an Active and Deactivated toggle separates current households from old ones. If nothing matches, the empty state invites the user to create that household.",
+            label: "Findability at scale",
+            text: "With hundreds of households, search is the main entry point. The list shows the total count, highlights matching letters, and reports how many results were found. A filter narrows from region down to street, and an Active and Deactivated toggle separates current records from old ones. When nothing matches, the empty state offers to create that household, so a dead end becomes the next step.",
         },
     ],
     results: [
         {
             label: "What I delivered",
             paragraphs: [
-                "A complete mobile experience for the household lifecycle: creating, editing, listing, and deactivating households, adding members, transferring them, and deactivating them. On top of that, I designed the Pulso ng Masa survey flows, with eight household surveys and one member survey, all linked back to the household profile.",
-                "Every feature was handed off with a workflow, acceptance criteria, relevant screens, and a Figma prototype to the development team. [TODO: magdagdag ng totoong resulta, halimbawa: kung ilang LGUs o households na ang gumagamit, feedback ng stakeholders, o bilis ng survey completion]",
+                "A complete mobile experience for the household lifecycle (create, edit, list, deactivate, add members, transfer, and deactivate members) plus the Pulso ng Masa survey flows, with eight household surveys and one member survey linked to the household profile.",
+                "Every feature was handed off to the development team with a workflow, acceptance criteria, annotated screens, and a Figma prototype.",
             ],
         },
     ],
@@ -122,61 +122,7 @@ const ciCase = {
         ],
     },
     next: "enov8tive-login-revamp",
-};
-
-const bolCase = {
-    title: "AI Gift Finder",
-    client: "bol",
-    year: "2025",
-    services: ["Mobile App Design", "User research & Testing", "UX Design"],
-    cover: coverImage,
-    background: {
-        text: "In preparation for the holiday season, bol wants to support their users in finding gifts for their loved ones. In comes the AI Gift Finder/Cadeauhulp. This conversational AI chatting experience, helps users with finding inspirational ideas for a gift, or a direct product that may fit their needs.",
-        link: { label: "Visit client website.", href: "#" },
-    },
-    challenge: [
-        "At this point in time, DEPT® had already done concepting for the Gift Finder. Though bol felt there were still design opportunities to enhance the user experience before releasing it to the public. My role here was to seek the answers to the questions; learning about how users behave with a conversational chat, learning about the value of output, learning about how intuitive the navigation feels, and more.",
-        "Seeking answers to these questions had been done so, by setting up and running the pilot for the Gift Finder. Consisting of a mixed methodology approach with usability tests and retrospective interviews in a lab environment. Learning about what users do, think, and say regarding finding gifts with the Gift Finder.",
-    ],
-    findings: [
-        {
-            label: "Suggestions and chip behavior",
-            text: "Users struggled in getting enough variety in products per output, variety in product categories, as well as the product amount. With the limit being set to 4 products per output, a behavioral pattern occured where users often relied on repeated use of the quick suggestion chips. Using it in order to quickly gain more product suggestions, as well as quickly navigate oneself through the conversation.",
-        },
-        {
-            label: "Reading input fields",
-            text: "When chatting with the Gift Finder, users generally showed 2 prompting styles. Either keyword focussed, or writing longer story-esque prompts. Even though users can finish their tasks quite well in both cases, the users who wrote longer prompts were frustrated that the chat's input field didn't allow for reading back a prompt before sending it. It was also the case that when users send their prompts in the chat, the position stayed in the middle of a chat field, and became disorienting.",
-        },
-        {
-            label: "Losing a chat",
-            text: "When navigating between a product detail page and a chat, users on some occasions double tapped the back button. The back button for both product detail pages, as well as the chat are on the same position, this made users exit the chat and lose their history. In other occassions, users also had performance issues. This either made a chat wipe, or made users want to restart their chat.",
-        },
-        {
-            label: "FAB's and mental models",
-            text: "Entering the Gift Finder, goes via the floating action button on the home page. In some cases, users expected the entry point for the Gift Finder to be within a search, a gift page, or a card on the home page. For them, this aligns more with their mental model of how they see and imagine the layout of the bol app.",
-        },
-    ],
-    results: [
-        {
-            label: "Insight Sharing",
-            paragraphs: [
-                "The pilot was well received by bol, the DEPT® team, and key stakeholders, which led to further iterations. Working with the UX Team was an ideal way of integrating findings into design, working to ensure users can find the answers they need quickly through discovery.",
-                "As of October 2025, the conversational Gift Finder is a featured link on the 'Wish To Gift' landing page, with over 70% of those users saying it helped 'finding gifts more fun'.",
-            ],
-        },
-    ],
-    gallery: {
-        main: { src: galleryMain, caption: "Basic navigation to find the gifts quicker" },
-        small: [
-            { src: galleryOne, caption: "Main entry point" },
-            { src: galleryTwo, caption: "Intro screens" },
-            { src: galleryThree, caption: "" },
-            { src: galleryFour, caption: "" },
-        ],
-    },
-    next: "community-intelligence",
-};
-
+}; */
 
 const kanrielCase = {
     title: "Kanriel",
@@ -186,70 +132,64 @@ const kanrielCase = {
     cover: kanrielImage,
 
     background: {
-        text: "Kanriel is a JLPT reviewer app built for Lady Arielle, a Japanese language student at PATS in Arayat, Pampanga. Her school gave students a reviewer website that was often down and a mobile app that only worked on Android, while the actual reviewers were printed on paper. She uses iOS devices, so she asked me to build something that works for her, and I made it an installable Progressive Web App that runs on any device. Together we shaped the idea, and I designed and built the whole app, from the interface to the database and storage behind it, to support her studies. Her classmates later started using it too, since they review the same material.",
-        link: { label: "View the app.", href: "https://kanriel.vercel.app/" }, // [TODO: ilagay ang live link]
+        text: "Kanriel is a JLPT study app I designed and built for Lady Arielle, a Japanese-language student at PATS in Arayat, Pampanga. Her school provided a reviewer website that was often down and a mobile app that only worked on Android, while the actual reviewers were printed on paper. She uses iOS, so she asked me for something that works on her device. I shaped the product with her, then designed and built it end to end as an installable Progressive Web App, from interface to database and storage. Her classmates later adopted it because they study the same material.",
+        link: { label: "View the app.", href: "https://kanriel.vercel.app/" },
     },
-
     challenge: [
-        "The tools students were given kept getting in the way of studying. The website was frequently down, which was frustrating right when they needed to review. The app was Android-only, and Lady Arielle uses iOS devices. The reviewers themselves were on paper, which can be lost, torn, or soaked, and is hard to carry around.",
-        "I set out to answer three questions: how can paper reviewers become digital without making students retype everything, how can classmates who study the same material avoid rebuilding it one by one, and how can all study materials, from reviewers to videos and PDFs, live in one app?",
+        "The existing tools failed at the moment students needed them. The website was frequently down, the app excluded iOS users, and paper reviewers can be lost, damaged, and hard to carry. Reliability and access were the real problems, more than features.",
+        "I worked from three questions: how can paper reviewers become digital without forcing students to retype everything, how can classmates studying the same material avoid rebuilding it one by one, and how can every study material (reviewers, videos, PDFs) live in a single place?",
     ],
-
     findings: [
         {
-            label: "From paper to practice",
-            text: "Students can create their own reviewers for kanji, vocabulary, and grammar, then study them as flashcards or take a quiz. Moving from paper to screen meant reviewing felt lighter and less overwhelming, and it works anywhere with a phone.",
+            label: "Make the core loop light",
+            text: "Students create reviewers for kanji, vocabulary, and grammar and study them as flashcards or quizzes. The goal was a short path from opening the app to practicing, so that a few spare minutes are enough to review.",
         },
         {
-            label: "Typing it all in took too long",
-            text: "After the first version, feedback came in quickly: typing every question and answer by hand was time-consuming. So I redesigned the entry flow. The student photographs the paper reviewer, gives the photo to an AI assistant together with a CSV template, and gets back a table of questions, answers, and meanings. Uploading that file into the reviewer fills in everything automatically. The importer checks the columns, catches duplicates, and handles up to 500 rows at a time. What used to take a long session now takes about one to two minutes.",
+            label: "Iterating on a real pain point: data entry",
+            text: "After the first version, feedback was fast and specific: typing every question and answer by hand took too long. I redesigned the entry flow around import. The student photographs the paper reviewer, gives the photo and a CSV template to an AI assistant, and uploads the resulting table. The importer validates columns, catches duplicates, and handles up to 500 rows at a time. Adding a reviewer went from a long session to about one to two minutes. Trade-off: the flow depends on an external AI tool, so the importer's validation and duplicate checks carry the reliability.",
         },
         {
-            label: "One reviewer, shared with classmates",
-            text: "Her classmates review the same material, so it made no sense for each of them to rebuild it. Lady Arielle can share her reviewers with a link, and classmates who are logged in can add them to their own dashboard. Shared reviewers stay view-only, and each student keeps their own progress, so one person's scores never affect another's.",
+            label: "Sharing without sacrificing individual progress",
+            text: "Classmates review the same material, so rebuilding it was wasted effort. Reviewers can be shared by link and added to a logged-in classmate's dashboard. Shared reviewers are view-only, and each student keeps their own progress, so one person's scores never affect another's.",
         },
         {
-            label: "A library for everything else",
-            text: "Students were also receiving JLPT orientation videos and PDFs from their teachers, scattered across chats and folders. The Study Library holds PDFs, videos, and audio in folders, with favorites, saved playback position, and PDF highlights, so they sit next to the reviewers instead of in another app.",
+            label: "Consolidating scattered materials",
+            text: "Teachers sent JLPT orientation videos and PDFs through chats and folders. The Study Library keeps PDFs, videos, and audio in folders, with favorites, saved playback position, and PDF highlights, so materials sit next to the reviewers instead of in another app.",
         },
         {
-            label: "Built for real study sessions",
-            text: "Study sessions get interrupted, so unfinished quizzes save automatically and can be resumed. Answers support partial credit and show which parts matched, so a nearly correct answer still teaches something. Every attempt goes to a history, and wrong answers collect in a mistake bank to retry. Lessons can be merged into one reviewer for mixed practice, and a timed Kotoba Game adds a faster, more playful mode.",
+            label: "Designed for interrupted, imperfect sessions",
+            text: "Study sessions get cut short, so unfinished quizzes save automatically and can be resumed. Answers support partial credit and show which parts matched, so a near miss still teaches something. Every attempt is logged, wrong answers collect in a mistake bank for retry, lessons can be merged into one reviewer for mixed practice, and a timed Kotoba Game offers a faster mode.",
         },
         {
-            label: "Installable on any device",
-            text: "Because the school's app only worked on Android, I built Kanriel as a Progressive Web App (PWA). It can be added to the home screen on iPhone, iPad, or Android, opens like a regular app in its own window, and needs no app store or separate versions for each platform. Updates reach everyone as soon as they're published.",
+            label: "A PWA to remove platform barriers",
+            text: "The school's app excluded iOS, so I built Kanriel as a Progressive Web App. It can be added to the home screen on iPhone, iPad, or Android, opens in its own window, needs no app store, and updates reach everyone as soon as they're published. One codebase also made it realistic for a solo builder to maintain.",
         },
         {
-            label: "Her app, her look",
-            text: "The pink theme was Lady Arielle's own request. It's her app, and she wanted something she'd enjoy opening every day, which made reviewing feel more personal and motivating. Her classmates didn't need the same look. What mattered to them was that they could review properly and that the app actually helped them study, so the interface stays simple, readable, and focused on the material.",
+            label: "Personal theme, neutral structure",
+            text: "The pink theme was Lady Arielle's request, because she wanted an app she'd enjoy opening daily. The structure underneath stays simple, readable, and focused on the material, so classmates who don't share her taste can use it comfortably.",
         },
     ],
-
     results: [
         {
-            label: "Academic improvement",
+            label: "Learning outcome",
             paragraphs: [
-                "One of the most meaningful outcomes was seeing Lady Arielle's grades improve after she started using Kanriel. Before the app, reviewing was less consistent because her study materials were scattered and difficult to access. With her reviewers organized in one place, she could study more regularly, practice through flashcards and quizzes, and revisit the topics she struggled with.",
-                "She also started passing her JLPT mock tests, a milestone that showed how consistent practice was translating into better performance. The ability to practice reciting Kanji characters gave her another way to reinforce what she was learning and improve her recall.",
-                "For me, this was the result that mattered most: the app wasn't just being used; it was becoming part of her actual learning progress.",
+                "Lady Arielle reports that her grades improved after she started using Kanriel, and she began passing her JLPT mock tests. Before the app, her materials were scattered and reviewing was inconsistent. With everything in one place, she studied more regularly through flashcards and quizzes and revisited weak topics.",
+                "This is one learner's experience, not a controlled study, so I treat it as strong qualitative evidence and not as proof of effect.",
             ],
         },
         {
             label: "Adoption",
             paragraphs: [
-                "Lady Arielle has been using Kanriel for four months and has created more than 50 reviewers, taking quizzes and reviewing flashcards along the way. Her classmates tried it after she shared it, found it helpful for reviewing, and kept using it too.",
-                "The AI-and-CSV import, which came directly from user feedback, cut the time to add a paper reviewer to about one to two minutes. Sharing meant classmates no longer repeated the same work.",
+                "Lady Arielle has used Kanriel for four months and created more than 50 reviewers. Her classmates tried it after she shared it and kept using it. The import flow, which came directly from user feedback, reduced the time to add a paper reviewer to about one to two minutes.",
             ],
         },
         {
             label: "What's next",
             paragraphs: [
-                "Open areas I'm planning to improve: a manual review flow for paragraph answers in the custom form builder, password reset, a settings page, and automated tests.",
+                "A manual review flow for paragraph answers in the custom form builder, password reset, a settings page, and automated tests. I'd also run short sessions with classmates to see where the import flow still causes friction.",
             ],
         },
     ],
-
     feedback: [
         {
             quote: "Reviewing is easier now, and I'm finally seeing better results in school.",
@@ -275,19 +215,19 @@ const kanrielCase = {
 
 
 
-const loginCase = {
+/* const loginCase = {
     title: "Enov8tive Login Revamp",
     client: "Enov8tive",
     year: "2026",
     services: ["UI Design", "UX Design", "Design Handoff"],
     cover: revampImage,
     background: {
-        text: "The login page is the first screen every Enov8tive subscriber sees. Accounts are only for registered users who bought or subscribed to the apps, so there is no public sign-up. I redesigned the login, the forgot-password flow, and the security states added after QA feedback, then handed the screens and specs to the engineers.",
-        link: { label: "Visit prototype.", href: "#" }, // [TODO: ilagay ang link o alisin]
+        text: "The login page is the first screen every Enov8tive subscriber sees. Accounts exist only for people who bought or subscribed to the apps, so there is no public sign-up. I redesigned the login, the forgot-password flow, and the security states added after QA feedback, then handed screens, states, and specs to engineering.",
+        link: { label: "Visit prototype.", href: "#" },
     },
     challenge: [
-        "The original page looked unfinished. A faded stock photo of a laptop and smartwatch felt like a generic tech product and said nothing about healthcare, and it competed with the form instead of supporting it. On top of that, the login card squeezed the logo, social sign-in, form, legal text, app store badges, and social links into one small box. The main action was hard to spot, and nothing told users when the app was working or had failed.",
-        "QA also found a security gap: there was no rate limiting, so a bot could try passwords again and again. The forgot-password flow was broken as well. After the user opened the magic link from their email, nothing happened and they landed back on the login page.",
+        "The original page undermined trust at the first touchpoint of a healthcare product. A faded stock photo of a laptop and smartwatch said nothing about healthcare and competed with the form. The card packed the logo, social sign-in, form, legal text, app store badges, and social links into one small box, so the primary action was hard to find, and nothing told users whether the app was working, waiting, or had failed.",
+        "QA surfaced two functional problems: no rate limiting, so a bot could attempt passwords indefinitely, and a broken forgot-password flow, where opening the emailed magic link dropped users back on the login page. The work had to fix hierarchy and trust, add security users can understand, and close the reset dead end.",
     ],
     comparison: {
         before: { src: loginBefore, label: "Original login page" },
@@ -303,36 +243,36 @@ const loginCase = {
     },
     findings: [
         {
-            label: "A calmer, on-brand look",
-            text: "I replaced the stock photo with a quiet white and blue look taken from the logo, so the page supports the form instead of competing with it. White and blue are common in healthcare and are often associated with cleanliness, trust, and calm, and reusing the brand colors makes the page feel familiar to returning users. The button uses a deeper blue so white text stays readable.",
+            label: "Calm, on-brand visual direction",
+            text: "I replaced the stock photo with a quiet white and blue treatment taken from the logo, so the page supports the form. White and blue are common in healthcare and often associated with cleanliness, trust, and calm, and reusing brand colors makes the page familiar to returning users. The button uses a deeper blue so white text stays readable.",
         },
         {
-            label: "Less crowding, clearer hierarchy",
-            text: "The sign-in card now only holds what the user needs to log in. The logo, tagline, social links, and app store badges moved to a brand panel beside it. Type is larger, labels sit above the fields instead of inside them, and Sign in is the strongest element on the page. Google and Apple sign-in show a \"Last used\" badge to help returning users.",
+            label: "One task per card, clear hierarchy",
+            text: "The card now holds only what's needed to sign in. Logo, tagline, social links, and store badges moved to a brand panel beside it. Labels sit above larger fields, and Sign in is the strongest element on the page. Google and Apple sign-in show a \"Last used\" badge to help returning users pick the right method quickly.",
         },
         {
-            label: "Feedback at every step",
-            text: "The original gave no sign that anything was happening. I designed loading states for the button and form, and clear messages for errors and blocked attempts, so users always know whether the page is working, waiting, or has rejected them.",
+            label: "System status at every step",
+            text: "The original gave no sign that anything was happening. I designed loading states for the button and form and clear messages for errors and blocked attempts, so users can tell whether the page is working, waiting, or has rejected them.",
         },
         {
             label: "Security the user can understand",
-            text: "QA reported that bots could brute-force logins, and the team asked for an enhancement. I designed the screens for three layers: rate limiting, a reCAPTCHA check, and account lockout. Each has its own message, so a locked-out user understands what happened instead of thinking the page is broken.",
+            text: "In response to QA's brute-force finding, I designed three layers: rate limiting, a reCAPTCHA check, and account lockout. Each has its own message, so a locked-out user understands what happened and doesn't assume the page is broken. Security that confuses legitimate users creates support load, so the copy matters as much as the control.",
         },
         {
-            label: "Built for registered users only",
-            text: "Because accounts come from a purchase or subscription, there is no sign-up button or free registration. The copy says \"Sign in to your enov8tive account\", and a support link helps people who can't get in.",
+            label: "Copy and structure for registered users only",
+            text: "Because accounts come from a purchase or subscription, there is no sign-up button. The copy reads \"Sign in to your enov8tive account\", and a support link helps people who can't get in.",
         },
         {
-            label: "Fixing the dead-end reset",
-            text: "I noticed the forgot-password magic link led nowhere, so I proposed a fix on my own and presented the screens to the CEO and my director. They agreed with the direction: after the user opens the link, a secure page lets them create a new password and confirm it, followed by a reCAPTCHA check. [TODO: kumpirmahin ang eksaktong fields]",
+            label: "Finding and fixing the dead-end reset",
+            text: "I noticed the magic link led nowhere, proposed a fix on my own initiative, and presented the screens to the CEO and my director. After opening the link, users land on a secure page to create and confirm a new password, followed by a reCAPTCHA check.",
         },
     ],
     results: [
         {
             label: "Approval and handoff",
             paragraphs: [
-                "The CEO reviewed the redesign and approved it, and my director backed the forgot-password flow I proposed. I handed the engineers the final screens, states, and specs for the login, security layers, and password reset.",
-                "The redesign is currently in development and hasn't been deployed yet, so the screens here show the approved design rather than a live page.",
+                "The CEO reviewed and approved the redesign, and my director backed the forgot-password flow I proposed. I handed engineering the final screens, states, and specs for the login, the three security layers, and the password reset.",
+                "The redesign is in development and not yet deployed, so I'm not reporting performance numbers. The screens shown are the approved design, not a live page. Once live, I'd track login success rate, lockout-related support requests, and password-reset completion.",
             ],
         },
     ],
@@ -346,7 +286,7 @@ const loginCase = {
         ],
     },
     next: "kanriel",
-};
+}; */
 
 const reseCase = {
     title: "Cafe RESÉ",
@@ -355,44 +295,44 @@ const reseCase = {
     services: ["UI Design", "UX Design"],
     cover: reseImage,
     background: {
-        text: "Cafe RESÉ is a cafe in Malolos, Bulacan that is always busy, with a steady stream of customers coming in. Nobody asked me to build anything. When I looked them up, I found that they only had a Facebook page and an Instagram account, and no website. So I designed one on my own initiative. This is a UI and UX template that shows how the cafe could present its story, menu, and services online. It has not been developed or deployed.",
+        text: "Cafe RESÉ is a busy cafe in Malolos, Bulacan with a steady flow of customers, but its only online presence is a Facebook page and an Instagram account. Nobody asked me to design anything. I chose it as a self-initiated project to practice defining a problem and a solution without a brief. The result is a UI and UX template showing how the cafe could present its story, menu, and services online. It has not been developed, deployed, or shown to the cafe.",
         link: {
             label: "View the prototype.",
             href: "https://www.figma.com/proto/vcYZJzNfJjc4Miy8LpwP9T/UI-UX-Portfolio?node-id=247-2969&t=En7mVMQtOhTKvMHK-0&scaling=scale-down-width&content-scaling=fixed&page-id=38%3A1422&starting-point-node-id=247%3A2969&hide-ui=1",
         },
     },
     challenge: [
-        "Facebook and Instagram are good for posts, but they are hard to use when someone is new to the cafe. A first-time visitor has to scroll through old posts to find the menu, learn the story, or check how to get there.",
-        "This was a self-initiated project with no client brief, so I set my own questions: what does a first-time visitor need to see right away, how do I give the menu and the cafe's story room to breathe, and how do I make contact and feedback easy to find?",
+        "Social feeds are good for updates and poor for orientation. A first-time visitor has to scroll through old posts to find the menu, learn the story, or work out how to get there. Information that should take seconds takes minutes.",
+        "With no client brief, I defined my own success criteria: what must a first-time visitor see immediately, how can the menu and the cafe's story get room without crowding the home page, and how can contact and feedback be easy to find?",
     ],
     findings: [
         {
-            label: "A website where there was none",
-            text: "The cafe was only reachable through social media, so the main goal was a single place that gathers everything a new customer looks for. The design is a template, so the cafe can fill in its own content later.",
+            label: "One place for what newcomers look for",
+            text: "The main goal was a single destination that gathers the story, menu, services, and contact details. It's designed as a template, so the cafe can fill in its own content later.",
         },
         {
-            label: "A clear home page",
-            text: "The home page walks the visitor through four sections in order: a hero that says who the cafe is, an About section, the Services, and customer Feedbacks. A visitor can scroll once and understand the cafe without opening another page.",
+            label: "A home page that scrolls like a pitch",
+            text: "The home page follows a deliberate order: a hero that says who the cafe is, an About section, Services, then customer Feedbacks. A visitor can understand the cafe in one scroll without opening another page.",
         },
         {
-            label: "A page just for the menu",
-            text: "The menu is what most visitors want to see first, so it has its own page instead of being squeezed into the home page. This gives the items space and makes the list easier to scan.",
+            label: "Give the highest-intent content its own page",
+            text: "The menu is what most visitors want first, so it has a dedicated page rather than a squeezed section. This gives items space and makes the list easier to scan.",
         },
         {
-            label: "Our Story",
-            text: "A busy cafe usually has a story behind it. The Our Story page gives that story its own space, so the brand feels personal and not like a generic template.",
+            label: "Brand personality through story",
+            text: "A busy cafe usually has a story worth telling. The Our Story page gives it room so the brand feels personal and less like a generic template.",
         },
         {
-            label: "Easy to reach",
-            text: "A dedicated Contact page puts the details a visitor needs in one place, so they don't have to look through social media posts to find them. The Feedbacks section shows what other customers say.",
+            label: "Reduce the effort to reach the cafe",
+            text: "A dedicated Contact page keeps the essentials in one place, so visitors don't dig through social posts. Feedbacks on the home page add social proof from other customers.",
         },
     ],
     results: [
         {
             label: "What I delivered",
             paragraphs: [
-                "A UI and UX design for the Cafe RESÉ website: a home page with Hero, About, Services, and Feedbacks sections, plus separate Menu, Our Story, and Contact pages.",
-                "This is a self-initiated template that has not been developed, deployed, or shown to the cafe yet, so there is no client feedback or usage data to share.",
+                "A UI and UX design for the Cafe RESÉ website: a home page with Hero, About, Services, and Feedbacks sections, plus separate Menu, Our Story, and Contact pages, with an interactive Figma prototype.",
+                "Because this is self-initiated and hasn't been shown to the cafe or tested with visitors, I'm not claiming outcomes. The next step would be to share it with the owner, learn which content they'd actually maintain, and test whether first-time visitors find the menu and location quickly.",
             ],
         },
     ],
@@ -405,7 +345,7 @@ const reseCase = {
             { src: rese3Image, caption: "" },
         ],
     },
-    next: "community-intelligence",
+    next: "bangkal-qrush",
 };
 
 const bangkalCase = {
@@ -414,52 +354,71 @@ const bangkalCase = {
     year: "2025",
     services: ["UI Design", "UX Design", "Full-Stack Development", "System Design"],
     cover: bangkalCover,
-    background: {
-        text: "QRUSH is a web-based document request system for Barangay Bangkal, built as my capstone project. Residents can request barangay documents online, and barangay staff can verify, process, and track each request in one place. I was the project lead and the only developer, so I designed and built the whole system, from the interface to the database, and deployed it as a live website.",
+      background: {
+        text: "QRUSH is a web-based document request system for Barangay Bangkal in Malolos, Bulacan, built as a four-person capstone project at La Consolacion University Philippines. Residents request barangay documents online and track them in real time, while staff verify, process, and complete each transaction from a role-based dashboard. I led the project and handled the design and development of the system, working with three teammates, and it is deployed as a live website.",
         link: { label: "Visit the live site.", href: "https://bangkalqrush.com" },
     },
     challenge: [
-        "Barangay documents are usually requested in person, which means travel, waiting, and paperwork. Moving the process online brings new problems: the system must confirm that the requester is a real resident, protect personal data, and stay easy to use for people who are not used to online forms.",
-        "I set out to answer three questions: how do we verify residents when not everyone has a working phone number on file, how do we guide residents through a request without mistakes, and how do we keep every request traceable from submission to release?",
+        "The barangay processed every document request in person. Based on interviews and observation with officials and residents, this meant congestion at the hall, no way for residents to check a request's status without returning, no formal check that a requester actually lives in the barangay, and no digital tool for staff to organize, track, or report on transactions. Residents who work office hours had no practical way to request a document at all.",
+        "Moving online introduces its own risks. The audience ranges from working adults to elderly residents with low digital confidence, the data includes IDs and proof of residency, and not every resident has a working phone number on file. The design had to be secure enough for a government context and still usable by the people least comfortable with online forms.",
+        "I worked from three questions: how do we verify residents without locking out those the records miss, how do we guide people through a request without errors, and how do we keep every request traceable from submission to claim?",
     ],
     findings: [
         {
-            label: "Verifying real residents",
-            text: "Requests are checked against the barangay masterlist, so only registered residents can proceed. This keeps the system limited to the people it is meant to serve and gives staff more confidence in each request.",
+            label: "Verification against the barangay's own masterlist",
+            text: "Registration requires the resident's details to match the official masterlist exactly before an account is created. Partial matches show hints under the relevant field, but they only guide the user and never approve an account. This keeps access limited to registered residents without the barangay having to trust self-declared identity.",
         },
         {
-            label: "Two paths to verification",
-            text: "Residents don't consistently have working phone numbers on file, so OTP alone would lock some of them out. I designed two paths: OTP authentication for residents with a working number, and manual verification for those without one. No resident is left without a way in.",
+            label: "Fallback paths so no resident is excluded",
+            text: "A strict match would fail residents whose records are outdated, so I designed two fallbacks. Manual verification asks for a valid ID, a selfie holding the ID, and one proof of residency, with a written explanation if the proof isn't in the resident's name, and allows up to three attempts. A Tracker Reference ID lets residents check the review status without an account. Staff can also register residents in person. Security that locks out the people the service exists for would have defeated the purpose.",
         },
         {
-            label: "Guided, step-by-step requests",
-            text: "Many residents are unfamiliar with online forms, so each request is split into short guided steps instead of one long form. Each step asks for one thing at a time, which reduces errors and makes the process less intimidating.",
+            label: "A phone OTP gate before the first request",
+            text: "After the first login, residents verify their number with a six-digit SMS code before they can submit any request. They can still browse the dashboard while they wait, so the gate blocks the action that matters without blocking the whole product. Resend is limited to three attempts with a sixty-second cooldown, and a lockout routes the resident to staff for a manual reset.",
         },
         {
-            label: "Tracking with QR codes",
-            text: "Every transaction gets a QR code, so a request can be tracked and checked from submission to release. Residents and staff share the same reference, and nobody has to guess where a request is.",
+            label: "Built for low digital literacy",
+            text: "The interface follows WCAG AA for text size and contrast, uses plain Filipino and English, and each request is broken into short steps. First-time users get a skippable onboarding walkthrough and an optional tour with tooltips, a chatbot answers barangay questions in either language, and the PWA can be added to the home screen on Android and iOS. Residents without smartphones can ask for a printed QR ticket, so the physical process is never cut off.",
         },
         {
-            label: "Accessible by design",
-            text: "The interface was designed to meet WCAG AA, with readable text, clear contrast, and simple layouts, so it works for residents of different ages and abilities.",
+            label: "One shared reference through ticket, QR, and public tracker",
+            text: "Approval generates a digital ticket with a QR code that staff scan to complete the transaction. A public tracker shows limited details without login, with the name partially masked, and sends the owner to log in for the full view. Ownership is validated so one resident can't see another's request. Completion then produces a separate Official Receipt, so the ticket works as the claim reference and the receipt as the permanent proof of payment.",
         },
         {
-            label: "Security for a government system",
-            text: "Because the system holds resident information, I added API rate limiting on top of OTP authentication and masterlist verification, to guard against repeated and automated attempts. I chose Firebase and Supabase so one person could build and maintain the system faster while still meeting these security needs.",
+            label: "Designing for delays and disputes",
+            text: "A follow-up button appears when processing runs past the configured time plus a buffer, with up to three attempts and a cooldown. Pickup has a claim window with reminders before expiry. If staff set the pickup time less than 24 hours before the window closed, the request is flagged as a disputed unclaimed document instead of penalizing the resident. Every action is recorded in a tamper-evident activity log, so disputes are settled with evidence instead of memory.",
+        },
+        {
+            label: "A staff dashboard that matches real workflows",
+            text: "Admin, Staff, and Kapitan accounts each get their own permissions. Staff review requests with mandatory reasons on rejection, mark pickups, complete transactions by QR, reference number, or manual entry, manage services, stock, and the calendar, and export reports. Staff-side logins are whitelisted and require a PIN after the password.",
+        },
+        {
+            label: "Security chosen with the audience in mind",
+            text: "I used Firebase App Check and compound-key API rate limiting instead of CAPTCHA, because CAPTCHA is a documented barrier for elderly and non-technical users, the group most at risk here. App Check blocks unauthorized clients at the infrastructure level with no extra steps for the user. Other controls include single active device sessions, device login alerts, session timeouts, and optional email two-factor authentication. Trade-off: this relies on Firebase and Supabase, which sped up delivery but ties the system to those platforms.",
+        },
+        {
+            label: "Scoped AI, with its limits stated",
+            text: "The chatbot uses the Gemini API and is restricted to barangay-related questions, with no personal resident data sent to it. The restriction is prompt-based, not a hard technical block, so it can't be guaranteed against every off-topic query. I documented that limit and kept the chatbot as an assistive layer, never a required step.",
         },
     ],
     results: [
         {
             label: "Evaluation",
             paragraphs: [
-                "The system was evaluated against ISO/IEC 25010:2023 with 40 respondents and earned an overall rating of 4.67 out of 5.00.",
-                "It also received the Best in System Design award for the capstone.",
+                "The system was evaluated against ISO/IEC 25010:2023 by 40 respondents: 30 verified residents, 5 barangay staff and clerks, and 5 IT professionals. It earned a grand mean of 4.47, interpreted as Very Good. Functional Suitability, Compatibility, Security, Maintainability, Interaction Capability, and Safety rated Excellent, and no characteristic scored below 4.40. The system also received the Best in System Design award for the capstone.",
+                "The lowest-scoring area was Performance Efficiency (4.40), specifically capacity, because the system hasn't been stress-tested. The paper also notes the scores sit in a narrow range, the evaluation window was short, and no penetration test was done, so I treat the results as a solid acceptance signal, not proof of long-term performance.",
             ],
         },
         {
             label: "What I delivered",
             paragraphs: [
-                "A full-stack production web app that is live at bangkalqrush.com, covering resident verification, guided document requests, QR-code tracking, and secure access, built and deployed solo as project lead. [TODO: idagdag kung ilan na ang requests o users, o kung ginagamit na talaga ng barangay]",
+                "A full-stack production web app, live at bangkalqrush.com, covering masterlist verification with manual fallback, OTP-gated document requests, QR ticketing and public tracking, claim-window and dispute handling, official receipts, appointment booking with the Kapitan, announcements, and a role-based admin dashboard with reporting.",
+            ],
+        },
+        {
+            label: "What I'd do next",
+            paragraphs: [
+                "Run formal load testing with a tool like k6 or JMeter before any wider rollout, add AI-assisted pre-screening of uploaded requirements to cut staff review time, extend the PWA with background sync for patchy connectivity (the system needs a stable connection today), and add dedicated evaluation items for the OTP gate, follow-up feature, and chatbot, which were scored under existing items.",
             ],
         },
     ],
@@ -488,82 +447,134 @@ const playgroundCase = {
     services: ["Motion Design", "GSAP Animation", "Frontend Development"],
     cover: patsPoster,
     coverVideo: patsVideo,
-    background: {
-        text: "This is a motion playground, not a client project. I modeled an animated school scene after the Philippines Arayat Training School (PATS) building, with mountains behind it, and built it in React with GSAP. Because the year-end is coming, I turned it into a winter scene with falling snow, snowy trees, and a snowy roof. It's a space for me to practice frontend motion design.",
-        link: { label: "View the playground.", href: "https://klyk-inky.vercel.app/" }, // [TODO: ilagay ang live link]
+      background: {
+        text: "This is a personal motion study, not a client project, though it ended up being shared with the schoofl it depicts. I modeled an animated school scene after the Philippines Arayat Training School (PATS) building, with mountains behind it, and built it in React with GSAP. With the year-end approaching, I turned it into a winter scene with falling snow, snowy trees, and a snowy roof. It's a space to practice frontend motion design and to explore how far one illustrated scene can go with code alone.",
+        link: { label: "View the playground.", href: "https://klyk-inky.vercel.app/" },
     },
     challenge: [
-        "I wanted to find out how far I could push a single illustrated scene with only code. The questions I set for myself: how do I make a still picture feel alive, how do I show the time of day changing without swapping images, and how do I make people want to click around?",
-        "The scene also had to feel like PATS, so I used the real building as my reference and kept its brick walls, white columns, and triangular entrance.",
+        "Motion is easy to overdo and hard to make meaningful. I set myself three questions: how do I make a still illustration feel alive, how do I show time of day changing without swapping images, and how do I make people want to explore instead of just look?",
+        "The scene also had to feel like PATS, so I used the real building as reference and kept its brick walls, white columns, and triangular entrance.",
     ],
     reference: [
         { src: patsReference, },
     ],
     findings: [
         {
-            label: "A scene that changes through the day",
-            text: "The scenery changes between morning, noon, evening, and night. The sun moves, the sky color shifts, and the mood of the whole school changes with it, so the page looks different each time someone visits.",
+            label: "State change through time of day",
+            text: "The scene moves through morning, noon, evening, and night. The sun travels, sky color shifts, and the mood of the whole school changes with it, so the page looks different on each visit. Driving this from code instead of swapped images keeps the file light and the transitions continuous.",
         },
         {
-            label: "Winter for the year-end",
-            text: "Since the year is ending, I added snow falling over the scene, snow on the roof and trees, and a cold blue sky, so the school feels ready for the holidays.",
+            label: "A seasonal layer with purpose",
+            text: "Because the year is ending, I added falling snow, snow on the roof and trees, and a cold blue sky, so the school feels ready for the holidays. Seasonal detail gives the scene a reason to be revisited.",
         },
         {
-            label: "People who make it feel alive",
-            text: "Students walk across the front of the school, and a sensei is part of the scene too. Each character moves at its own pace, so the scene never looks like a loop of the same movement.",
+            label: "Life through uneven rhythm",
+            text: "Students walk across the front of the school, and a sensei is part of the scene. Each character moves at its own pace, so the motion doesn't read as one repeating loop.",
         },
         {
-            label: "Interactions",
-            text: "The scene responds to the visitor. Characters and objects react when clicked or hovered, which turns the picture into something to explore, not just look at. [TODO: ilista ang eksaktong interactions, halimbawa kung ano ang nangyayari pag nag-click sa estudyante o sensei]",
+            label: "Interaction that rewards curiosity",
+            text: "Characters and objects react to click and hover, which turns the picture into something to explore.",
         },
         {
-            label: "The year-end photo booth",
-            text: "PATS has a photo booth during its year-end event, so I added one to the scene, next to the Student Council booth. A tooltip invites visitors to click and view photos, and a speech bubble in English and Japanese invites them to try the booth.",
+            label: "Anchoring it in a real event",
+            text: "PATS has a photo booth at its year-end event, so I added one beside the Student Council booth. A tooltip invites visitors to view photos, and a speech bubble in English and Japanese invites them to try it. Tying the scene to something real gives it a story, not just effects.",
+        },
+        {
+            label: "A cartoon style people see themselves in",
+            text: "I kept the school and its students in a friendly cartoon style instead of a realistic one. It makes the scene approachable, forgives small inaccuracies in the building, and lets students recognize themselves and their school at a glance. That recognition is what the PATS admin and students responded to.",
         },
     ],
     results: [
         {
             label: "What I built",
             paragraphs: [
-                "An animated, interactive winter scene of PATS built with React and GSAP, with a day-and-night cycle, moving students and a sensei, and a photo booth tied to the year-end event.",
-                "It's a personal practice project, so there's no client feedback or usage data to share. [TODO: idagdag kung may reaction ang mga kaklase o ang school]",
+                "An interactive winter scene of PATS built with React and GSAP, with a day-and-night cycle, moving students and a sensei, and a photo booth tied to the year-end event.",
+                "It started as a practice project, but the people it was made for responded to it. The PATS admin liked it and found it cute, and students reacted the same way, especially to the cartoon version of their school and of themselves. That kind of reaction matters to me more than any metric here, because it shows the scene felt recognizable and warm to the community it depicts. There's no formal usage data, so I treat this as informal qualitative feedback.",
+                "If I continued, I'd add a reduced-motion mode and test performance on low-end phones, since continuous animation is where this kind of piece usually struggles.",
             ],
         },
     ],
     gallery: {
         small: [], // [TODO: optional, ilagay ang screenshots ng morning/night, halimbawa { src: patsNight, caption: "Night" }]
     },
-    next: "community-intelligence",
+    next: "enov8tive-corporate-website",
 };
 const corporateCase = {
     title: "Enov8tive Corporate Website",
-    client: "Enov8tive",
+    client: "Self-initiated (Enov8tive concept)",
     year: "2026",
-    services: ["Web Design", "UI Design", "UX Design"],
+    services: ["UX Audit", "Web Design", "UI Design", "Front-end Development", "Motion Design"],
     cover: corpoCover,
     coverCompare: {
         original: corpoOriginalVideo,
         enhanced: corpoEnhancedVideo,
     },
-    background: {
-        text: "[TODO: isulat ang background ng corporate website ng Enov8tive at ang role mo.]",
+       background: {
+        text: "A self-initiated redesign of Enov8tive's corporate landing page, the site that introduces their healthcare software to clinics, hospitals, and medical practitioners. It was not commissioned, and Enov8tive has not seen it. I treated it as a real engagement: I audited the live site, defined the problems, set design principles, and then designed and built the result myself. Because Enov8tive's name and logo can't be used, I created a placeholder brand, Vitalink, so the work stands on its own. My role was end-to-end: UX audit, information architecture, visual design, prototyping, and front-end development with GSAP.",
         links: [
-            { label: "Visit the website.", href: "#" },
+            { label: "Visit the website.", href: "https://vitalink-rose.vercel.app/" },
             { label: "View the prototype.", href: "https://www.figma.com/proto/6SQPSy8GHbNR0q2e1sR5Mx/Corpo-Redesing?node-id=21-1140&t=ExMedrxxMF6fAlxq-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&hide-ui=1" },
         ],
     },
     challenge: [
-        "[TODO: ano ang problema sa original website?]",
-        "[TODO: ano ang mga tanong na sinagot mo sa redesign?]",
+        "The audience is a medical decision-maker: a clinic owner, administrator, or physician who evaluates software quickly and with skepticism. For that person, the site has to answer three questions fast: what is this, can I trust it, and what do I do next. The original had the right content but answered them weakly. Trust came almost entirely from stock photography, so it looked like generic healthcare rather than a credible software company. Hierarchy was flat, with long stacked sections and large empty gaps. The primary tabs were low in contrast and easy to miss, the call-to-action banner put teal text over a busy photo, the testimonial used a clip-art avatar, the footer logo area looked broken, and \"Inquire Now\" appeared in several different styles. The page had no motion or sense of polish, so it felt static.",
+        "I framed the work around one goal, getting a qualified visitor to inquire, and three questions: how do we signal clinical credibility through the interface itself instead of through stock photos, how do we make the product, the PhilHealth integration, and the mobile app understandable in a single scroll, and how do we add motion that supports reading instead of competing with it?",
     ],
     findings: [
-        { label: "[TODO: decision 1]", text: "[TODO]" },
-        { label: "[TODO: decision 2]", text: "[TODO]" },
+        {
+            label: "Design principles",
+            text: "Before designing, I set four principles to judge every decision against: clinical (calm, clean, uncluttered), credible (proof before claims), clear (one primary action per view), and quiet (motion that guides, never performs). When a layout idea failed one of these, it was cut.",
+        },
+        {
+            label: "A placeholder brand with intent",
+            text: "Vitalink keeps the DNA-helix motif so the identity still reads as healthcare and stays recognizable as a medical product, while the name, wordmark, and layout are original. It also kept the project ethically clean: the redesign demonstrates my process without borrowing someone else's brand.",
+        },
+        {
+            label: "Visual system: white, light blue, one accent",
+            text: "I limited the palette to white and light blue surfaces with a single teal accent reserved for actions, so color always means something. Rounded cards, generous spacing, and a consistent type scale give the page a calm, clinical rhythm. Trade-off: a restrained palette risks feeling cold, so I let photography and the app mockups carry the warmth.",
+        },
+        {
+            label: "One call to action, one style",
+            text: "The original used several styles of \"Inquire Now\". I reduced it to one primary teal pill with an arrow, repeated in the navigation, hero, banner, and FAQ, with a secondary ghost button for lower-priority actions such as About Us. Repetition gives the visitor a predictable path at every scroll depth, and a single visual treatment makes the main action unmistakable.",
+        },
+        {
+            label: "Hero: message first, proof second",
+            text: "The hero leads with a large headline and two actions, then a \"Trusted by 10k+ providers\" line with avatars and a star rating placed directly under it, so social proof arrives before the visitor scrolls. A soft teal overlay keeps the text readable over the photo. The proof numbers in this concept are placeholders and would be replaced with verified data in production.",
+        },
+        {
+            label: "Information architecture for scanning",
+            text: "I replaced long stacked sections with a sequence that matches how a buyer evaluates: a one-line value statement, three stat cards for credibility, then \"What We Do\" as a tabbed card carousel. Tabs became a clear pill switcher with a solid active state, fixing the original's low-contrast controls. Cards use a dark gradient under the photos so white text keeps its contrast. This limits the choices on screen at any moment and keeps the page shorter.",
+        },
+        {
+            label: "Localized trust signals",
+            text: "I adapted the concept to a Philippine market and gave the PhilHealth eClaims integration its own section: a green-tinted card with a verified badge and a moving row of partner logos. For providers in this market, a certified integration is a stronger trust signal than any marketing line, so it earns dedicated space and a distinct color that separates it from the product's teal.",
+        },
+        {
+            label: "Removing friction near the decision point",
+            text: "The banner uses a soft blue overlay so its headline and two buttons stay legible. Testimonials became a single large quote with simple carousel controls, and the FAQ moved to a two-column layout with an Inquire Now button beside it, so a visitor with a last-minute question can act without scrolling back up. Plus and minus toggles make each question's state obvious.",
+        },
+        {
+            label: "Showing the product",
+            text: "The page closes with the mobile app, Vitalink MD, using phone mockups, a one-line promise, and store badges. Showing real interface screens does more for credibility than a description, and it gives the page a visual ending that points to a next step.",
+        },
+        {
+            label: "Motion with restraint",
+            text: "I built the page with GSAP and ScrollSmoother: smooth scrolling and minimal fade-in triggers as sections enter. Motion is limited to opacity and short vertical shifts so it supports reading order without adding noise. Trade-off: smooth scrolling can feel unfamiliar to some users, so keeping the effect subtle was a deliberate choice, not a default.",
+        },
     ],
     results: [
         {
             label: "What I delivered",
-            paragraphs: ["[TODO: isulat ang final output at resulta]"],
+            paragraphs: [
+                "A designed and fully built landing page: hero with social proof, value statement and stats, tabbed What We Do, PhilHealth integration, call-to-action banner, testimonials, FAQ, and a mobile app showcase, plus a Figma prototype and a live demo.",
+                "This is a self-initiated concept that hasn't been launched or tested with real users, so I'm not claiming performance numbers. If it went into production, I would measure inquiry conversion on the primary call to action, scroll depth through the What We Do section, and FAQ engagement, and I would run a short usability test with clinic administrators to check whether the hierarchy and tabs behave as designed.",
+            ],
+        },
+        {
+            label: "What I'd do next",
+            paragraphs: [
+                "Replace placeholder statistics and testimonials with verified content, run an accessibility pass against WCAG AA for text over imagery and the overlay states, add a reduced-motion fallback for the scroll animation, and test the \"What We Do\" carousel with keyboard and touch users.",
+            ],
         },
     ],
     gallery: { small: [] },
@@ -585,10 +596,9 @@ const corporateCase = {
     Para magdagdag ng bago: gumawa ng object tulad ng ciCase,
     tapos ilagay dito. `next` = key ng susunod na case study. */
 export const CASE_STUDIES = {
-    "community-intelligence": ciCase,
-    bol: bolCase,
+    // "community-intelligence": ciCase,
     kanriel: kanrielCase,
-    "enov8tive-login-revamp": loginCase,
+    // "enov8tive-login-revamp": loginCase,
     "cafe-rese": reseCase,
     "bangkal-qrush": bangkalCase,
     playground: playgroundCase,
@@ -1135,7 +1145,7 @@ function CaseStudyPage({ caseStudy }) {
                         <div className="cs__block cs__block--loose">
                             <InfoRow label="Background">
                                 <p>{caseStudy.background.text}</p>
-                                {(caseStudy.background.links || [caseStudy.background.link]).map((l) => (
+                                {(caseStudy.background.links || (caseStudy.background.link ? [caseStudy.background.link] : [])).map((l) => (
                                     <a
                                         key={l.label}
                                         className="cs__link"

@@ -1,6 +1,6 @@
 import emailjs from "@emailjs/browser";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FiCheck, FiX } from "react-icons/fi";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -73,9 +73,11 @@ export default function ContactReference() {
     const [website, setWebsite] = useState("");
     const lastSubmitRef = useRef(0);
 
-    useEffect(() => {
-        const smoother = ScrollSmoother.create({ wrapper: "#contact-smooth-wrapper", content: "#contact-smooth-content", smooth: 1.35, effects: true, smoothTouch: 0.08 });
-        return () => smoother?.kill();
+    useLayoutEffect(() => {
+        ScrollSmoother.get()?.kill();
+        const smoother = ScrollSmoother.create({ wrapper: "#contact-smooth-wrapper", content: "#contact-smooth-content", smooth: 1.35, effects: true });
+        smoother.scrollTop(0);
+        return () => smoother.kill();
     }, []);
 
     useEffect(() => {

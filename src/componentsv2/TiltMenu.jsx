@@ -2,6 +2,7 @@ import { useLayoutEffect, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 import menuImage from "../assets/behindbg.jpg";
 
 /* tunables */
@@ -50,6 +51,9 @@ export default function TiltMenu({ open, onClose }) {
                 ease: "power3.inOut",
                 onComplete: () => {
                     gsap.set(wrapper, { clearProps: "transform,willChange,transformOrigin" });
+                    ScrollSmoother.get()?.paused(false);
+                    document.body.style.overflow = "";
+                    document.documentElement.style.overflow = "";
                     gsap.set(panel, { autoAlpha: 0 });
                     gsap.set(inners, { yPercent: 115, autoAlpha: 1 });
                 },
