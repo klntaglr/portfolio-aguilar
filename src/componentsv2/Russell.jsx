@@ -19,7 +19,7 @@ import projectImage from "../assets/CI.svg";
 import corpoImage from "../assets/corpo.svg";
 import reseImage from "../assets/rese.svg";
 import kanrielImage from "../assets/Kanriel.svg";
-import revampImage from "../assets/Revamp.svg";
+import bangkalImage from "../assets/bangkalproject.png";
 import portraitImage from "../assets/grad.jpg";
 import portraitImage1 from "../assets/mockup4.jpg";
 // ← your about photo
@@ -971,8 +971,8 @@ export default function Russell() {
                                 <div className="showcase__marquee-track" data-project-word="kanriel" data-active="false">
                                     <span>KANRIEL</span>
                                 </div>
-                                <div className="showcase__marquee-track" data-project-word="login" data-active="false">
-                                    <span>ENOV8TIVE LOGIN</span>
+                                <div className="showcase__marquee-track" data-project-word="bangkal" data-active="false">
+                                    <span>BARANGAY BANGKAL</span>
                                 </div>
                             </div>
 
@@ -987,7 +987,7 @@ export default function Russell() {
                                     <span className="showcase__reveal-word" data-project-word="kanriel">KANRIEL</span>
                                 </span>
                                 <span className="showcase__reveal-mask">
-                                    <span className="showcase__reveal-word" data-project-word="login">LOGIN</span>
+                                    <span className="showcase__reveal-word" data-project-word="bangkal">BANGKAL</span>
                                 </span>
                             </div>
 
@@ -1088,17 +1088,17 @@ export default function Russell() {
                                     </Link>
 
                                     <Link
-                                        to="/works/enov8tive-login-revamp"
+                                        to="/works/bangkal-qrush"
                                         className="showcase__layer showcase__layer--d"
-                                        aria-label="View Enov8tive login page revamp project"
+                                        aria-label="View QRUSH Barangay Bangkal project"
                                         aria-hidden="true"
                                         tabIndex={-1}
                                     >
                                         <div className="showcase__media">
                                             <div className="showcase__frame">
                                                 <img
-                                                    src={revampImage}
-                                                    alt="Enov8tive login page revamp mockup"
+                                                    src={bangkalImage}
+                                                    alt="QRUSH Barangay Bangkal document request system"
                                                     decoding="async"
                                                     loading="eager"
                                                     fetchPriority="low"
@@ -1110,11 +1110,11 @@ export default function Russell() {
                                             <HugeiconsIcon icon={MousePointerClickIcon} className="showcase__icon showcase__icon--hover" />
                                         </span>
                                         <div className="showcase__footer">
-                                            <h3>Enov8tive Login Revamp</h3>
+                                            <h3>QRUSH: Barangay Bangkal</h3>
                                             <div className="showcase__tags" aria-label="Project disciplines">
-                                                <span>UI design</span>
-                                                <span>UX design</span>
-                                                <span>Redesign</span>
+                                                <span>Capstone</span>
+                                                <span>Full-stack</span>
+                                                <span>System design</span>
                                             </div>
                                         </div>
                                     </Link>
